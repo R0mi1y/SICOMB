@@ -25,7 +25,6 @@ def set_uid(request):
     if request.method == 'POST':
         settings.AUX["UID"] = request.POST.get('uid') # TODO Mudar para método POST aqui e no esp
     elif request.method == 'GET':
-        if(settings.AUX["UID"] == request.GET.get('bf_uid')):
-            settings.AUX["UID"] = request.GET.get('uid') # TODO Mudar para método POST aqui e no esp
+        settings.AUX["UID"] = request.GET.get('uid') # TODO Mudar para método POST aqui e no esp
         
     return HttpResponse(f"Sucesso, uid = {settings.AUX['UID']}")
