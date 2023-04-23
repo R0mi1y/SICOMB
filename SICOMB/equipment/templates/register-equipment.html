@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro do equipamento</title>
+    </head>
+    <body>
+        <form action="">
+            <input type="text" id="uid" disabled>
+            <input type="text" placeholder="Nome">
+            <input type="text-box" placeholder="Descrição">
+            <input type="text" placeholder="calibre">
+        </form>
+    </body>
+    <script>
+        const interval = setInterval(function() {
+            fetch('http://localhost:8000/equipment/get')
+            .then(response => response.json())
+            .then(data => {
+                if(data.uid != ''){
+                    document.getElementById("uid").value = data.uid;
+                    
+                    clearInterval(interval);
+                }
+            })
+            .catch(error => console.error(error));
+        }, 1000);
+
+
+    </script>
+</html>
