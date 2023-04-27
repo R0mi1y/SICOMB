@@ -32,24 +32,25 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders', # Configuração necessaria para acerro da página equipment/get como uma api
+    'corsheaders',  # Configuração necessaria para acerro da página equipment/get como uma api
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    'equipment.apps.EquipmentConfig',
-    'main.apps.MainConfig',
+
+    'equipment',
+    'main',
+    'police',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True # CORS configuração
+CORS_ORIGIN_ALLOW_ALL = True  # CORS configuração
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-APPEND_SLASH = False # resolve erro do fetch de rotas do django
+APPEND_SLASH = False  # resolve erro do fetch de rotas do django
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
@@ -71,8 +72,8 @@ ROOT_URLCONF = 'SICOMB.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), 
-                 os.path.join(BASE_DIR, 'main/templates'), 
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'main/templates'),
                  os.path.join(BASE_DIR, 'equipment/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -91,7 +92,6 @@ WSGI_APPLICATION = 'SICOMB.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 
 
 # Password validation
@@ -126,7 +126,7 @@ USE_TZ = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sicomb',
         'USER': 'root',
         'PASSWORD': '',
@@ -149,4 +149,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUX = {'UID' : ''}
+AUX = {'UID': ''}
