@@ -72,9 +72,7 @@ ROOT_URLCONF = 'SICOMB.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),
-                 os.path.join(BASE_DIR, 'main/templates'),
-                 os.path.join(BASE_DIR, 'equipment/templates')],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,6 +127,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sicomb',
         'USER': 'root',
+        'OPTIONS': {
+            'sql_mode':'traditional',
+        },
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
@@ -150,3 +151,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUX = {'UID': ''}
+
+# AUTH_USER_MODEL = 'police.Police'

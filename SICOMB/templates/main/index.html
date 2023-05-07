@@ -43,10 +43,11 @@
     </head>
     <body>
         <div id="login">
-            <form action="">
+            <form method="post">
+                {% csrf_token %}
                 <h1>Login</h1>
-                <input type="text" placeholder="Matrícula">
-                <input type="password" placeholder="Senha">
+                <input type="text" placeholder="Matrícula" name="matricula">
+                <input type="password" placeholder="Senha" name="senha">
                 <input type="submit" value="Submit">
             </form>
         </div>

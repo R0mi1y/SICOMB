@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.http import HttpResponseRedirect
 
 # Só serve pra redirecionar pra tela de login por enquanto
-def login(request):
-    
-    return render(request, 'index.html')
 
+
+def redirect_login(request):
+    return redirect('login')

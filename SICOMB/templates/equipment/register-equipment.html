@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro do equipamento</title>
+
+        <style>
+            /* Estilizando o cabeçalho */
+h1 {
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* Estilizando o formulário */
+form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Estilizando os campos de entrada */
+input[type="text"],
+select {
+  margin: 10px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  width: 100%;
+}
+
+input[type="submit"] {
+  margin-top: 20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+input[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+
+/* Estilizando as opções do select */
+select option {
+  font-size: 16px;
+}
+
+/* Desativando a seleção dos campos de entrada e do select */
+input:disabled,
+select:disabled {
+  background-color: #f2f2f2;
+  cursor: not-allowed;
+}
+
+        </style>
+    </head>
+    <body>
+        <h1>Registro do equipamento</h1>
+        <form method="post" action=".">
+            <input type="text" id="uid" disabled name="uid" required>
+            <input type="text" placeholder="Numero de série"
+                name="serial_number" required>
+            <select disabled name="type" id="type" required>
+                <option value='' id="choice" selected>Tipo de equipamento</option>
+                <option value="Armament">Armamento</option>
+                <option value="Wearable">Vestível</option>
+            </select>
+            <select disabled name="type_id" id="type_id" required>
+                <option value='' id="choice_2" selected>Tipo específico</option>
+            </select>
+            <input type="submit" value="Cadastrar">
+        </form>
+    </body>
+
+    <script>
+        var type = document.getElementById("type");
+        var type_id = document.getElementById("type_id");
+        var eq;
+
+        const interval = setInterval(function() {
+            fetch('http://localhost:8000/equipment/get')
+            .then(response => response.json())
+            .then(data => {
+                eq = data;
+                if(data.uid != ''){
+                    document.getElementById("uid").value = data.uid;
+                    clearInterval(interval);
+
+
+                    if(data.registred != false){
+                        type.removeAttribute("disabled");
+                        
+                        document.getElementById("choice").innerHTML = data.registred;
+                        document.getElementById("choice_2").innerHTML = eval('data.' + data.registred + '.model');
+                    } else {
+                        type.removeAttribute("disabled");
+
+                        console.log(data);
+                    }
+                }
+            })
+            .catch(error => console.error(error));
+        }, 1000);
+        
+        type.addEventListener('change', function() {
+            if(type.value != ''){
+                type_id.removeAttribute("disabled");
+
+                type_id.innerHTML = '<option value="" id="choice_2" selected="">Tipo específico</option>';
+
+                eq[type.value].forEach(element => {
+                            type_id.innerHTML = type_id.innerHTML + '<option value="'+ element.pk + '">' + element.fields.model + '</option>'
+                        })
+            } else {
+                document.getElementById('type_id').setAttribute("disabled", true);
+            }
+        });
+        </script>
+</html>
