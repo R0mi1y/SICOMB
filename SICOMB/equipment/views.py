@@ -37,14 +37,10 @@ def get_equipment(request):
         set_armament = {}
         set_wearable = {}
 
-        cont = 0
         for i in armament:
             set_armament['armamento ' + str(i.pk)] = model_to_dict(i)
-            cont = + 1
-        cont = 0
         for i in wearable:
             set_wearable['vestivel ' + str(i.pk)] = model_to_dict(i)
-            cont = + 1
 
         data = {
             'uid': settings.AUX['UID'],

@@ -4,7 +4,7 @@ from django.db import models
 
 class Equipment(models.Model):
     # chave primária do equipamento
-    serial_number = models.IntegerField('Numero de série')
+    serial_number = models.CharField('Numero de série', max_length=100)
     uid = models.CharField('UID', max_length=100, primary_key=True)
     type = models.CharField('Tipo', max_length=50)
     type_id = models.IntegerField('ID_Tipo')
