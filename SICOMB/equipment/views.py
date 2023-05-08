@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.conf import settings
 from django.core import serializers
 from . import models
+from django.forms.models import model_to_dict
 import json
 
 
@@ -24,10 +25,26 @@ def register_equipment(request):
 
 def get_equipment(request):
     if settings.AUX['UID'] != '':
-        equipment = models.Equipment.objects.filter(
-            uid=settings.AUX['UID']).first()
+        try:
+            equipment = models.Equipment.objects.get(
+                uid=settings.AUX['UID'])
+        except models.Equipment.DoesNotExist:
+            equipment = None
+
         armament = models.Armament.objects.all()
         wearable = models.Wearable.objects.all()
+
+        set_armament = {}
+        set_wearable = {}
+
+        cont = 0
+        for i in armament:
+            set_armament['armamento ' + str(i.pk)] = model_to_dict(i)
+            cont = + 1
+        cont = 0
+        for i in wearable:
+            set_wearable['vestivel ' + str(i.pk)] = model_to_dict(i)
+            cont = + 1
 
         data = {
             'uid': settings.AUX['UID'],
@@ -37,18 +54,24 @@ def get_equipment(request):
         }
 
         if equipment is None:
-            data['Armament'] = serializers.serialize('python', armament)
-            data['Wearable'] = serializers.serialize('python', wearable)
+            data['Armament'] = set_armament
+            data['Wearable'] = set_wearable
+
+            print(str(data) + " Equipamento não cadastrado")
         elif equipment.type == 'Armament':
-            armament = models.Armament.objects.filter(pk=equipment.type_id)
+            armament = models.Armament.objects.get(pk=equipment.type_id)
             data['registred'] = equipment.type
-            data['equipment'] = equipment
-            data['Armament'] = serializers.serialize('python', armament)
+            data['equipment'] = model_to_dict(equipment)
+            data['Armament'] = model_to_dict(armament)
+
+            print("Equipamento é um armamento")
         elif equipment.type == 'Wearable':
-            wearable = models.Wearable.objects.filter(pk=equipment.type_id)
+            wearable = models.Wearable.objects.get(pk=equipment.type_id)
             data['registred'] = equipment.type
-            data['equipment'] = equipment
-            data['Wearable'] = serializers.serialize('python', wearable)
+            data['equipment'] = model_to_dict(equipment)
+            data['Wearable'] = model_to_dict(wearable)
+
+            print("Equipamento é um vestível")
 
         if settings.AUX['UID'] != '':
             settings.AUX['UID'] = ""
@@ -57,6 +80,8 @@ def get_equipment(request):
             'uid': settings.AUX['UID'],
             'registred': True,
         }
+
+        print("uid não inserido")
     return JsonResponse(data)
 
 
