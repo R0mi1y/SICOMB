@@ -89,6 +89,7 @@
                 <option value='' id="choice" selected>Tipo de equipamento</option>
                 <option value="Armament">Armamento</option>
                 <option value="Wearable">Vestível</option>
+                <option value="Bullet">Munição</option>
             </select>
             <select disabled name="type_id" id="type_id" required>
                 <option value='' id="choice_2" selected>Tipo específico</option>
@@ -133,8 +134,9 @@
 
                             if(data.registred == 'Wearable'){
                                 campo = eval(`data.${data.registred}.model`) + ' ' + eval(`data.${data.registred}.size`);
-                            } else {
+                            } else if (data.registred == 'Armament') {
                                 campo = eval(`data.${data.registred}.model`) + ' ' + eval(`data.${data.registred}.caliber`);
+                            } else if (data.registred == 'Bullet') {
                             }
 
                             document.getElementById("choice_2").innerHTML = campo;

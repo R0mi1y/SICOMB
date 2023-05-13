@@ -31,49 +31,47 @@ def get_equipment(request):
         except models.Equipment.DoesNotExist:
             equipment = None
 
-        armament = models.Armament.objects.all()
-        wearable = models.Wearable.objects.all()
-
-        set_armament = {}
-        set_wearable = {}
-
-        for i in armament:
-            set_armament['armamento ' + str(i.pk)] = model_to_dict(i)
-        for i in wearable:
-            set_wearable['vestivel ' + str(i.pk)] = model_to_dict(i)
-
         data = {
             'uid': settings.AUX['UID'],
             'registred': False,
-            'Armament': '',
-            'Wearable': '',
+            # 'Armament': '',
+            # 'Wearable': '',
         }
+        
+        types = ["armament", "wearable", "bullet"]
 
         if equipment is None:
-            data['Armament'] = set_armament
-            data['Wearable'] = set_wearable
+            
+            for tipo in types:
+                code = (f"{tipo} = models.Model_{tipo}.objects.all() \n" +
+                        f"set_{tipo} = " + "{} \n" + 
+                        f"for i in {tipo}: \n" + 
+                        f"   set_{tipo}['{tipo}' + str(i.pk)] = model_to_dict(i)\n" + 
+                        f"data['{tipo.capitalize()}'] = set_{tipo}\n" + 
+                        'print(str(data) + " Equipamento não cadastrado")\n')
+                print (code)
+                exec(code)
+        else:
+            if equipment.type == 'Armament':
+                armament = models.Model_armament.objects.get(pk=equipment.type_id)
+                data['registred'] = equipment.type
+                data['equipment'] = model_to_dict(equipment)
+                data['Armament'] = model_to_dict(armament)
 
-            print(str(data) + " Equipamento não cadastrado")
-        elif equipment.type == 'Armament':
-            armament = models.Armament.objects.get(pk=equipment.type_id)
-            data['registred'] = equipment.type
-            data['equipment'] = model_to_dict(equipment)
-            data['Armament'] = model_to_dict(armament)
+            elif equipment.type == 'Wearable':
+                wearable = models.Model_wearable.objects.get(pk=equipment.type_id)
+                data['registred'] = equipment.type
+                data['equipment'] = model_to_dict(equipment)
+                data['Wearable'] = model_to_dict(wearable)
+                
 
-            print("Equipamento é um armamento")
-        elif equipment.type == 'Wearable':
-            wearable = models.Wearable.objects.get(pk=equipment.type_id)
-            data['registred'] = equipment.type
-            data['equipment'] = model_to_dict(equipment)
-            data['Wearable'] = model_to_dict(wearable)
+            print(f"Equipamento é um {equipment.type}")
 
-            print("Equipamento é um vestível")
-
-        if settings.AUX['UID'] != '':
-            settings.AUX['UID'] = ""
+        # if settings.AUX['UID'] != '':
+        #     settings.AUX['UID'] = ""
     else:
         data = {
-            'uid': settings.AUX['UID'],
+            'uid': '',
             'registred': True,
         }
 
