@@ -7,4 +7,5 @@ urlpatterns = [
     path('equipment/', include('equipment.urls')),
     path('police/', include('police.urls')),
     path('', include('main.urls')),
+    path('load_management/', include('load_management.urls')),
 ]
