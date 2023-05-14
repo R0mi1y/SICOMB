@@ -1,8 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    width: 1300px;
+    margin: 10px auto;
+    font-family: sans-serif;
+}
+
+.logo img {
+    width: 70px;
+}
+
+header h1 {
+    font-size: 30px;
+    margin: auto 0;
+    margin-left: 40px;
+}
+
+.nav {
+    margin: auto 0;
+    margin-left: 130px;
+}
+
+header a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    margin-right: 30px;
+    border-radius: 2px;
+    transition: 0.1s;
+}
+
+header a:hover {
+    border-bottom: 4px solid rgb(0, 157, 255);
+}
+
 #login {
+    background: #004593;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 650px;
 }
 
 form {

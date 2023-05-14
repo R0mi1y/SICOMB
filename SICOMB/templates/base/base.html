@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +11,20 @@
     <title>{% block title %}{% endblock title %}</title>
 </head>
 
-    <header>
-        <div class="logo">
-            <img src="{% static 'img/17bpm_guanambi.png' %}" alt="">
-        </div>
-    </header>
+<header>
+    <div class="logo">
+        <img src="{% static 'img/17bpm_guanambi.png' %}" alt="logo">
+    </div>
+    <h1>SISCOEM -Sistema de Controle de Equipamentos Militares</h1>
+    <div class="nav">
+        <a href="">Início</a>
+        <a href="">Sobre</a>
+    </div>
+    
+</header>
 
 <body>
     {% block content %}{% endblock content %}
 </body>
+
 </html>
