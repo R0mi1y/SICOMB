@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'load/css/styles.css' %}">
+    <title>Fazer Carga</title>
+</head>
+<body>
+    <header>
+        <nav id="navbar">
+            <ul class="alter">
+                <div class="logo"> 
+                    <img id="logo-nav" src="/Images/17bpm_guanambi.png" alt="17º Batalhão de Polícia Militar do Estado da Bahia">
+                    <h3>SISCOEM</h3>
+                </div>
+                <li>
+                    <img src="/Images/dashboard.png" alt="">
+                    <a href ="#"><span>Dashboard</span></a>
+                </li>
+                <p>Gerenciamento</p> 
+                <li>
+                    <img src="/Images/click.png" alt="">
+                    <a href ="#"><span>Fazer Carga</span></a>
+                </li>
+                <li>
+                    <img src="/Images/network.png" alt="">
+                    <a href ="#"><span>Cargas</span></a>
+                </li>
+                <li>
+                    <img src="/Images/disket.png" alt="">
+                    <a href ="#"><span>Equipamentos</span></a>
+                </li>
+                <li>
+                    <img src="/Images/reports.png" alt="">
+                    <a href ="#" ><span>Relatórios</span></a>
+                </li>
+                <hr> 
+                <p>Cadastramento</p>
+                <li>
+                    <img src="/Images/user.png" alt="">
+                    <a class="test" href ="#"><span>Cadastrar Policial</span></a>
+                </li>
+                <li>
+                    <img src="/Images/warehouse.png" alt="">
+                    <a href ="#"><span>Cadastrar Equipamento</span></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="content">
+        <section class="top-content">
+            <h1>FAZER CARGA</h1>
+            <ul class="info-login">
+
+                <li class="top-item">
+                    <img src="/Images/user.png" alt="Usuário">
+                </li>
+
+                <li class="top-item">
+                    <h3>SGTALMEIDA</h3>
+                    <p>MATRÍCULA: 129834765</p>
+                </li class="top-item">
+                <li>
+                    <img id="down_arrow" src="/Images/down_arrow.png" alt="">
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">
+                            <!-- <img src="/Images/" alt="" srcset="">
+                            Logout -->
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </section>      
+    </div>
+
+</body>
+</html>

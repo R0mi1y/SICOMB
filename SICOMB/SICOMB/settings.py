@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'equipment',
     'main',
     'police',
-    'load_management',
+    'load',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True  # CORS configuração
@@ -152,5 +152,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUX = {'UID': ''}
-
+DIGITAL_FINGER_POLICEMAN = {'DIGITAL_FINGER': ''}
 # AUTH_USER_MODEL = 'police.Police'
