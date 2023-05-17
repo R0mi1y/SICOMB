@@ -14,7 +14,7 @@ def login(request):
             user = models.Police.objects.get(
                 plate=request.POST.get('matricula'), password=request.POST.get('senha'))
         except models.Police.DoesNotExist:
-            return render(request, 'main/index.html')
+            return render(request, 'main/login.html')
 
         print(
             f"{user.plate, user.password} {request.POST['matricula']} {request.POST['senha']}")
@@ -24,16 +24,14 @@ def login(request):
             cache.set("user", user, timeout=(60*60*24))
             return redirect('register_equipment')
         else:
-            return render(request, 'main/index.html')
+            return render(request, 'main/login.html')
 
     else:
-        return render(request, 'main/index.html')
+        return render(request, 'main/login.html')
 
 
-def register(request):
-
+def register(self, request):
     if request.method == 'POST':
-        return render(request, 'main/index.html')
+        return render(request, 'main/login.html')
     else:
-        return render(request, 'main/index.html')
-      
+        return render(request, 'main/login.html')
