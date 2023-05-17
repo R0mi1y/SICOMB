@@ -30,8 +30,10 @@ def login(request):
         return render(request, 'main/index.html')
 
 
-def register(self, request):
+def register(request):
+
     if request.method == 'POST':
         return render(request, 'main/index.html')
     else:
         return render(request, 'main/index.html')
+      
