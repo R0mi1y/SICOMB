@@ -130,7 +130,7 @@ DATABASES = {
         'OPTIONS': {
             'sql_mode':'traditional',
         },
-        'PASSWORD': '1234',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -152,4 +152,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUX = {'UID': ''}
 
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 # AUTH_USER_MODEL = 'police.Police'

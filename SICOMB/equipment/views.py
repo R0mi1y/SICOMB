@@ -1,12 +1,11 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.conf import settings
-from django.core import serializers
 from . import models
+from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
-import json
 
-
+@login_required
 def register_equipment(request):
     if request.method == 'POST':
         models.Equipment(
@@ -23,6 +22,7 @@ def register_equipment(request):
 # Retorna o UID mais recente em formato JSON
 
 
+@login_required
 def get_equipment(request):
     if settings.AUX['UID'] != '':
         try:
