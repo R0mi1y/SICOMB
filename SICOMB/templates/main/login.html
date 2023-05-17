@@ -2,14 +2,17 @@
 
 {% block title %}SICOMB - Login{% endblock title %}
 
-{% block content %}
-    <div id="login">
+{% block l-right %}
+<div id="login">
+    <h4>Visualize no SISCOEM os movimentos realizados 
+        <span>pelos policiais no batalhão</span></h4>
     <form method="post">
         {% csrf_token %}
-        <h1>Login</h1>
-        <input type="text" placeholder="Matrícula" name="matricula">
-        <input type="password" placeholder="Senha" name="senha">
-        <input type="submit" value="Submit">
+        <label class="mat-top">Matrícula</label>
+        <input type="text" name="username">
+        <label for="">Senha</label>
+        <input type="password" name="password">
+        <input type="submit" value="Entrar">
     </form>
-    </div>
-{% endblock content %}
+</div>
+{% endblock l-right %}
