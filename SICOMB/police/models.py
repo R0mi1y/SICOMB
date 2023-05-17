@@ -1,13 +1,12 @@
 # from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 
-class Police(models.Model):
-    name = models.CharField('Nome', max_length=100)
+class Police(User):
     patent = models.CharField('Patente', max_length=100)
     plate = models.CharField('Matricula', max_length=20)
-    password = models.CharField('Senha', max_length=20)
     
 # class adjunto(models.Model):
