@@ -6,7 +6,7 @@
 
 header {
     display: flex;
-    max-width: 1300px;
+    max-width: 1250px;
     margin: 10px auto;
     font-family: sans-serif;
 }
@@ -15,16 +15,18 @@ header {
     width: 70px;
 }
 
-header h1 {
+.text-nav {
     font-size: 30px;
     margin: auto 0;
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
-.nav {
+.nav-content {
+    width: 21%;
     margin: auto 0;
-    margin-left: 130px;
+    text-align: right;
 }
+
 
 header a {
     text-decoration: none;
@@ -51,20 +53,51 @@ header a:hover {
     padding: 20px;
 }
 
+.l-left {
+    margin: 0 auto;
+    margin-top: 10%;
+    max-width: 75%;
+    height: 80%;
+}
+
+.l-left h1 {
+    font-family: sans-serif;
+    color: white;
+}
+
+.l-left h4 {
+    font-family: sans-serif;
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: normal;
+    color: white;
+}
+
+.img-login {
+    text-align: center;
+    margin: 30px;
+}
+
+.img-login img {
+    text-align: center;
+    width: 150px;
+}
+
 #login {
     margin: 0 auto;
     margin-top: 10%;
     max-width: 55%;
-    height: 80%;  
+    height: 80%;
 }
 
-#login h4{
+#login h4 {
     font-family: sans-serif;
     font-weight: normal;
-    color: white; 
+    color: white;
     margin-bottom: 10px;
 }
-#login h4 span{
+
+#login h4 span {
     font-weight: bold;
 }
 
@@ -81,13 +114,13 @@ form {
 }
 
 input[type="text"],
-input[type="password"]{
+input[type="password"] {
     background: #f0f7fe;
 }
 
 input[type="text"],
 input[type="password"],
-input[type="submit"]{
+input[type="submit"] {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -107,8 +140,8 @@ input[type="submit"]:hover {
     background-color: #1691c6;
 }
 
-.mat-top{
-margin-top: 25px;
+.mat-top {
+    margin-top: 25px;
 }
 
 @media (max-width: 1310px) {
@@ -116,12 +149,108 @@ margin-top: 25px;
         padding: 0 20px;
     }
 
-    .nav {
+    .nav-content {
+        width: 100%;
         margin: auto 0;
         margin-left: 20px;
     }
 
     header a {
         margin-right: 10px;
+    }
+}
+
+@media (max-width: 1024px) {
+
+    header {
+        max-width: 920px;
+    }
+
+    .text-nav {
+        margin-left: 20px;
+    }
+
+    #login {
+        margin: 0 auto;
+        margin-top: 10%;
+        max-width: 70%;
+        height: 80%;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    header {
+        max-width: 700px;
+    }
+
+    .text-nav {
+        margin-left: 20px;
+    }
+
+    #login {
+        margin: 0 auto;
+        margin-top: 10%;
+        max-width: 85%;
+        height: 80%;
+    }
+}
+
+@media (max-width: 425px) {
+
+    #login {
+        max-width: 75%;
+    }
+
+    .container {
+        display: block;
+    }
+
+    .logo img {
+        width: 60px;
+    }
+
+    .nav-content {
+        margin-left: 20px;
+    }
+
+    .nav a {
+        margin-right: 2px;
+    }
+
+    .text-nav {
+        margin-left: 10px;
+    }
+
+    .l-left {
+        display: none;
+    }
+}
+
+@media (max-width: 375px) {
+    .container {
+        display: block;
+    }
+
+    .logo img {
+        width: 60px;
+    }
+
+    .nav-content {
+        margin-left: 20px;
+    }
+
+    .nav a {
+        margin-right: 2px;
+    }
+
+    .text-nav {
+        font-size: 25px;
+        margin-left: 10px;
+    }
+
+    .l-left {
+        display: none;
     }
 }

@@ -1,16 +1,30 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block title %}SICOMB - Login{% endblock title %}
 
-{% block content %}
+{% block l-left %}
+<div class="l-left">
+    <h1>Controle total para uma missão cumprida</h1>
+    <h4>Gerenciando e contabilizando a entrada e saída de equipamentos. Tenha visibilidade completa do seu inventário bélico com o SISCOEM. </h4>
+    <div class="img-login">
+        <img src="{% static 'img/gerenciamento-de-projetos.png' %}" alt="">
+    </div>  
+</div>
+{% endblock l-left %}
+
+{% block l-right %}
 <div id="login">
+    <h4>Visualize no SISCOEM os movimentos realizados
+        <span>pelos policiais no batalhão</span> </h4>
     <form method="post" action=".">
         {% csrf_token %}
-        <h1>Login</h1>
-        <input type="text" placeholder="Matrícula" name="username">
-        <input type="password" placeholder="Senha" name="password">
-        <a href="/police/register/">cadastrar</a>
-        <input type="submit" value="Submit">
+        <label for="">Matrícula</label>
+        <input type="text" name="username">
+        <label for="">Senha</label>
+        <input type="password"name="password">
+        <input type="submit" value="Entrar">
+        <a href="/police/register/">Cadastre-se</a>
     </form>
 </div>
-{% endblock content %}
+{% endblock l-right %}
