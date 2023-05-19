@@ -24,61 +24,107 @@ def register_equipment(request):
 
 @login_required
 def get_equipment(request):
+    data = {}
+    
+    # Para caso o que o usuário esteja solicitando não seja algo q tenha uma tag
+    if request.GET.get('type') != None:
+        data['registred'] = request.POST.get('type')
+        
+        # Caso seja uma granada
+        if request.POST.get('type') == 'grenada':
+            try:
+                grenada = models.Grenada.objects.get(pk=request.GET.get('id'))
+            except models.Equipment.DoesNotExist:
+                return JsonResponse({'uid': '', 'msm':'Equipamento não cadastrado'}) # Caso o equipamento não esteja cadastrado ele simplismente ignora
+            
+            data['grenada'] = model_to_dict(grenada)
+
+        # Caso seja uma munição
+        if request.POST.get('type') == 'bullet':
+            try:
+                bullet = models.Bullet.objects.get(pk=request.GET.get('pk'))
+            except models.Equipment.DoesNotExist:
+                return JsonResponse({'uid': '', 'msm':'Equipamento não cadastrado'}) # Caso o equipamento não esteja cadastrado ele simplismente ignora
+            
+            data['equipment'] = model_to_dict(bullet)
+    
+    # Para os equipamentos com a tag
     if settings.AUX['UID'] != '':
+        data['uid'] = settings.AUX['UID']
+        
         try:
             equipment = models.Equipment.objects.get(
-                uid=settings.AUX['UID'])
+                uid=settings.AUX['UID'])  # Recupera o objeto Equipamento
         except models.Equipment.DoesNotExist:
-            equipment = None
-
-        armament = models.Armament.objects.all()
-        wearable = models.Wearable.objects.all()
-
-        set_armament = {}
-        set_wearable = {}
-
-        for i in armament:
-            set_armament['armamento ' + str(i.pk)] = model_to_dict(i)
-        for i in wearable:
-            set_wearable['vestivel ' + str(i.pk)] = model_to_dict(i)
-
-        data = {
-            'uid': settings.AUX['UID'],
-            'registred': False,
-            'Armament': '',
-            'Wearable': '',
-        }
-
-        if equipment is None:
-            data['Armament'] = set_armament
-            data['Wearable'] = set_wearable
-
-            print(str(data) + " Equipamento não cadastrado")
-        elif equipment.type == 'Armament':
-            armament = models.Armament.objects.get(pk=equipment.type_id)
+            return JsonResponse({'uid': '', 'msm':'Equipamento não cadastrado'}) # Caso o equipamento não esteja cadastrado ele simplismente ignora
+            
+        else:
             data['registred'] = equipment.type
             data['equipment'] = model_to_dict(equipment)
-            data['Armament'] = model_to_dict(armament)
+            
+            if equipment.type == 'Armament': # Recupera o objeto armamento, que complementa o equipamento
+                armament = models.Model_armament.objects.get(pk=equipment.type_id)
+                data['Armament'] = model_to_dict(armament)
 
-            print("Equipamento é um armamento")
-        elif equipment.type == 'Wearable':
-            wearable = models.Wearable.objects.get(pk=equipment.type_id)
-            data['registred'] = equipment.type
-            data['equipment'] = model_to_dict(equipment)
-            data['Wearable'] = model_to_dict(wearable)
+            elif equipment.type == 'Wearable': # Recupera o objeto vestimento, que complementa o equipamento
+                wearable = models.Model_wearable.objects.get(pk=equipment.type_id)
+                data['Wearable'] = model_to_dict(wearable)
+            
+            elif equipment.type == 'Acessory': # Recupera o objeto acessorio, que complementa o equipamento
+                acessory = models.Model_acessory.objects.get(pk=equipment.type_id)
+                data['accessory'] = model_to_dict(acessory)
+        
+    return JsonResponse(data) # Retorna o dicionário em forma de api
+        
 
-            print("Equipamento é um vestível")
+    #     armament = models.Armament.objects.all()
+    #     wearable = models.Wearable.objects.all()
 
-        if settings.AUX['UID'] != '':
-            settings.AUX['UID'] = ""
-    else:
-        data = {
-            'uid': settings.AUX['UID'],
-            'registred': True,
-        }
+    #     set_armament = {}
+    #     set_wearable = {}
 
-        print("uid não inserido")
-    return JsonResponse(data)
+    #     for i in armament:
+    #         set_armament['armamento ' + str(i.pk)] = model_to_dict(i)
+    #     for i in wearable:
+    #         set_wearable['vestivel ' + str(i.pk)] = model_to_dict(i)
+
+    #     data = {
+    #         'uid': settings.AUX['UID'],
+    #         'registred': False,
+    #         'Armament': '',
+    #         'Wearable': '',
+    #     }
+
+    #     if equipment is None:
+    #         data['Armament'] = set_armament
+    #         data['Wearable'] = set_wearable
+
+    #         print(str(data) + " Equipamento não cadastrado")
+    #     elif equipment.type == 'Armament':
+    #         armament = models.Armament.objects.get(pk=equipment.type_id)
+    #         data['registred'] = equipment.type
+    #         data['equipment'] = model_to_dict(equipment)
+    #         data['Armament'] = model_to_dict(armament)
+
+    #         print("Equipamento é um armamento")
+    #     elif equipment.type == 'Wearable':
+    #         wearable = models.Wearable.objects.get(pk=equipment.type_id)
+    #         data['registred'] = equipment.type
+    #         data['equipment'] = model_to_dict(equipment)
+    #         data['Wearable'] = model_to_dict(wearable)
+
+    #         print("Equipamento é um vestível")
+
+    #     if settings.AUX['UID'] != '':
+    #         settings.AUX['UID'] = ""
+    # else:
+    #     data = {
+    #         'uid': settings.AUX['UID'],
+    #         'registred': True,
+    #     }
+
+    #     print("uid não inserido")
+    # return JsonResponse(data)
 
 
 # Recebe o UID do ESP

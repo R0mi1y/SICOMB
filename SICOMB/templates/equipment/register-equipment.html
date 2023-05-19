@@ -1,159 +1,87 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Registro do equipamento</title>
+{% extends 'base/base.html' %}
+{% load static %}
 
-        <style>
-            /* Estilos CSS */
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f5f5f5;
-            }
-        
-            h1 {
-                text-align: center;
-                margin-top: 30px;
-                color: #333;
-            }
-        
-            form {
-                /* Centraliza o formulário na página */
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #fff;
-                border-radius: 5px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            }
-        
-            input[type="text"],
-            select {
-                display: block;
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 20px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                box-sizing: border-box;
-            }
-        
-            input[type="submit"] {
-                background-color: #333;
-                color: #fff;
-                border: none;
-                padding: 10px 20px;
-                font-size: 16px;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-        
-            input[type="submit"]:hover {
-                background-color: #555;
-            }
-        
-            /* Esconde a primeira caixa de texto */
-            #uid1 {
-                display: none;
-            }
-        
-            /* Define o estilo do input de número de série */
-            #serial_number {
-                font-weight: bold;
-            }
-        
-            /* Define o estilo das opções default nos selects */
-            #type option[value=""],
-            #type_id option[value=""] {
-                display: none;
-            }
-        </style>
-        
-        
-    </head>
-    <body>
-        <h1>Registro do equipamento</h1>
-        <form method="post" action=".">
-            {% csrf_token %}
-            <input type="text" id="uid1" name="uid">
-            <input type="text" id="uid" disabled required>
-            <input type="text" placeholder="Numero de série" name="serial_number" id="serial_number" disabled required>
-            <select disabled name="type" id="type" required>
-                <option value='' id="choice" selected>Tipo de equipamento</option>
-                <option value="Armament">Armamento</option>
-                <option value="Wearable">Vestível</option>
-            </select>
-            <select disabled name="type_id" id="type_id" required>
-                <option value='' id="choice_2" selected>Tipo específico</option>
-            </select>
-            <input type="submit" value="Cadastrar">
-        </form>
-    </body>
+{% block css %}{% static 'css/register_equipment.css' %}{% endblock %}
+{% block title %}SICOMB - Registro de Equipamento{% endblock title %}
 
-    <script>
-        const typeDropdown = document.getElementById("type");
-        const typeIdDropdown = document.getElementById("type_id");
-        const serialNumberInput = document.getElementById("serial_number");
-        let equipmentData;
+{% block content %}
+<div class="container">
+    <h1>Registro do equipamento</h1>
+    <form method="post" action=".">
+        {% csrf_token %}
+        <input type="text" id="uid1" name="uid">
+        <input type="text" id="uid" disabled required>
+        <input type="text" placeholder="Numero de série" name="serial_number" id="serial_number" disabled required>
+        <select disabled name="type" id="type" required>
+            <option value='' id="choice" selected>Tipo de equipamento</option>
+            <option value="Armament">Armamento</option>
+            <option value="Wearable">Vestível</option>
+        </select>
+        <select disabled name="type_id" id="type_id" required>
+            <option value='' id="choice_2" selected>Tipo específico</option>
+        </select>
+        <input type="submit" value="Cadastrar">
+    </form>
+</div>
 
-        function fetchEquipmentData() {
-            fetch('http://localhost:8000/equipment/get')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
 
-                    // Armazena os dados do equipamento em uma variável pra usar depois
-                    equipmentData = data;
+<script>
+    const typeDropdown = document.getElementById("type");
+    const typeIdDropdown = document.getElementById("type_id");
+    const serialNumberInput = document.getElementById("serial_number");
+    let equipmentData;
 
-                    // Atualiza os campos com as respectivas opções
-                    if (data.uid !== '') {
-                        document.getElementById("uid").value = data.uid;
-                        document.getElementById("uid1").value = data.uid;
+    function fetchEquipmentData() {
+        fetch('http://localhost:8000/equipment/get')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
 
-                        // Para de ficar requisitando
-                        clearInterval(interval);
+                // Armazena os dados do equipamento em uma variável pra usar depois
+                equipmentData = data;
 
-                        if (data.registred !== false) {
-                            let campo;
+                // Atualiza os campos com as respectivas opções
+                if (data.uid !== '') {
+                    document.getElementById("uid").value = data.uid;
+                    document.getElementById("uid1").value = data.uid;
 
-                            if(data.registred == 'Wearable'){
-                                campo = 'Vestível';
-                            } else {
-                                campo = 'Armamento';
-                            }
-                            
-                            document.getElementById("choice").innerHTML = campo;
+                    // Para de ficar requisitando
+                    clearInterval(interval);
 
-                            if(data.registred == 'Wearable'){
-                                campo = eval(`data.${data.registred}.model`) + ' ' + eval(`data.${data.registred}.size`);
-                            } else {
-                                campo = eval(`data.${data.registred}.model`) + ' ' + eval(`data.${data.registred}.caliber`);
-                            }
+                    if (data.registred !== false) {
+                        let campo;
 
-                            document.getElementById("choice_2").innerHTML = campo;
-                            serialNumberInput.value = data.equipment.serial_number;
+                        if (data.registred == 'Wearable') {
+                            campo = 'Vestível';
                         } else {
-                            // Habilita os campo pra cadastro
-                            typeDropdown.removeAttribute("disabled");
-                            serialNumberInput.removeAttribute("disabled");
+                            campo = 'Armamento';
                         }
+
+                        document.getElementById("choice").innerHTML = campo;
+
+                        if (data.registred == 'Wearable') {
+                            campo = eval(`data.${data.registred}.model`) + ' ' + eval(`data.${data.registred}.size`);
+                        } else {
+                            campo = eval(`data.${data.registred}.model`) + ' ' + eval(`data.${data.registred}.caliber`);
+                        }
+
+                        document.getElementById("choice_2").innerHTML = campo;
+                        serialNumberInput.value = data.equipment.serial_number;
+                    } else {
+                        // Habilita os campo pra cadastro
+                        typeDropdown.removeAttribute("disabled");
+                        serialNumberInput.removeAttribute("disabled");
                     }
-                })
+                }
+            })
             .catch(error => console.error(error));
-        }
+    }
 
-        // cria um intervalo pra chamar a função a cada 1 segundo
-        const interval = setInterval(fetchEquipmentData, 1000);
+    // cria um intervalo pra chamar a função a cada 1 segundo
+    const interval = setInterval(fetchEquipmentData, 1000);
 
-        // cria um evento para cada mudança no select
-        typeDropdown.addEventListener('change', function() {
+    // cria um evento para cada mudança no select
+    typeDropdown.addEventListener('change', function () {
         if (typeDropdown.value !== '') {
             console.log(equipmentData);
             console.log(typeDropdown.value);
@@ -177,7 +105,6 @@
         } else {
             typeIdDropdown.setAttribute("disabled", true);
         }
-        });
-
-        </script>
-</html>
+    });
+</script>
+{% endblock content %}

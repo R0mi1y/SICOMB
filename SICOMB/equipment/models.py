@@ -19,15 +19,6 @@ class Equipment(models.Model):
     #     verbose_name = 'Equipamento'
 
 
-class Bullet(models.Model):
-    amount = models.IntegerField('Quantidade', default=0)
-    image_path = models.TextField('caminho da imagem', default=img_alt)
-    caliber = models.CharField('Calibre', max_length=50)
-
-    def __str__(self):
-        return f"Munição {self.caliber}"
-
-
 class Model_armament(models.Model):
     model = models.TextField('Modelo do armamento')
     caliber = models.CharField('Calibre', max_length=10)
@@ -44,18 +35,27 @@ class Model_wearable(models.Model):
 
     def __str__(self):
         return f"Vestível {self.model}"
+
     
+class Model_accessory(models.Model): # bastão, escudo
+    model = models.TextField('Modelo do armamento')
     
-class Model_grenada(models.Model):
+    def __str__(self):
+        return f"Acessório {self.model}"
+
+    
+class Grenada(models.Model):
     model = models.TextField('Modelo do armamento')
     image_path = models.TextField('caminho da imagem', default=img_alt)
     
     def __str__(self):
         return f"Granada {self.model}"
     
-    
-class accessory(models.Model): # bastão, escudo
-    model = models.TextField('Modelo do armamento')
-    
+
+class Bullet(models.Model):
+    amount = models.IntegerField('Quantidade', default=0)
+    image_path = models.TextField('caminho da imagem', default=img_alt)
+    caliber = models.CharField('Calibre', max_length=50)
+
     def __str__(self):
-        return f"Acessório {self.model}"
+        return f"Munição {self.caliber}"

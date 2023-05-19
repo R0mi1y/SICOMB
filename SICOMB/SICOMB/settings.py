@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'equipment',
     'main',
     'police',
+    'cargo',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True  # CORS configuração

@@ -1,13 +1,15 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block css %}{% static 'css/register.css' %}{% endblock %}
+{% block css %}{% static 'css/register_police.css' %}{% endblock %}
 {% block title %}SICOMB - Registrar{% endblock title %}
 
 {% block content %}
+ <div class="container">
     <form action="." method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Cadastrar">
     </form>
+ </div>
 {% endblock content %}

@@ -4,17 +4,18 @@
 {% block css %}{% static 'css/login.css' %}{% endblock %}
 {% block title %}SICOMB - Login{% endblock title %}
 
-{% block content %}
+{% block content_main %}
 
-<header>
+<div class="top-side">
     <div class="header-content">
         <div class="logo">
             <img src="{% static 'img/17bpm_guanambi.png' %}" alt="logo">
         </div>
         <h1 class="text-nav">SISCOEM - Sistema de Controle de Equipamentos Militares</h1>
-    </div> 
-</header>
+    </div>
 
+</div>
+    
 <div class="container">
     <div class="column">
         <div class="l-left">
@@ -43,4 +44,4 @@
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock content_main %}

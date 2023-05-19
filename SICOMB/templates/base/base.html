@@ -7,13 +7,85 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% block css %}{% endblock %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <title>{% block title %}{% endblock title %}</title>
+    <style>
+        @font-face {
+            font-family: interRegular;
+            src:url({% static 'fonts/Inter-Regular.ttf' %});
+        }
+
+        @font-face {
+            font-family: interBold;
+            src:url({% static 'fonts/Inter-Bold.ttf' %});
+        }
+
+        @font-face {
+            font-family: interExtraBold;
+            src: url({% static 'fonts/Inter-ExtraBold.ttf' %});
+        }
+
+        @font-face {
+            font-family: interExtraLight;
+            src: url({% static 'fonts/Inter-ExtraLight.ttf' %});
+        }
+    </style>
 </head>
 
 <body>
 
+    {% block content_main %}
+    <header>
+        <nav id="navbar">
+            <ul class="alter">
+                <div class="logo">
+                    <img class="img-bpm" src="{% static 'img/17bpm_guanambi.png' %}"
+                        alt="17º Batalhão de Polícia Militar do Estado da Bahia">
+                    <h3>SISCOEM</h3>
+                </div>
+                <li onclick="window.location='#'">
+                    <img src="{% static 'img/dashboard.png' %}" alt="">
+                    <span>Dashboard</span>
+                </li>
+                <p>Gerenciamento</p>
+                <li onclick="window.location='/cargo/fazer_carga/'">
+                    <img src="{% static 'img/click.png' %}" alt="">
+                    <span>Fazer Carga</span>
+                </li>
+                <li onclick="window.location='#'">
+                    <img src="{% static 'img/network.png' %}" alt="">
+                    <span>Cargas</span>
+                </li>
+                <li onclick="window.location='#'">
+                    <img src="{% static 'img/disket.png' %}" alt="">
+                    <span>Equipamentos</span>
+                </li>
+                <li onclick="window.location='#'">
+                    <img src="{% static 'img/reports.png' %}" alt="">
+                    <span>Relatórios</span>
+                </li>
+                <hr>
+                <p>Cadastramento</p>
+                <li onclick="window.location='/police/register/'">
+                    <img src="{% static 'img/user.png' %}" alt="">
+                    <span>Cadastrar Policial</span>
+                </li>
+                <li onclick="window.location='/equipment/cadastro/'">
+                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                    <span>Cadastrar Equipamento</span>
+                </li>
+            </ul>
+            {% comment %} <div class="balls">
+                <div class="ball ball_blue"></div>
+                <div class="ball ball_red"></div>
+            </div> {% endcomment %}
+
+        </nav>
+    </header>
     {% block content %}{% endblock content %}
-    
+    {% endblock content_main %}
+
+
     <script src="{% static 'js/script.js'%}"></script>
 </body>
 
