@@ -5,7 +5,7 @@ function verificarTamanhoTela() {
     console.log(elemento.textContent);
     console.log(larguraTela);
 
-    if (larguraTela < 1310) { // Por exemplo, remova o texto quando a largura for inferior a 768 pixels
+    if (larguraTela <= 768) { // Por exemplo, remova o texto quando a largura for inferior a 768 pixels
         elemento.textContent = "SISCOEM";
     } else {
         elemento.textContent = "SISCOEM - Sistema de Controle de Equipamentos Militares"; // Restaura o texto se a largura for maior ou igual a 768 pixels

@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -7,42 +6,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% block css %}{% endblock %}">
     <title>{% block title %}{% endblock title %}</title>
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">
-            <img src="{% static 'img/17bpm_guanambi.png' %}" alt="logo">
-        </div>
-        <h1 class="text-nav">SISCOEM - Sistema de Controle de Equipamentos Militares</h1>
-        
-        <div class="nav-content">
-            <div class="nav">
-                <a href="">Início</a>
-                <a href="">Sobre</a>
-            </div>
-        </div>
-        
-
-    </header>
-
+    {% block content %}{% endblock content %}
     
-    {% block content %}
-    <div class="container">
-        <div class="column">
-            {% block l-left %}
-            {% endblock l-left %}
-        </div>
-        <div class="column">
-            {% block l-right %}
-            {% endblock l-right %}
-        </div>
-    </div>
-    {% endblock content %}
-
     <script src="{% static 'js/script.js'%}"></script>
 </body>
 
