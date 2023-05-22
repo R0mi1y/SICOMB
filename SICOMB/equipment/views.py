@@ -7,6 +7,7 @@ from django.forms.models import model_to_dict
 
 @login_required
 def register_equipment(request):
+    
     if request.method == 'POST':
         models.Equipment(
             serial_number=request.POST.get('serial_number'),
@@ -14,7 +15,7 @@ def register_equipment(request):
             type=request.POST.get('type'),
             type_id=request.POST.get('type_id'),
         ).save()
-
+        print('Chegou aqui')
         return render(request, 'equipment/register-equipment.html', {'message': 'Equipamento cadastrado com sucesso'})
     else:
         return render(request, 'equipment/register-equipment.html')
@@ -26,7 +27,7 @@ def register_equipment(request):
 def get_equipment(request):
     data = {}
     
-    # Para caso o que o usuário esteja solicitando não seja algo q tenha uma tag
+    # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get('type') != None:
         data['registred'] = request.POST.get('type')
         

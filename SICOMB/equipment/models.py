@@ -9,7 +9,7 @@ class Equipment(models.Model):
     uid = models.CharField('UID', max_length=20, primary_key=True, default='null')
     type = models.CharField('Tipo', max_length=50, default='')
     type_id = models.CharField('Tipo', max_length=50, default='null')
-    observation = models.TextField('Observação')
+    observation = models.TextField('Observação', default='null')
     status = models.CharField("Estado atual", max_length=10, default="Disponivel")
 
     def __str__(self):

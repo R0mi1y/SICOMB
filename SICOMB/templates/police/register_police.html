@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block css %}{% static 'css/register_police.css' %}{% endblock %}
+{% block title %}SICOMB - Registrar{% endblock title %}
+
+{% block content %}
+<div class="container">
+   <section class="top-content">
+      <h1>CADASTRAR POLICIAL</h1>
+      <div>
+         <a href="#" class="info-login">
+            <span class="top-item">
+               <img src="{% static 'img/user.png' %}" alt="Usuário">
+            </span>
+   
+            <span class="top-item">
+               <h3>SGTALMEIDA</h3>
+               <p>MATRÍCULA: 129834765</p>
+            </span class="top-item">
+            <span>
+               <img id="down_arrow" src="{% static 'img/down_arrow.png' %}" alt="">
+               <div class="dropdown-menu">
+                  <a href="#" class="dropdown-item">
+                     <!-- <img src="{% static 'img/" alt="" srcset="">
+                                           Logout -->
+                  </a>
+               </div>
+            </span>
+         </a>
+      </div>
+   </section>
+   <section class="section_register">
+      <div class="registration shadow">
+         <table>
+            <thead>
+               <tr>
+                  <th colspan="100%" class="title">
+                     <h3>CADASTRAR POLICIAL</h3>
+                  </th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td class="sub-title">PREENCHA O FORMULÁRIO PARA O CADASTRO <br>DE UM NOVO POLICIAL</td>
+               </tr>
+            </tbody>
+         </table>
+         <div class="row_color"><span>
+               <hr>
+            </span></div>
+
+         <form action="/seu-url-de-destino" method="POST">
+            {% csrf_token %}
+            <div class="input-div">
+               
+               <div class="input-box">
+               {{form.nome.label_tag}}
+               {{form.nome}}
+               {{form.matricula.label_tag}}
+               {{form.matricula}}
+               {{form.telefone.label_tag}}
+               {{form.telefone}}
+               {{form.lotacao.label_tag}}
+               {{form.lotacao}}
+               </div>
+               <div class="input-box">
+               {{form.sobrenome.label_tag}}
+               {{form.sobrenome}}
+               {{form.posto.label_tag}}
+               {{form.posto}}
+               {{form.email.label_tag}}
+               {{form.email}}
+               </div>
+               
+            </div>
+            <div class="finalize-registration">
+               <input class="box-shadow-registration" type="submit" value="FINALIZAR CADASTRO">
+            </div>
+         </form>
+      </div>
+   </section>
+</div>
+{% endblock content %}

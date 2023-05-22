@@ -10,3 +10,13 @@ class Police(User):
     plate = models.CharField('Matricula', max_length=20)
     
 # class adjunto(models.Model):
+
+class RegisterPolice(models.Model):
+    
+    nome = models.CharField(max_length=200)
+    sobrenome = models.CharField(max_length=200)
+    matricula = models.CharField(max_length=20)
+    posto = models.CharField(max_length=10)
+    email = models.EmailField(max_length=200)
+    telefone = models.CharField(max_length=11)
+    lotacao = models.CharField(max_length=50)
