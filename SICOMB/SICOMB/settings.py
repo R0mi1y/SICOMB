@@ -39,10 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'police',
     'equipment',
     'main',
-    'police',
     'cargo',
 ]
 

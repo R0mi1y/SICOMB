@@ -1,10 +1,10 @@
-{% extends 'base/base.html' %}
+{% extends 'base/topo.html' %}
 {% load static %}
 
-{% block content %}
-<div class="container">
+{% block content_intermed %}
 
-{% block content_intermed %}{% endblock content_intermed %}
+
+{% block content_final %}{% endblock content_final %}
 
 <footer>
     <div class="footer-div">
@@ -13,5 +13,5 @@
         <h3>SISCOEM - Sistema de Controle de Equipamentos Militarers</h3>
     </div>
 </footer>
-</div>
-{% endblock content %}
+
+{% endblock content_intermed %}

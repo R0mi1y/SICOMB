@@ -4,32 +4,9 @@
 {% block css %}{% static 'css/register_police.css' %}{% endblock %}
 {% block title %}SICOMB - Registrar{% endblock title %}
 
-{% block content_intermed %}
+{% block content_final %}
 
-   <section class="top-content">
-      <h1>CADASTRAR POLICIAL</h1>
-      <div>
-         <a href="#" class="info-login">
-            <span class="top-item">
-               <img src="{% static 'img/user.png' %}" alt="Usuário">
-            </span>
-   
-            <span class="top-item">
-               <h3>SGTALMEIDA</h3>
-               <p>MATRÍCULA: 129834765</p>
-            </span class="top-item">
-            <span>
-               <img id="down_arrow" src="{% static 'img/down_arrow.png' %}" alt="">
-               <div class="dropdown-menu">
-                  <a href="#" class="dropdown-item">
-                     <!-- <img src="{% static 'img/" alt="" srcset="">
-                                           Logout -->
-                  </a>
-               </div>
-            </span>
-         </a>
-      </div>
-   </section>
+
    <section class="section_register">
       <div class="registration shadow">
          <table>
@@ -50,7 +27,7 @@
                <hr>
             </span></div>
 
-         <form action="/seu-url-de-destino" method="POST">
+         <form action="" method="POST">
             {% csrf_token %}
             <div class="input-div">
                
@@ -81,4 +58,4 @@
       </div>
    </section>
 
-{% endblock content_intermed %}
+{% endblock content_final %}

@@ -59,3 +59,5 @@ class Bullet(models.Model):
 
     def __str__(self):
         return f"Munição {self.caliber}"
+
+
