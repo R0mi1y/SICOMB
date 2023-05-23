@@ -1,17 +1,19 @@
-.top-content h1 {
-    font-family: interExtraBold;
-    font-style: italic;
 
-
-}
 .top-content {
     color: #004593;
     display: flex;
     justify-content: space-between;
     height: 80px;
     align-items: center;
-    padding: 0px;
+    padding: 0 20px;
     
+}
+
+.top-content h1 {
+    font-family: interExtraBold;
+    font-style: italic;
+
+
 }
 
 .top-item {

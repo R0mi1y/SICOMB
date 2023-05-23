@@ -21,11 +21,6 @@ header {
     background-color: #004593;
 }
 
-.container {
-    width: 100vh;
-    padding: 0px 25px;
-}
-
 #navbar {
     
     display: grid;

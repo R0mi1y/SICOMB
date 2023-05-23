@@ -28,10 +28,11 @@
 }
 
 body {
-    background: #004593;
+    background: #004593 !important;
 }
 
 .container {
+    width: 100% !important;
     margin: 0 auto;
     max-width: 1250px;
     display: flex;

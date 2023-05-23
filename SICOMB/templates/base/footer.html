@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+
+{% block content_intermed %}{% endblock content_intermed %}
+
+<footer>
+    <div class="footer-div">
+        <img class="img-bpm" src="{% static 'img/17bpm_guanambi.png' %}"
+            alt="17º Batalhão de Polícia Militar do Estado da Bahia">
+        <h3>SISCOEM - Sistema de Controle de Equipamentos Militarers</h3>
+    </div>
+</footer>
+</div>
+{% endblock content %}

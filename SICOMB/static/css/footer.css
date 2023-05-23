@@ -1,13 +1,12 @@
 footer {
     background-color: #fff;
     width: 100%;
-    border-top: 1px solid rgb(156, 156, 156);
 }
 
 .footer-div {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     font-family: 'interRegular';
     color: rgb(0, 69, 147);
     padding: 0px 20px;

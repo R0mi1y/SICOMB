@@ -1,11 +1,11 @@
-{% extends 'base/base.html' %}
+{% extends 'base/footer.html' %}
 {% load static %}
 
 {% block css %}{% static 'css/register_police.css' %}{% endblock %}
 {% block title %}SICOMB - Registrar{% endblock title %}
 
-{% block content %}
-<div class="container">
+{% block content_intermed %}
+
    <section class="top-content">
       <h1>CADASTRAR POLICIAL</h1>
       <div>
@@ -55,21 +55,21 @@
             <div class="input-div">
                
                <div class="input-box">
-               {{form.nome.label_tag}}
+               <label for="{{ form.nome.id_for_label }}" class="custom-label">Nome</label>
                {{form.nome}}
-               {{form.matricula.label_tag}}
+               <label for="{{ form.matricula.id_for_label }}" class="custom-label">Matrícula</label>
                {{form.matricula}}
-               {{form.telefone.label_tag}}
+               <label for="{{ form.telefone.id_for_label }}" class="custom-label">Telefone</label>
                {{form.telefone}}
-               {{form.lotacao.label_tag}}
+               <label for="{{ form.lotacao.id_for_label }}" class="custom-label">Lotação</label>
                {{form.lotacao}}
                </div>
                <div class="input-box">
-               {{form.sobrenome.label_tag}}
+                  <label for="{{ form.sobrenome.id_for_label }}" class="custom-label">Sobrenome</label>
                {{form.sobrenome}}
-               {{form.posto.label_tag}}
+               <label for="{{ form.posto.id_for_label }}" class="custom-label">Posto</label>
                {{form.posto}}
-               {{form.email.label_tag}}
+               <label for="{{ form.email.id_for_label }}" class="custom-label">Email</label>
                {{form.email}}
                </div>
                
@@ -80,5 +80,5 @@
          </form>
       </div>
    </section>
-</div>
-{% endblock content %}
+
+{% endblock content_intermed %}
