@@ -28,9 +28,11 @@
             
                 {% csrf_token %}
                 <div class="input-box">
+                    {% comment %} <label for="" class="input-title">DESCRIÇÃO</label> {% endcomment %}
                     <h4 class="input-title">NOME</h4>
                     <input type="text" class="input-data" placeholder="Digite o nome">
 
+                    {% comment %} <label for="{{ form.type.id_for_label }}" class="input-title">TIPO DE EQUIPAMENTO</label> {% endcomment %}
                     <h4 class="input-title">TIPO DE EQUIPAMENTO</h4>
                     <!-- <label for="equipment-type"></label> -->
                     <div class="select">
