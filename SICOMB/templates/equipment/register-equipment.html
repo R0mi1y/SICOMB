@@ -1,110 +1,13 @@
-{% extends 'base/base.html' %}
+{% extends 'base/footer.html' %}
 {% load static %}
 
 {% block css %}{% static 'css/register_equipment.css' %}{% endblock %}
 {% block title %}SICOMB - Registro de Equipamento{% endblock title %}
+{% block title_top %}REGISTRO DE EQUIPAMENTO{% endblock title_top %}
 
-{% block content %}
-<div class="container">
-    <h1>Registro do equipamento</h1>
-    <form method="post" action=".">
-        {% csrf_token %}
-        <input type="text" id="uid1" name="uid">
-        <input type="text" id="uid" disabled required>
-        <input type="text" placeholder="Numero de série" name="serial_number" id="serial_number" disabled required>
-        <select disabled name="type" id="type" required>
-            <option value='' id="choice" selected>Tipo de equipamento</option>
-            <option value="Armament">Armamento</option>
-            <option value="Wearable">Vestível</option>
-        </select>
-        <select disabled name="type_id" id="type_id" required>
-            <option value='' id="choice_2" selected>Tipo específico</option>
-        </select>
-        <input type="submit" value="Cadastrar">
-    </form>
-</div>
+{% block content_final %}
+
+<h1>REGISTER EQUIPMENT</h1>
 
 
-<script>
-    const typeDropdown = document.getElementById("type");
-    const typeIdDropdown = document.getElementById("type_id");
-    const serialNumberInput = document.getElementById("serial_number");
-    let equipmentData;
-
-    function fetchEquipmentData() {
-        fetch('http://localhost:8000/equipment/get')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-
-                // Armazena os dados do equipamento em uma variável pra usar depois
-                equipmentData = data;
-
-                // Atualiza os campos com as respectivas opções
-                if (data.uid !== '') {
-                    document.getElementById("uid").value = data.uid;
-                    document.getElementById("uid1").value = data.uid;
-
-                    // Para de ficar requisitando
-                    clearInterval(interval);
-
-                    if (data.registred !== false) {
-                        let campo;
-
-                        if (data.registred == 'Wearable') {
-                            campo = 'Vestível';
-                        } else {
-                            campo = 'Armamento';
-                        }
-
-                        document.getElementById("choice").innerHTML = campo;
-
-                        if (data.registred == 'Wearable') {
-                            campo = eval(`data.${data.registred}.model`) + ' ' + eval(`data.${data.registred}.size`);
-                        } else {
-                            campo = eval(`data.${data.registred}.model`) + ' ' + eval(`data.${data.registred}.caliber`);
-                        }
-
-                        document.getElementById("choice_2").innerHTML = campo;
-                        serialNumberInput.value = data.equipment.serial_number;
-                    } else {
-                        // Habilita os campo pra cadastro
-                        typeDropdown.removeAttribute("disabled");
-                        serialNumberInput.removeAttribute("disabled");
-                    }
-                }
-            })
-            .catch(error => console.error(error));
-    }
-
-    // cria um intervalo pra chamar a função a cada 1 segundo
-    const interval = setInterval(fetchEquipmentData, 1000);
-
-    // cria um evento para cada mudança no select
-    typeDropdown.addEventListener('change', function () {
-        if (typeDropdown.value !== '') {
-            console.log(equipmentData);
-            console.log(typeDropdown.value);
-            console.log(equipmentData[typeDropdown.value]);
-            typeIdDropdown.removeAttribute("disabled");
-
-            typeIdDropdown.innerHTML = '<option value="" id="choice_2" selected="">Tipo específico</option>';
-
-            // Determina qual propriedade do equipmento usar para o tipo específico do dropdown
-            let property;
-            if (typeDropdown.value === 'Armament') {
-                property = 'caliber';
-            } else {
-                property = 'size';
-            }
-
-            // Adiciona as options no dropdown
-            for (const key in equipmentData[typeDropdown.value]) {
-                typeIdDropdown.innerHTML += `<option value="${equipmentData[typeDropdown.value][key].id}">${equipmentData[typeDropdown.value][key].model} ${equipmentData[typeDropdown.value][key][property]}</option>`;
-            }
-        } else {
-            typeIdDropdown.setAttribute("disabled", true);
-        }
-    });
-</script>
-{% endblock content %}
+{% endblock content_final %}

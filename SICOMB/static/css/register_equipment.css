@@ -1,5 +1,8 @@
 @import 'header.css';
 
 .container {
-    height: 100vh;
+    flex: 1;
 }
+
+
+
