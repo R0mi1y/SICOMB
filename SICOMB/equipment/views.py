@@ -63,17 +63,14 @@ def get_equipment(request):
             data['registred'] = equipment.type
             data['equipment'] = model_to_dict(equipment)
             
-            if equipment.type == 'Armament': # Recupera o objeto armamento, que complementa o equipamento
-                armament = models.Model_armament.objects.get(pk=equipment.type_id)
-                data['Armament'] = model_to_dict(armament)
+            if equipment.armament != None: # Recupera o objeto armamento, que complementa o equipamento
+                data['Armament'] = model_to_dict(equipment.armament)
 
-            elif equipment.type == 'Wearable': # Recupera o objeto vestimento, que complementa o equipamento
-                wearable = models.Model_wearable.objects.get(pk=equipment.type_id)
-                data['Wearable'] = model_to_dict(wearable)
+            elif equipment.wearable != None: # Recupera o objeto vestimento, que complementa o equipamento
+                data['Wearable'] = model_to_dict(equipment.wearable)
             
-            elif equipment.type == 'Acessory': # Recupera o objeto acessorio, que complementa o equipamento
-                acessory = models.Model_acessory.objects.get(pk=equipment.type_id)
-                data['accessory'] = model_to_dict(acessory)
+            elif equipment.accessory != None: # Recupera o objeto acessorio, que complementa o equipamento
+                data['accessory'] = model_to_dict(equipment.accessory)
         
     return JsonResponse(data) # Retorna o dicionário em forma de api
         

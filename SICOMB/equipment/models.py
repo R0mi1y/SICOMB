@@ -3,23 +3,6 @@ from django.db import models
 #imagem para caso não tenha uma imagem ainda
 img_alt = ''
 
-class Equipment(models.Model):
-    # chave primária do equipamento
-    #description = models.CharField('Descrição', max_length=45)
-    serial_number = models.CharField('Numero de série', max_length=20)
-    uid = models.CharField('UID', max_length=20, primary_key=True, default='null')
-    type = models.CharField('Tipo', max_length=50, default='')
-    type_id = models.CharField('Tipo', max_length=50, default='null')
-    observation = models.TextField('Observação', default='null')
-    status = models.CharField("Estado atual", max_length=10, default="Disponivel")
-
-    def __str__(self):
-        return f"Equipamento {self.type}"
-
-    # class Meta:
-    #     verbose_name = 'Equipamento'
-
-
 class Model_armament(models.Model):
     model = models.TextField('Modelo do armamento')
     caliber = models.CharField('Calibre', max_length=10)
@@ -44,6 +27,24 @@ class Model_accessory(models.Model): # bastão, escudo
     def __str__(self):
         return f"Acessório {self.model}"
 
+    
+class Equipment(models.Model):
+    # chave primária do equipamento
+    serial_number = models.CharField('Numero de série', max_length=20)
+    uid = models.CharField('UID', max_length=20, primary_key=True, default=None)
+    type = models.CharField('Tipo', max_length=50, default='')
+    observation = models.TextField('Observação', default=None)
+    status = models.CharField("Estado atual", max_length=10, default="Disponivel")
+    armament = models.OneToOneField(Model_armament, on_delete=models.CASCADE, default=None)
+    accessory = models.OneToOneField(Model_accessory, on_delete=models.CASCADE, default=None)
+    wearable = models.OneToOneField(Model_wearable, on_delete=models.CASCADE, default=None)
+
+    def __str__(self):
+        return f"Equipamento {self.type}"
+
+    # class Meta:
+    #     verbose_name = 'Equipamento'
+    
     
 class Grenada(models.Model):
     model = models.TextField('Modelo do armamento')
