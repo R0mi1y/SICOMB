@@ -7,7 +7,96 @@
 
 {% block content_final %}
 
-<h1>REGISTER EQUIPMENT</h1>
+<section class="section_register shadow">
+    <div class="registration shadow">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="100%" class="title"><h3>FORMULÁRIO DE CADASTRO DE EQUIPAMENTOS</h3></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sub-title">PREENCHA O FORMULÁRIO PARA O CADASTRO <br>DE UM NOVO EQUIPAMENTO</td>
+                </tr>
+            </tbody>   
+        </table>
+        <div class="row_color"><span><hr></span></div>
+        
+        <form action="" method="POST" >
+            <div class="input-div">
+            
+                {% csrf_token %}
+                <div class="input-box">
+                    <h4 class="input-title">NOME</h4>
+                    <input type="text" class="input-data" placeholder="Digite o nome">
+
+                    <h4 class="input-title">TIPO DE EQUIPAMENTO</h4>
+                    <!-- <label for="equipment-type"></label> -->
+                    <div class="select">
+                        <select name="equipment-type" class="select-field">
+                            <option selected disabled>ESCOLHA O TIPO DO EQUIPAMENTO</option>
+                            <option value="armament">ARMAMENTO</option>
+                            <option value="wearable">VESTÍVEL</option>
+                            <option value="accessory">ACESSÓRIO</option>
+                            <option value="granade">GRANADA</option>
+                            <option value="ammunition">MUNIÇÃO</option>
+                        </select>
+                        <span class="custom-arrow"></span>
+                    </div>
+                    <h4 class="input-title">NÚMERO DE SÉRIE</h4>
+                    <input type="text" class="input-data" placeholder="Digite o e-mail">
+                    
+                    <h4 class="input-title">TIPO DE ARMAMENTO</h4>
+                    <!-- <label for="armament-type">SELECIONE O TIPO DO ARMAMENTO</label> -->
+                    <div class="select">
+                        <select name="armament-type" class="select-field">
+                            <option selected disabled>SELECIONE O TIPO DO ARMAMENTO</option>
+                            <option value="escopeta">ESCOPETA</option>
+                            <option value="fuzil">FUZIL</option>
+                            <option value="pistola">PISTOLA</option>
+                            <option value="revolver">REVOLVER</option>
+                        </select>
+                    </div>
+                                                
+                </div>
+                <div class="input-box">
+                    <h4 class="input-title">ID</h4>
+                    <input type="text" class="input-data" placeholder="">
+                    <h4 class="input-title">QUANTIDADE</h4>
+                    <input type="text" class="input-data" placeholder="Digite a quantidade">
+
+                    <h4 class="input-title">CALIBRE</h4>
+                    <!-- <label for="armament-type">SELECIONE O CALIBRE DO ARMAMENTO</label> -->
+                    <div class="select">
+                        <select name="armament-type" class="select-field">
+                            <option selected disabled>SELECIONE O CALIBRE DO ARMAMENTO</option>
+                            <option value=".22mm">.22MM</option>
+                            <option value=".40mm">.40MM</option>
+                            <option value="5.56mm">5.56MM</option>
+                            <option value="7.62mm">7.62MM</option>
+                            <option value="9mm">9MM</option>
+                        </select>
+                    </div>
+                    <h4 class="input-title">ANEXAR IMAGEM</h4>
+                    <div class="file-div">
+                        <input class="input-file" type="file" id="file" accept="image/*">
+                        <label class="file-label" for="file">UPLOAD DE ARQUIVO +</label>
+                    </div>
+                </div>
+            
+             </div>
+
+        </form>
+        <div class="finalize-registration">
+            <label><input class="box-shadow-registration" type="submit" value="FINALIZAR CADASTRO"></label>
+        </div>
+        
+
+    </div>
+
+
+</section>
 
 
 {% endblock content_final %}

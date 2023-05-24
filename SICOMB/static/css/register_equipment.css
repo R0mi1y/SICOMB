@@ -4,5 +4,190 @@
     flex: 1;
 }
 
+.section_register{
+    display: flex;
+    justify-content: center;
+}
+.registration{
+    height: 800px;
+    width: 70%;
+    background-color: #fff;
+    border-radius: 10px;
+    margin: 0% 0% 5% 0%;
+}
+.title{
+    font-family: interBold;
+    color: #fff;
+    height: 50px;
+    width: 100%;
+    background-color: #004593;
+    border-radius: 10px 10px 0px 0px;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+}
+
+.sub-title{
+    height: 50px;
+    padding: 2% 0%;;
+}
+
+.row_color{
+    display: flex;
+    justify-content: center;
+    padding: 0% 0% 5% 0%;
+}
+.row_color span{
+    height: 2px;
+    width: 80%;
+    background-color: rgb(0,111,237,0.45);   
+}
+
+.input-div{
+    display: flex;
+    justify-content: space-around;
+}
+.input-box{
+    padding: 0px 20px;
+}
+
+.input-title{
+    font-family: interBold;
+    color: #004593;
+    font-size: 14px;
+    padding: 10% 5% 5% 5%;
+}
+.input-data{
+    background-color: rgb(0,69,147, 0.10);
+    padding: 2% 5%;
+    border-radius: 10px;
+    border: 2px solid rgb(0,112,237, 0.45);
+    font-size: 14px;
+    font-family: 'interBold';
+    color: #004593;
+    line-height: 40px;
+    width: 89%;
+}
+.file-div{
+    display: flex;
+    
+}
+
+.select-field{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background-color: rgb(0,69,147, 0.10);
+    background-image: none;
+    flex: 1;
+    /* padding: 0 5em; */
+    cursor: pointer;
+    color: rgb(0,112,237, 0.8);
+    font-family: 'interBold';
+    font-size: 11px;
+    padding: 0% 1% 0% 1%;
+} 
+.select-field::-ms-expand{
+    display: none;
+}
+.select{
+    height: 3em;
+    background-color: rgb(0,69,147, 0.10);
+    border: 2px solid rgb(0,112,237, 0.45);
+    overflow: hidden;
+    border-radius: 10px;
+    display: flex;
+    transition: .25s;
+}
 
 
+.select::after{
+    display: flex;
+    align-items: center;
+    content: '\25BC';
+    color: #fff;
+    /* position: absolute; */
+    /* top: 0%; */
+    /* right: 0%; */
+    padding: 0 1em;
+    background: rgb(0,112,237, 0.45);
+    cursor: pointer;
+    pointer-events: none;
+    transition: .25s all ease;
+}
+.select:hover::after{
+    /* background-color: #004593; */
+    color: #004593;
+}
+
+.file-label{
+    padding: 6% 5%;
+}
+
+.select-field option{
+    
+}
+
+.input-file{
+    display: none;
+}
+
+.file-label{
+    background-color: rgb(0,112,237, 0.45);
+    color: #004593;
+    font-family: interBold;
+    font-size: 14px;
+    padding: 8% 5%;
+    border-radius: 10px;
+    border: 1px solid rgb(0,111,237, 0.45);
+    width: 100%;
+    cursor: pointer;
+    transition: .5s;
+}
+.file-label:hover{
+    color: #fff;
+    background-color: rgb(0,69,147, 0.80);
+    border: 1px solid rgb(0,111,237, 0.45);
+}
+
+.finalize-registration{
+    display: flex;
+    justify-content: center;
+    padding: 10%;
+}
+
+.finalize-registration label input {
+    font-family: interBold;
+    font-size: 15px;
+    color: #fff;
+    background-color: rgb(0,111,237);
+    border-radius: 10px;
+    border: 1px solid #70B3FF;
+    padding: 8% 15%;
+    cursor: pointer;
+}
+
+.box-shadow-registration{
+    box-shadow: -2px 4px 2px #004593;
+}
+
+.shadow{
+    box-shadow: -0px 5px 10px rgb(0,0,0,0.25);
+}
+
+table {
+    border-collapse: collapse;
+    justify-content: center;
+    width: 100%;
+    font-family: interBold;
+    font-size: 15px;
+    color: #004593;
+}
+
+table tbody td{
+    text-align: center;
+}
