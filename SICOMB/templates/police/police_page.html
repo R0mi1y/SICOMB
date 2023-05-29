@@ -1,0 +1,126 @@
+{% extends 'base/footer.html' %}
+{% load static %}
+
+
+{% block css %}{% static 'css/police_page.css' %}{% endblock %}
+{% block title %}SICOMB - Dashboard{% endblock title %}
+{% block title_top %}FAZER CARGA{% endblock title_top %}
+
+{% comment %} {% block content %}{% endblock content %} {% endcomment %}
+
+{% block content_final%}
+    <section class="cargo">
+                    
+        <div class="police_officer_field shadow">
+            <table class="police_officer_table">
+                <thead>
+                    <tr>
+                        <th class="cargo_title">POLICIAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="#" ><img class="shadow" src="/Images/minha_foto.jpg" alt=""></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Rafael Bragança de Oliveira</td>
+                    </tr>
+                    <tr>
+                        <td>1519884</td>
+                    </tr>
+                    <tr>
+                        <td>(77) 9 9922-1111</td>
+                    </tr>
+                    <tr>
+                        <td>SGT</td>
+                    </tr>
+                    <tr>
+                        <td>rafaelficticio@teste.com</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="military_means_room shadow">
+            <div class="means_room_content">
+                <div class="means_room_table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="100%" class="title">CONFIRMAÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody_top_means_room">
+                            <tr>
+                                <td class="sub-title">INSIRA SUA MATRÍCULA E SENHA OU COLOQUE SUA DIGITAL<br> PARA CONFIRMAR A OPERAÇÃO.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row_color"><span><hr></span></div>
+                    <form action="">
+                        <div class="input-div">
+
+                            <div class="input-box">
+
+                                <h4 class="input-title">MATRÍCULA</h4>
+                                <input type="text" class="input-data" placeholder="Digite o matrícula">
+                                
+                            </div>
+                            <div class="input-box">
+                                <!-- <h4 class="input-title">CONFIRME A CARGA COM SUA MATRÍCULA E SENHA.</h4> -->
+                                <h4 class="input-title">SENHA</h4>
+                                <input type="password" class="input-data" placeholder="Digite a senha">
+                            </div>
+                        </div>
+                        <div class="finalize_load">
+                            <div class="btn_final">
+                                <input class="btn_finalize btn_cancel shadow" type="submit" value="Cancelar">
+                            </div>
+                            <div class="btn_final">
+                                <input class="btn_finalize btn_confirm shadow" type="submit" value="Finalizar">
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="cargo_itens shadow">
+            <!-- <h2>ITENS</h2> -->
+            
+            <table class="table_itens">
+                <thead>
+                    <tr>
+                        <th colspan="100%" class="cargo_title"><h3 >ITENS</h3></th>
+                    </tr>
+                    <tr class="col-itens">
+                        <th>Nº DE SÉRIE</th>
+                        <th>DESCRIÇÃO</th>
+                        <th>TIPO</th>
+                        <th>CALIBRE</th>
+                        <th>QUANTIDADE</th>
+                        <th>TAMANHO</th>
+                        <th>OBSERVAÇÃO</th>
+                        <th>AÇÃO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1596633</td>
+                        <td>PISTOLA GLOCK G19 CAL 9MM</td>
+                        <td>PISTOLA</td>
+                        <td>9MM</td>
+                        <td>1</td>
+                        <td>-</td>
+                        <td>APRESENTA DEFEITO NO TAMBOR</td>
+                        <td><a href="#">| X |</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+{% endblock content_final%}
+

@@ -44,3 +44,7 @@ def register_user(request):
     else:
         form = UserForm()
         return render(request, 'registration/register.html', {'form': form})
+    
+    
+def finalize_cargo(request):
+    return render(request, 'police/police_page.html')

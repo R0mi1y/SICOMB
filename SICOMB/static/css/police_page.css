@@ -1,3 +1,4 @@
+/* Mesmo css da página de fazer carga */
 @import 'header.css';
 
 .container{
@@ -64,7 +65,7 @@ table img{
 .military_means_room{
     background-color: #fff;
     border-radius: 10px;
-    width: 735px;
+    width: 70%;
     height: 400px;
 }
 
@@ -76,53 +77,11 @@ table img{
     text-align: center;
     padding: 3px 0px 3px 0px;
 }
-.checkbox{
-    text-align: left;
-}
-.img-search{
-    height: 40px;
-    width: 40px;
-}
+
 .tbody_top_means_room tr td h4{
     background-color: rgb(197, 196, 196);
     border-radius: 10px;
     margin: 0px 20px;
-}
-.search-info{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.search-table{
-    display: flex;
-    width: 500px;
-    padding: 0px 20px;
-}
-.search-table table{
-    text-align: center;
-}
-.search-table table td{
-    padding: 10px 0px;;
-}
-.search-box{
-    display: flex;
-    justify-content: center;
-    background-color: aliceblue;
-    border-radius: 10px 0px 0px 10px;
-
-}
-.search-txt{
-    border: none;
-    background: none;
-    outline: none;
-    padding: 0;
-    color: #004593;
-    font-size: 15px;
-    font-family: interBold;
-    line-height: 20px;
-    width:200px;
-    padding: 10px;
-    text-align: center;
 }
 
 ::-webkit-input-placeholder{
@@ -130,37 +89,7 @@ table img{
     font-family: interRegular;
 }
 
-.search-btn{
-    justify-content: center;
-    align-items: center;
-}
-.put_qnt{
-    background-color: aliceblue;
-    border-radius: 0px 10px 10px 0px;
-    border-left: 2px solid rgb(0, 69, 147, 0.20);
-}
-.put_qnt input{
-    background: none;
-    justify-items: center;
-    text-align: center;
-    font-size: 15px;
-    padding: 0px;
-}
-.means_room_product{
-    height: 130px;
-    width: 130px;
-}
 
- .img_product{
-    padding: 0px 20px;
- }
-.info_product{
-    width: 550px;
-    padding: 0px 20px;
-}
-.info_product table th{
-    border-bottom: 1px solid rgb(0,69,147);
-}
 .row_color{
     display: flex;
     justify-content: center;
@@ -171,16 +100,7 @@ table img{
     width: 600px;
     background-color: rgb(0, 69, 147);
 }
-.description_product{
-    font-family: 'interRegular';
-    font-size: 13px;
-}
 
-.bottom_means_room{
-    display: flex;
-    padding: 10px 20px;
-    justify-content: space-between;
-}
 
 .btn{
     font-family: interBold;
@@ -192,26 +112,7 @@ table img{
     height: 25px;
     border-radius: 10px;
 }
-.insert_button{
-    display: flex;
-    align-items: end;
-}
 
-.note{
-    border-bottom: 1px solid rgb(0, 69, 147);
-}
-
-.note h5{
-    font-family: interBold;
-    font-size:15px;
-    color: #004593;
-
-}
-.note textarea{
-    font-family: interRegular;
-    font-size:13px;
-    color: #004593;
-}
 
 .cargo_itens{
     background-color: #fff;
@@ -281,4 +182,75 @@ table img{
 }
 .btn_confirm:hover{
     background-color: rgb(5, 168, 5, 0.8);
+}
+/* ------------------------------------------------------------------------------- */
+
+.title{
+    font-family: interBold;
+    color: #fff;
+    height: 50px;
+    width: 100%;
+    background-color: #004593;
+    border-radius: 10px 10px 0px 0px;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+}
+
+.sub-title{
+    height: 50px;
+    padding: 2% 0%;;
+}
+.row_color{
+    padding: 0% 0% 5% 0%;
+}
+.row_color span{
+    background-color: rgb(0,111,237,0.45);   
+}
+
+.input-div{
+    display: flex;
+    justify-content: space-around;
+}
+.input-box{
+    /* padding: 0% 10%; */
+}
+
+.input-title{
+    font-family: interBold;
+    color: #004593;
+    font-size: 14px;
+    padding: 10% 5% 5% 5%;
+}
+.input-data{
+    background-color: rgb(0,69,147, 0.10);
+    padding: 2% 5%;
+    border-radius: 10px;
+    border: 2px solid rgb(0,112,237, 0.45);
+    font-size: 14px;
+    font-family: 'interBold';
+    color: #004593;
+    line-height: 40px;
+    width: 89%;
+}
+/* ----------------------------------------------------------------------------------- */
+
+/* Para a página do policial */
+.row_color{
+    padding: 0% 0%;;
+}
+
+body{
+    justify-content: center;
+}
+
+.btn_final{
+    margin: 0% 5% 0% 0%;
+}
+.btn_finalize{
+    cursor: pointer;
+}
+
+.input-div{
+    padding: 5% 0% 8% 0%;
 }
