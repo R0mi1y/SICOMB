@@ -1,35 +1,40 @@
-const typeDropdown = document.getElementById("type");
-// const typeIdDropdown = document.getElementById("type_id");
-const serialNumberInput = document.getElementById("serial_number");
-let equipmentData;
+var serialNumberInput = document.getElementById("serial_number");
+var description = document.getElementById("description");
+var type = document.getElementById("type");
+var amount = document.getElementById("amount");
+var imageEquipment = document.getElementById("means_room_product");
+var observation = document.getElementById("note_equipment");
+var equipmentData;
+
+console.log(
+    serialNumberInput + ", \n" +
+    description + ", \n" +
+    type + ", \n" +
+    amount + ", \n" +
+    imageEquipment + ", \n"
+);
 
 var dataAtual = new Date();
 var dia = dataAtual.getDate();
 var mes = dataAtual.getMonth() + 1; // Lembrando que os meses começam em 0
 var ano = dataAtual.getFullYear();
 
-if (dia < 10) {
-    dia = '0' + dia;
-}
-
-if (mes < 10) {
-    mes = '0' + mes;
-}
+let diaFormatado = dia < 10 ? '0' + dia : dia;
+let mesFormatado = mes < 10 ? '0' + mes : mes;
 
 var time = dataAtual.getHours() + ':' + dataAtual.getMinutes();
-var data =  dia + '/' + mes + '/' + ano;
+var data = diaFormatado + '/' + mesFormatado + '/' + ano;
 
 document.getElementById('date').innerText = data;
-document.getElementById("time").innerText = time;
+document.getElementById('time').innerText = time;
 
-
-fetchEquipmentData = () => {
+var fetchEquipmentData = () => {
     fetch('http://localhost:8000/equipment/get')
         .then(response => response.json())
         .then(data => {
             console.log(data);
 
-            // Armazena os dados do equipamento em uma variável pra usar depois
+            // Armazena os dados do equipamento em uma variável para uso posterior
             equipmentData = data;
 
             // Atualiza os campos com as respectivas opções
@@ -40,27 +45,31 @@ fetchEquipmentData = () => {
                 if (data.registred !== false) {
                     // Muda a imagem
                     let campo;
-                    var model;
 
-                    if (data.registred == 'wearable') {
+                    if (data.registred === 'wearable') {
                         campo = 'Vestível';
-                    } else if (data.registred == 'acessory') {
-                        campo = 'Acessorio';
-                    } else if (data.registred == 'armament') {
+                    } else if (data.registred === 'accessory') {
+                        campo = 'Acessório';
+                    } else if (data.registred === 'armament') {
                         campo = 'Armamento';
                     }
+
                     // Seta a imagem
-                    document.getElementById("means_room_product").src = "/static/" + data['model'].image_path;
-                    // Seta o numero de série
-                    serialNumberInput.innerText = data['equipment'].serial_number;
-                    document.getElementById("description").innerText = data.equipment.observation;
-                    document.getElementById("type").innerText = campo;
-                    document.getElementById("amount").innerText = '1';
+                    imageEquipment.src = "/static/" + data.model.image_path;
+
+                    // Seta o número de série
+                    serialNumberInput.innerText = data.equipment.serial_number;
+                    description.innerText = data.model.description;
+                    observation.innerText = data.equipment.observation;
+                    type.innerText = campo;
+                    amount.innerText = '1';
                 }
             }
         })
-        .catch();
+        .catch(error => {
+            console.error('Erro ao buscar dados do equipamento:', error);
+        });
 }
 
-// cria um intervalo pra chamar a função a cada 1 segundo
-const interval = setInterval(fetchEquipmentData, 1000);
+// Cria um intervalo para chamar a função a cada 1 segundo
+var interval = setInterval(fetchEquipmentData, 1000);
