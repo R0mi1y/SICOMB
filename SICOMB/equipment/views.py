@@ -36,8 +36,8 @@ def get_equipment(request):
     #     description = "Descrição aqui"
     # ).save()
     # models.Equipment(
-    #     serial_number="165161",
-    #     uid="7c",
+    #     serial_number="16sfdf",
+    #     uid="e1",
     #     type="armament",
     #     observation="Observação aqui",
     #     armament=models.Model_armament.objects.get(pk=1),
@@ -52,6 +52,7 @@ def get_equipment(request):
             try:
                 grenada = models.Grenada.objects.get(pk=request.GET.get("id"))
             except models.Equipment.DoesNotExist:
+                settings.AUX["UID"] = ""
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
@@ -63,6 +64,7 @@ def get_equipment(request):
             try:
                 bullet = models.Bullet.objects.get(pk=request.GET.get("pk"))
             except models.Equipment.DoesNotExist:
+                settings.AUX["UID"] = ""
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
@@ -78,6 +80,7 @@ def get_equipment(request):
                 uid=settings.AUX["UID"]
             )  # Recupera o objeto Equipamento
         except models.Equipment.DoesNotExist:
+            settings.AUX["UID"] = ""
             return JsonResponse(
                 {"uid": "", "msm": "Equipamento não cadastrado"}
             )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
@@ -119,56 +122,7 @@ def set_uid(request):
         # TODO Mudar para método POST aqui e no esp
         settings.AUX["UID"] = request.GET.get("uid")
 
-    return HttpResponse(
-        f"""<body>
-  <div class="container">
-    <p class="success-text">Sucesso, uid = {settings.AUX['UID']}</p>
-    <a class="resend-link" href="set?uid={settings.AUX['UID']}">Reenviar</a>
-  </div>
-</body>
-<style>
-body {{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #f7f7f7;
-      font-family: Arial, sans-serif;
-    }}
-
-    .container {{
-      text-align: center;
-      padding: 60px;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    }}
-
-    .success-text {{
-      font-size: 36px;
-      color: #333;
-      margin-bottom: 60px;
-    }}
-
-    .resend-link {{
-      display: inline-block;
-      padding: 30px 60px;
-      font-size: 28px;
-      background-color: #4caf50;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: background-color 0.3s ease;
-    }}
-
-    .resend-link:hover {{
-      background-color: #45a049;
-    }}
-
-</style>
-"""
-    )
+    return render(request, "equipment/set_answer.html", {"uid": settings.AUX["UID"]})
 
 
 # Retorna a lista de tipos, modelos e tipos de equipamentos em formato json para a página de registro

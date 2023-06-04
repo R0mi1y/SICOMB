@@ -123,7 +123,7 @@
                             </table>
                         </div>
                         <div class="img_product">
-                            <img class="means_room_product" id="means_room_product" src="{% static 'img/colete_balistico.png' %}" alt="">
+                            <img class="means_room_product" id="means_room_product" src="{% static 'img/default.png' %}" alt="">
                         </div>
                     </div>
                     <hr>
@@ -156,7 +156,7 @@
                                         </textarea>
                         </div>
                         <div class="insert_button">
-                            <input type="submit" value="INSERIR" class="btn btn-insert shadow">
+                            <button id="insert_btn" class="btn btn-insert shadow">INSERIR</button>
                         </div>
                     </div>
                 </div>
@@ -175,6 +175,7 @@
                             </th>
                         </tr>
                         <tr class="col-itens">
+                            <th>Nª</th>
                             <th>Nº DE SÉRIE</th>
                             <th>DESCRIÇÃO</th>
                             <th>TIPO</th>
@@ -185,17 +186,7 @@
                             <th>AÇÃO</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1596633</td>
-                            <td>PISTOLA GLOCK G19 CAL 9MM</td>
-                            <td>PISTOLA</td>
-                            <td>9MM</td>
-                            <td>1</td>
-                            <td>-</td>
-                            <td>APRESENTA DEFEITO NO TAMBOR</td>
-                            <td><a href="#">| X |</a></td>
-                        </tr>
+                    <tbody  id="body_table_itens">
                     </tbody>
                 </table>
 
@@ -204,7 +195,6 @@
         <div class="finalize_load">
             <div class=""><input class="btn_finalize btn_cancel shadow" type="submit" value="Cancelar"></div>
             <div class=""><input class="btn_finalize btn_confirm shadow" type="submit" value="Finalizar"></div>
-
         </div>
     </div>
 </div>

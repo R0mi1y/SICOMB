@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+    }
+    
+    .container {
+      margin: 0 auto;
+      max-width: 400px;
+      background-color: #f2f2f2;
+      padding: 20px;
+      border-radius: 5px;
+    }
+    
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+    
+    .resend-btn {
+      display: block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: #ffffff;
+      background-color: #0000ff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+      padding: 100px 100px;
+    }
+    
+    .uid-links {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .uid-link {
+      flex-basis: 32.4%;
+      display: block;
+      margin-bottom: 5px;
+      text-decoration: none;
+      color: #0000ff;
+      text-align: center;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    
+    .uid-input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #4caf50;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    h1 {
+      margin-top: 30px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="success">Sucesso, uid = {{uid}}</p>
+    <button class="resend-btn" onclick="location.href='set?uid={{uid}}'">Reenviar</button>
+    <div class="uid-links">
+      <a class="uid-link" href="set?uid=a1">armamento 'a1'</a>&nbsp;
+      <a class="uid-link" href="set?uid=b1">vestível 'b1'</a>&nbsp;
+      <a class="uid-link" href="set?uid=c1">acessório 'c1'</a>
+    </div>
+    <div class="uid-links">
+      <a class="uid-link" href="set?uid=d1">granada 'd1'</a>&nbsp;
+      <a class="uid-link" href="set?uid=e1">enviar 'e1'</a>&nbsp;
+      <a class="uid-link" href="set?uid=f1">não setado 'f1'</a>
+    </div>
+    <h1>Novo uid</h1>
+    <form method="GET">
+      {% csrf_token %}
+      <input class="uid-input" name="uid" type="text" placeholder="UID">
+      <input class="submit-btn" type="submit">
+    </form>
+  </div>
+</body>
+</html>

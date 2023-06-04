@@ -39,13 +39,13 @@ class Equipment(models.Model):
     type = models.CharField("Tipo", max_length=50, default="")
     observation = models.TextField("Observação", default=None)
     status = models.CharField("Estado atual", max_length=10, default="Disponivel")
-    armament = models.OneToOneField(
+    armament = models.ForeignKey(
         Model_armament, on_delete=models.CASCADE, null=True, default=None
     )
-    accessory = models.OneToOneField(
+    accessory = models.ForeignKey(
         Model_accessory, on_delete=models.CASCADE, null=True, default=None
     )
-    wearable = models.OneToOneField(
+    wearable = models.ForeignKey(
         Model_wearable, on_delete=models.CASCADE, null=True, default=None
     )
 
