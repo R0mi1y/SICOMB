@@ -8,7 +8,7 @@ footer {
     align-items: center;
     justify-content: start;
     font-family: 'interRegular';
-    color: rgb(0, 69, 147);
+    color: #48382B;
     padding: 0px 20px;
-    border-top: 1px solid rgb(0, 69, 147, 0.2);
+    border-top: 1px solid rgb(91,73,57, 0.2);
 }

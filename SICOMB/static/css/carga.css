@@ -19,7 +19,7 @@
     color: #fff;
     height: 50px;
     width: 100%;
-    background-color: #004593;
+    background-color: #5B4939;
     border-radius: 10px 10px 0px 0px;
     align-items: center;
     justify-content: center;
@@ -32,7 +32,7 @@ table {
     width: 100%;
     font-family: interBold;
     font-size: 15px;
-    color: #004593;
+    color: #5B4939;
 }
 .police_officer_table td{
     text-align: center;
@@ -40,7 +40,7 @@ table {
 }  
 .police_officer_table img{
     border-radius: 80px;
-    border: 3px inset rgb(0,69,147);
+    border: 3px inset #5B4939;
 }
 table img{
     width: 130px;
@@ -57,7 +57,7 @@ table img{
 }
 
 .cargo_itens h2{
-    color: #004593;
+    color: #5B4939;
     background-color: #fff;
 }
 
@@ -107,7 +107,7 @@ table img{
 .search-box{
     display: flex;
     justify-content: center;
-    background-color: aliceblue;
+    background-color: rgb(91,73,57, 0.1);
     border-radius: 10px 0px 0px 10px;
 
 }
@@ -116,7 +116,7 @@ table img{
     background: none;
     outline: none;
     padding: 0;
-    color: #004593;
+    color: #5B4939;
     font-size: 15px;
     font-family: interBold;
     line-height: 20px;
@@ -126,7 +126,7 @@ table img{
 }
 
 ::-webkit-input-placeholder{
-    color:#70B3FF;
+    color:rgb(91,73,57, 0.7);
     font-family: interRegular;
 }
 
@@ -135,7 +135,7 @@ table img{
     align-items: center;
 }
 .put_qnt{
-    background-color: aliceblue;
+    background-color: rgb(91,73,57, 0.1);
     border-radius: 0px 10px 10px 0px;
     border-left: 2px solid rgb(0, 69, 147, 0.20);
 }
@@ -159,7 +159,7 @@ table img{
     padding: 0px 20px;
 }
 .info_product table th{
-    border-bottom: 1px solid rgb(0,69,147);
+    border-bottom: 1px solid #5B4939;
 }
 .row_color{
     display: flex;
@@ -169,7 +169,7 @@ table img{
 .row_color span{
     height: 2px;
     width: 600px;
-    background-color: rgb(0, 69, 147);
+    background-color: #5B4939;
 }
 .description_product{
     font-family: 'interRegular';
@@ -185,12 +185,15 @@ table img{
 .btn{
     font-family: interBold;
     font-size:15px;
-    color:#004593;
+    color:#5B4939;
     background: none;
-    background-color:rgb(0, 69, 147, 0.20);
+    background-color: rgb(91,73,57, 0.45);
     width: 130px;
     height: 25px;
     border-radius: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #5B4939;
+
 }
 .insert_button{
     display: flex;
@@ -198,19 +201,19 @@ table img{
 }
 
 .note{
-    border-bottom: 1px solid rgb(0, 69, 147);
+    border-bottom: 1px solid #5B4939;
 }
 
 .note h5{
     font-family: interBold;
     font-size:15px;
-    color: #004593;
+    color: #5B4939;
 
 }
 .note textarea{
     font-family: interRegular;
     font-size:13px;
-    color: #004593;
+    color: #5B4939;
 }
 
 .cargo_itens{
@@ -222,7 +225,7 @@ table img{
 
 .cargo_itens .cargo_title{
     font-family: interBold;
-    color: #004593;
+    color: #5B4939;
     height: 50px;
     width: 100%;
     background-color: #fff;
@@ -232,7 +235,7 @@ table img{
     padding: 0px;
 }
 .table_itens .col-itens{
-    background-color: rgb(0,69,147);
+    background-color: #5B4939;
     color: #fff;
     height: 40px;
     font-size: 13px;
@@ -241,7 +244,7 @@ table img{
 
 .table_itens tbody{
     font-size: 11px;
-    border-bottom: 1px solid rgb(0,69, 147);
+    border-bottom: 1px solid #5B4939;
 }
 .table_itens tbody td a{
     background: red;

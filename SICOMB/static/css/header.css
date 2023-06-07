@@ -8,7 +8,7 @@
 
 body {
     font-family: interRegular;
-    background-color: rgb(0, 69, 147, 0.10);
+    background-color: rgb(144, 129, 106, 0.10);
 }
 
 main{
@@ -18,7 +18,7 @@ main{
 
 header {
     width: 245px;
-    background-color: #004593;
+    background-color: rgb(91,73,57, 0.9);
 }
 
 #navbar {
@@ -39,7 +39,7 @@ ul {
     background-color: white;
     border-radius: 10px;
     text-decoration: none;
-    color: #004593;
+    color: #5B4939;
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -52,7 +52,7 @@ ul {
 }
 
 #navbar li:hover {
-    background-color: rgb(0, 111, 237, 0.45);
+    background-color: rgb(91,73,57, 0.6);
 }
 
 #navbar li:hover span {
@@ -60,7 +60,7 @@ ul {
 }
 
 #navbar li:visited {
-    background-color: #004593;
+    background-color: rgb(91,73,57, 0.9);
 }
 
 

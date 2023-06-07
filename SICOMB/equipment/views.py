@@ -34,13 +34,13 @@ def get_equipment(request):
     #     caliber = ".44",
     #     image_path = "img/pistola.png",
     #     description = "Descrição aqui"
-    # ).save()
+    # # ).save()
     # models.Equipment(
-    #     serial_number="16sfdf",
-    #     uid="e1",
+    #     serial_number="65161566",
+    #     uid="a1",
     #     type="armament",
     #     observation="Observação aqui",
-    #     armament=models.Model_armament.objects.get(pk=1),
+    #     armament=models.Model_armament.objects.get(pk=2),
     # ).save()
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
