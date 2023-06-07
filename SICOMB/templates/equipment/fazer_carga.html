@@ -72,10 +72,10 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <h4>11/05/2023</h4>
+                                        <h4 id="date"></h4>
                                     </td>
                                     <td>
-                                        <h4>14:23</h4>
+                                        <h4 id="time"></h4>
                                     </td>
                                     <td class="checkbox">
                                         <input type="radio" id="twelve-hours" name="options_load">
@@ -104,7 +104,6 @@
                                     <tr>
                                         <td>NUM. DE SÉRIE/ID</td>
                                         <td>QUANTIDADE</td>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -115,17 +114,16 @@
                                                 <img class="img-search" src="{% static 'img/search.png' %}" alt="">
                                             </a>
                                         </td>
-                                        <td class="put_qnt"> <input type="text" id="uname" name="name" required
-                                                placeholder="1" /></td>
+                                        <td class="put_qnt"> <input type="text" id="uname" name="name" required placeholder="1" /></td>
                                         <!-- <td rowspan="2">
                                                     
-                                                    </td> -->
+                                        </td> -->
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="img_product">
-                            <img class="means_room_product" src="{% static 'img/colete_balistico.png' %}" alt="">
+                            <img class="means_room_product" id="means_room_product" src="{% static 'img/default.png' %}" alt="">
                         </div>
                     </div>
                     <hr>
@@ -141,10 +139,11 @@
                             </thead>
                             <tbody>
                                 <tr class="description_product">
-                                    <td>1753292</td>
-                                    <td colspan="2">COLETE MODULAR MARROM</td>
-                                    <td>COLETE</td>
-                                    <td>1</td>
+                                    {% comment %} id pro js {% endcomment %}
+                                    <td id="serial_number">&nbsp;</td>
+                                    <td id="description" colspan="2">&nbsp;</td>
+                                    <td id="type">&nbsp;</td>
+                                    <td id="amount">&nbsp;</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -153,11 +152,11 @@
                     <div class="bottom_means_room">
                         <div class="note">
                             <h5>OBSERVAÇÃO: </h5>
-                            <textarea id="note_equipment" name="note" rows="3" cols="60">It was a dark and stormy night...It was a dark and stormy night...It was a dark and stormy night...It was a dark and stormy night...It was a dark and stormy night...It was a dark and stormy night...It was a dark and stormy night...It was a dark and stormy night...It was a dark and stormy night...
+                            <textarea id="note_equipment" name="note" rows="3" cols="60">
                                         </textarea>
                         </div>
                         <div class="insert_button">
-                            <input type="submit" value="INSERIR" class="btn btn-insert shadow">
+                            <button id="insert_btn" class="btn btn-insert shadow">INSERIR</button>
                         </div>
                     </div>
                 </div>
@@ -176,6 +175,7 @@
                             </th>
                         </tr>
                         <tr class="col-itens">
+                            <th>Nª</th>
                             <th>Nº DE SÉRIE</th>
                             <th>DESCRIÇÃO</th>
                             <th>TIPO</th>
@@ -186,17 +186,7 @@
                             <th>AÇÃO</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1596633</td>
-                            <td>PISTOLA GLOCK G19 CAL 9MM</td>
-                            <td>PISTOLA</td>
-                            <td>9MM</td>
-                            <td>1</td>
-                            <td>-</td>
-                            <td>APRESENTA DEFEITO NO TAMBOR</td>
-                            <td><a href="#">| X |</a></td>
-                        </tr>
+                    <tbody  id="body_table_itens">
                     </tbody>
                 </table>
 
@@ -205,9 +195,8 @@
         <div class="finalize_load">
             <div class=""><input class="btn_finalize btn_cancel shadow" type="submit" value="Cancelar"></div>
             <div class=""><input class="btn_finalize btn_confirm shadow" type="submit" value="Finalizar"></div>
-
         </div>
     </div>
 </div>
-
+{% block js %}{% static 'js/fetch_charge.js' %}{% endblock js %}
 {% endblock content_final %}

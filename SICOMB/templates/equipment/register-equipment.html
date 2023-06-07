@@ -7,6 +7,7 @@
 
 {% block content_final %}
 
+
 <section class="section_register shadow">
     <div class="registration shadow">
         <table>
@@ -37,13 +38,8 @@
                     <h4 class="input-title">TIPO DE EQUIPAMENTO</h4>
                     <!-- <label for="equipment-type"></label> -->
                     <div class="select">
-                        <select name="equipment-type" class="select-field">
+                        <select id="choicesTypes" name="equipment-type" class="select-field">
                             <option selected disabled>ESCOLHA O TIPO DO EQUIPAMENTO</option>
-                            <option value="armament">ARMAMENTO</option>
-                            <option value="wearable">VESTÍVEL</option>
-                            <option value="accessory">ACESSÓRIO</option>
-                            <option value="granade">GRANADA</option>
-                            <option value="ammunition">MUNIÇÃO</option>
                         </select>
                         <span class="custom-arrow"></span>
                     </div>
@@ -53,12 +49,8 @@
                     <h4 class="input-title">TIPO DE ARMAMENTO</h4>
                     <!-- <label for="armament-type">SELECIONE O TIPO DO ARMAMENTO</label> -->
                     <div class="select">
-                        <select name="armament-type" class="select-field">
+                        <select id="choicesModels" name="armament-type" class="select-field">
                             <option selected disabled>SELECIONE O TIPO DO ARMAMENTO</option>
-                            <option value="escopeta">ESCOPETA</option>
-                            <option value="fuzil">FUZIL</option>
-                            <option value="pistola">PISTOLA</option>
-                            <option value="revolver">REVOLVER</option>
                         </select>
                     </div>
                                                 
@@ -94,12 +86,9 @@
         <div class="finalize-registration">
             <label><input class="box-shadow-registration" type="submit" value="FINALIZAR CADASTRO"></label>
         </div>
-        
-
     </div>
-
-
 </section>
 
+<script src="{% static 'js/register_equipment.js' %}"></script>
 
 {% endblock content_final %}
