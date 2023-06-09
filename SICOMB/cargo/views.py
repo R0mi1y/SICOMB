@@ -92,7 +92,6 @@ def add_list_equipment(request, serial_number, obs):
         # equipment.save()
         list_equipment[serial_number] = data
 
-        print(list_equipment)
         return JsonResponse({"sucesso": "sucesso"})
     else:
         return JsonResponse({"falha": "falha"})

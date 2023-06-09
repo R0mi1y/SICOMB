@@ -1,46 +1,63 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.conf import settings
-from . import models
+from .models import *
 from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
+from .forms import *
 
 
 @login_required
 def register_equipment(request):
     if request.method == "POST":
-        models.Equipment(
-            serial_number=request.POST.get("serial_number"),
-            uid=request.POST.get("uid"),
-            type=request.POST.get("type"),
-            type_id=request.POST.get("type_id"),
-        ).save()
-        print("Chegou aqui")
-        return render(
-            request,
-            "equipment/register-equipment.html",
-            {"message": "Equipamento cadastrado com sucesso"},
-        )
-    else:
-        return render(request, "equipment/register-equipment.html")
+        form = EquipmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            # O formulário é inválido, realizar ações apropriadas
+            erros = form.errors
+            return render(
+                request, "equipment/teste.html", {"form": form, "erros": erros}
+            )
+    form = EquipmentForm()
+
+    return render(request, "equipment/teste.html", {"form": form})
+
+
+def valid_uid(request):
+    uid = settings.AUX["UID"]
+    settings.AUX["UID"] = ""
+    try:
+        Equipment.objects.get(uid=uid)
+    except Equipment.DoesNotExist:
+        return JsonResponse({"uid": uid})
+    return JsonResponse({"msm": "UID já cadastrado", "uid": ""})
+
+
+def valid_serial_number(request, sn):
+    try:
+        Equipment.objects.get(serial_number=sn)
+    except Equipment.DoesNotExist:
+        return JsonResponse({"exists": False})
+    return JsonResponse({"msm": "Numero de série já cadastrado", "exists": True})
 
 
 # Retorna o equipamento referente ao uid mais recente em formato JSON
 def get_equipment(request):
     data = {"uid": ""}
 
-    # models.Model_armament(
+    # Model_armament(
     #     model = "Pistola Glock",
     #     caliber = ".44",
     #     image_path = "img/pistola.png",
     #     description = "Descrição aqui"
     # # ).save()
-    # models.Equipment(
+    # Equipment(
     #     serial_number="65161566",
     #     uid="a1",
     #     type="armament",
     #     observation="Observação aqui",
-    #     armament=models.Model_armament.objects.get(pk=2),
+    #     armament=Model_armament.objects.get(pk=2),
     # ).save()
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
@@ -50,8 +67,8 @@ def get_equipment(request):
         # Caso seja uma munição
         if request.POST.get("type") == "bullet":
             try:
-                bullet = models.Bullet.objects.get(pk=request.GET.get("pk"))
-            except models.Equipment.DoesNotExist:
+                bullet = Bullet.objects.get(pk=request.GET.get("pk"))
+            except Equipment.DoesNotExist:
                 settings.AUX["UID"] = ""
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
@@ -64,10 +81,10 @@ def get_equipment(request):
         data["uid"] = settings.AUX["UID"]
 
         try:
-            equipment = models.Equipment.objects.get(
+            equipment = Equipment.objects.get(
                 uid=settings.AUX["UID"]
             )  # Recupera o objeto Equipamento
-        except models.Equipment.DoesNotExist:
+        except Equipment.DoesNotExist:
             settings.AUX["UID"] = ""
             return JsonResponse(
                 {"uid": "", "msm": "Equipamento não cadastrado"}
@@ -97,7 +114,6 @@ def get_equipment(request):
         ):  # Recupera o objeto acessorio, que complementa o equipamento
             data["model"] = model_to_dict(equipment.grenada)
 
-        print(data)
         settings.AUX["UID"] = ""
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
@@ -117,37 +133,35 @@ def set_uid(request):
 
 # Retorna a lista de tipos, modelos e tipos de equipamentos em formato json para a página de registro
 def get_models_equipment(request):
-    armaments = models.Model_armament.objects.all()
+    armaments = Model_armament.objects.all()
     armament_models = []
 
     for i in armaments:
-        armament_models.append(i.model)
+        armaments.append(i.model)
 
-    print(armament_models)
-
-    wearbles = models.Model_wearable.objects.all()
+    wearbles = Model_wearable.objects.all()
     wearbles_models = []
 
     for i in wearbles:
-        wearbles_models.append(i.model)
+        wearbles.append(i.model)
 
-    accessory = models.Model_accessory.objects.all()
+    accessory = Model_accessory.objects.all()
     accessory_models = []
 
     for i in accessory:
-        accessory_models.append(i.model)
+        accessory.append(i.model)
 
-    grenada = models.Model_grenada.objects.all()
+    grenada = Model_grenada.objects.all()
     grenada_models = []
 
     for i in grenada:
-        grenada_models.append(i.model)
+        grenada.append(i.model)
 
-    bullet = models.Bullet.objects.all()
+    bullet = Bullet.objects.all()
     bullet_models = []
 
     for i in bullet:
-        bullet_models.append(model_to_dict(i))
+        bullet.append(model_to_dict(i))
 
     types = {
         "Munição": {"name": "Munição", "eng_name": "Bullet", "models": bullet_models},

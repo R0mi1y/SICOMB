@@ -45,9 +45,9 @@ class Model_grenada(models.Model):
 class Equipment(models.Model):
     # chave primária do equipamento
     serial_number = models.CharField("Numero de série", max_length=20)
-    uid = models.CharField("UID", max_length=20, primary_key=True, default=None)
+    uid = models.CharField("uid", max_length=20, primary_key=True, default=None)
     type = models.CharField("Tipo", max_length=50, default="")
-    observation = models.TextField("Observação", default=None)
+    observation = models.TextField("Observação", default="-")
     status = models.CharField("Estado atual", max_length=10, default="Disponivel")
     armament = models.ForeignKey(
         Model_armament, on_delete=models.CASCADE, null=True, default=None

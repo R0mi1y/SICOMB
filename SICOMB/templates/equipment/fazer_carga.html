@@ -194,10 +194,10 @@
         </section>
         <div class="finalize_load">
             <div class=""><input class="btn_finalize btn_cancel shadow" type="button" onclick="window.location.href = '';" value="Cancelar"></div>
-            <div class=""><input class="btn_finalize btn_confirm shadow" type="button" onclick="window.location.href = './confirm';" value="Finalizar"></div>
+            <div class=""><input class="btn_finalize btn_confirm shadow" type="button" onclick="confirmCargo()" value="Finalizar"></div>
         </div>
     </div>
 </div>
-{% csrf_token %}
 <script src="{% static 'js/fetch_cargo.js' %}"></script>
+{% csrf_token %}
 {% endblock content_final %}

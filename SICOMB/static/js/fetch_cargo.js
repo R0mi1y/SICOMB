@@ -122,12 +122,8 @@ insert_bttn.addEventListener('click', () => {
 
         list_equipment[equipmentData.equipment.serial_number] = { 'serial_number': equipmentData.equipment.serial_number, 'observation': observation.innerText };
 
-        // Seleciona o csrf token
-        const csrf = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-
         fetch("http://localhost:8000/cargo/list_equipment/add/" + equipmentData.equipment.serial_number + "/" + (observation.value != '' ? observation.value : "-") + "/", {
             method: 'POST',
-            // 'X-CSRFToken':csrf
         });
 
         equipmentData = null; // reseta os equipamentos atuais
@@ -247,4 +243,10 @@ function removerAlert() {
     if (overlay) {
         overlay.remove();
     }
+}
+
+function confirmCargo() {
+    var rows = table_itens.getElementsByTagName("tr");
+    if (rows.length > 0) window.location.href = './confirm';
+    else alert("Lista vazia!");
 }
