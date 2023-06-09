@@ -27,9 +27,19 @@ class Model_wearable(models.Model):
 class Model_accessory(models.Model):  # bastão, escudo
     model = models.TextField("Modelo do armamento")
     description = models.TextField("Descrição")
+    image_path = models.TextField("caminho da imagem", default=img_alt)
 
     def __str__(self):
         return f"Acessório {self.model}"
+
+
+class Model_grenada(models.Model):
+    model = models.TextField("Modelo do armamento")
+    image_path = models.TextField("caminho da imagem", default=img_alt)
+    description = models.TextField("Descrição")
+
+    def __str__(self):
+        return f"Granada {self.model}"
 
 
 class Equipment(models.Model):
@@ -48,21 +58,15 @@ class Equipment(models.Model):
     wearable = models.ForeignKey(
         Model_wearable, on_delete=models.CASCADE, null=True, default=None
     )
+    grenada = models.ForeignKey(
+        Model_grenada, on_delete=models.CASCADE, null=True, default=None
+    )
 
     def __str__(self):
         return f"Equipamento {self.type}"
 
     # class Meta:
     #     verbose_name = 'Equipamento'
-
-
-class Grenada(models.Model):
-    model = models.TextField("Modelo do armamento")
-    image_path = models.TextField("caminho da imagem", default=img_alt)
-    description = models.TextField("Descrição")
-
-    def __str__(self):
-        return f"Granada {self.model}"
 
 
 class Bullet(models.Model):

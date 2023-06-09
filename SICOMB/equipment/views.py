@@ -47,18 +47,6 @@ def get_equipment(request):
     if request.GET.get("type") != None:
         data["registred"] = request.POST.get("type")
 
-        # Caso seja uma granada
-        if request.POST.get("type") == "grenada":
-            try:
-                grenada = models.Grenada.objects.get(pk=request.GET.get("id"))
-            except models.Equipment.DoesNotExist:
-                settings.AUX["UID"] = ""
-                return JsonResponse(
-                    {"uid": "", "msm": "Equipamento não cadastrado"}
-                )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
-
-            data["grenada"] = model_to_dict(grenada)
-
         # Caso seja uma munição
         if request.POST.get("type") == "bullet":
             try:
@@ -92,20 +80,22 @@ def get_equipment(request):
         if (
             equipment.armament != None
         ):  # Recupera o objeto armamento, que complementa o equipamento
-            equipment.armament.image_path = equipment.armament.image_path
             data["model"] = model_to_dict(equipment.armament)
 
         elif (
             equipment.wearable != None
         ):  # Recupera o objeto vestimento, que complementa o equipamento
-            equipment.wearable.image_path = equipment.wearable.image_path
             data["model"] = model_to_dict(equipment.wearable)
 
         elif (
             equipment.accessory != None
         ):  # Recupera o objeto acessorio, que complementa o equipamento
-            equipment.accessory.image_path = equipment.accessory.image_path
             data["model"] = model_to_dict(equipment.accessory)
+
+        elif (
+            equipment.grenada != None
+        ):  # Recupera o objeto acessorio, que complementa o equipamento
+            data["model"] = model_to_dict(equipment.grenada)
 
         print(data)
         settings.AUX["UID"] = ""
@@ -147,7 +137,7 @@ def get_models_equipment(request):
     for i in accessory:
         accessory_models.append(i.model)
 
-    grenada = models.Grenada.objects.all()
+    grenada = models.Model_grenada.objects.all()
     grenada_models = []
 
     for i in grenada:
@@ -157,11 +147,11 @@ def get_models_equipment(request):
     bullet_models = []
 
     for i in bullet:
-        bullet_models.append(i.model)
+        bullet_models.append(model_to_dict(i))
 
     types = {
-        "Granada": {"name": "Granada", "eng_name": "Granade", "models": grenada_models},
         "Munição": {"name": "Munição", "eng_name": "Bullet", "models": bullet_models},
+        "Granada": {"name": "Granada", "eng_name": "Grenada", "models": grenada_models},
         "Acessório": {
             "name": "Acessorio",
             "eng_name": "Acessory",

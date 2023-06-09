@@ -126,7 +126,7 @@ table img{
 }
 
 ::-webkit-input-placeholder{
-    color:rgb(91,73,57, 0.7);
+    color:#5b4939b3;
     font-family: interRegular;
 }
 
