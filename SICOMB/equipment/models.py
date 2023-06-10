@@ -11,7 +11,8 @@ class Model_armament(models.Model):
     description = models.TextField("Descrição")
 
     def __str__(self):
-        return f"Armamento {self.model}"
+        # na hora dos campos do select ele retorna isso
+        return f"Armamento {self.model}" 
 
 
 class Model_wearable(models.Model):
@@ -21,6 +22,7 @@ class Model_wearable(models.Model):
     description = models.TextField("Descrição")
 
     def __str__(self):
+        # na hora dos campos do select ele retorna isso
         return f"Vestível {self.model}"
 
 
@@ -30,6 +32,7 @@ class Model_accessory(models.Model):  # bastão, escudo
     image_path = models.TextField("caminho da imagem", default=img_alt)
 
     def __str__(self):
+        # na hora dos campos do select ele retorna isso
         return f"Acessório {self.model}"
 
 
@@ -39,6 +42,7 @@ class Model_grenada(models.Model):
     description = models.TextField("Descrição")
 
     def __str__(self):
+        # na hora dos campos do select ele retorna isso
         return f"Granada {self.model}"
 
 
@@ -63,10 +67,11 @@ class Equipment(models.Model):
     )
 
     def __str__(self):
+        # na hora dos campos do select ele retorna isso
         return f"Equipamento {self.type}"
 
-    # class Meta:
-    #     verbose_name = 'Equipamento'
+    class Meta:
+        verbose_name = 'Equipamento'
 
 
 class Bullet(models.Model):
@@ -76,4 +81,5 @@ class Bullet(models.Model):
     description = models.TextField("Descrição")
 
     def __str__(self):
+        # na hora dos campos do select ele retorna isso
         return f"Munição {self.caliber}"
