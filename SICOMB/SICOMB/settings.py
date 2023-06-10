@@ -133,7 +133,7 @@ DATABASES = {
 #<<<<<<< HEAD
         # 'PASSWORD': '12345679',
 #=======
-        'PASSWORD': '',
+        'PASSWORD': '1234',
 #>>>>>>> 7c4a436cc165bad97bee72497148fa6251c04913
         'HOST': 'localhost',
         'PORT': '3306',

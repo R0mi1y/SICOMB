@@ -285,3 +285,7 @@ table img{
 .btn_confirm:hover{
     background-color: rgb(5, 168, 5, 0.8);
 }
+
+footer{
+    position: static !important;
+}

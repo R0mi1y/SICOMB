@@ -20,3 +20,4 @@ window.addEventListener("resize", verificarTamanhoTela);
 
 // Verificar o tamanho da tela ao carregar a página
 verificarTamanhoTela();
+

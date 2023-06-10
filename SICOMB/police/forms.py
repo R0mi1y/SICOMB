@@ -3,6 +3,9 @@ from django import forms
 from police.models import RegisterPolice
 from django.contrib.auth.models import User
 
+from django.forms import ClearableFileInput
+from django.utils.translation import gettext_lazy as _
+
 
 class UserForm(UserCreationForm):
 
@@ -20,6 +23,7 @@ class PoliceForm(forms.ModelForm):
     email = forms.CharField(widget=forms.EmailInput(attrs={'class':'input-data'}), label='Email')
     telefone = forms.CharField(widget=forms.TextInput(attrs={'class':'input-data'}), label='Telefone')
     lotacao = forms.CharField(widget=forms.TextInput(attrs={'class':'input-data'}), label='Lotação')
+    img = forms.FileField(widget=forms.FileInput(attrs={'class':'file-input', 'accept':'image/*', 'onchange':'handleFileSelection(event)'}), label='Foto')
     
     class Meta:
         model = RegisterPolice

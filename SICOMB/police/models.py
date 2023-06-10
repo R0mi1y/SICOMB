@@ -12,6 +12,7 @@ class Police(User):
     telefone = models.CharField(max_length=11)
     
     
+    
 class RegisterPolice(models.Model):
     
     lotacao = models.CharField(max_length=50)

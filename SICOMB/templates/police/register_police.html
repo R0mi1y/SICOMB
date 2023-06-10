@@ -6,31 +6,31 @@
 {% block title_top %}CADASTRO DE POLICIAL{% endblock title_top %}
 
 {% block content_final %}
-   <section class="section_register">
-      <div class="registration shadow">
-         <table>
-            <thead>
-               <tr>
-                  <th colspan="100%" class="title">
-                     <h3>CADASTRAR POLICIAL</h3>
-                  </th>
-               </tr>
-            </thead>
-            <tbody>
-               <tr>
-                  <td class="sub-title">PREENCHA O FORMULÁRIO PARA O CADASTRO <br>DE UM NOVO POLICIAL</td>
-               </tr>
-            </tbody>
-         </table>
-         <div class="row_color"><span>
-               <hr>
-            </span></div>
+<section class="section_register">
+   <div class="registration shadow">
+      <table>
+         <thead>
+            <tr>
+               <th colspan="100%" class="title">
+                  <h3>CADASTRAR POLICIAL</h3>
+               </th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td class="sub-title">PREENCHA O FORMULÁRIO PARA O CADASTRO <br>DE UM NOVO POLICIAL</td>
+            </tr>
+         </tbody>
+      </table>
+      <div class="row_color"><span>
+            <hr>
+         </span></div>
 
-         <form action="" method="POST">
-            {% csrf_token %}
-            <div class="input-div">
-               
-               <div class="input-box">
+      <form action="" method="POST">
+         {% csrf_token %}
+         <div class="input-div">
+
+            <div class="input-box">
                <label for="{{ form.nome.id_for_label }}" class="custom-label">Nome</label>
                {{form.nome}}
                <label for="{{ form.matricula.id_for_label }}" class="custom-label">Matrícula</label>
@@ -39,22 +39,41 @@
                {{form.telefone}}
                <label for="{{ form.lotacao.id_for_label }}" class="custom-label">Lotação</label>
                {{form.lotacao}}
-               </div>
-               <div class="input-box">
-                  <label for="{{ form.sobrenome.id_for_label }}" class="custom-label">Sobrenome</label>
+            </div>
+            <div class="input-box">
+               <label for="{{ form.sobrenome.id_for_label }}" class="custom-label">Sobrenome</label>
                {{form.sobrenome}}
                <label for="{{ form.posto.id_for_label }}" class="custom-label">Posto</label>
                {{form.posto}}
                <label for="{{ form.email.id_for_label }}" class="custom-label">Email</label>
                {{form.email}}
+               <div class="file-input-container">
+                  {{form.img}}
+                  <label for="{{ form.img.id_for_label }}" class="custom-file-input">Selecionar Arquivo</label> 
                </div>
-               
+               <p id="fileSelectedMessage"></p>
             </div>
-            <div class="finalize-registration">
-               <input class="box-shadow-registration" type="submit" value="FINALIZAR CADASTRO">
-            </div>
-         </form>
-      </div>
-   </section>
+
+         </div>
+         <div class="finalize-registration">
+            <input class="box-shadow-registration" type="submit" value="FINALIZAR CADASTRO">
+         </div>
+      </form>
+   </div>
+</section>
+
+<script>
+   function handleFileSelection(event) {
+      const fileInput = event.target;
+      const fileSelectedMessage = document.querySelector('#fileSelectedMessage');
+      console.log(fileSelectedMessage);
+      if (fileInput.files && fileInput.files.length > 0) {
+         const fileName = fileInput.files[0].name;
+         fileSelectedMessage.textContent = `Arquivo: ${fileName}`;
+      } else {
+         fileSelectedMessage.textContent = "Nenhum arquivo selecionado";
+      }
+   }
+</script>
 
 {% endblock content_final %}
