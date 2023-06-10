@@ -33,7 +33,6 @@ class EquipmentForm(forms.ModelForm):
         ),
         label="Tipo",
     )
-    grenada = models.CharField
 
     class Meta:
         model = Equipment
@@ -45,11 +44,15 @@ class EquipmentForm(forms.ModelForm):
             "accessory",
             "wearable",
             "grenada",
-        ]
+        ]  # pra definir a ordem
+
+        # os que não devem aparecer
         exclude = ("status", "observation")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # A partir daqui ele modifica todos os campos pois ele já
+        # vem setado com td certo e refazer daria mais trabalho
 
         self.fields["armament"].widget = forms.Select(
             attrs={
@@ -98,28 +101,3 @@ class EquipmentForm(forms.ModelForm):
         self.fields["grenada"].initial = ""
         self.fields["grenada"].required = False
         self.fields["grenada"].queryset = Model_grenada.objects.all()
-
-    # def save(self):
-    #     Equipment.objects.create(
-    #         uid=self.cleaned_data["uid"],
-    #         serial_number=self.cleaned_data["serial_number"],
-    #         type=self.cleaned_data["type"],
-    #     )
-
-    #     return True
-
-    # def clean_serial_number(self):
-    #     serial_number = self.cleaned_data.get("serial_number")
-
-    #     if Equipment.objects.filter(serial_number=serial_number).exists():
-    #         raise forms.ValidationError("Número de série já cadastrado.")
-
-    #     return serial_number
-
-    # def clean_uid(self):
-    #     uid = self.cleaned_data.get("uid")
-
-    #     if Equipment.objects.filter(serial_number=uid).exists():
-    #         raise forms.ValidationError("UID já cadastrado.")
-
-    #     return uid

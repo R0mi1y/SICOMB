@@ -18,6 +18,7 @@ class Cargo(models.Model):
     # adjunct = models.ForeignKey(Adjunct, on_delete=models.CASCADE) #Pega a chave primária do adjunto
 
 
+# Tabela que faz o relacionamento entre a carga e os equipamentos
 class Equipment_cargo(models.Model):
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
@@ -25,3 +26,6 @@ class Equipment_cargo(models.Model):
         Bullet, on_delete=models.CASCADE, null=True, default=None
     )
     bullet_amount = models.IntegerField("Quantidade_munição", null=True, default=None)
+    # o bullet_amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
+    
+    # TODO: adicionar uma observação para cada equipamento relacionado à essa carga

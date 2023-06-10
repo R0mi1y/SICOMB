@@ -7,6 +7,7 @@ from django.forms.models import model_to_dict
 from .forms import *
 
 
+# Registra o equipamento
 @login_required
 def register_equipment(request):
     if request.method == "POST":
@@ -14,51 +15,37 @@ def register_equipment(request):
         if form.is_valid():
             form.save()
         else:
-            # O formulário é inválido, realizar ações apropriadas
-            erros = form.errors
-            return render(
-                request, "equipment/teste.html", {"form": form, "erros": erros}
-            )
-    form = EquipmentForm()
+            return render(request, "equipment/teste.html", {"form": form})
+    form = EquipmentForm()  # Se for bem sucedido ele zera o form
 
     return render(request, "equipment/teste.html", {"form": form})
 
 
+# valida o uid pra cadastro
 def valid_uid(request):
     uid = settings.AUX["UID"]
     settings.AUX["UID"] = ""
     try:
         Equipment.objects.get(uid=uid)
-    except Equipment.DoesNotExist:
-        return JsonResponse({"uid": uid})
+    except Equipment.DoesNotExist:  # se não existe
+        return JsonResponse(
+            {"uid": uid}
+        )  # retorna o uid pq significa que pode cadastrar
     return JsonResponse({"msm": "UID já cadastrado", "uid": ""})
 
 
+# valida o numero de série pra cadastro
 def valid_serial_number(request, sn):
     try:
         Equipment.objects.get(serial_number=sn)
-    except Equipment.DoesNotExist:
-        return JsonResponse({"exists": False})
+    except Equipment.DoesNotExist:  # se não existe
+        return JsonResponse({"exists": False})  # retorna que não existe
     return JsonResponse({"msm": "Numero de série já cadastrado", "exists": True})
 
 
 # Retorna o equipamento referente ao uid mais recente em formato JSON
 def get_equipment(request):
     data = {"uid": ""}
-
-    # Model_armament(
-    #     model = "Pistola Glock",
-    #     caliber = ".44",
-    #     image_path = "img/pistola.png",
-    #     description = "Descrição aqui"
-    # # ).save()
-    # Equipment(
-    #     serial_number="65161566",
-    #     uid="a1",
-    #     type="armament",
-    #     observation="Observação aqui",
-    #     armament=Model_armament.objects.get(pk=2),
-    # ).save()
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get("type") != None:
@@ -131,56 +118,56 @@ def set_uid(request):
     return render(request, "equipment/set_answer.html", {"uid": settings.AUX["UID"]})
 
 
-# Retorna a lista de tipos, modelos e tipos de equipamentos em formato json para a página de registro
-def get_models_equipment(request):
-    armaments = Model_armament.objects.all()
-    armament_models = []
+# # Retorna a lista de tipos, modelos e tipos de equipamentos em formato json para a página de registro
+# def get_models_equipment(request):
+#     armaments = Model_armament.objects.all()
+#     armament_models = []
 
-    for i in armaments:
-        armaments.append(i.model)
+#     for i in armaments:
+#         armaments.append(i.model)
 
-    wearbles = Model_wearable.objects.all()
-    wearbles_models = []
+#     wearbles = Model_wearable.objects.all()
+#     wearbles_models = []
 
-    for i in wearbles:
-        wearbles.append(i.model)
+#     for i in wearbles:
+#         wearbles.append(i.model)
 
-    accessory = Model_accessory.objects.all()
-    accessory_models = []
+#     accessory = Model_accessory.objects.all()
+#     accessory_models = []
 
-    for i in accessory:
-        accessory.append(i.model)
+#     for i in accessory:
+#         accessory.append(i.model)
 
-    grenada = Model_grenada.objects.all()
-    grenada_models = []
+#     grenada = Model_grenada.objects.all()
+#     grenada_models = []
 
-    for i in grenada:
-        grenada.append(i.model)
+#     for i in grenada:
+#         grenada.append(i.model)
 
-    bullet = Bullet.objects.all()
-    bullet_models = []
+#     bullet = Bullet.objects.all()
+#     bullet_models = []
 
-    for i in bullet:
-        bullet.append(model_to_dict(i))
+#     for i in bullet:
+#         bullet.append(model_to_dict(i))
 
-    types = {
-        "Munição": {"name": "Munição", "eng_name": "Bullet", "models": bullet_models},
-        "Granada": {"name": "Granada", "eng_name": "Grenada", "models": grenada_models},
-        "Acessório": {
-            "name": "Acessorio",
-            "eng_name": "Acessory",
-            "models": accessory_models,
-        },
-        "Vestível": {
-            "name": "Vestível",
-            "eng_name": "Wearble",
-            "models": wearbles_models,
-        },
-        "Armamento": {
-            "name": "Armamento",
-            "eng_name": "Armament",
-            "models": armament_models,
-        },
-    }
+#     types = {
+#         "Munição": {"name": "Munição", "eng_name": "Bullet", "models": bullet_models},
+#         "Granada": {"name": "Granada", "eng_name": "Grenada", "models": grenada_models},
+#         "Acessório": {
+#             "name": "Acessorio",
+#             "eng_name": "Acessory",
+#             "models": accessory_models,
+#         },
+#         "Vestível": {
+#             "name": "Vestível",
+#             "eng_name": "Wearble",
+#             "models": wearbles_models,
+#         },
+#         "Armamento": {
+#             "name": "Armamento",
+#             "eng_name": "Armament",
+#             "models": armament_models,
+#         },
+#     }
 
-    return JsonResponse(types)
+#     return JsonResponse(types)
