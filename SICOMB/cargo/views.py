@@ -12,30 +12,27 @@ list_equipment_removed = {}  # lista de equipamentos removidos
 
 
 # cadastra a carga com a lista
-def confirm_cargo(request):
-    data_hora_atual = datetime.now()  # pega a data atual
-    data_hora_futura = data_hora_atual + timedelta(
-        hours=6
-    )  # TODO: definir carha horária da carga
-    cargo = Cargo(expected_cargo_return_date=data_hora_futura)  # Cadastra a carga
-    cargo.save()
-
-    # Cadastra a lista de equipamentos na tabela equipment_cargo
-    # com a carga cadastrada e os equipamentos da lista
-    for key in list_equipment:
-        Equipment_cargo(
-            cargo=cargo, equipment=Equipment.objects.get(serial_number=key)
-        ).save()
-
-    list_equipment.clear()
-    list_equipment_removed.clear()
-
-    return redirect("register_equipment")
-
-
 @login_required
-def redirect_cargo(request):
-    return render(request, "equipment/fazer_carga.html")
+def confirm_cargo(request):
+    if request.method == "POST":
+        data_hora_atual = datetime.now()  # pega a data atual
+        data_hora_futura = data_hora_atual + timedelta(
+            hours=6
+        )  # TODO: definir carha horária da carga
+        cargo = Cargo(expected_cargo_return_date=data_hora_futura)  # Cadastra a carga
+        cargo.save()
+
+        # Cadastra a lista de equipamentos na tabela equipment_cargo
+        # com a carga cadastrada e os equipamentos da lista
+        for key in list_equipment:
+            Equipment_cargo(
+                cargo=cargo, equipment=Equipment.objects.get(serial_number=key)
+            ).save()
+
+        list_equipment.clear()
+        list_equipment_removed.clear()
+
+    return render(request, "cargo/cargo.html")
 
 
 @login_required
@@ -56,7 +53,7 @@ def cancel_cargo(request):
     list_equipment.clear()
     list_equipment_removed.clear()
 
-    return redirect("register_equipment")
+    return redirect("fazer_carga")
 
 
 # Retorna a lista

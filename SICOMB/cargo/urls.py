@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path(
-        "fazer_carga/", views.redirect_cargo, name="fazer_carga"
+        "fazer_carga/", views.confirm_cargo, name="fazer_carga"
     ),  # Redireciona pra página
     path(
         "fazer_carga/confirm", views.confirm_cargo

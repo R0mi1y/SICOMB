@@ -43,6 +43,55 @@ def valid_serial_number(request, sn):
     return JsonResponse({"msm": "Numero de série já cadastrado", "exists": True})
 
 
+def get_equipment_serNum(request, serial_number):
+    if serial_number.isdigit():
+        try:
+            equipment = Equipment.objects.get(serial_number=serial_number)
+        except Equipment.DoesNotExist:
+            return JsonResponse(
+                {"msm": "Equipamento não existe na base de dados!", "registred": False}
+            )
+        data = {}
+        data["equipment"] = model_to_dict(equipment)
+
+        if (
+            equipment.armament != None
+        ):  # Recupera o objeto armamento, que complementa o equipamento
+            data["registred"] = "armament"
+            data["model"] = model_to_dict(equipment.armament)
+
+        elif (
+            equipment.wearable != None
+        ):  # Recupera o objeto vestimento, que complementa o equipamento
+            data["registred"] = "wearable"
+            data["model"] = model_to_dict(equipment.wearable)
+
+        elif (
+            equipment.accessory != None
+        ):  # Recupera o objeto acessorio, que complementa o equipamento
+            data["registred"] = "accessory"
+            data["model"] = model_to_dict(equipment.accessory)
+
+        elif (
+            equipment.grenada != None
+        ):  # Recupera o objeto acessorio, que complementa o equipamento
+            data["registred"] = "grenada"
+            data["model"] = model_to_dict(equipment.grenada)
+
+        return JsonResponse(data)
+    else:
+        try:
+            bullet = Bullet.objects.get(caliber=serial_number)
+        except Bullet.DoesNotExist:
+            return JsonResponse(
+                {"msm": "Munição não existe na base de dados!", "registred": False}
+            )
+        data = {}
+        data["bullet"] = model_to_dict(bullet)
+
+        return JsonResponse(data)
+
+
 # Retorna o equipamento referente ao uid mais recente em formato JSON
 def get_equipment(request):
     data = {"uid": ""}
@@ -77,28 +126,30 @@ def get_equipment(request):
                 {"uid": "", "msm": "Equipamento não cadastrado"}
             )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
 
-        data["registred"] = equipment.type
         data["equipment"] = model_to_dict(equipment)
-        # soma o caminho estatico com o da imagem
 
         if (
             equipment.armament != None
         ):  # Recupera o objeto armamento, que complementa o equipamento
+            data["registred"] = "armament"
             data["model"] = model_to_dict(equipment.armament)
 
         elif (
             equipment.wearable != None
         ):  # Recupera o objeto vestimento, que complementa o equipamento
+            data["registred"] = "wearable"
             data["model"] = model_to_dict(equipment.wearable)
 
         elif (
             equipment.accessory != None
         ):  # Recupera o objeto acessorio, que complementa o equipamento
+            data["registred"] = "accessory"
             data["model"] = model_to_dict(equipment.accessory)
 
         elif (
             equipment.grenada != None
         ):  # Recupera o objeto acessorio, que complementa o equipamento
+            data["registred"] = "grenada"
             data["model"] = model_to_dict(equipment.grenada)
 
         settings.AUX["UID"] = ""

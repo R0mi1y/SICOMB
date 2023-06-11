@@ -26,6 +26,7 @@ class Equipment_cargo(models.Model):
         Bullet, on_delete=models.CASCADE, null=True, default=None
     )
     bullet_amount = models.IntegerField("Quantidade_munição", null=True, default=None)
+    observation = models.TextField("Observação", default=None, null=True)
     # o bullet_amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
     
     # TODO: adicionar uma observação para cada equipamento relacionado à essa carga

@@ -109,9 +109,9 @@
                                 <tbody>
                                     <tr>
                                         <td class="search-box">
-                                            <input type="text" class="search-txt" placeholder="Pesquisar">
+                                            <input type="text" id="search-camp" class="search-txt" placeholder="Pesquisar">
                                             <a href="#" class="search-btn">
-                                                <img class="img-search" src="{% static 'img/search.png' %}" alt="">
+                                                <img class="img-search" id="search-btn" src="{% static 'img/search.png' %}" alt="">
                                             </a>
                                         </td>
                                         <td class="put_qnt"> <input type="text" id="uname" name="name" required placeholder="1" /></td>
@@ -193,7 +193,7 @@
             </div>
         </section>
         <div class="finalize_load">
-            <div class=""><input class="btn_finalize btn_cancel shadow" type="button" onclick="window.location.href = '';" value="Cancelar"></div>
+            <div class=""><input class="btn_finalize btn_cancel shadow" type="button" onclick="window.location.href = './cancel';" value="Limpar lista"></div>
             <div class=""><input class="btn_finalize btn_confirm shadow" type="button" onclick="confirmCargo()" value="Finalizar"></div>
         </div>
     </div>
