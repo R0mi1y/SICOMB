@@ -55,7 +55,7 @@
                         <img src="{% static 'img/click.png' %}" alt="">
                         <span>Fazer Carga</span>
                     </li>
-                    <li onclick="window.location='#'">
+                    <li onclick="window.location='/cargo/dashboard_cargas/'">
                         <img src="{% static 'img/network.png' %}" alt="">
                         <span>Cargas</span>
                     </li>
@@ -94,6 +94,14 @@
     <script src="{% static 'js/script.js'%}"></script>
     <script src="{% static 'js/utilitary.js'%}"></script>
     <script src="{% block js %}{% endblock js %}"></script>
+    <script>
+        {% if msm %}
+            {% if msm == "Munição não existe na base de dados!"%}
+                register_bullet();
+            {% endif %}
+            popUp("{{msm}}");
+        {% endif %}
+    </script>
 </body>
 
 </html>

@@ -49,11 +49,12 @@ var fetchEquipmentData = (serial_number) => {
         .then(data => {
             if (data.uid !== '') {
                 // percorre a lista comparando o que já tem com o novo equipamento
-                for (let key in list_equipment) {
-                    console.log(key);
-                    if (key == data.equipment.serial_number) {
-                        popUp('Equipamento já na lista!');
-                        return;
+                if (data.equipment.serial_number != null && data.equipment.serial_number != undefined) {
+                    for (let key in list_equipment) {
+                        if (key == data.equipment.serial_number) {
+                            popUp('Equipamento já na lista!');
+                            return;
+                        }
                     }
                 }
 
@@ -64,19 +65,26 @@ var fetchEquipmentData = (serial_number) => {
                     // Para de ficar requisitando
                     clearInterval(interval);
                     // variável auxiliar, o equipmentData['campo'] vai ter o nome em português
-                    equipmentData['campo'] = data.registred == 'wearable' ? 'Vestível' : equipmentData['campo'];
+                    equipmentData['campo'] = data.registred == 'wearable' ? 'Vestmento' : equipmentData['campo'];
                     equipmentData['campo'] = data.registred == 'accessory' ? 'Acessório' : equipmentData['campo'];
                     equipmentData['campo'] = data.registred == 'armament' ? 'Armamento' : equipmentData['campo'];
                     equipmentData['campo'] = data.registred == 'grenada' ? 'Granada' : equipmentData['campo'];
+                    equipmentData['campo'] = data.registred == 'bullet' ? 'Munição' : equipmentData['campo'];
 
                     imageEquipment.src = "/static/" + data.model.image_path; // Muda a imagem
 
+                    if (!data.equipment.serial_number) {
+                        console.log("disabled false");
+                        document.getElementById("amount_input").disabled = false;
+                    }
+
                     // Seta o resto => {
-                    if (data.equipment.serial_number != null) serialNumberInput.innerText = data.equipment.serial_number;
-                    if (data.model.description != null) description.innerText = data.model.description;
+                    data.model.description = data.model.description ?? "-";
+                    serialNumberInput.innerText = data.equipment.serial_number ?? "-";
+                    description.innerText = data.model.description;
                     observation.innerText = data.equipment.observation == null || data.equipment.observation == undefined ? "" : data.equipment.observation;
                     type.innerText = equipmentData.campo;
-                    amount.innerText = '1';
+                    amount.innerText = equipmentData.amount ?? "1";
                     // => }
                 }
             }
@@ -101,13 +109,13 @@ function insertLine(line) {
     table_itens.innerHTML += // Insere efetivamente na lista => {
         '<tr>' +
         '<td></td>' +
-        '<td>' + (line.equipment.serial_number == null ? "-" : line.equipment.serial_number) + '</td>' +
-        '<td>' + (line.model.description == null ? "-" : line.model.description) + '</td>' +
-        '<td>' + (line.campo == null ? "-" : line.campo) + '</td>' +
-        '<td>' + (line.model.caliber == null ? "-" : line.model.caliber) + '</td>' +
-        '<td>' + (line.equipment.amount == null ? "1" : line.equipment.amount) + '</td>' +
+        '<td>' + (line.equipment.serial_number == null || line.equipment.serial_number == undefined ? "-" : line.equipment.serial_number) + '</td>' +
+        '<td>' + (line.model.description == null || line.model.description == undefined ? "-" : line.model.description) + '</td>' +
+        '<td>' + (line.campo == null || line.campo == undefined ? "-" : line.campo) + '</td>' +
+        '<td>' + (line.model.caliber == null || line.model.caliber == undefined ? "-" : line.model.caliber) + '</td>' +
+        '<td>' + (line.amount == null || line.amount == undefined ? "1" : line.amount) + '</td>' +
         '<td>' + (line.registred == 'wearable' ? line.model.size : "-") + '</td>' +
-        '<td>' + (line.equipment.observation == null ? "-" : line.equipment.observation) + '</td>' +
+        '<td>' + (line.equipment.observation == null || line.equipment.observation == undefined ? "-" : line.equipment.observation) + '</td>' +
         '<td></td>' +
         '</tr>' // => }
 
@@ -117,8 +125,9 @@ function insertLine(line) {
 
 // Insere com o clicar do botão inserir
 insert_bttn.addEventListener('click', () => {
+    let amount_input = document.getElementById("amount_input");
     if (equipmentData != null) { // se tiver um equipamento no quadro
-        equipmentData.equipment['amount'] = amount.innerText;
+        equipmentData['amount'] = amount_input.value;
 
         insertLine(equipmentData); // insere a linha
 
@@ -127,10 +136,12 @@ insert_bttn.addEventListener('click', () => {
             'observation': observation.innerText
         };
 
+        equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ?? equipmentData.model.caliber;
+
         // adiciona no array de equipamentos do django => {
         fetch("http://localhost:8000/cargo/list_equipment/add/" +
             equipmentData.equipment.serial_number + "/" +
-            (observation.value != '' ? observation.value : null) + "/", {
+            (observation.value != '' ? observation.value : '-') + "/" + equipmentData.amount + "/", {
                 method: 'POST',
             });
         // => }
@@ -144,6 +155,9 @@ insert_bttn.addEventListener('click', () => {
         observation.innerHTML = '';
         type.innerText = '';
         amount.innerText = '';
+        amount_input.value = '1';
+        amount_input.disabled = true;
+
         // => }
     }
 });
@@ -169,7 +183,7 @@ function checkRemoveRow(rowNumber) {
                                 removerpopUp(); // remove o popUpa
                                 clearInterval(interval); // Para de ficar requisitando
                                 // remove da lista do django
-                                fetch("http://localhost:8000/cargo/list_equipment/remove/" + serialNum + "/" + (obs != '' ? obs : null) + "/", {
+                                fetch("http://localhost:8000/cargo/list_equipment/remove/" + serialNum + "/" + (obs != '' ? obs : null) + "/" + list_equipment.amount + '/', {
                                     method: 'POST',
                                 });
                                 interval = setInterval(fetchEquipmentData, 1000); // volta a ficar requisitando pra cadastrar outros
@@ -222,3 +236,10 @@ document.getElementById("search-btn").addEventListener("click", () => {
     fetchEquipmentData(search.value);
     search.value = '';
 });
+
+// checa se a lista tá vazia
+function confirmCargo() {
+    var rows = table_itens.getElementsByTagName("tr");
+    if (rows.length > 0) window.location.href = '.'; // se tiver certo redireciona pra confirmar a carga
+    else popUp("Lista vazia!");
+}

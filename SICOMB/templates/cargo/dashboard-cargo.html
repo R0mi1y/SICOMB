@@ -1,0 +1,41 @@
+{% extends 'base/footer.html' %}
+{% load static %}
+
+{% block title %}SICOMB - Registro de Equipamento{% endblock title %}
+{% block title_top %}REGISTRO DE EQUIPAMENTO{% endblock title_top %}
+
+{% block content_final %}
+{% for i in cargos %}
+<table>
+    <tr>
+        <th colspan="100%" class="cargo_title">
+            <h3>CARGA {{i.0.pk}}</h3>
+        </th>
+    </tr>
+    <tr class="col-itens">
+        <th>Nª</th>
+            <th>Nº DE SÉRIE</th>
+            <th>DESCRIÇÃO</th>
+            <th>TIPO</th>
+            <th>CALIBRE</th>
+            <th>QUANTIDADE</th>
+            <th>TAMANHO</th>
+            <th>OBSERVAÇÃO</th>
+            <th>AÇÃO</th>
+        </tr>
+        {% for y in i.1 %}
+        {{ y.rsegistred }}
+        <tr>
+            
+            <th>{{ y }}</th>
+            <th>{{ y.equipment.serial_number|default:"-" }}</th>
+            <th>{{ y.registred|default:"-" }}</th>
+            <th>{% if y.registred == "Armamento" or y.registred == "Munição" %}{{ y.model.caliber }}{% else %}-{% endif %}</th>
+            <th>{{ y.amount }}</th>
+            <th>{% if y.registred == "Vestimento" %}{{ y.model.size }}{% else %}-{% endif %}</th>
+            <th>{{ y.observation|default:"-" }}</th>
+        </tr>
+        {% endfor %}
+    </table>
+{% endfor %}
+{% endblock content_final %}

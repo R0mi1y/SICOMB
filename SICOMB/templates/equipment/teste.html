@@ -63,10 +63,23 @@
                   {{ field }}
                   {% endfor %}
                   <input type="button" id="submit-btn" value="Enviar">
+                  <br>
+                  <br>
                   <input type="button" id="clear-btn" value="limpar uid">
+                  <br>
+                  <br>
+                  <input id="bullet-btn" type="button" value="Cadastrar Munição">
                 </form>
             </div>
         </div>
     </div>
+    <script>
+      {% if bullets %}
+      var bullets = [];
+        {% for i in bullets %}
+          bullets.push(["{{i.caliber}}", "{{i.pk}}", "{{i.amount}}"]);
+        {% endfor %}
+      {% endif %}
+    </script>
     <script src='{% static 'js/register_equipment.js' %}'></script>
 {% endblock content_final %}
