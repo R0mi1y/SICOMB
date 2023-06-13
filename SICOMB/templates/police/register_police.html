@@ -45,8 +45,6 @@
                {{form.posto}}
                <label for="{{ form.email.id_for_label }}" class="custom-label">Email</label>
                {{form.email}}
-               <!-- <label for="{{ form.foto.id_for_label }}" class="custom-label">Foto</label>
-               {{form.foto}} -->
                <div class="file-input-container">
                   {{form.foto}}
                   <label for="{{ form.foto.id_for_label }}" class="custom-file-input">Anexar foto</label> 
@@ -61,6 +59,43 @@
       </form>
    </div>
 </section>
+
+{% if messages %}
+<script>
+    // Função para fechar o alerta
+    function closeAlert(alert) {
+      alert.remove();
+    }
+
+    // Função para exibir as mensagens de sucesso
+    function showSuccessMessages() {
+      {% for message in messages %}
+        var messageText = "{{ message }}";
+        // Crie um elemento de alerta para cada mensagem
+        var alert = document.createElement('div');
+        alert.className = 'alert alert-success';
+        alert.textContent = messageText;
+        // Crie um botão de fechamento (X)
+        var closeButton = document.createElement('span');
+        closeButton.className = 'alert-close';
+        closeButton.textContent = 'X';
+        closeButton.onclick = function() {
+          closeAlert(alert);
+        };
+        alert.appendChild(closeButton);
+        // Adicione o elemento ao corpo do documento
+        document.body.appendChild(alert);
+        // Defina um tempo limite para remover o elemento após 5 segundos
+        setTimeout(function() {
+          closeAlert(alert);
+        }, 5000); // 5000 milissegundos = 5 segundos
+      {% endfor %}
+    }
+
+    // Chame a função para exibir as mensagens de sucesso
+    showSuccessMessages();
+  </script>
+{% endif %}
 
 <script>
    function handleFileSelection(event) {

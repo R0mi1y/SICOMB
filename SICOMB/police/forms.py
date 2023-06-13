@@ -15,20 +15,17 @@ class UserForm(UserCreationForm):
 
 class PoliceForm(forms.ModelForm):
     
-    # nome = forms.CharField( label='Nome')
-    # sobrenome = forms.CharField(widget=forms.TextInput(attrs={'class':'input-data'}), label='Sobrenome')
-    matricula = forms.CharField(widget=forms.TextInput(attrs={'class':'input-data'}), label='Matrícula')
-    posto = forms.CharField(widget=forms.TextInput(attrs={'class':'input-data'}), label='Posto')
-    email = forms.CharField(widget=forms.EmailInput(attrs={'class':'input-data'}), label='Email')
-    telefone = forms.CharField(widget=forms.TextInput(attrs={'class':'input-data'}), label='Telefone')
-    lotacao = forms.CharField(widget=forms.TextInput(attrs={'class':'input-data'}), label='Lotação')
     foto = forms.ImageField(widget=ClearableFileInput(attrs={'class':'file-input', 'accept':'image/*', 'onchange':'handleFileSelection(event)'}), label='Foto')
-    # foto = forms.ImageField(widget=forms.FileInput(attrs={'class':'file-input', 'accept':'image/*', 'onchange':'handleFileSelection(event)'}), label='Foto')
     
     class Meta:
         model = RegisterPolice
         fields = '__all__'
         widgets = {
-            'nome': forms.TextInput(attrs={'class':'input-data'})
+            'nome': forms.TextInput(attrs={'class':'input-data'}),
+            'matricula': forms.TextInput(attrs={'class':'input-data'}),
+            'posto': forms.TextInput(attrs={'class':'input-data'}),
+            'email': forms.EmailInput(attrs={'class':'input-data'}),
+            'telefone': forms.TextInput(attrs={'class':'input-data'}),
+            'lotacao': forms.TextInput(attrs={'class':'input-data'})
         }
         

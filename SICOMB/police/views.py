@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from police.forms import UserForm
-from django.core.cache import cache
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from police.forms import PoliceForm
@@ -20,7 +20,8 @@ def register_police(request):
         form = PoliceForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/cargo/fazer_carga/')
+            messages.success(request, 'Cadastro realizado com sucesso!')
+            return HttpResponseRedirect('/police/register/')
     else:
         form = PoliceForm
            

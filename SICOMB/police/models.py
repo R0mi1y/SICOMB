@@ -19,7 +19,7 @@ class RegisterPolice(models.Model):
     matricula = models.CharField(max_length=20, primary_key=True)
     telefone = models.CharField(max_length=11)
     lotacao = models.CharField(max_length=50)
-    posto = models.CharField(max_length=10, default="Policial")
+    posto = models.CharField(max_length=10)
     email = models.EmailField(max_length=254)
     foto = models.FileField(upload_to="media/")
 

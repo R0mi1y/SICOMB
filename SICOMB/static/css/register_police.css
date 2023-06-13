@@ -113,7 +113,7 @@
     background-color: rgb(91,73,57, 0.9);
     border-radius: 10px;
     border: 1px solid #90816A;
-    padding: 4% 6%;
+    padding: 3% 6%;
     cursor: pointer;
 }
 
@@ -124,7 +124,7 @@
     background-color: rgb(91,73,57, 0.8);
     border-radius: 10px;
     border: 1px solid #90816A;
-    padding: 4% 6%;
+    padding: 3% 6%;
     cursor: pointer;
 }
 
@@ -176,4 +176,47 @@
 
 footer{
     width: auto !important;
+}
+
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 22px 10px;
+    font-family: interBold;
+    font-size: 15px;
+    color: #fff;
+    background-color: rgb(91, 73, 57);
+    border-radius: 10px;
+    border: 1px solid #90816A;
+    opacity: 0;
+    animation-name: fade-in-out;
+    animation-duration: 5s;
+    animation-fill-mode: forwards;
+}
+
+.alert-close {
+    float: right;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 15px;
+    margin-top: -15px;
+}
+
+@keyframes fade-in-out {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
