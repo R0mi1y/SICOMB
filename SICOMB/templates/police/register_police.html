@@ -26,7 +26,7 @@
             <hr>
          </span></div>
 
-      <form action="" method="POST">
+      <form action="" method="POST" enctype="multipart/form-data">
          {% csrf_token %}
          <div class="input-div">
 
@@ -41,15 +41,15 @@
                {{form.lotacao}}
             </div>
             <div class="input-box">
-               <label for="{{ form.sobrenome.id_for_label }}" class="custom-label">Sobrenome</label>
-               {{form.sobrenome}}
                <label for="{{ form.posto.id_for_label }}" class="custom-label">Posto</label>
                {{form.posto}}
                <label for="{{ form.email.id_for_label }}" class="custom-label">Email</label>
                {{form.email}}
+               <!-- <label for="{{ form.foto.id_for_label }}" class="custom-label">Foto</label>
+               {{form.foto}} -->
                <div class="file-input-container">
-                  {{form.img}}
-                  <label for="{{ form.img.id_for_label }}" class="custom-file-input">Selecionar Arquivo</label> 
+                  {{form.foto}}
+                  <label for="{{ form.foto.id_for_label }}" class="custom-file-input">Anexar foto</label> 
                </div>
                <p id="fileSelectedMessage"></p>
             </div>

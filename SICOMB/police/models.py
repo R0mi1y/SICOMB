@@ -15,6 +15,12 @@ class Police(User):
     
 class RegisterPolice(models.Model):
     
+    nome = models.CharField(max_length=100)
+    matricula = models.CharField(max_length=20, primary_key=True)
+    telefone = models.CharField(max_length=11)
     lotacao = models.CharField(max_length=50)
+    posto = models.CharField(max_length=10, default="Policial")
+    email = models.EmailField(max_length=254)
+    foto = models.FileField(upload_to="media/")
 
 

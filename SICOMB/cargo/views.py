@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from cargo.models import *
 from equipment.models import *
+from police.models import *
 from datetime import datetime, timedelta
 
 list_equipment = {}  # lista de equipamentos
@@ -14,6 +15,7 @@ list_equipment_removed = {}  # lista de equipamentos removidos
 # cadastra a carga com a lista
 @login_required
 def confirm_cargo(request):
+    policial = RegisterPolice.objects.get(matricula='WA025ALM')
     if request.method == "POST":
         data_hora_atual = datetime.now()  # pega a data atual
         data_hora_futura = data_hora_atual + timedelta(
@@ -32,7 +34,7 @@ def confirm_cargo(request):
         list_equipment.clear()
         list_equipment_removed.clear()
 
-    return render(request, "cargo/cargo.html")
+    return render(request, "cargo/cargo.html", {'policial': policial})
 
 
 @login_required

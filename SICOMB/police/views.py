@@ -1,10 +1,8 @@
 from django.shortcuts import render
 from police.forms import UserForm
 from django.core.cache import cache
-from urllib import response
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
-from . import models
+from django.shortcuts import render
 from police.forms import PoliceForm
 from django.contrib.auth.decorators import login_required
 
@@ -15,13 +13,14 @@ def index(request):
     HttpResponseRedirect("index")
 
 
+@login_required
 def register_police(request):
     
     if request.method == "POST":
-        form = PoliceForm(request.POST)
+        form = PoliceForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/cargo/fazer_carga/')
     else:
         form = PoliceForm
            

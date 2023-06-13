@@ -132,7 +132,7 @@ DATABASES = {
         # <<<<<<< HEAD
         # 'PASSWORD': '12345679',
         # =======
-        "PASSWORD": "",
+        "PASSWORD": "1234",
         # >>>>>>> 7c4a436cc165bad97bee72497148fa6251c04913
         "HOST": "localhost",
         "PORT": "3306",
@@ -145,8 +145,11 @@ DATABASES = {
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    os.path.join(BASE_DIR, "static")
 ]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = "{}/media".format(BASE_DIR)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
