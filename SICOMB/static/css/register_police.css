@@ -22,7 +22,7 @@
 }
 
 .registration table {
-    
+
     margin: 2% auto;
 }
 
@@ -46,15 +46,17 @@
 }
 
 .row_color span {
-    background-color: rgb(91,73,57, 0.6);
+    background-color: rgb(91, 73, 57, 0.6);
 }
 
 .input-div {
-    display: flex; 
+    display: flex;
 }
-.input-box{
+
+.input-box {
     width: 50%;
 }
+
 .custom-label {
     font-family: interBold;
     color: #5B4939;
@@ -66,11 +68,34 @@
     width: 70%;
     padding: 0 3%;
     border-radius: 10px;
-    border: 2px solid rgb(91,73,57, 0.6);
+    border: 2px solid rgb(91, 73, 57, 0.6);
     color: #5B4939;
     line-height: 35px;
     margin: 5px 0 10px 0;
+}
+
+.input-search{
+    display: flex;
+    width: 70%;
+    padding: 3% 3%;
+    border-radius: 10px;
+    border: 2px solid rgb(91, 73, 57, 0.6);
     
+    line-height: 35px;
+    margin: 7px auto;
+}
+
+.input-search input{
+    width: 86%;
+    color: #5B4939;
+}
+.input-search button {
+    width: 14%;
+    height: 22px;
+    cursor: pointer;
+}
+.input-search img {
+    width: 20px;
 }
 
 .file-div {
@@ -83,13 +108,13 @@
 }
 
 .file-label {
-    background-color: rgb(91,73,57, 0.6);
+    background-color: rgb(91, 73, 57, 0.6);
     color: #004593;
     font-family: interBold;
     font-size: 14px;
     padding: 8% 5%;
     border-radius: 10px;
-    border: 1px solid rgb(91,73,57, 0.6);
+    border: 1px solid rgb(91, 73, 57, 0.6);
     width: 100%;
     cursor: pointer;
     transition: .5s;
@@ -97,20 +122,20 @@
 
 .file-label:hover {
     color: #fff;
-    background-color: rgb(91,73,57, 0.8);
-    border: 1px solid rgb(91,73,57, 0.6);
+    background-color: rgb(91, 73, 57, 0.8);
+    border: 1px solid rgb(91, 73, 57, 0.6);
 }
 
 .finalize-registration {
     padding: 4%;
-    
+
 }
 
 .finalize-registration input {
     font-family: interBold;
     font-size: 15px;
     color: #fff;
-    background-color: rgb(91,73,57, 0.9);
+    background-color: rgb(91, 73, 57, 0.9);
     border-radius: 10px;
     border: 1px solid #90816A;
     padding: 3% 6%;
@@ -121,7 +146,7 @@
     font-family: interBold;
     font-size: 15px;
     color: #fff;
-    background-color: rgb(91,73,57, 0.8);
+    background-color: rgb(91, 73, 57, 0.8);
     border-radius: 10px;
     border: 1px solid #90816A;
     padding: 3% 6%;
@@ -129,11 +154,11 @@
 }
 
 .box-shadow-registration {
-    box-shadow: -2px 4px 2px rgb(91,73,57);
+    box-shadow: -2px 4px 2px rgb(91, 73, 57);
 }
 
-.shadow{
-    box-shadow: -0px 5px 10px rgb(0,0,0,0.25);
+.shadow {
+    box-shadow: -0px 5px 10px rgb(0, 0, 0, 0.25);
 }
 
 
@@ -168,13 +193,13 @@
     width: 100%;
 }
 
-#fileSelectedMessage{
+#fileSelectedMessage {
     font-size: 11px;
     font-family: interBold;
     color: #5B4939;
 }
 
-footer{
+footer {
     width: auto !important;
 }
 

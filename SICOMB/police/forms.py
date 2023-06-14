@@ -22,7 +22,7 @@ class PoliceForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'nome': forms.TextInput(attrs={'class':'input-data'}),
-            'matricula': forms.TextInput(attrs={'class':'input-data'}),
+            'matricula': forms.TextInput(attrs={'id':'matricula-input'}),
             'posto': forms.TextInput(attrs={'class':'input-data'}),
             'email': forms.EmailInput(attrs={'class':'input-data'}),
             'telefone': forms.TextInput(attrs={'class':'input-data'}),

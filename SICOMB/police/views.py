@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from police.forms import PoliceForm
 from django.contrib.auth.decorators import login_required
-
+from .models import RegisterPolice
 
 # Create your views here.
 
@@ -28,6 +28,33 @@ def register_police(request):
     return render(request, 'police/register_police.html' , context={
         'form': form,
     })
+
+
+def search_police(request, matricula):
+    
+    try:
+        policial = RegisterPolice.objects.only('matricula').get(matricula=matricula)
+    except RegisterPolice.DoesNotExist:
+        policial = None
+        messages.success(request, 'Policial não encontrado!')
+        return HttpResponseRedirect('/police/register/')
+
+    if policial:
+        policial.foto = None
+    
+    if request.method == "POST":
+        form = PoliceForm(request.POST, request.FILES, instance=policial)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Atulização realizada com sucesso!')
+            return HttpResponseRedirect('/police/register/')
+    else:
+        form = PoliceForm(instance=policial)
+           
+    return render(request, 'police/register_police.html' , context={
+        'form': form,
+    })
+    
 
 @login_required
 def register_user(request):
