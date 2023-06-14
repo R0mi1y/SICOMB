@@ -117,27 +117,22 @@ document.getElementById("submit-btn").addEventListener('click', () => {
 
 function register_bullet() {
     var bullet_options = '';
-    if (bullets) {
+    bullets ?? '';
         for (i in bullets) {
             console.log(i);
             bullet_options += '\n<option value="' + bullets[i][1] + '">' + bullets[i][0] + '</option>';
         }
-    }
 
     var csrf = document.querySelector('input[type="hidden"][name="csrfmiddlewaretoken"]');
-    console.log(csrf);
     var bullet_html =
-        `
+    `
     <form method="post" action=".">
     ` + csrf.outerHTML + `
     <label for="dropdown_bullets">Munições já cadastradas:</label>
     <select name="bullet" id="dropdown_bullets" required>
     ` +
-
         bullet_options
-
-        +
-        `
+    + `
     </select>
     <br>
     <label for="input_amount">Número:</label>

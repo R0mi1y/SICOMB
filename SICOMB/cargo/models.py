@@ -16,6 +16,9 @@ class Cargo(models.Model):
     status = models.CharField("horário_carga", max_length=20, default="Pendente")
     # police = models.OneToOneField(RegisterPolice, on_delete=models.CASCADE)
     # adjunct = models.ForeignKey(Adjunct, on_delete=models.CASCADE) #Pega a chave primária do adjunto
+    
+    def __str__(self):
+        return str(self.pk)
 
 
 # Tabela que faz o relacionamento entre a carga e os equipamentos

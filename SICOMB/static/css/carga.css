@@ -246,12 +246,12 @@ table img{
     font-size: 11px;
     border-bottom: 1px solid #5B4939;
 }
-.table_itens tbody td a{
+/* .table_itens tbody td a{
     background: red;
     color: #fff;
     font-family: 'interExtraBold';
     font-size: 17px;
-}
+} */
 .table_itens thead th{
     min-width: 100px;
 }
@@ -288,4 +288,29 @@ table img{
 
 footer{
     position: static !important;
+}
+
+/* Para a tela final de fazer carga /
+.img-return{
+    width: 25px;
+}
+.cargo_id h3{
+    background-color: rgba(179, 166, 155, 0.9);
+    color: #fff;
+    border-radius: 10px;
+    margin: 0px 10px;
+    padding: 6%;
+}
+
+/  -----------------------------------------------------------------------------------  /
+/ CSS da página que exibe todas cargas e descargas realizadas */
+
+.click_redirect a {
+    background: none;
+    color: #5B4939;
+    font-size: 12px;
+}
+
+.click_redirect a:hover{
+    text-decoration: underline ;
 }

@@ -214,50 +214,12 @@ def remove_list_equipment(request, serial_number, obs, amount):
 
 
 def get_dashboard_cargas(request):
-    json_cargos = []
     cargos = Cargo.objects.all()
+    cargos_aux = []
+    qnt = []
+    for i in cargos:
+        ec = Equipment_cargo.objects.filter(cargo=i)
+        cargos_aux.append([i, ec.__len__])
 
-    for cont, i in enumerate(cargos):
-        equipment_cargo = Equipment_cargo.objects.filter(cargo=i.pk)
-
-        for cont2, y in enumerate(equipment_cargo):
-            if y.equipment != None:
-                equipment = y.equipment
-
-                if (
-                    equipment.armament != None
-                ):  # Recupera o objeto armamento, que complementa o equipamento
-                    registred = "Armamento"
-                    model = equipment.armament
-
-                elif (
-                    equipment.wearable != None
-                ):  # Recupera o objeto vestimento, que complementa o equipamento
-                    registred = "Vestimento"
-                    model = equipment.wearable
-
-                elif (
-                    equipment.accessory != None
-                ):  # Recupera o objeto acessorio, que complementa o equipamento
-                    registred = "Acessório"
-                    model = equipment.accessory
-
-                elif (
-                    equipment.grenada != None
-                ):  # Recupera o objeto acessorio, que complementa o equipamento
-                    registred = "Granada"
-                    model = equipment.grenada
-
-            elif y.bullet:
-                registred = "Munição"
-                model = y.bullet
-
-                y.registred = model
-            else:
-                print(
-                    "ERROOOOOUUUU ================================================================="
-                )
-
-        json_cargos.append([i, equipment_cargo])
     # return JsonResponse(json_cargos)
-    return render(request, "cargo/dashboard-cargo.html", {"cargos": json_cargos})
+    return render(request, "cargo/dashboard-cargo.html", {"cargos": cargos_aux, "": qnt})
