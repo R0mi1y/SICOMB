@@ -21,12 +21,14 @@ class Cargo(models.Model):
 # Tabela que faz o relacionamento entre a carga e os equipamentos
 class Equipment_cargo(models.Model):
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
+    equipment = models.ForeignKey(
+        Equipment, on_delete=models.CASCADE, null=True, default=None
+    )
     bullet = models.ForeignKey(
         Bullet, on_delete=models.CASCADE, null=True, default=None
     )
-    bullet_amount = models.IntegerField("Quantidade_munição", null=True, default=None)
+    amount = models.IntegerField("Quantidade", null=True, default="1")
     observation = models.TextField("Observação", default=None, null=True)
     # o bullet_amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
-    
+
     # TODO: adicionar uma observação para cada equipamento relacionado à essa carga

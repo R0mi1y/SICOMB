@@ -61,11 +61,6 @@ MIDDLEWARE = [
 
 APPEND_SLASH = False  # resolve erro do fetch de rotas do django
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
-
 ROOT_URLCONF = "SICOMB.urls"
 
 TEMPLATES = [
@@ -166,6 +161,7 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:8000",
+    "https://9942-177-185-71-201.ngrok-free.app",
 ]
 
 CORS_ALLOW_METHODS = [

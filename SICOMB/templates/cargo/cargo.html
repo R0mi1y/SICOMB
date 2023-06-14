@@ -6,8 +6,6 @@
 {% block title_top %}FAZER CARGA{% endblock title_top %}
 
 {% block content_final %}
-
-
     <div class="content">
         <!-- <main role="main" > -->
         <section class="cargo">
@@ -114,7 +112,7 @@
                                                 <img class="img-search" id="search-btn" src="{% static 'img/search.png' %}" alt="">
                                             </a>
                                         </td>
-                                        <td class="put_qnt"> <input type="text" id="uname" name="name" required placeholder="1" /></td>
+                                        <td class="put_qnt"><input type="text" id="amount_input" name="name" disabled required placeholder="1" /></td>
                                         <!-- <td rowspan="2">
                                                     
                                         </td> -->
@@ -193,12 +191,14 @@
             </div>
         </section>
         <div class="finalize_load">
-            <div class=""><input class="btn_finalize btn_cancel shadow" type="button" onclick="window.location.href = './cancel';" value="Limpar lista"></div>
-            <div class=""><input class="btn_finalize btn_confirm shadow" type="button" onclick="confirmCargo()" value="Finalizar"></div>
+            <form action="." method="POST" id="form-equipment">
+                {% csrf_token %}
+                <div class=""><input class="btn_finalize btn_cancel shadow" type="button" onclick="window.location.href = './cancel';" value="Limpar lista"></div>
+                <div class=""><input class="btn_finalize btn_confirm shadow" type="submit" onclick="" value="Finalizar"></div>
+            </form>
         </div>
     </div>
 <script src="{% static 'js/fetch_cargo.js' %}"></script>
 
-{% csrf_token %}
 
 {% endblock content_final %}

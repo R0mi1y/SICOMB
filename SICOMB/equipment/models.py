@@ -12,7 +12,7 @@ class Model_armament(models.Model):
 
     def __str__(self):
         # na hora dos campos do select ele retorna isso
-        return f"Armamento {self.model}" 
+        return f"Armamento {self.model}"
 
 
 class Model_wearable(models.Model):
@@ -50,7 +50,7 @@ class Equipment(models.Model):
     # chave primária do equipamento
     serial_number = models.CharField("Numero de série", max_length=20)
     uid = models.CharField("uid", max_length=20, primary_key=True, default=None)
-    status = models.CharField("Estado atual", max_length=10, default="Disponivel")
+    status = models.CharField("Estado atual", max_length=20, default="Disponivel")
     armament = models.ForeignKey(
         Model_armament, on_delete=models.CASCADE, null=True, default=None
     )
@@ -66,10 +66,10 @@ class Equipment(models.Model):
 
     def __str__(self):
         # na hora dos campos do select ele retorna isso
-        return f"Equipamento {self.type}"
+        return f"Equipamento {self.uid}"
 
     class Meta:
-        verbose_name = 'Equipamento'
+        verbose_name = "Equipamento"
 
 
 class Bullet(models.Model):

@@ -11,14 +11,29 @@ from .forms import *
 @login_required
 def register_equipment(request):
     if request.method == "POST":
-        form = EquipmentForm(request.POST)
-        if form.is_valid():
-            form.save()
-        else:
-            return render(request, "equipment/teste.html", {"form": form})
-    form = EquipmentForm()  # Se for bem sucedido ele zera o form
+        if request.POST.get("bullet") and request.POST.get("amount"):
+            try:
+                bullet = Bullet.objects.get(id=request.POST.get("bullet"))
+            except Bullet.DoesNotExist:
+                form = EquipmentForm()  # Se for bem sucedido ele zera o form
 
-    return render(request, "equipment/teste.html", {"form": form})
+                return render(
+                    request,
+                    "equipment/teste.html",
+                    {"msm": "Munição não existe na base de dados!", "form": form},
+                )
+            bullet.amount = int(bullet.amount) + int(request.POST.get("amount"))
+            bullet.save()
+        else:
+            form = EquipmentForm(request.POST)
+            if form.is_valid():
+                form.save()
+            else:
+                return render(request, "equipment/teste.html", {"form": form})
+    form = EquipmentForm()  # Se for bem sucedido ele zera o form
+    bullets = Bullet.objects.all()
+
+    return render(request, "equipment/teste.html", {"form": form, "bullets": bullets})
 
 
 # valida o uid pra cadastro
@@ -79,15 +94,21 @@ def get_equipment_serNum(request, serial_number):
             data["model"] = model_to_dict(equipment.grenada)
 
         return JsonResponse(data)
-    else:
+    elif serial_number[0] == ".":
         try:
             bullet = Bullet.objects.get(caliber=serial_number)
         except Bullet.DoesNotExist:
             return JsonResponse(
-                {"msm": "Munição não existe na base de dados!", "registred": False}
+                {
+                    "msm": "Munição não existe na base de dados!",
+                    "registred": False,
+                    "uid": "",
+                }
             )
         data = {}
-        data["bullet"] = model_to_dict(bullet)
+        data["model"] = model_to_dict(bullet)
+        data["equipment"] = model_to_dict(bullet)
+        data["registred"] = "bullet"
 
         return JsonResponse(data)
 
@@ -125,6 +146,10 @@ def get_equipment(request):
             return JsonResponse(
                 {"uid": "", "msm": "Equipamento não cadastrado"}
             )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
+        if equipment.status != "Disponivel":
+            settings.AUX["UID"] = ""
+
+            return JsonResponse({"uid": "", "msm": "Equipamento indisponivel"})
 
         data["equipment"] = model_to_dict(equipment)
 
@@ -167,58 +192,3 @@ def set_uid(request):
         settings.AUX["UID"] = request.GET.get("uid")
 
     return render(request, "equipment/set_answer.html", {"uid": settings.AUX["UID"]})
-
-
-# # Retorna a lista de tipos, modelos e tipos de equipamentos em formato json para a página de registro
-# def get_models_equipment(request):
-#     armaments = Model_armament.objects.all()
-#     armament_models = []
-
-#     for i in armaments:
-#         armaments.append(i.model)
-
-#     wearbles = Model_wearable.objects.all()
-#     wearbles_models = []
-
-#     for i in wearbles:
-#         wearbles.append(i.model)
-
-#     accessory = Model_accessory.objects.all()
-#     accessory_models = []
-
-#     for i in accessory:
-#         accessory.append(i.model)
-
-#     grenada = Model_grenada.objects.all()
-#     grenada_models = []
-
-#     for i in grenada:
-#         grenada.append(i.model)
-
-#     bullet = Bullet.objects.all()
-#     bullet_models = []
-
-#     for i in bullet:
-#         bullet.append(model_to_dict(i))
-
-#     types = {
-#         "Munição": {"name": "Munição", "eng_name": "Bullet", "models": bullet_models},
-#         "Granada": {"name": "Granada", "eng_name": "Grenada", "models": grenada_models},
-#         "Acessório": {
-#             "name": "Acessorio",
-#             "eng_name": "Acessory",
-#             "models": accessory_models,
-#         },
-#         "Vestível": {
-#             "name": "Vestível",
-#             "eng_name": "Wearble",
-#             "models": wearbles_models,
-#         },
-#         "Armamento": {
-#             "name": "Armamento",
-#             "eng_name": "Armament",
-#             "models": armament_models,
-#         },
-#     }
-
-#     return JsonResponse(types)

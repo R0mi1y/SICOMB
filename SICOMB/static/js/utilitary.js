@@ -1,9 +1,10 @@
 var id_overlay = 0;
 var aux = {};
 
-function popUp(message, close_btn, yn) {
+function popUp(message, close_btn, yn, adictional) {
     close_btn = close_btn ?? true;
     yn = yn ?? false;
+    adictional = adictional ?? false;
 
     var overlayHTML = `
     <div id="overlay` + id_overlay + `" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
@@ -16,6 +17,9 @@ function popUp(message, close_btn, yn) {
         </button>`;
     }
     overlayHTML += '<p style="margin: 0;">' + message + "</p>"
+    if (adictional) {
+        overlayHTML += adictional;
+    }
     if (yn) { // se quer q tenha os botões de sim ou não
         overlayHTML += `
         <button onclick="answerY()" style="background-color: green; color: white; border: none; padding: 5px 10px; font-size: 16px; border-radius: 5px; cursor: pointer; margin-right: 10px;">
@@ -40,13 +44,6 @@ function removerpopUp() {
     if (overlay) {
         overlay.remove();
     }
-}
-
-// checa se a lista tá vazia
-function confirmCargo() {
-    var rows = table_itens.getElementsByTagName("tr");
-    if (rows.length > 0) window.location.href = './confirm'; // se tiver certo redireciona pra confirmar a carga
-    else popUp("Lista vazia!");
 }
 
 function answerN() {
