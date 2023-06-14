@@ -1,0 +1,102 @@
+{% extends 'base/footer.html' %}
+{% load static %}
+
+{% block title %}SICOMB - Registro de Equipamento{% endblock title %}
+{% block title_top %}REGISTRO DE EQUIPAMENTO{% endblock title_top %}
+{% block css2 %}{% static 'css/carga.css' %}{% endblock%}
+
+{% block content_final %}
+<section style="padding: 0px 20px">
+    <div class="cargo_itens shadow">
+        <!-- <h2>ITENS</h2> -->
+        
+        <table class="table_itens">
+            <thead>
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3 >CARGAS</h3></th>
+                </tr>
+                <tr class="col-itens">
+                    <th>ID DE CARGA</th>
+                    <th>TIPO</th>
+                    <th>REQUISITANTE</th>
+                    <th>MATRÍCULA</th>
+                    <th>ADJUNTO</th>
+                    <th>GRADUAÇÃO</th>
+                    <th>QNT. DE ITENS</th>
+                    <th>DATA</th>
+                    <th>PREVISÃO DE DESCARGA</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr> <!-- Dados teste para visualização dos dados na tabela-->
+                    <td class="click_redirect"><a  href="">152</a></td>
+                    <td >6H</td>
+                    <td class="click_redirect"><a  href="">Rafael Bragança de Olins</a></td>
+                    <td>99AG55B44</td>
+                    <td  class="click_redirect" ><a  href="">Alex Sandro Almeida</a></td>
+                    <td>CB</td>
+                    <td>8</td>
+                    <td>14/06/2023 - 14:00</td>
+                    <td>14/06/2023 - 20:00</td>
+                </tr>
+                {% for y in cargos %}
+                {{ y.registred }}
+                <tr>
+                    
+                    <td>{{ y }}</td>
+                    <td>{{ y.equipment.serial_number|default:"-" }}</td>
+                    <td>{{ y.registred|default:"-" }}</td>
+                    <td>{% if y.registred == "Armamento" or y.registred == "Munição" %}{{ y.model.caliber }}{% else %}-{% endif %}</td>
+                    <td>{{ y.amount }}</td>
+                    <td>{% if y.registred == "Vestimento" %}{{ y.model.size }}{% else %}-{% endif %}</td>
+                    <td>{{ y.observation|default:"-" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</section>
+
+<section style="padding: 0px 20px">
+    <div class="cargo_itens shadow">
+        <!-- <h2>ITENS</h2> -->
+        
+        <table class="table_itens">
+            <thead>
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3 >DESCARGAS</h3></th>
+                </tr>
+                <tr class="col-itens">
+                    <th>ID DE CARGA</th>
+                    <th>TIPO</th>
+                    <th>REQUISITANTE</th>
+                    <th>MATRÍCULA</th>
+                    <th>TELEFONE</th>
+                    <th>GRADUAÇÃO</th>
+                    <th>QNT. DE ITENS</th>
+                    <th>DATA </th>
+                    <th>DATA DE DESCARGA</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="click_redirect"><a  href="">347</a></td>
+                    <td>6H</td>
+                    <td>João Fernandes de Oliveira</td>
+                    <td>11BC33T23</td>
+                    <td>(77) 9 9900-0000</td>
+                    <td>CB</td>
+                    <td>8</td>
+                    <td>14/06/2023 - 9:00</td>
+                    <td>14/06/2023 - 15:00</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</section>
+
+{% endblock content_final %}

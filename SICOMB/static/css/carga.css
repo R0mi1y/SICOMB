@@ -1,0 +1,317 @@
+@import 'header.css';
+
+.container{
+    flex: 1;
+}
+
+.content{
+    padding: 0 20px;  
+}
+.cargo{
+    font-family: interRegular;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cargo .cargo_title{
+    font-family: interBold;
+    color: #fff;
+    height: 50px;
+    width: 100%;
+    background-color: #5B4939;
+    border-radius: 10px 10px 0px 0px;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+}
+
+table {
+    border-collapse: collapse;
+    justify-content: center;
+    width: 100%;
+    font-family: interBold;
+    font-size: 15px;
+    color: #5B4939;
+}
+.police_officer_table td{
+    text-align: center;
+    padding: 7px 2px;
+}  
+.police_officer_table img{
+    border-radius: 80px;
+    border: 3px inset #5B4939;
+}
+table img{
+    width: 130px;
+}
+
+.police_officer_field {
+    width: 300px;
+    height: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgb(0,0,0,0.50);
+    justify-content: center; 
+
+}
+
+.cargo_itens h2{
+    color: #5B4939;
+    background-color: #fff;
+}
+
+.military_means_room{
+    background-color: #fff;
+    border-radius: 10px;
+    width: 735px;
+    height: 400px;
+}
+
+.shadow{
+    box-shadow: -0px 5px 10px rgb(0,0,0,0.25);
+}
+
+.means_room_table table tbody, td{
+    text-align: center;
+    padding: 3px 0px 3px 0px;
+}
+.checkbox{
+    text-align: left;
+}
+.img-search{
+    height: 40px;
+    width: 40px;
+}
+.tbody_top_means_room tr td h4{
+    background-color: rgb(197, 196, 196);
+    border-radius: 10px;
+    margin: 0px 20px;
+}
+.search-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.search-table{
+    display: flex;
+    width: 500px;
+    padding: 0px 20px;
+}
+.search-table table{
+    text-align: center;
+}
+.search-table table td{
+    padding: 10px 0px;;
+}
+.search-box{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(91,73,57, 0.1);
+    border-radius: 10px 0px 0px 10px;
+
+}
+.search-txt{
+    border: none;
+    background: none;
+    outline: none;
+    padding: 0;
+    color: #5B4939;
+    font-size: 15px;
+    font-family: interBold;
+    line-height: 20px;
+    width:200px;
+    padding: 10px;
+    text-align: center;
+}
+
+::-webkit-input-placeholder{
+    color:#5b4939b3;
+    font-family: interRegular;
+}
+
+.search-btn{
+    justify-content: center;
+    align-items: center;
+}
+.put_qnt{
+    background-color: rgb(91,73,57, 0.1);
+    border-radius: 0px 10px 10px 0px;
+    border-left: 2px solid rgb(0, 69, 147, 0.20);
+}
+.put_qnt input{
+    background: none;
+    justify-items: center;
+    text-align: center;
+    font-size: 15px;
+    padding: 0px;
+}
+.means_room_product{
+    width: 81px;
+    margin: 17px 46px 0px 0px;
+}
+
+ .img_product{
+    padding: 0px 20px;
+ }
+.info_product{
+    width: 550px;
+    padding: 0px 20px;
+}
+.info_product table th{
+    border-bottom: 1px solid #5B4939;
+}
+.row_color{
+    display: flex;
+    justify-content: center;
+    padding: 10px 0px 0px 0px;
+}
+.row_color span{
+    height: 2px;
+    width: 600px;
+    background-color: #5B4939;
+}
+.description_product{
+    font-family: 'interRegular';
+    font-size: 13px;
+}
+
+.bottom_means_room{
+    display: flex;
+    padding: 10px 20px;
+    justify-content: space-between;
+}
+
+.btn{
+    font-family: interBold;
+    font-size:15px;
+    color:#5B4939;
+    background: none;
+    background-color: rgb(91,73,57, 0.45);
+    width: 130px;
+    height: 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #5B4939;
+
+}
+.insert_button{
+    display: flex;
+    align-items: end;
+}
+
+.note{
+    border-bottom: 1px solid #5B4939;
+}
+
+.note h5{
+    font-family: interBold;
+    font-size:15px;
+    color: #5B4939;
+
+}
+.note textarea{
+    font-family: interRegular;
+    font-size:13px;
+    color: #5B4939;
+}
+
+.cargo_itens{
+    background-color: #fff;
+    border-radius: 10px;
+    height: 478px;
+    margin: 20px 0px;
+}
+
+.cargo_itens .cargo_title{
+    font-family: interBold;
+    color: #5B4939;
+    height: 50px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 10px 10px 0px 0px;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+}
+.table_itens .col-itens{
+    background-color: #5B4939;
+    color: #fff;
+    height: 40px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.table_itens tbody{
+    font-size: 11px;
+    border-bottom: 1px solid #5B4939;
+}
+.table_itens tbody td a{
+    /* background: red;
+    color: #fff;
+    font-family: 'interExtraBold';
+    font-size: 17px; */
+}
+.table_itens thead th{
+    min-width: 100px;
+}
+
+.finalize_load{
+    justify-content: flex-end;
+    display: flex;
+    padding: 0px 0px 20px 0px;
+}
+
+.btn_finalize{
+    font-family: interExtraBold;
+    font-size:18px;
+    color:#fff;
+    width: 220px;
+    height: 35px;
+    border-radius: 10px;
+    margin: 0px 0px 0px 20px;
+}
+
+.btn_cancel{
+    background-color: #C5033D;
+}
+.btn_confirm{
+    background-color: rgb(5, 168, 5);
+}
+
+.btn_cancel:hover{
+    background-color: #b63159;
+}
+.btn_confirm:hover{
+    background-color: rgb(5, 168, 5, 0.8);
+}
+
+footer{
+    position: static !important;
+}
+/* Para a tela final de fazer carga */
+.img-return{
+    width: 25px;
+}
+.cargo_id h3{
+    background-color: rgba(179, 166, 155, 0.9);
+    color: #fff;
+    border-radius: 10px;
+    margin: 0px 10px;
+    padding: 6%;
+}
+
+/*  -----------------------------------------------------------------------------------  */
+/* CSS da página que exibe todas cargas e descargas realizadas */
+
+.click_redirect a {
+    background: none;
+    color: #5B4939;
+    font-size: 12px;
+}
+
+.click_redirect a:hover{
+    text-decoration: underline ;
+}
+
+
