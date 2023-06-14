@@ -17,7 +17,11 @@ list_equipment_removed = {}  # lista de equipamentos removidos
 # cadastra a carga com a lista
 @login_required
 def confirm_cargo(request):
-    policial = RegisterPolice.objects.get(matricula='WA025ALM')
+    try:
+        policial = RegisterPolice.objects.get(matricula="WA025ALM")
+    except:
+        policial = None
+
     data = {}
     if request.method == "POST":
         data_hora_atual = datetime.now()  # pega a data atual
@@ -62,8 +66,8 @@ def confirm_cargo(request):
 
         list_equipment.clear()
         list_equipment_removed.clear()
-    
-    data['policial'] = policial
+
+    data["policial"] = policial
 
     return render(request, "cargo/cargo.html", data)
 
