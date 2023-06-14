@@ -11,19 +11,22 @@ let amount_input = document.getElementById("amount_input");
 var equipmentData = null; // Equipamento atual só que de forma global, pra acessar depois, será setada depois
 
 // seta a data e a hora atual => {
-var dataAtual = new Date();
-var dia = dataAtual.getDate();
-var mes = dataAtual.getMonth() + 1; // Lembrando que os meses começam em 0
-var ano = dataAtual.getFullYear();
+function set_date(){
+    var dataAtual = new Date();
+    var dia = dataAtual.getDate();
+    var mes = dataAtual.getMonth() + 1; // Lembrando que os meses começam em 0
+    var ano = dataAtual.getFullYear();
 
-let diaFormatado = dia < 10 ? '0' + dia : dia;
-let mesFormatado = mes < 10 ? '0' + mes : mes;
+    let diaFormatado = dia < 10 ? '0' + dia : dia;
+    let mesFormatado = mes < 10 ? '0' + mes : mes;
 
-var time = dataAtual.getHours() + ':' + dataAtual.getMinutes();
-var data = diaFormatado + '/' + mesFormatado + '/' + ano;
+    var time = dataAtual.getHours() + ':' + dataAtual.getMinutes();
+    var data = diaFormatado + '/' + mesFormatado + '/' + ano;
 
-document.getElementById('date').innerText = data;
-document.getElementById('time').innerText = time;
+    document.getElementById('date').innerText = data;
+    document.getElementById('time').innerText = time;
+}
+// set_date()
 // => }
 
 // busca se já tem uma lista no sistema 

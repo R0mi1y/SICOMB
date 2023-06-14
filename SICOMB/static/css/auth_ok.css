@@ -1,0 +1,78 @@
+.title{
+    font-size: 1.5em;
+    color: #004593;
+    /* padding: 25px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3% 0%;
+}
+.means_room{
+    display: grid;
+    align-items: center;
+}
+.loading_or_unloading{
+    display: grid;
+    /* color: #fff; */
+    font-family: interBold;
+    /* display: flex; */
+    justify-content: center;
+    /* align-items: center; */
+    margin: 0% 0% 2% 0;
+}
+ul{
+    list-style-type: none;
+}
+
+.choice_loading_unloading li{
+    align-items: center;
+    width: 500px;
+    padding: 10px;
+    /* width: 100%; */
+}
+.choice_loading_unloading li a{
+    background-color: #004593;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5%;
+    /* margin: 20px; */
+    /* width: 70%; */
+    border-radius: 10px;
+    box-shadow: -0px 5px 10px rgb(0,0,0,0.50);
+
+    
+}
+
+.choice_loading_unloading li a{
+    text-decoration: none;
+    color: #fff;
+}
+
+.choice_loading_unloading li a:hover{
+    background-color: #fff;
+    transition: .5s;
+
+
+}
+
+.choice_loading_unloading li:hover span{
+    color:#004593
+
+}
+
+.military_means_room{
+    display: grid;
+    align-items: center;
+}
+.tbody_top_means_room tr td{
+    padding: 5px 10px;
+}
+.checkbox input, label{
+   cursor: pointer;
+}
+
+.button_continue{
+    justify-content: center;
+}
+

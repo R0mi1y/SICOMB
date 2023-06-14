@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from .forms import *
 
+# def register_equipment_t(request):
+    
 
 # Registra o equipamento
 @login_required
