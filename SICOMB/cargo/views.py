@@ -222,4 +222,6 @@ def get_dashboard_cargas(request):
         cargos_aux.append([i, ec.__len__])
 
     # return JsonResponse(json_cargos)
-    return render(request, "cargo/dashboard-cargo.html", {"cargos": cargos_aux, "": qnt})
+    return render(
+        request, "cargo/dashboard-cargo.html", {"cargos": cargos_aux, "": qnt}
+    )

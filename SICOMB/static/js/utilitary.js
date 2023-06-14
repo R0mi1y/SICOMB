@@ -2,9 +2,9 @@ var id_overlay = 0;
 var aux = {};
 
 function popUp(message, close_btn, yn, adictional) {
-    close_btn = close_btn ?? true;
-    yn = yn ?? false;
-    adictional = adictional ?? false;
+    close_btn = close_btn ? ? true;
+    yn = yn ? ? false;
+    adictional = adictional ? ? false;
 
     var overlayHTML = `
     <div id="overlay` + id_overlay + `" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
@@ -244,13 +244,13 @@ var select_time = `
 </div>
 `
 
-var sala_meios = document.getElementById("means_room_content");
-sala_meios.innerHTML = select_cargo;
+// var sala_meios = document.getElementById("means_room_content");
+// sala_meios.innerHTML = select_cargo;
 
-function changeTemplate(template) {
+// function changeTemplate(template) {
 
-    if (template == "select_time") sala_meios.innerHTML = select_time;
-    else if (template == "select_cargo") {
-        window.location.href = '.';
-    }
-}
+//     if (template == "select_time") sala_meios.innerHTML = select_time;
+//     else if (template == "select_cargo") {
+//         window.location.href = './t';
+//     }
+// }

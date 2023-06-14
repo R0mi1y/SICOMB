@@ -4,7 +4,6 @@ from .views import *
 # /equipment
 urlpatterns = [
     path("cadastro/", register_equipment, name="register_equipment"), # registra o equipamento
-    path("cadastro/t", register_equipment_t, name="r"), # registra o equipamento
     path("get", get_equipment), # retorna em o equipamento do uid inserido (em formato JSON)
     path("get/<str:serial_number>", get_equipment_serNum), # retorna em o equipamento do uid inserido (em formato JSON)
     path("valid_uid", valid_uid), # valida o uid inserido para cadastrar (em formato JSON)
