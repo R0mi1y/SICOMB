@@ -6,7 +6,9 @@ var imageEquipment = document.getElementById("means_room_product");
 var observation = document.getElementById("note_equipment");
 var insert_bttn = document.getElementById("insert_btn");
 var list_equipment = {}; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
+var list_awate_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
 let amount_input = document.getElementById("amount_input");
+var semaphore = true;
 //tem uma array de equipamentos igual no django para caso de refresh e essa se perca
 var equipmentData = null; // Equipamento atual só que de forma global, pra acessar depois, será setada depois
 
@@ -26,7 +28,7 @@ function set_date(){
     document.getElementById('date').innerText = data;
     document.getElementById('time').innerText = time;
 }
-// set_date()
+set_date()
 // => }
 
 // busca se já tem uma lista no sistema 
@@ -38,11 +40,6 @@ fetch("http://localhost:8000/cargo/list_equipment/get") // faz uma requisição 
             list_equipment = data;
             for (let key in list_equipment) { // percorre a lista se existir
                 insertLine(list_equipment[key]); // insere cada objeto novamente na tabela
-                // list_equipment[equipmentData.equipment.serial_number] = { // adiciona no array de equipamentos o numero de série e a observação
-                //     'serial_number': equipmentData.equipment.serial_number,
-                //     'observation': observation.innerText,
-                //     'amount': amount_input.value
-                // };
             }
         }
     });
@@ -50,7 +47,6 @@ fetch("http://localhost:8000/cargo/list_equipment/get") // faz uma requisição 
 
 // faz a requisição dos dados do equipamento atual de forma igual às api's
 var fetchEquipmentData = (serial_number) => {
-
     let url = serial_number == null || serial_number == undefined ? 'http://localhost:8000/equipment/get' : 'http://localhost:8000/equipment/get/' + serial_number;
     fetch(url) // busca o equipamento do uid inserido
         .then(response => response.json())
@@ -68,32 +64,9 @@ var fetchEquipmentData = (serial_number) => {
 
                 //se não tiver cadastrado
                 if (data.registred !== false) {
-                    // Armazena os dados do equipamento em uma variável para uso posterior
-                    equipmentData = data;
-                    // Para de ficar requisitando
-                    clearInterval(interval);
-                    // variável auxiliar, o equipmentData['campo'] vai ter o nome em português
-                    equipmentData['campo'] = data.registred == 'wearable' ? 'Vestmento' : equipmentData['campo'];
-                    equipmentData['campo'] = data.registred == 'accessory' ? 'Acessório' : equipmentData['campo'];
-                    equipmentData['campo'] = data.registred == 'armament' ? 'Armamento' : equipmentData['campo'];
-                    equipmentData['campo'] = data.registred == 'grenada' ? 'Granada' : equipmentData['campo'];
-                    equipmentData['campo'] = data.registred == 'bullet' ? 'Munição' : equipmentData['campo'];
+                    list_awate_equipment.push(data);
 
-                    imageEquipment.src = "/static/" + data.model.image_path; // Muda a imagem
-
-                    if (!data.equipment.serial_number) {
-                        document.getElementById("amount_input").disabled = false;
-                    }
-
-                    // Seta o resto => {
-                    data.model.description = data.model.description ?? "-";
-                    serialNumberInput.innerText = data.equipment.serial_number ?? "-";
-                    description.innerText = data.model.description;
-                    observation.innerText = data.equipment.observation == null || data.equipment.observation == undefined ? "" : data.equipment.observation;
-                    type.innerText = equipmentData.campo;
-                    amount.innerText = equipmentData.amount == null || equipmentData.amount == undefined || equipmentData.amount == '' ? "1" : equipmentData.amount;
-                    amount_input.value = amount.innerText;
-                    // => }
+                    checkAwateList();
                 }
             }
             if (data.msm != null) { // se tiver uma mensagem de erro na reguisição
@@ -166,7 +139,9 @@ insert_bttn.addEventListener('click', () => {
         amount_input.value = '1';
         amount_input.disabled = true;
 
+        checkAwateList();
         // => }
+        semaphore = true;
     }
 });
 
@@ -252,4 +227,47 @@ function confirmCargo() {
     var rows = table_itens.getElementsByTagName("tr");
     if (rows.length > 0) window.location.href = '.'; // se tiver certo redireciona pra confirmar a carga
     else popUp("Lista vazia!");
+}
+
+function checkAwateList() {
+    if (list_awate_equipment.length > 0 && semaphore) {
+        let wating_list;
+
+        for(i in list_awate_equipment){
+            wating_list += "<tr>" + i.description
+            "</tr>"
+        }
+
+
+        document.getElementById("wating_list").innerHTML = wating_list
+        equipmentData = list_awate_equipment[list_awate_equipment.length - 1];
+        // Armazena os dados do equipamento em uma variável para uso posterior
+        data = list_awate_equipment[list_awate_equipment.length - 1];
+        list_awate_equipment.pop();
+        // Para de ficar requisitando
+        clearInterval(interval);
+        // variável auxiliar, o equipmentData['campo'] vai ter o nome em português
+        data['campo'] = data.registred == 'wearable' ? 'Vestmento' : data['campo'];
+        data['campo'] = data.registred == 'accessory' ? 'Acessório' : data['campo'];
+        data['campo'] = data.registred == 'armament' ? 'Armamento' : data['campo'];
+        data['campo'] = data.registred == 'grenada' ? 'Granada' : data['campo'];
+        data['campo'] = data.registred == 'bullet' ? 'Munição' : data['campo'];
+        
+        imageEquipment.src = "/static/" + data.model.image_path; // Muda a imagem
+        
+        if (!data.equipment.serial_number) {
+            document.getElementById("amount_input").disabled = false;
+        }
+        
+        // Seta o resto => {
+        data.model.description = data.model.description ?? "-";
+        serialNumberInput.innerText = data.equipment.serial_number ?? "-";
+        description.innerText = data.model.description;
+        observation.innerText = data.equipment.observation == null || data.equipment.observation == undefined ? "" : data.equipment.observation;
+        type.innerText = data.campo;
+        amount.innerText = data.amount == null || data.amount == undefined || data.amount == '' ? "1" : data.amount;
+        amount_input.value = amount.innerText;
+        // => }
+        semaphore = false;
+    }
 }
