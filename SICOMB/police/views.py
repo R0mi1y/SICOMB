@@ -23,7 +23,7 @@ def register_police(request):
             messages.success(request, 'Cadastro realizado com sucesso!')
             return HttpResponseRedirect('/police/register/')
     else:
-        form = PoliceForm
+        form = PoliceForm()
            
     return render(request, 'police/register_police.html' , context={
         'form': form,

@@ -12,8 +12,8 @@
             </span>
 
             <span class="top-item">
-                <h3>SGTALMEIDA</h3>
-                <p>MATRÍCULA: 129834765</p>
+                <h3>{{ request.user.first_name}} {{ request.user.last_name }}</h3>
+                <p>MATRÍCULA: {{ request.user.username }}</p>
             </span class="top-item">
             <span>
                 <img id="down_arrow" src="{% static 'img/down_arrow.png' %}" alt="">
