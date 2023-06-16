@@ -43,9 +43,34 @@
                 </table>
             </div>
 
+            <div class="police_officer_field shadow">
+                <table class="police_officer_table">
+                    <thead>
+                        <tr>
+                            <th class="cargo_title">LISTA DE ESPERA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wating_list" style="text-align: center;">
+                        
+                    </tbody>
+                </table>
+            </div>
+
             <div class="military_means_room shadow">
                 <div class="means_room_content" id="means_room_content">
-                    
+                    <div class="means_room_table">
+                        <h1 class="title">Você está fazendo uma carga ou descarga de materiais?</h1>
+                        <div class="loading_or_unloading ">
+                            <ul class="choice_loading_unloading ">
+                                <li>
+                                    <a onclick="changeTemplate('select_time')" href="#"><span>CARGA</span></a>
+                                </li>
+                                <li>
+                                    <a onclick="changeTemplate('cargo')" href="#"><span>DESCARGA</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -87,7 +112,7 @@
             </form>
         </div>
     </div>
-<script src="{% static 'js/fetch_cargo.js' %}"></script>
+{% comment %} <script src="{% static 'js/fetch_cargo.js' %}"></script> {% endcomment %}
 
 
 {% endblock content_final %}

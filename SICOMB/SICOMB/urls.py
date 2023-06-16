@@ -9,6 +9,6 @@ urlpatterns = [
     path('equipment/', include('equipment.urls')),
     path('cargo/', include('cargo.urls')),
     path('police/', include('police.urls')),
-    path('', include('main.urls')),
+    path('', include('equipment.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

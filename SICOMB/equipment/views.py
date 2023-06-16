@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import *
@@ -6,7 +7,6 @@ from django.forms.models import model_to_dict
 from .forms import *
 
 uids = []
-
 
 # Registra o equipamento
 @login_required
@@ -195,3 +195,8 @@ def set_uid(request):
     print(uids)
 
     return render(request, "equipment/set_answer.html", data)
+
+
+def get_uids(request):
+    dicionario = dict(enumerate(uids))
+    return JsonResponse(dicionario)

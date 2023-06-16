@@ -24,11 +24,19 @@ def confirm_cargo(request):
 
     data = {}
     if request.method == "POST":
+        turn_type = request.POST.get("turn_type")
         data_hora_atual = datetime.now()  # pega a data atual
-        data_hora_futura = data_hora_atual + timedelta(
-            hours=6
-        )  # TODO: definir carha horária da carga
-        cargo = Cargo(expected_cargo_return_date=data_hora_futura)  # Cadastra a carga
+        
+        if turn_type == "6H" or turn_type == "12H" or turn_type == "24H":
+            turn_type = turn_type.replace("H", "")
+            
+            data_hora_futura = data_hora_atual + timedelta(
+                hours=int(turn_type)
+            )
+        else:
+            data_hora_futura = None
+        
+        cargo = Cargo(expected_cargo_return_date=data_hora_futura, turn_type=turn_type)  # Cadastra a carga
         cargo.save()
 
         # Cadastra a lista de equipamentos na tabela equipment_cargo
@@ -69,7 +77,7 @@ def confirm_cargo(request):
 
     data["policial"] = policial
 
-    return render(request, "cargo/cargo.html", data)
+    return render(request, "cargo/cargo_temporary.html", data)
 
 
 @login_required
@@ -102,7 +110,9 @@ def get_list_equipment(request):
 # adiciona um equipamento à lista na views vindo do front
 def add_list_equipment(request, serial_number, obs, amount):
     if request.method == "POST":
-        if serial_number.isdigit():
+        if serial_number == "turn_type":
+            list_equipment["turn_type"] = obs
+        elif serial_number.isdigit():
             equipment = Equipment.objects.get(
                 serial_number=serial_number
             )  # Recupera o equipment pelo numero de série
@@ -134,6 +144,10 @@ def add_list_equipment(request, serial_number, obs, amount):
                 data["model"] = model_to_dict(equipment.grenada)
                 data["campo"] = "Granada"
 
+            # Adiciona na lista de equipamentos efetivamente
+            list_equipment[serial_number] = data
+            list_equipment[serial_number]["observation"] = obs if obs != "-" else ""
+            list_equipment[serial_number]["amount"] = amount
         elif serial_number[0] == ".":  # se for uma munição
             try:
                 bullet = Bullet.objects.get(caliber=serial_number)
@@ -146,10 +160,10 @@ def add_list_equipment(request, serial_number, obs, amount):
             data["equipment"] = model_to_dict(bullet)
             data["campo"] = "Munição"
 
-        # Adiciona na lista de equipamentos efetivamente
-        list_equipment[serial_number] = data
-        list_equipment[serial_number]["observation"] = obs if obs != "-" else ""
-        list_equipment[serial_number]["amount"] = amount
+            # Adiciona na lista de equipamentos efetivamente
+            list_equipment[serial_number] = data
+            list_equipment[serial_number]["observation"] = obs if obs != "-" else ""
+            list_equipment[serial_number]["amount"] = amount
 
         return JsonResponse({"sucesso": "sucesso"})
     else:

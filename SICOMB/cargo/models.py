@@ -11,7 +11,8 @@ from django.utils import timezone
 class Cargo(models.Model):
     situation = models.CharField("Devolvido", max_length=20, default="Pendente")
     date_cargo = models.DateTimeField(default=timezone.now)
-    expected_cargo_return_date = models.DateTimeField("Data Prevista de Devolução")
+    expected_cargo_return_date = models.DateTimeField("Data Prevista de Devolução", null=True)
+    turn_type = models.CharField(max_length=20)
     # nomear atributo que receberá os dados: 6h, 12h, 24h, conserto, requisição judicial ou indeterminado
     status = models.CharField("horário_carga", max_length=20, default="Pendente")
     # police = models.OneToOneField(RegisterPolice, on_delete=models.CASCADE)

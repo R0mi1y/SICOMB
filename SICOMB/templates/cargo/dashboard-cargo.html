@@ -29,14 +29,14 @@
                 {% for i in cargos %}
                 <tr>
                     <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
-                    <td>6H</td>
+                    <td>{{i.0.turn_type}}</td>
                     <td class="click_redirect"><a  href="">{{ i.0.police.name |default:'Wallas'}}</a></td>
                     <td>{{ i.0.police.plate |default:"WA025ALM" }}</td>
                     <td class="click_redirect" ><a  href="">{{ i.0.adjunct.name |default:"Adjunto Indisponível" }}</a></td>
                     <td>{{ i.0.police.patent |default:'Tenente'}}</td>
                     <td>{{ i.1 }}</td>
                     <td>{{ i.0.date_cargo }}</td>
-                    <td>{{ i.0.expected_cargo_return_date }}</td>
+                    <td>{{ i.0.expected_cargo_return_date |default:'-' }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

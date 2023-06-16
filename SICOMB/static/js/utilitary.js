@@ -56,6 +56,39 @@ function answerY() {
     removerpopUp();
 }
 
+function changeTemplate(template){
+    fetch("/static/html/" + template + ".html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("means_room_content").innerHTML = data;
+    })
+    if (template == "cargo") {
+        setTimeout(() => {
+            var script = document.createElement('script');
+            script.src = '/static/js/fetch_cargo.js';
+            document.head.appendChild(script);
+        }, 500)
+    }
+}
+
+var turn_type;
+function setTurnType() {
+    var radioSelecionado = document.querySelector('input[name="options_load"]:checked');
+
+    if (radioSelecionado && radioSelecionado.value) {
+        var inputElement = document.createElement("input");
+        inputElement.type = "hidden";
+        inputElement.name = "turn_type";
+        inputElement.value = radioSelecionado.value;
+        document.getElementById("form-equipment").appendChild(inputElement);
+    
+        turn_type = radioSelecionado.value;
+        changeTemplate("cargo");
+    } else {
+        popUp("Selecione uma das opções!");
+    }
+  }
+  
 // var sala_meios = document.getElementById("means_room_content");
 // sala_meios.innerHTML = select_cargo;
 

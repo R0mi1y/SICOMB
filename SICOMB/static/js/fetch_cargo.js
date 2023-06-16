@@ -2,7 +2,6 @@ var serialNumberInput = document.getElementById("serial_number");
 var description = document.getElementById("description");
 var type = document.getElementById("type");
 var amount = document.getElementById("amount");
-var imageEquipment = document.getElementById("means_room_product");
 var observation = document.getElementById("note_equipment");
 var insert_bttn = document.getElementById("insert_btn");
 var list_equipment = {}; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
@@ -13,7 +12,7 @@ var semaphore = true;
 var equipmentData = null; // Equipamento atual só que de forma global, pra acessar depois, será setada depois
 
 // seta a data e a hora atual => {
-function set_date(){
+function set_date() {
     var dataAtual = new Date();
     var dia = dataAtual.getDate();
     var mes = dataAtual.getMonth() + 1; // Lembrando que os meses começam em 0
@@ -130,7 +129,8 @@ insert_bttn.addEventListener('click', () => {
         equipmentData = null; // reseta os equipamentos atuais
         // Reseta o quadro do equipamento => {
         interval = setInterval(fetchEquipmentData, 1000);
-        imageEquipment.src = "/static/img/default.png";
+
+        document.getElementById("means_room_product").src = "/static/img/default.png";
         serialNumberInput.innerText = '';
         description.innerText = '';
         observation.innerHTML = '';
@@ -230,16 +230,7 @@ function confirmCargo() {
 }
 
 function checkAwateList() {
-    if (list_awate_equipment.length > 0 && semaphore) {
-        let wating_list;
-
-        for(i in list_awate_equipment){
-            wating_list += "<tr>" + i.description
-            "</tr>"
-        }
-
-
-        document.getElementById("wating_list").innerHTML = wating_list
+    if (list_awate_equipment.length > 0) {
         equipmentData = list_awate_equipment[list_awate_equipment.length - 1];
         // Armazena os dados do equipamento em uma variável para uso posterior
         data = list_awate_equipment[list_awate_equipment.length - 1];
@@ -252,13 +243,14 @@ function checkAwateList() {
         data['campo'] = data.registred == 'armament' ? 'Armamento' : data['campo'];
         data['campo'] = data.registred == 'grenada' ? 'Granada' : data['campo'];
         data['campo'] = data.registred == 'bullet' ? 'Munição' : data['campo'];
-        
-        imageEquipment.src = "/static/" + data.model.image_path; // Muda a imagem
-        
+
+        console.log(document.getElementById("means_room_product"));
+        document.getElementById("means_room_product").src = "/static/" + data.model.image_path; // Muda a imagem
+
         if (!data.equipment.serial_number) {
             document.getElementById("amount_input").disabled = false;
         }
-        
+
         // Seta o resto => {
         data.model.description = data.model.description ?? "-";
         serialNumberInput.innerText = data.equipment.serial_number ?? "-";
@@ -268,6 +260,20 @@ function checkAwateList() {
         amount.innerText = data.amount == null || data.amount == undefined || data.amount == '' ? "1" : data.amount;
         amount_input.value = amount.innerText;
         // => }
-        semaphore = false;
+        if (semaphore) {
+            semaphore = false;
+        }
     }
 }
+function searchWatingList() {
+    fetch("http://localhost:8000/equipment/wating_list/get/").then(response => response)
+        .then(response => response.json())
+        .then(data => {
+            let wating_list = "";
+            for (i in data) {
+                wating_list += "<tr>" + data[i] + "</tr>";
+            }
+            document.getElementById("wating_list").innerHTML = wating_list;
+        });
+}
+var intervalWatingList = setInterval(searchWatingList, 1000);
