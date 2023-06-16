@@ -1,18 +1,20 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.conf import settings
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from .forms import *
 
+uids = []
+
+
 # Registra o equipamento
 @login_required
 def register_equipment(request):
-    if request.method == "POST":
-        if request.POST.get("bullet") and request.POST.get("amount"):
+    if request.method == "GET":
+        if request.GET.get("bullet") and request.GET.get("amount"):
             try:
-                bullet = Bullet.objects.get(id=request.POST.get("bullet"))
+                bullet = Bullet.objects.get(id=request.GET.get("bullet"))
             except Bullet.DoesNotExist:
                 form = EquipmentForm()  # Se for bem sucedido ele zera o form
 
@@ -21,10 +23,10 @@ def register_equipment(request):
                     "equipment/teste.html",
                     {"msm": "Munição não existe na base de dados!", "form": form},
                 )
-            bullet.amount = int(bullet.amount) + int(request.POST.get("amount"))
+            bullet.amount = int(bullet.amount) + int(request.GET.get("amount"))
             bullet.save()
         else:
-            form = EquipmentForm(request.POST)
+            form = EquipmentForm(request.GET)
             if form.is_valid():
                 form.save()
             else:
@@ -37,8 +39,8 @@ def register_equipment(request):
 
 # valida o uid pra cadastro
 def valid_uid(request):
-    uid = settings.AUX["UID"]
-    settings.AUX["UID"] = ""
+    uid = uids[uids.__len__() - 1]
+    uids[uids.__len__() - 1] = ""
     try:
         Equipment.objects.get(uid=uid)
     except Equipment.DoesNotExist:  # se não existe
@@ -118,14 +120,13 @@ def get_equipment(request):
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get("type") != None:
-        data["registred"] = request.POST.get("type")
+        data["registred"] = request.GET.get("type")
 
         # Caso seja uma munição
-        if request.POST.get("type") == "bullet":
+        if request.GET.get("type") == "bullet":
             try:
                 bullet = Bullet.objects.get(pk=request.GET.get("pk"))
             except Equipment.DoesNotExist:
-                settings.AUX["UID"] = ""
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
@@ -133,22 +134,21 @@ def get_equipment(request):
             data["equipment"] = model_to_dict(bullet)
 
     # Para os equipamentos com a tag
-    if settings.AUX["UID"] != "":
-        data["uid"] = settings.AUX["UID"]
+    if uids.__len__() > 0 and uids[uids.__len__() - 1]:
+        uid = uids[uids.__len__() - 1]
+        uids.pop()
+        data["uid"] = uid
 
         try:
-            equipment = Equipment.objects.get(
-                uid=settings.AUX["UID"]
-            )  # Recupera o objeto Equipamento
+            equipment = Equipment.objects.get(uid=uid)  # Recupera o objeto Equipamento
         except Equipment.DoesNotExist:
-            settings.AUX["UID"] = ""
             return JsonResponse(
                 {"uid": "", "msm": "Equipamento não cadastrado"}
             )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
         if equipment.status != "Disponivel":
-            settings.AUX["UID"] = ""
-
-            return JsonResponse({"uid": "", "msm": "Equipamento indisponivel"})
+            return JsonResponse(
+                {"uid": "", "msm": "Equipamento não disponivel, " + equipment.status}
+            )
 
         data["equipment"] = model_to_dict(equipment)
 
@@ -176,18 +176,22 @@ def get_equipment(request):
             data["registred"] = "grenada"
             data["model"] = model_to_dict(equipment.grenada)
 
-        settings.AUX["UID"] = ""
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
 
 # Recebe o UID do ESP
 def set_uid(request):
-    # Armazena o UID recebido numa variável global no arquivo settings
-    if request.method == "POST":
-        # TODO Mudar para método POST aqui e no esp
-        settings.AUX["UID"] = request.POST.get("uid")
-    elif request.method == "GET":
-        # TODO Mudar para método POST aqui e no esp
-        settings.AUX["UID"] = request.GET.get("uid")
+    data = {"uid": "Não setado"}
+    # Armazena o UID recebido num array
+    if request.method == "GET":
+        print (request.GET.get("uid"))
+        if (
+            request.GET.get("uid") != ""
+            and request.GET.get("uid") != None
+            and request.GET.get("uid") not in uids
+        ):
+            uids.append(request.GET.get("uid"))
+            data["uid"] = uids[uids.__len__() - 1]
+    print(uids)
 
-    return render(request, "equipment/set_answer.html", {"uid": settings.AUX["UID"]})
+    return render(request, "equipment/set_answer.html", data)

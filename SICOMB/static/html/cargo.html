@@ -1,4 +1,3 @@
-<div class="means_room_table">
     <table>
         <thead>
             <tr>
@@ -46,9 +45,11 @@
     </table>
 
 </div>
-<div class="row_color"><span>
+<div class="row_color">
+    <span>
         <hr>
-    </span></div>
+    </span>
+</div>
 <div class="search-info">
     <div class="search-table">
         <table cellspacing="0" cellpadding="0" align="center">
@@ -63,7 +64,7 @@
                     <td class="search-box">
                         <input type="text" id="search-camp" class="search-txt" placeholder="Pesquisar">
                         <a href="#" class="search-btn">
-                            <img class="img-search" id="search-btn" src="{% static 'img/search.png' %}" alt="">
+                            <img class="img-search" id="search-btn" src="/static/img/search.png" alt="">
                         </a>
                     </td>
                     <td class="put_qnt"><input type="text" id="amount_input" name="name" disabled required placeholder="1" /></td>
@@ -75,7 +76,7 @@
         </table>
     </div>
     <div class="img_product">
-        <img class="means_room_product" id="means_room_product" src="{% static 'img/default.png' %}" alt="">
+        <img class="means_room_product" id="means_room_product" src="/static/img/default.png" alt="">
     </div>
 </div>
 <hr>
@@ -91,7 +92,6 @@
         </thead>
         <tbody>
             <tr class="description_product">
-                {% comment %} id pro js {% endcomment %}
                 <td id="serial_number">&nbsp;</td>
                 <td id="description" colspan="2">&nbsp;</td>
                 <td id="type">&nbsp;</td>
@@ -105,7 +105,7 @@
     <div class="note">
         <h5>OBSERVAÇÃO: </h5>
         <textarea id="note_equipment" name="note" rows="3" cols="60">
-                    </textarea>
+        </textarea>
     </div>
     <div class="insert_button">
         <button id="insert_btn" class="btn btn-insert shadow">INSERIR</button>
