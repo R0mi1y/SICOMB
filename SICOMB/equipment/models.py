@@ -50,7 +50,7 @@ class Equipment(models.Model):
     # chave primária do equipamento
     serial_number = models.CharField("Numero de série", max_length=20)
     uid = models.CharField("uid", max_length=20, primary_key=True, default=None)
-    status = models.CharField("Estado atual", max_length=20, default="Disponivel")
+    status = models.CharField("Estado atual", max_length=20, default="Disponível")
     armament = models.ForeignKey(
         Model_armament, on_delete=models.CASCADE, null=True, default=None
     )

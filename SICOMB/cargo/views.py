@@ -44,7 +44,7 @@ def confirm_cargo(request):
         for key in list_equipment:
             if key.isdigit():
                 equipment = Equipment.objects.get(serial_number=key)
-                equipment.status = "Indisponível"
+                equipment.status = turn_type
                 equipment.save()
 
                 Equipment_cargo(

@@ -11,36 +11,23 @@
         <!-- <main role="main" > -->
         <section class="cargo">
 
-            <div class="police_officer_field shadow">
-                <table class="police_officer_table">
-                    <thead>
-                        <tr>
-                            <th class="cargo_title">POLICIAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <a href="#"><img class="shadow" src="/media/{{policial.foto}}" alt=""></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{policial.nome}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{policial.matricula}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{policial.telefone}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{policial.lotacao}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{policial.email}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div id="police_officer_field" class="police_officer_field shadow">
+                <div class="waiting_auth">
+                    <table class="alert_auth">
+                        <thead>
+                            <tr>
+                                <th>AGUARDANDO <br> AUTENTICAÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    É preciso que o policial solicitante faça autenticação por meio da digital ou matrícula e senha!
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="police_officer_field shadow">
@@ -58,18 +45,21 @@
 
             <div class="military_means_room shadow">
                 <div class="means_room_content" id="means_room_content">
-                    <div class="means_room_table">
-                        <h1 class="title">Você está fazendo uma carga ou descarga de materiais?</h1>
-                        <div class="loading_or_unloading ">
-                            <ul class="choice_loading_unloading ">
-                                <li>
-                                    <a onclick="changeTemplate('select_time')" href="#"><span>CARGA</span></a>
-                                </li>
-                                <li>
-                                    <a onclick="changeTemplate('cargo')" href="#"><span>DESCARGA</span></a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="waiting_auth">
+                        <table class="alert_auth">
+                            <thead>
+                                <tr>
+                                    <th>AGUARDANDO <br> AUTENTICAÇÃO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        É preciso que o policial solicitante faça autenticação por meio da digital ou matrícula e senha!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -112,7 +102,7 @@
             </form>
         </div>
     </div>
-{% comment %} <script src="{% static 'js/fetch_cargo.js' %}"></script> {% endcomment %}
+<script src="{% static 'js/select_cargo.js' %}"></script>
 
 
 {% endblock content_final %}

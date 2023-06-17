@@ -73,13 +73,5 @@
             </div>
         </div>
     </div>
-    <script>
-      {% if bullets %}
-      var bullets = [];
-        {% for i in bullets %}
-          bullets.push(["{{i.caliber}}", "{{i.pk}}", "{{i.amount}}"]);
-        {% endfor %}
-      {% endif %}
-    </script>
     <script src='{% static 'js/register_equipment.js' %}'></script>
 {% endblock content_final %}

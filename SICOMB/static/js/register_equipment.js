@@ -60,7 +60,7 @@ var fetchUid = () => {
         });
 }
 
-let interval = setInterval(fetchUid, 1000);
+interval = setInterval(fetchUid, 1000);
 
 // Faz a função de limpar o uid setado
 document.getElementById("clear-btn").addEventListener('click', () => {
@@ -116,33 +116,36 @@ document.getElementById("submit-btn").addEventListener('click', () => {
 });
 
 function register_bullet() {
-    var bullet_options = '';
-    bullets ?? '';
-        for (i in bullets) {
-            console.log(i);
-            bullet_options += '\n<option value="' + bullets[i][1] + '">' + bullets[i][0] + '</option>';
-        }
+    fetch("http://localhost:8000/equipment/bullets/get/")
+        .then(response => response.json())
+        .then(bullets => {
+            var bullet_options = '';
+            bullets ?? '';
+                for (i in bullets) {
+                    bullet_options += '\n<option value="' + bullets[i]['id'] + '">' + bullets[i]['description'] + '</option>';
+                }
 
-    var csrf = document.querySelector('input[type="hidden"][name="csrfmiddlewaretoken"]');
-    var bullet_html =
-    `
-    <form method="post" action=".">
-    ` + csrf.outerHTML + `
-    <label for="dropdown_bullets">Munições já cadastradas:</label>
-    <select name="bullet" id="dropdown_bullets" required>
-    ` +
-        bullet_options
-    + `
-    </select>
-    <br>
-    <label for="input_amount">Número:</label>
-    <input name="amount" type="number" id="input_amount" required>
-    
-    <input type="submit" value="Adicionar">
-    </form>
-    `;
+            var csrf = document.querySelector('input[type="hidden"][name="csrfmiddlewaretoken"]');
+            var bullet_html =
+            `
+            <form method="post" action=".">
+            ` + csrf.outerHTML + `
+            <label for="dropdown_bullets">Munições já cadastradas:</label>
+            <select name="bullet" id="dropdown_bullets" required>
+            ` +
+                bullet_options
+            + `
+            </select>
+            <br>
+            <label for="input_amount">Número:</label>
+            <input name="amount" type="number" id="input_amount" required>
+            
+            <input type="submit" value="Adicionar">
+            </form>
+            `;
 
-    popUp("Cadastro de munição", true, false, bullet_html);
+            popUp("Cadastro de munição", true, false, bullet_html);
+        });
 }
 
 // Botão para cadastrar munição

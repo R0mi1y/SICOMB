@@ -11,10 +11,10 @@ uids = []
 # Registra o equipamento
 @login_required
 def register_equipment(request):
-    if request.method == "GET":
-        if request.GET.get("bullet") and request.GET.get("amount"):
+    if request.method == "POST":
+        if request.POST.get("bullet") and request.POST.get("amount"):
             try:
-                bullet = Bullet.objects.get(id=request.GET.get("bullet"))
+                bullet = Bullet.objects.get(id=request.POST.get("bullet"))
             except Bullet.DoesNotExist:
                 form = EquipmentForm()  # Se for bem sucedido ele zera o form
 
@@ -23,31 +23,43 @@ def register_equipment(request):
                     "equipment/teste.html",
                     {"msm": "Munição não existe na base de dados!", "form": form},
                 )
-            bullet.amount = int(bullet.amount) + int(request.GET.get("amount"))
+            bullet.amount = int(bullet.amount) + int(request.POST.get("amount"))
             bullet.save()
         else:
-            form = EquipmentForm(request.GET)
+            form = EquipmentForm(request.POST)
             if form.is_valid():
                 form.save()
             else:
                 return render(request, "equipment/teste.html", {"form": form})
     form = EquipmentForm()  # Se for bem sucedido ele zera o form
-    bullets = Bullet.objects.all()
 
-    return render(request, "equipment/teste.html", {"form": form, "bullets": bullets})
+    return render(request, "equipment/teste.html", {"form": form})
+
+
+def get_bullets(request):
+    bullets = Bullet.objects.all()
+    data = {}
+    for i, caliber in enumerate(bullets):
+        data[i] = model_to_dict(caliber)
+        
+    return JsonResponse(data)
 
 
 # valida o uid pra cadastro
 def valid_uid(request):
-    uid = uids[uids.__len__() - 1]
-    uids[uids.__len__() - 1] = ""
-    try:
-        Equipment.objects.get(uid=uid)
-    except Equipment.DoesNotExist:  # se não existe
-        return JsonResponse(
-            {"uid": uid}
-        )  # retorna o uid pq significa que pode cadastrar
-    return JsonResponse({"msm": "UID já cadastrado", "uid": ""})
+    if(uids.__len__() > 0):
+        uid = uids[uids.__len__() - 1]
+        uids[uids.__len__() - 1] = ""
+        try:
+            Equipment.objects.get(uid=uid)
+        except Equipment.DoesNotExist:  # se não existe
+            return JsonResponse(
+                {"uid": uid}
+            )  # retorna o uid pq significa que pode cadastrar
+        return JsonResponse({"msm": "UID já cadastrado", "uid": ""})
+    else:
+        return JsonResponse({"uid": ''})
+    
 
 
 # valida o numero de série pra cadastro
@@ -145,9 +157,9 @@ def get_equipment(request):
             return JsonResponse(
                 {"uid": "", "msm": "Equipamento não cadastrado"}
             )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
-        if equipment.status != "Disponivel":
+        if equipment.status != "Disponível":
             return JsonResponse(
-                {"uid": "", "msm": "Equipamento não disponivel, " + equipment.status}
+                {"uid": "", "msm": "Equipamento não disponível, " + equipment.status}
             )
 
         data["equipment"] = model_to_dict(equipment)

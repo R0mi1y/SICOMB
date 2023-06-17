@@ -11,5 +11,6 @@ urlpatterns = [
     path("set", set_uid), # seta o uid (em formato API)
     path("", register_equipment), # seta o uid (em formato API)
     path("wating_list/get/", get_uids), # seta o uid (em formato API)
+    path("bullets/get/", get_bullets), # seta o uid (em formato API)
     # path("get_models", get_models_equipment), # retorna todos os models
 ]
