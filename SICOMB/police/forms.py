@@ -26,6 +26,6 @@ class PoliceForm(forms.ModelForm):
             'posto': forms.TextInput(attrs={'class':'input-data'}),
             'email': forms.EmailInput(attrs={'class':'input-data'}),
             'telefone': forms.TextInput(attrs={'class':'input-data'}),
-            'lotacao': forms.TextInput(attrs={'class':'input-data'})
+            'lotacao': forms.TextInput(attrs={'class':'input-data'}),
+            'senha': forms.TextInput(attrs={'class':'input-data', 'type':'password', 'autocomplete':"new-password"}),
         }
-        

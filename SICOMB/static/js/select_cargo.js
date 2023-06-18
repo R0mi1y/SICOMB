@@ -35,12 +35,13 @@ function setTurnType() {
 var interval = setInterval(() => {
     let url = 'http://localhost:8000/police/get_login/';
     fetch(url)
-    .then(response => response.json())
-    .then(policial => {
-        if (policial) {
-            clearInterval(interval);
+        .then(response => response.json())
+        .then(policial => {
+            console.log(policial);
+            if (policial && Object.keys(policial).length !== 0) {
+                clearInterval(interval);
 
-            let table = `<table class="police_officer_table">
+                let table = `<table class="police_officer_table">
             <thead>
                 <tr>
                     <th class="cargo_title">` + policial.lotacao + `</th>
@@ -70,11 +71,15 @@ var interval = setInterval(() => {
             </tbody>
             </table>`;
 
-            document.getElementById("police_officer_field").innerHTML = table;
+                var inputElement = document.createElement("input");
+                inputElement.type = "hidden";
+                inputElement.name = "plate";
+                inputElement.value = policial.matricula
+                document.getElementById("form-equipment").appendChild(inputElement);
 
-            changeTemplate("select_cargo");
-        }
-    });
+                document.getElementById("police_officer_field").innerHTML = table;
+
+                changeTemplate("select_cargo");
+            }
+        });
 }, 1000);
-
-

@@ -118,7 +118,7 @@ USE_TZ = True
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "sicomb",
+        "NAME": "sicomb_teste",
         "USER": "root",
         "OPTIONS": {
             "sql_mode": "traditional",
@@ -170,3 +170,5 @@ CORS_ALLOW_METHODS = [
 CORS_ALLOW_HEADERS = [
     "cache-control",
 ]
+
+AUX = {'matricula':''}

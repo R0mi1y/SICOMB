@@ -9,6 +9,7 @@ from equipment.models import *
 from police.models import *
 from datetime import datetime, timedelta
 import json
+from django.conf import settings
 
 list_equipment = {}  # lista de equipamentos
 list_equipment_removed = {}  # lista de equipamentos removidos
@@ -17,12 +18,8 @@ list_equipment_removed = {}  # lista de equipamentos removidos
 # cadastra a carga com a lista
 @login_required
 def confirm_cargo(request):
-    try:
-        policial = RegisterPolice.objects.get(matricula="WA025ALM")
-    except:
-        policial = None
-
     data = {}
+    police = None
     if request.method == "POST":
         turn_type = request.POST.get("turn_type")
         data_hora_atual = datetime.now()  # pega a data atual
@@ -35,8 +32,13 @@ def confirm_cargo(request):
             )
         else:
             data_hora_futura = None
+            
+        try:
+            police = RegisterPolice.objects.get(matricula=request.POST.get("plate"))
+        except:
+            pass
         
-        cargo = Cargo(expected_cargo_return_date=data_hora_futura, turn_type=turn_type)  # Cadastra a carga
+        cargo = Cargo(expected_cargo_return_date=data_hora_futura, turn_type=turn_type, police=police)  # Cadastra a carga
         cargo.save()
 
         # Cadastra a lista de equipamentos na tabela equipment_cargo
@@ -71,11 +73,13 @@ def confirm_cargo(request):
                     observation=list_equipment[key]["observation"],
                     amount=list_equipment[key]["amount"],
                 ).save()
+                
+        settings.AUX["matricula"] = ''
 
         list_equipment.clear()
         list_equipment_removed.clear()
 
-    data["policial"] = policial
+    data["policial"] = police
 
     return render(request, "cargo/cargo_temporary.html", data)
 

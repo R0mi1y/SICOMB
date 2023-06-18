@@ -11,6 +11,7 @@
 {% block content_final%}
     <section class="cargo">
                     
+        {% if police %}
         <div class="police_officer_field shadow">
             <table class="police_officer_table">
                 <thead>
@@ -21,27 +22,39 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="#" ><img class="shadow" src="/Images/minha_foto.jpg" alt=""></a>
+                            <a href="#" ><img class="shadow" src="/media/{{police.foto}}" alt=""></a>
                         </td>
                     </tr>
                     <tr>
-                        <td>Rafael Bragança de Oliveira</td>
+                        <td>{{police.nome}}</td>
                     </tr>
                     <tr>
-                        <td>1519884</td>
+                        <td>{{police.matricula}}</td>
                     </tr>
                     <tr>
-                        <td>(77) 9 9922-1111</td>
+                        <td>{{police.telefone}}</td>
                     </tr>
                     <tr>
-                        <td>SGT</td>
+                        <td>{{police.lotacao}}</td>
                     </tr>
                     <tr>
-                        <td>rafaelficticio@teste.com</td>
+                        <td>{{police.email}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form action="./" method="post">
+                                {% csrf_token %}
+                                <div class="btn_final">
+                                    <input class="btn_finalize btn_cancel shadow" name="cancelar" type="submit" value="Cancelar">
+                                </div>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        {% endif %}
+        {% if not police %}
         <div class="military_means_room shadow">
             <div class="means_room_content">
                 <div class="means_room_table">
@@ -58,32 +71,32 @@
                         </tbody>
                     </table>
                     <div class="row_color"><span><hr></span></div>
-                    <form action="">
+                    <form action="./" method="POST">
+                        {% csrf_token %}
                         <div class="input-div">
 
                             <div class="input-box">
 
                                 <h4 class="input-title">MATRÍCULA</h4>
-                                <input type="text" class="input-data" placeholder="Digite o matrícula">
+                                <input type="text" name="matricula" class="input-data" placeholder="Digite a matrícula">
                                 
                             </div>
                             <div class="input-box">
                                 <!-- <h4 class="input-title">CONFIRME A CARGA COM SUA MATRÍCULA E SENHA.</h4> -->
                                 <h4 class="input-title">SENHA</h4>
-                                <input type="password" class="input-data" placeholder="Digite a senha">
+                                <input type="password" name="senha" class="input-data" placeholder="Digite a senha">
                             </div>
                         </div>
                         <div class="finalize_load">
-                            <div class="btn_final">
-                                <input class="btn_finalize btn_cancel shadow" type="submit" value="Cancelar">
-                            </div>
                             <div class="btn_final">
                                 <input class="btn_finalize btn_confirm shadow" type="submit" value="Finalizar">
                             </div>
                         </div>
                     </form>
+                </div>
             </div>
         </div>
+        {% endif %}
     </section>
     <section>
         <div class="cargo_itens shadow">
@@ -95,28 +108,42 @@
                         <th colspan="100%" class="cargo_title"><h3 >ITENS</h3></th>
                     </tr>
                     <tr class="col-itens">
-                        <th>Nº DE SÉRIE</th>
+                        {% comment %} <th>Nº DE SÉRIE</th>
                         <th>DESCRIÇÃO</th>
                         <th>TIPO</th>
                         <th>CALIBRE</th>
                         <th>QUANTIDADE</th>
                         <th>TAMANHO</th>
                         <th>OBSERVAÇÃO</th>
-                        <th>AÇÃO</th>
+                        <th>AÇÃO</th> {% endcomment %}
+                        <th>ID DE CARGA</th>
+                        <th>TIPO</th>
+                        <th>MATRÍCULA</th>
+                        <th>ADJUNTO</th>
+                        <th>GRADUAÇÃO</th>
+                        <th>QNT. DE ITENS</th>
+                        <th>DATA</th>
+                        <th>PREVISÃO DE DESCARGA</th>
                     </tr>
                 </thead>
+                {% if cargos %}
                 <tbody>
+                    {% for i in cargos %}
                     <tr>
-                        <td>1596633</td>
-                        <td>PISTOLA GLOCK G19 CAL 9MM</td>
-                        <td>PISTOLA</td>
-                        <td>9MM</td>
-                        <td>1</td>
-                        <td>-</td>
-                        <td>APRESENTA DEFEITO NO TAMBOR</td>
-                        <td><a href="#">| X |</a></td>
+                        <tr>
+                            <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
+                            <td>{{i.0.turn_type}}</td>
+                            <td>{{ i.0.police.plate |default:"WA025ALM" }}</td>
+                            <td class="click_redirect" ><a  href="">{{ i.0.adjunct.name |default:"Adjunto Indisponível" }}</a></td>
+                            <td>{{ i.0.police.patent |default:'Tenente'}}</td>
+                            <td>{{ i.1 }}</td>
+                            <td>{{ i.0.date_cargo }}</td>
+                            <td>{{ i.0.expected_cargo_return_date |default:'-' }}</td>
+                        </tr>
                     </tr>
+                    {% endfor %}
                 </tbody>
+                {% endif %}
             </table>
 
         </div>
