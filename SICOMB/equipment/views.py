@@ -127,7 +127,7 @@ def get_equipment_serNum(request, serial_number):
 
 
 # Retorna o equipamento referente ao uid mais recente em formato JSON
-def get_equipment(request):
+def get_equipment_avalible(request):
     data = {"uid": ""}
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
@@ -159,7 +159,72 @@ def get_equipment(request):
             )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
         if equipment.status != "Disponível":
             return JsonResponse(
-                {"uid": "", "msm": "Equipamento não disponível, " + equipment.status}
+                {"uid": "", "msm": "Equipamento não disponível, equipamento em uma carga de " + equipment.status}
+            )
+
+        data["equipment"] = model_to_dict(equipment)
+
+        if (
+            equipment.armament != None
+        ):  # Recupera o objeto armamento, que complementa o equipamento
+            data["registred"] = "armament"
+            data["model"] = model_to_dict(equipment.armament)
+
+        elif (
+            equipment.wearable != None
+        ):  # Recupera o objeto vestimento, que complementa o equipamento
+            data["registred"] = "wearable"
+            data["model"] = model_to_dict(equipment.wearable)
+
+        elif (
+            equipment.accessory != None
+        ):  # Recupera o objeto acessorio, que complementa o equipamento
+            data["registred"] = "accessory"
+            data["model"] = model_to_dict(equipment.accessory)
+
+        elif (
+            equipment.grenada != None
+        ):  # Recupera o objeto acessorio, que complementa o equipamento
+            data["registred"] = "grenada"
+            data["model"] = model_to_dict(equipment.grenada)
+
+    return JsonResponse(data)  # Retorna o dicionário em forma de api
+
+
+# Retorna o equipamento referente ao uid mais recente em formato JSON
+def get_equipment_unvalible(request):
+    data = {"uid": ""}
+
+    # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
+    if request.GET.get("type") != None:
+        data["registred"] = request.GET.get("type")
+
+        # Caso seja uma munição
+        if request.GET.get("type") == "bullet":
+            try:
+                bullet = Bullet.objects.get(pk=request.GET.get("pk"))
+            except Equipment.DoesNotExist:
+                return JsonResponse(
+                    {"uid": "", "msm": "Equipamento não cadastrado"}
+                )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
+
+            data["equipment"] = model_to_dict(bullet)
+
+    # Para os equipamentos com a tag
+    if uids.__len__() > 0 and uids[uids.__len__() - 1]:
+        uid = uids[uids.__len__() - 1]
+        uids.pop()
+        data["uid"] = uid
+
+        try:
+            equipment = Equipment.objects.get(uid=uid)  # Recupera o objeto Equipamento
+        except Equipment.DoesNotExist:
+            return JsonResponse(
+                {"uid": "", "msm": "Equipamento não cadastrado"}
+            )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
+        if equipment.status == "Disponível":
+            return JsonResponse(
+                {"uid": "", "msm": "Equipamento não disponível, equipamento não está na carga."}
             )
 
         data["equipment"] = model_to_dict(equipment)

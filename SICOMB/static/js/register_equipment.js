@@ -36,7 +36,7 @@ choicesTypes.addEventListener('change', change_field); // executa toda vez q mud
 
 // requisita e valida o uid pra cadastrar
 var fetchUid = () => {
-    fetch('http://localhost:8000/equipment/valid_uid')
+    fetch('http://localhost:8000/equipamento/valid_uid')
         .then(response => response.json())
         .then(data => {
             let input_uid = document.getElementById('input-uid'); // o input que fica escondido
@@ -94,7 +94,7 @@ document.getElementById("submit-btn").addEventListener('click', () => {
         return;
     }
     // requisita ao sjango se o numero se série é válido, se já tá cadastrado no caso
-    async () => fetch("http://localhost:8000/equipment/valid_serial_number/" + serial_num + '/')
+    async () => fetch("http://localhost:8000/equipamento/valid_serial_number/" + serial_num + '/')
         .then(response => response.json())
         .then((data) => {
             if (data.exists) { // checa se existe ou não um num de série igual já cadastrado
@@ -116,7 +116,7 @@ document.getElementById("submit-btn").addEventListener('click', () => {
 });
 
 function register_bullet() {
-    fetch("http://localhost:8000/equipment/bullets/get/")
+    fetch("http://localhost:8000/equipamento/bullets/get/")
         .then(response => response.json())
         .then(bullets => {
             var bullet_options = '';

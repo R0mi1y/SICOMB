@@ -6,6 +6,6 @@ urlpatterns = [
     path("register/", views.register_police, name="cadastro"),
     path("login/", views.login, name="login"),
     path("search/<str:matricula>/", views.search_police, name="procurar-policial"),
-    path("police-page/", views.finalize_cargo, name="finalizar-carga"),
+    path("police-page/", views.finalize_load, name="finalizar-carga"),
     path("get_login/", views.get_login_police)
 ]

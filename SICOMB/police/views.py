@@ -7,7 +7,7 @@ from django.shortcuts import render
 from police.forms import PoliceForm
 from django.contrib.auth.decorators import login_required
 from .models import *
-from cargo.models import Cargo, Equipment_cargo
+from load.models import Load, Equipment_load
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 
@@ -37,11 +37,11 @@ def login(request):
                 settings.AUX["matricula"] = request.POST.get("matricula")
 
                 data["police"] = police
-                cargos = Cargo.objects.filter(police=police)
-                data["cargos"] = []
-                for i in cargos:
-                    ec = Equipment_cargo.objects.filter(cargo=i)
-                    data["cargos"].append([i, ec.__len__])
+                loads = Load.objects.filter(police=police)
+                data["loads"] = []
+                for i in loads:
+                    ec = Equipment_load.objects.filter(load=i)
+                    data["loads"].append([i, ec.__len__])
             else:
                 data["msm"] = "Senha incorreta"
 
@@ -108,7 +108,7 @@ def register_user(request):
             print(form)
             print(form)
             print(form)
-            return HttpResponseRedirect("/cargo/fazer_carga/")
+            return HttpResponseRedirect("/carga/fazer_carga/")
         else:
             return HttpResponseRedirect("")
 
@@ -117,7 +117,7 @@ def register_user(request):
         return render(request, "registration/register.html", {"form": form})
 
 
-def finalize_cargo(request):
+def finalize_load(request):
     return render(request, "police/police_page.html")
 
 

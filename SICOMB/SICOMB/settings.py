@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "police",
     "equipment",
-    "cargo",
+    "load",
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True  # CORS configuração
