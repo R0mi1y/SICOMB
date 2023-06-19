@@ -9,7 +9,7 @@ from django.utils import timezone
 
 
 class Cargo(models.Model):
-    situation = models.CharField("Devolvido", max_length=20, default="Pendente")
+    situation = models.CharField("Situação da carga", max_length=20, default="Pendente")
     date_cargo = models.DateTimeField(default=timezone.now)
     expected_cargo_return_date = models.DateTimeField("Data Prevista de Devolução", null=True)
     turn_type = models.CharField(max_length=20)
@@ -33,6 +33,7 @@ class Equipment_cargo(models.Model):
     )
     amount = models.IntegerField("Quantidade", null=True, default="1")
     observation = models.TextField("Observação", default=None, null=True)
+    status = models.CharField('Status', max_length=20, default='Aprovado')
     
     # o amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
 

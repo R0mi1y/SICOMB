@@ -13,8 +13,8 @@ from django.conf import settings
 from django.utils import timezone
 
 
-list_equipment = {}  # lista de equipamentos
-list_equipment_removed = {}  # lista de equipamentos removidos
+settings.AUX['list_equipment'] = {}  # lista de equipamentos
+settings.AUX['list_equipment_removed'] = {}  # lista de equipamentos removidos
 
 
 # cadastra a carga com a lista
@@ -45,7 +45,7 @@ def confirm_cargo(request):
 
         # Cadastra a lista de equipamentos na tabela equipment_cargo
         # com a carga cadastrada e os equipamentos da lista
-        for key in list_equipment:
+        for key in settings.AUX['list_equipment']:
             if key.isdigit():
                 equipment = Equipment.objects.get(serial_number=key)
                 equipment.status = turn_type
@@ -54,32 +54,45 @@ def confirm_cargo(request):
                 Equipment_cargo(
                     cargo=cargo,
                     equipment=equipment,
-                    observation=list_equipment[key]["observation"],
-                    amount=list_equipment[key]["amount"],
+                    observation=settings.AUX['list_equipment'][key]["observation"],
+                    amount=settings.AUX['list_equipment'][key]["amount"],
+                ).save()
+        for key in settings.AUX['list_equipment_removed']:
+            if key.isdigit():
+                equipment = Equipment.objects.get(serial_number=key)
+                equipment.status = turn_type
+                equipment.save()
+
+                Equipment_cargo(
+                    cargo=cargo,
+                    equipment=equipment,
+                    observation=settings.AUX['list_equipment_removed'][key]["observation"],
+                    amount=settings.AUX['list_equipment_removed'][key]["amount"],
+                    status='Retornado'
                 ).save()
             elif key[0] == ".":  # se for uma munição
                 bullet = Bullet.objects.get(caliber=key)
-                if int(bullet.amount) - int(list_equipment[key]["amount"]) < 0:
-                    list_equipment[key]["amount"] = bullet.amount
+                if int(bullet.amount) - int(settings.AUX['list_equipment'][key]["amount"]) < 0:
+                    settings.AUX['list_equipment'][key]["amount"] = bullet.amount
                     bullet.amount = 0
                     data["msm"] = "Munição insuficiente, munição zerada"
                 else:
                     bullet.amount = int(bullet.amount) - int(
-                        list_equipment[key]["amount"]
+                        settings.AUX['list_equipment'][key]["amount"]
                     )
                 bullet.save()
 
                 Equipment_cargo(
                     cargo=cargo,
                     bullet=bullet,
-                    observation=list_equipment[key]["observation"],
-                    amount=list_equipment[key]["amount"],
+                    observation=settings.AUX['list_equipment'][key]["observation"],
+                    amount=settings.AUX['list_equipment'][key]["amount"],
                 ).save()
                 
         settings.AUX["matricula"] = ''
 
-        list_equipment.clear()
-        list_equipment_removed.clear()
+        settings.AUX['list_equipment'].clear()
+        settings.AUX['list_equipment_removed'].clear()
 
     data["policial"] = police
 
@@ -157,15 +170,15 @@ def get_cargo(request, id):  # Retorna uma resposta JSON com todas as cargas (ca
 
 # Cancela a carga e zera as listas
 def cancel_cargo(request):
-    list_equipment.clear()
-    list_equipment_removed.clear()
+    settings.AUX['list_equipment'].clear()
+    settings.AUX['list_equipment_removed'].clear()
 
     return redirect("fazer_carga")
 
 
 # Retorna a lista
 def get_list_equipment(request):
-    return JsonResponse(list_equipment)
+    return JsonResponse(settings.AUX['list_equipment'])
 
 
 @csrf_exempt  # tira a necessidade do token csrf
@@ -173,7 +186,7 @@ def get_list_equipment(request):
 def add_list_equipment(request, serial_number, obs, amount):
     if request.method == "POST":
         if serial_number == "turn_type":
-            list_equipment["turn_type"] = obs
+            settings.AUX['list_equipment']["turn_type"] = obs
         elif serial_number.isdigit():
             equipment = Equipment.objects.get(
                 serial_number=serial_number
@@ -207,9 +220,9 @@ def add_list_equipment(request, serial_number, obs, amount):
                 data["campo"] = "Granada"
 
             # Adiciona na lista de equipamentos efetivamente
-            list_equipment[serial_number] = data
-            list_equipment[serial_number]["observation"] = obs if obs != "-" else ""
-            list_equipment[serial_number]["amount"] = amount
+            settings.AUX['list_equipment'][serial_number] = data
+            settings.AUX['list_equipment'][serial_number]["observation"] = obs if obs != "-" else ""
+            settings.AUX['list_equipment'][serial_number]["amount"] = amount
         elif serial_number[0] == ".":  # se for uma munição
             try:
                 bullet = Bullet.objects.get(caliber=serial_number)
@@ -223,9 +236,9 @@ def add_list_equipment(request, serial_number, obs, amount):
             data["campo"] = "Munição"
 
             # Adiciona na lista de equipamentos efetivamente
-            list_equipment[serial_number] = data
-            list_equipment[serial_number]["observation"] = obs if obs != "-" else ""
-            list_equipment[serial_number]["amount"] = amount
+            settings.AUX['list_equipment'][serial_number] = data
+            settings.AUX['list_equipment'][serial_number]["observation"] = obs if obs != "-" else ""
+            settings.AUX['list_equipment'][serial_number]["amount"] = amount
 
         return JsonResponse({"sucesso": "sucesso"})
     else:
@@ -278,11 +291,11 @@ def remove_list_equipment(request, serial_number, obs, amount):
         data[serial_number]["observation"] = obs
         data[serial_number]["amount"] = amount
 
-        list_equipment_removed[
+        settings.AUX['list_equipment_removed'][
             serial_number
         ] = data  # salva na lista de equipamentos removidos
 
-        del list_equipment[serial_number]  # deleta efetivamente
+        del settings.AUX['list_equipment'][serial_number]  # deleta efetivamente
 
         return JsonResponse({"sucesso": "sucesso"})
     else:
