@@ -81,27 +81,6 @@ var fetchEquipmentData = (serial_number) => {
 
 // Cria um intervalo para chamar a função a cada 1 segundo
 var interval = setInterval(fetchEquipmentData, 1000);
-var table_itens = document.getElementById('body_table_itens'); // tabela de itens do html
-
-// Insere na tabela uma line que é um objeto 
-// equipment com um model em formato json
-function insertLine(line) {
-    table_itens.innerHTML += // Insere efetivamente na lista => {
-        '<tr>' +
-        '<td></td>' +
-        '<td>' + (line.equipment.serial_number == null || line.equipment.serial_number == undefined ? "-" : line.equipment.serial_number) + '</td>' +
-        '<td>' + (line.model.description == null || line.model.description == undefined ? "-" : line.model.description) + '</td>' +
-        '<td>' + (line.campo == null || line.campo == undefined ? "-" : line.campo) + '</td>' +
-        '<td>' + (line.model.caliber == null || line.model.caliber == undefined ? "-" : line.model.caliber) + '</td>' +
-        '<td>' + (line.amount == null || line.amount == undefined || line.amount == '' ? "1" : line.amount) + '</td>' +
-        '<td>' + (line.registred == 'wearable' ? line.model.size : "-") + '</td>' +
-        '<td>' + (line.equipment.observation == null || line.equipment.observation == undefined ? "-" : line.equipment.observation) + '</td>' +
-        '<td></td>' +
-        '</tr>' // => }
-
-    // renumera e adiciona o botão de deletar
-    updateRowNumbers(table_itens);
-}
 
 // Insere com o clicar do botão inserir
 insert_bttn.addEventListener('click', () => {
@@ -202,18 +181,6 @@ function removeRow(rowNumber) {
 
     table_itens.deleteRow(rowNumber);
     updateRowNumbers();
-}
-
-
-// Básicamente checa o numero que foi retirado e renumera as linha de acordo e coloca o botão de excluir linha
-function updateRowNumbers() {
-    var rows = table_itens.getElementsByTagName("tr");
-
-    for (var i = 0; i < rows.length; i++) {
-        var cells = rows[i].getElementsByTagName("td");
-        cells[0].innerHTML = i + 1; // primeira coluna, a do numero de série da tabela
-        cells[cells.length - 1].innerHTML = '<a href="#" onclick="checkRemoveRow(' + i + ')">| X |</a>'; // ultima coluna, o botão de remover
-    }
 }
 
 document.getElementById("search-btn").addEventListener("click", () => {

@@ -10,6 +10,8 @@ from police.models import *
 from datetime import datetime, timedelta
 import json
 from django.conf import settings
+from django.utils import timezone
+
 
 list_equipment = {}  # lista de equipamentos
 list_equipment_removed = {}  # lista de equipamentos removidos
@@ -84,18 +86,74 @@ def confirm_cargo(request):
     return render(request, "cargo/cargo_temporary.html", data)
 
 
-@login_required
-def get_cargo(
-    request, id
-):  # Retorna uma resposta JSON com todas as cargas (caso necessário)
+def convert_date(data_hora_utc):
+    # Converter para um objeto de data e hora do Django
+    data_hora = timezone.datetime.strptime(data_hora_utc, "%Y-%m-%d %H:%M:%S.%f%z")
+
+    # Converter para o fuso horário brasileiro
+    data_hora_brasileira = data_hora.astimezone(timezone.get_current_timezone())
+
+    # Formatar a data e hora no formato desejado
+    formato_br = "%d/%m/%Y %H:%M:%S"
+    data_hora_formatada = data_hora_brasileira.strftime(formato_br)
+
+    return data_hora_formatada
+
+
+
+def get_cargos_police(request, plate):
+    # Filtrar os objetos Cargo com base no campo "police" igual a "plate"
+    cargos_filtrados = Cargo.objects.filter(police=plate, status="Pendente")
+
+    # Criar uma lista chamada "cargos" e preencher com os dicionários dos objetos Cargo filtrados
+    cargos = []
+    for cargo in cargos_filtrados:
+        dicionario_cargo = model_to_dict(cargo)
+        dicionario_cargo['itens_amount'] = Equipment_cargo.objects.filter(cargo=cargo).__len__()
+        dicionario_cargo['date_cargo'] = convert_date(str(dicionario_cargo['date_cargo']))
+        if dicionario_cargo['expected_cargo_return_date']:
+            dicionario_cargo['expected_cargo_return_date'] = convert_date(str(dicionario_cargo['expected_cargo_return_date']))
+        
+        cargos.append(dicionario_cargo)
+        
+    data = {'cargos_police' : cargos}
+    
+    return JsonResponse(data)
+    
+    
+# @login_required
+def get_cargo(request, id):  # Retorna uma resposta JSON com todas as cargas (caso necessário)
     cargo = Cargo.objects.get(id=id)
-    list = Equipment_cargo.objects.filter(cargo=cargo)
+    equipment_cargos = []
+    for cargo in Equipment_cargo.objects.filter(cargo=cargo):
+        equipment_cargo = model_to_dict(cargo)
+        equipment = {}
+        equipment['equipment'] = model_to_dict(cargo.equipment)
+        
+        if cargo.equipment.armament != None:  # Recupera o objeto armamento, que complementa o equipamento
+            equipment["registred"] = "armament"
+            equipment["model"] = model_to_dict(cargo.equipment.armament)
 
-    for key in list:
-        print(key.equipment.type)
+        elif cargo.equipment.wearable != None:  # Recupera o objeto vestimento, que complementa o equipamento
+            equipment["registred"] = "wearable"
+            equipment["model"] = model_to_dict(cargo.equipment.wearable)
 
-    return redirect("fazer_carga")
+        elif cargo.equipment.accessory != None:  # Recupera o objeto acessorio, que complementa o equipamento
+            equipment["registred"] = "accessory"
+            equipment["model"] = model_to_dict(cargo.equipment.accessory)
 
+        elif cargo.equipment.grenada != None:  # Recupera o objeto acessorio, que complementa o equipamento
+            equipment["registred"] = "grenada"
+            equipment["model"] = model_to_dict(cargo.equipment.grenada)
+        
+        equipment['amount'] = cargo.amount
+        equipment_cargo['Equipment&model'] = equipment
+        equipment_cargos.append(equipment_cargo)
+        
+    cargo = model_to_dict(cargo)
+    cargo['equipment_cargos'] = equipment_cargos
+    
+    return JsonResponse(cargo)
 
 # Cancela a carga e zera as listas
 def cancel_cargo(request):

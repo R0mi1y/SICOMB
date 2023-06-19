@@ -15,7 +15,7 @@ class Cargo(models.Model):
     turn_type = models.CharField(max_length=20)
     # nomear atributo que receberá os dados: 6h, 12h, 24h, conserto, requisição judicial ou indeterminado
     status = models.CharField("horário_carga", max_length=20, default="Pendente")
-    police = models.OneToOneField(RegisterPolice, on_delete=models.CASCADE)
+    police = models.ForeignKey(RegisterPolice, on_delete=models.CASCADE)
     # adjunct = models.ForeignKey(Adjunct, on_delete=models.CASCADE) #Pega a chave primária do adjunto
     
     def __str__(self):
@@ -33,6 +33,6 @@ class Equipment_cargo(models.Model):
     )
     amount = models.IntegerField("Quantidade", null=True, default="1")
     observation = models.TextField("Observação", default=None, null=True)
-    # o bullet_amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
+    
+    # o amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
 
-    # TODO: adicionar uma observação para cada equipamento relacionado à essa carga

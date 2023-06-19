@@ -18,6 +18,6 @@ class RegisterPolice(models.Model):
     telefone = models.CharField(max_length=20)
     lotacao = models.CharField(max_length=50)
     posto = models.CharField(max_length=10)
-    senha = models.CharField(max_length=20)
+    senha = models.CharField(max_length=100)
     email = models.EmailField(max_length=254)
     foto = models.FileField(upload_to="media/")

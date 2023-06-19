@@ -12,6 +12,9 @@ urlpatterns = [
         "get/<int:id>/", views.get_cargo
     ),  # Retorna uma resposta JSON com todas as cargas (caso necessário)
     path(
+        "get/cargos_police/<str:plate>/", views.get_cargos_police
+    ),  # Retorna uma resposta JSON com todas as cargas (caso necessário)
+    path(
         "list_equipment/add/<str:serial_number>/<str:obs>/<str:amount>/",
         views.add_list_equipment,
     ),  # adiciona um equipamento à lista na views vindo do front

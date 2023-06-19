@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from cargo.models import Cargo, Equipment_cargo
 from django.conf import settings
+from django.contrib.auth.hashers import check_password
 
 # Create your views here.
 
@@ -19,6 +20,7 @@ def index(request):
 
 @login_required
 def login(request):
+    settings.AUX["matricula"] = ''
     data = {"msm": ""}
     if request.method == "POST":
         if not request.POST.get("cancelar"):
@@ -27,17 +29,19 @@ def login(request):
                     matricula=request.POST.get("matricula")
                 )
             except RegisterPolice.DoesNotExist:
-                return render(request, "police/police_page.html", {"msm": "Matrícula incorreta"})
+                return render(
+                    request, "police/police_page.html", {"msm": "Matrícula incorreta"}
+                )
 
-            if police.senha == request.POST.get("senha"):
+            if check_password(request.POST.get("senha"), police.senha):
                 settings.AUX["matricula"] = request.POST.get("matricula")
-                
+
                 data["police"] = police
                 cargos = Cargo.objects.filter(police=police)
-                data['cargos'] = []
+                data["cargos"] = []
                 for i in cargos:
                     ec = Equipment_cargo.objects.filter(cargo=i)
-                    data['cargos'].append([i, ec.__len__])
+                    data["cargos"].append([i, ec.__len__])
             else:
                 data["msm"] = "Senha incorreta"
 
@@ -78,6 +82,7 @@ def search_police(request, matricula):
     if request.method == "POST":
         form = PoliceForm(request.POST, request.FILES, instance=policial)
         if form.is_valid():
+            print(form)
             form.save()
             messages.success(request, "Atulização realizada com sucesso!")
             return HttpResponseRedirect("/police/register/")
@@ -100,6 +105,9 @@ def register_user(request):
 
         if form.is_valid():
             form.save()
+            print(form)
+            print(form)
+            print(form)
             return HttpResponseRedirect("/cargo/fazer_carga/")
         else:
             return HttpResponseRedirect("")
@@ -116,7 +124,7 @@ def finalize_cargo(request):
 def get_login_police(request):
     try:
         police = RegisterPolice.objects.get(matricula=settings.AUX["matricula"])
-        settings.AUX["matricula"] = ""
+        # settings.AUX["matricula"] = ""
         fieldfile = police.foto
         caminho_arquivo = fieldfile.name
 

@@ -35,8 +35,8 @@
                     <td class="click_redirect" ><a  href="">{{ i.0.adjunct.name |default:"Adjunto Indisponível" }}</a></td>
                     <td>{{ i.0.police.patent |default:'Tenente'}}</td>
                     <td>{{ i.1 }}</td>
-                    <td>{{ i.0.date_cargo }}</td>
-                    <td>{{ i.0.expected_cargo_return_date |default:'-' }}</td>
+                    <td>{{ i.0.date_cargo|date:"d/m/Y  H:i:s" }}</td>
+                    <td>{{ i.0.expected_cargo_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
