@@ -92,6 +92,7 @@ function changeTemplate(template) {
 // equipment com um model em formato json
 var table_itens = document.getElementById('body_table_itens'); // tabela de itens do html
 function insertLine(line, x) {
+    // console.log(line);
     x = x ?? true;
     table_itens.innerHTML += // Insere efetivamente na lista => {
         '<tr>' +
@@ -150,7 +151,6 @@ var interval = setInterval(() => {
     fetch(url)
         .then(response => response.json())
         .then(policial => {
-            console.log(policial);
             if (policial && Object.keys(policial).length !== 0) {
                 clearInterval(interval);
 
@@ -207,7 +207,7 @@ function addToSquare(data) {
     data['campo'] = data.registred == 'grenada' ? 'Granada' : data['campo'];
     data['campo'] = data.registred == 'bullet' ? 'Munição' : data['campo'];
 
-    console.log(document.getElementById("means_room_product"));
+    // console.log(document.getElementById("means_room_product"));
     document.getElementById("means_room_product").src = "/static/" + data.model.image_path; // Muda a imagem
 
     if (!data.equipment.serial_number) {

@@ -48,7 +48,7 @@ class Model_grenada(models.Model):
 
 class Equipment(models.Model):
     # chave primária do equipamento
-    serial_number = models.CharField("Numero de série", max_length=20)
+    serial_number = models.CharField("Numero de série", max_length=20, null=True)
     uid = models.CharField("uid", max_length=20, primary_key=True, default=None)
     status = models.CharField("Estado atual", max_length=20, default="Disponível")
     armament = models.ForeignKey(

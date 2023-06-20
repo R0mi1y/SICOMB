@@ -37,6 +37,7 @@ fetch("http://localhost:8000/carga/lista_equipamentos/get") // faz uma requisiç
         if (data !== {}) {
             list_equipment = data;
             for (let key in list_equipment) { // percorre a lista se existir
+                console.log(list_equipment[key]);
                 insertLine(list_equipment[key]); // insere cada objeto novamente na tabela
             }
         }
@@ -59,7 +60,6 @@ function fetchEquipmentData(serial_number) {
                         }
                     }
                 }
-
                 //se não tiver cadastrado
                 if (data.registred !== false) {
                     list_awate_equipment.push(data);
@@ -86,15 +86,16 @@ insert_bttn.addEventListener('click', () => {
     if (equipmentData != null) { // se tiver um equipamento no quadro
         equipmentData['amount'] = amount_input.value;
 
+        console.log(equipmentData);
         insertLine(equipmentData); // insere a linha
 
-        list_equipment[equipmentData.equipment.serial_number] = { // adiciona no array de equipamentos o numero de série e a observação
+        list_equipment[equipmentData.equipment.serial_number ?? 'ac'+ equipmentData.equipment.id] = { // adiciona no array de equipamentos o numero de série e a observação
             'serial_number': equipmentData.equipment.serial_number,
             'observation': observation.innerText,
             'amount': amount_input.value
         };
 
-        equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ? ? equipmentData.model.caliber;
+        equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ?? equipmentData.model.caliber;
 
         // adiciona no array de equipamentos do django => {
         fetch("http://localhost:8000/carga/lista_equipamentos/add/" +
@@ -125,54 +126,66 @@ insert_bttn.addEventListener('click', () => {
 
 // Requisita passar o equipamento de novo no sensor pra remover
 function checkRemoveRow(rowNumber) {
-    popUp("Passe de volta o equipamento", false); // o false tira o botão de excluir a notificação
     var rows = table_itens.getElementsByTagName("tr"); // pega os tr da tabela
     var col = rows[rowNumber].getElementsByTagName("td"); // pega os td da tr
-
-    serialNum = col[1].innerHTML; // 1 É A POSIÇÃO DO NUMERO DE SÉRIE, ou seja ele pega o numero de série
+    
     obs = col[7].innerHTML; // assim por diante
     amount = col[5].innerHTML;
+    
+    if (col[3].innerHTML != 'Munição'){
+        serialNum = col[1].innerHTML; // 1 É A POSIÇÃO DO NUMERO DE SÉRIE, ou seja ele pega o numero de série
+        popUp("Passe de volta o equipamento", false); // o false tira o botão de excluir a notificação
 
-    clearInterval(interval); // Para de ficar requisitando
-
-    interval = setInterval(() => { // começa a requisitar mas mudando as verificações
-        fetch('http://localhost:8000/equipamento/get_disponivel') // requisita o equipamento
-            .then(response => response.json())
-            .then(data => {
-                if (data.uid !== '') {
-                    // percorre procurando o equipamento correspondente na tabela
-                    for (let key in list_equipment) {
-                        if (key === data.equipment.serial_number) { // verifica se tá na lista
-                            if (key == serialNum) { // verifica se é o certo pois ele pode passar um q tá na lista mas é outro
-                                removeRow(rowNumber); // remove a linha da tabela do html
-                                removerpopUp(); // remove o popUpa
-                                clearInterval(interval); // Para de ficar requisitando
-                                // remove da lista do django
-                                console.log(list_equipment);
-
-                                fetch("http://localhost:8000/carga/lista_equipamentos/remover/" + serialNum + "/" + obs + "/" + amount + '/', {
-                                    method: 'POST',
-                                });
-                                interval = setInterval(fetchEquipmentData, 1000); // volta a ficar requisitando pra cadastrar outros
-                                return;
-                            } else {
-                                popUp("Equipamento incorreto!");
-                                return;
+    
+        clearInterval(interval); // Para de ficar requisitando
+    
+        interval = setInterval(() => { // começa a requisitar mas mudando as verificações
+            fetch('http://localhost:8000/equipamento/get_disponivel') // requisita o equipamento
+                .then(response => response.json())
+                .then(data => {
+                    if (data.uid !== '') {
+                        // percorre procurando o equipamento correspondente na tabela
+                        for (let key in list_equipment) {
+                            if (key === data.equipment.serial_number) { // verifica se tá na lista
+                                if (key == serialNum) { // verifica se é o certo pois ele pode passar um q tá na lista mas é outro
+                                    removeRow(rowNumber); // remove a linha da tabela do html
+                                    removerpopUp(); // remove o popUpa
+                                    clearInterval(interval); // Para de ficar requisitando
+                                    // remove da lista do django
+                                    console.log(list_equipment);
+    
+                                    fetch("http://localhost:8000/carga/lista_equipamentos/remover/" + serialNum + "/" + obs + "/" + amount + '/', {
+                                        method: 'POST',
+                                    });
+    
+                                    interval = setInterval(fetchEquipmentData, 1000); // volta a ficar requisitando pra cadastrar outros
+                                    return;
+                                } else {
+                                    popUp("Equipamento incorreto!");
+                                    return;
+                                }
                             }
+                        } // a partir daqui é se o equipamento não é o certo
+                        // exibe a msm q veio do django
+                        if (data.msm != null) {
+                            popUp(data.msm);
+                        } else {
+                            popUp("O equipamento não está na lista!");
                         }
-                    } // a partir daqui é se o equipamento não é o certo
-                    // exibe a msm q veio do django
-                    if (data.msm != null) {
-                        popUp(data.msm);
-                    } else {
-                        popUp("O equipamento não está na lista!");
                     }
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao buscar dados do equipamento:', error);
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados do equipamento:', error);
+                });
+        }, 1000);
+    } else {
+        caliber = col[4].innerHTML;
+        removeRow(rowNumber);
+        fetch("http://localhost:8000/carga/lista_equipamentos/remover/" + caliber + "/" + obs + "/" + amount + '/', {
+                method: 'POST',
             });
-    }, 1000);
+    }
+
 }
 
 
@@ -189,7 +202,7 @@ function removeRow(rowNumber) {
 // checa se a lista tá vazia
 function confirmCargo() {
     var rows = table_itens.getElementsByTagName("tr");
-    if (rows.length > 0) window.location.href = '.'; // se tiver certo redireciona pra confirmar a carga
+    if (rows.length > 0) document.getElementById("form-equipment").submit(); // se tiver certo redireciona pra confirmar a carga
     else popUp("Lista vazia!");
 }
 

@@ -24,5 +24,5 @@ urlpatterns = [
     ),  # Remove um equipamento da lista na views vindo do front a solicitação
     path("lista_equipamentos/get", views.get_list_equipment),
     # Retorna a lista da views
-    path("dashboard_cargas/", views.get_dashboard_cargas, name='dashboard_cargas'),
+    path("dashboard_cargas/", views.get_dashboard_loads, name='dashboard_cargas'),
 ]
