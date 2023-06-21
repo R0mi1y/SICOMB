@@ -21,7 +21,7 @@ function set_date() {
 
 function selectCargo(id) {
 
-    fetch("/static/html/cargo.html")
+    fetch("/static/html/load.html")
         .then(response => response.text())
         .then(data => {
             document.getElementById("means_room_content").innerHTML = data;

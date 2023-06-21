@@ -9,7 +9,6 @@ from django.utils import timezone
 
 
 class Load(models.Model):
-    situation = models.CharField("Situação da carga", max_length=20, default="Pendente")
     date_load = models.DateTimeField(default=timezone.now)
     expected_load_return_date = models.DateTimeField("Data Prevista de Devolução", null=True)
     turn_type = models.CharField(max_length=20)
