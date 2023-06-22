@@ -88,9 +88,15 @@ ul {
     margin: 20px;
 }
 
+#pm_nav_img{
+    background-color: rgb(141 122 104);
+    border-radius: 30px;
+    margin-right: 5px;
+}
+
 .img-bpm {
-    padding: 10px;
-    width: 57px;
+    /* padding: 10px; */
+    width: 75px;
 }
 
 

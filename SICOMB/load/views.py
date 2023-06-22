@@ -20,7 +20,7 @@ settings.AUX["list_equipment_removed"] = {}  # lista de equipamentos removidos
 def confirm_load(request):
     data = {}
     police = None
-    if request.method == "POST" and len(settings.AUX["list_equipment"]) > 0 and len(settings.AUX["list_equipment_removed"]) > 0:
+    if request.method == "POST" and len(settings.AUX["list_equipment"]) > 0 or len(settings.AUX["list_equipment_removed"]) > 0:
         turn_type = request.POST.get("turn_type")
         data_hora_atual = datetime.now()  # pega a data atual
 
@@ -106,8 +106,8 @@ def confirm_load(request):
                 Equipment_load(
                     load=load,
                     bullet=bullet,
-                    observation=settings.AUX["list_equipment"][key]["observation"],
-                    amount=settings.AUX["list_equipment"][key]["amount"],
+                    observation=settings.AUX["list_equipment_removed"][key]["observation"],
+                    amount=settings.AUX["list_equipment_removed"][key]["amount"],
                     status="Retornado",
                 ).save()
 

@@ -76,9 +76,7 @@ table img{
     text-align: center;
     padding: 3px 0px 3px 0px;
 }
-.checkbox{
-    text-align: left;
-}
+
 .img-search{
     height: 40px;
     width: 40px;
@@ -102,7 +100,7 @@ table img{
     text-align: center;
 }
 .search-table table td{
-    padding: 10px 0px;;
+    padding: 5px 0px;;
 }
 .search-box{
     display: flex;
@@ -145,6 +143,8 @@ table img{
     text-align: center;
     font-size: 15px;
     padding: 0px;
+    font-family: 'interBold';
+    color: #5B4939;
 }
 .means_room_product{
     width: 81px;
@@ -154,12 +154,29 @@ table img{
  .img_product{
     padding: 0px 20px;
  }
+
 .info_product{
     width: 550px;
-    padding: 0px 20px;
+    padding: 5px 20px 0 20px;
 }
-.info_product table th{
+
+/* .info_product table th{
     border-bottom: 1px solid #5B4939;
+} */
+
+.table_info_product{
+    background: gainsboro;
+    border-radius: 10px;
+ }
+
+
+.info_product_title{
+    background-color: burlywood;
+    border-radius: 10px 10px 0 0;
+}
+.info_product_th{
+    font-size: 13px;
+    background-color: antiquewhite;
 }
 .row_color{
     display: flex;
@@ -313,4 +330,3 @@ footer{
 .click_redirect a:hover{
     text-decoration: underline ;
 }
-
