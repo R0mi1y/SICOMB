@@ -25,9 +25,12 @@ function set_date() {
 
     document.getElementById('date').innerText = data;
     document.getElementById('time').innerText = time;
+    document.getElementById('turn_type').innerText = turn_type;
 }
 set_date()
 // => }
+
+
 
 // busca se já tem uma lista no sistema 
 //(serve para caso a página de refresh, tá salvo no sistema desde q ele não rreinicie o sistema)
