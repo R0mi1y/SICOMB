@@ -18,8 +18,8 @@
                     <th>TURNO / TIPO</th>
                     <th>REQUISITANTE</th>
                     <th>MATRÍCULA</th>
-                    <th>ADJUNTO</th>
                     <th>GRADUAÇÃO</th>
+                    <th>ADJUNTO</th>
                     <th>QNT. DE ITENS</th>
                     <th>DATA</th>
                     <th>PREVISÃO DE DESCARGA</th>
@@ -32,8 +32,8 @@
                     <td>{{i.0.turn_type}}</td>
                     <td class="click_redirect"><a  href="">{{ i.0.police.nome }}</a></td>
                     <td>{{ i.0.police.matricula }}</td>
-                    <td class="click_redirect" ><a  href="">{{ i.0.adjunct.nome|default:'-' }}</a></td>
                     <td>{{ i.0.police.posto }}</td>
+                    <td class="click_redirect" ><a  href="">{{ i.0.adjunct.nome|default:'-' }}</a></td>
                     <td>{{ i.1 }}</td>
                     <td>{{ i.0.date_load|date:"d/m/Y  H:i:s" }}</td>
                     <td>{{ i.0.expected_load_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>

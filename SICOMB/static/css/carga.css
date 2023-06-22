@@ -164,7 +164,12 @@ table img{
 
 .info_product{
     width: 550px;
-    padding: 5px 20px 0 20px;
+    padding: 0px 20px 0 20px;
+    max-height: 80px;
+    overflow-y: scroll;
+}
+.info_product tbodey tr:nth-child(even){
+    background-color: rgb(235, 235, 235);
 }
 
 /* .info_product table th{
@@ -176,6 +181,10 @@ table img{
     border-radius: 10px;
  }
 
+ .table_info_product thead{
+    position: sticky;
+    top: 0;
+ }
 
 .info_product_title{
     background-color: burlywood;
@@ -243,10 +252,14 @@ table img{
 .cargo_itens{
     background-color: #fff;
     border-radius: 10px;
-    height: 478px;
+    height: 500px;
     margin: 20px 0px;
+    max-height: 500px;
+    overflow-y: scroll;
 }
-
+ .cargo_itens tbody tr:nth-child(even){
+    background-color: rgb(235, 235, 235);
+ }
 .cargo_itens .cargo_title{
     font-family: interBold;
     color: #5B4939;
@@ -257,6 +270,8 @@ table img{
     align-items: center;
     justify-content: center;
     padding: 0px;
+    font-size: 16px;
+    line-height: 60px;
 }
 .table_itens .col-itens{
     background-color: #5B4939;
@@ -264,11 +279,13 @@ table img{
     height: 40px;
     font-size: 13px;
     text-align: center;
+    line-height: 50px;
 }
 
 .table_itens tbody{
-    font-size: 11px;
-    border-bottom: 1px solid #5B4939;
+    font-size: 14px;
+    /* border-bottom: 1px solid #5B4939; */
+    line-height: 30px;
 }
 /* .table_itens tbody td a{
     background: red;
@@ -276,6 +293,10 @@ table img{
     font-family: 'interExtraBold';
     font-size: 17px;
 } */
+.table_itens thead{
+    position: sticky;
+    top: 0;
+}
 .table_itens thead th{
     min-width: 100px;
 }
@@ -337,9 +358,21 @@ footer{
 .click_redirect a {
     background: none;
     color: #5B4939;
-    font-size: 12px;
 }
 
 .click_redirect a:hover{
     text-decoration: underline ;
+}
+
+::-webkit-scrollbar{
+    width: 8px;
+}
+::-webkit-scrollbar-track{
+    background: gainsboro;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb{
+    background-color: rgb(91,73,57, 0.9);
+    border-radius: 10px;
+
 }
