@@ -193,6 +193,7 @@ def get_equipment_avalible(request):
 
 # Retorna o equipamento referente ao uid mais recente em formato JSON
 def get_equipment_unvalible(request):
+    print("Chegou em get_equipment_unvalible()")
     data = {"uid": ""}
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag

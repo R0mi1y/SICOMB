@@ -27,7 +27,7 @@ function changeTemplate(template) {
                 <tbody>
                     `;
                 console.log(data.loads_police);
-
+                console.log("Chegou no tbody de cargas")
                 for (i in data.loads_police) {
                     table_element.innerHTML += 
                     `<tr>

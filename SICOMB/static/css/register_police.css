@@ -12,18 +12,23 @@
 }
 
 .registration {
-    max-width: 500px;
+    max-width: 70%;
     width: 70%;
     background-color: #fff;
     border-radius: 10px;
     margin: 0% 0% 5% 0%;
-    height: 650px;
+    /* height: 650px; */
     text-align: center;
 }
 
 .registration table {
-
-    margin: 2% auto;
+    /* margin: 2% auto; */
+    border-collapse: collapse;
+    justify-content: center;
+    width: 100%;
+    font-family: interBold;
+    font-size: 15px;
+    color: #5B4939;
 }
 
 .title {
@@ -31,30 +36,36 @@
     color: #fff;
     height: 50px;
     width: 100%;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
     background-color: #5B4939;
 }
 
 .sub-title {
     height: 50px;
     padding: 2% 0%;
-    ;
+    
 }
 
 .row_color {
     padding: 0% 0% 5% 0%;
+    display: flex;
+    justify-content: center;
 }
 
 .row_color span {
     background-color: rgb(91, 73, 57, 0.6);
+    height: 2px;
+    width: 80%;
 }
 
 .input-div {
     display: flex;
+    justify-content: space-around;
 }
 
 .input-box {
     width: 50%;
+    
 }
 
 .custom-label {
@@ -65,37 +76,45 @@
 }
 
 .input-data {
-    width: 70%;
-    padding: 0 3%;
+    width: 65%;
+    padding: 2% 5%;
     border-radius: 10px;
     border: 2px solid rgb(91, 73, 57, 0.6);
     color: #5B4939;
-    line-height: 35px;
+    line-height: 40px;
     margin: 5px 0 10px 0;
+    background-color: rgb(144, 129, 106, 0.10);
+    color: #5B4939;
+    font-family: 'interBold';
 }
 
 .input-search{
     display: flex;
-    width: 70%;
-    padding: 3% 3%;
+    width: 65%;
+    padding: 2% 5%;
     border-radius: 10px;
     border: 2px solid rgb(91, 73, 57, 0.6);
     
     line-height: 35px;
     margin: 7px auto;
+    background-color: rgb(144, 129, 106, 0.10);
 }
 
 .input-search input{
     width: 86%;
+    line-height: 40px;
+    background-color: rgb(144, 129, 106, 0.0);
     color: #5B4939;
+    font-family: 'interBold';
 }
 .input-search button {
     width: 14%;
-    height: 22px;
+    /* height: 22px; */
     cursor: pointer;
+    border-radius: 20px;
 }
 .input-search img {
-    width: 20px;
+    width: 37px;
 }
 
 .file-div {
@@ -140,6 +159,7 @@
     border: 1px solid #90816A;
     padding: 3% 6%;
     cursor: pointer;
+    transition: .5s;
 }
 
 .finalize-registration input:hover {
@@ -154,6 +174,10 @@
 }
 
 .box-shadow-registration {
+    box-shadow: -2px 4px 2px rgb(91, 73, 57, 0.7);
+    transition: .5s;
+}
+.box-shadow-registration:hover{
     box-shadow: -2px 4px 2px rgb(91, 73, 57);
 }
 
@@ -180,17 +204,30 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
+    display: none;
 }
 
 .custom-file-input {
     display: inline-block;
-    padding: 8px 0;
-    background-color: rgb(91, 73, 57, 0.9);
+    padding: 6% 0;
+    /* background-color: rgb(91, 73, 57, 0.9); */
+    /* background-color: rgb(141 122 104); */
+    border: 2px solid rgb(141, 122, 104);
+    background-color: rgb(189, 163, 138);
+    font-family: interBold;
     border-radius: 10px;
-    color: #fff;
+    /* color: #fff; */
+    color: #5B4939;
     cursor: pointer;
     margin: 24px 0 0 0;
-    width: 100%;
+    width: 98%;
+    transition: .5s;
+}
+
+.custom-file-input:hover{
+    color: rgb(189, 163, 138);
+    background-color: rgb(91, 73, 57, 0.9);
+    border: 2px solid rgb(189, 163, 138);
 }
 
 #fileSelectedMessage {

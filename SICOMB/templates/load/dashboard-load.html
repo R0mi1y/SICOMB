@@ -7,7 +7,7 @@
 
 {% block content_final %}
 <section style="padding: 0px 20px">
-    <div class="cargo_itens shadow"> 
+    <div class="cargo_itens dashboard_loads shadow"> 
          <table class="table_itens">
             <thead>
                 <tr>
@@ -23,6 +23,8 @@
                     <th>QNT. DE ITENS</th>
                     <th>DATA</th>
                     <th>PREVISÃO DE DESCARGA</th>
+                    <th>STATUS</th>
+                    <th>DATA DE DESCARGA</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +39,9 @@
                     <td>{{ i.1 }}</td>
                     <td>{{ i.0.date_load|date:"d/m/Y  H:i:s" }}</td>
                     <td>{{ i.0.expected_load_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>
+                    <td class="{% if i.0.status == 'ATRASADA' %}status-atrasada{% elif i.0.status == 'DENTRO DO PRAZO' %}status-dentro-prazo{% elif i.0.status == 'DESCARREGADA COM ATRASO' %}status-descarregada-atraso{% elif i.0.status == 'DESCARREGADA DENTRO DO PRAZO' %}status-descarregada-prazo{% elif i.0.status == 'DATA DE RETORNO NÃO DEFINIDA' %}status-data-indefinida{% endif %}">{{ i.0.status}}</td>
+                    <td>{{ i.0.returned_load_date|date:"d/m/Y  H:i:s" |default:'NÃO DESCARREGADA' }}</td>
+
                 </tr>
                 {% endfor %}
             </tbody>
@@ -44,44 +49,50 @@
     </div>
 </section>
 
-<section style="padding: 0px 20px">
-    <div class="load_itens shadow">
+{% comment %} <section class="table_section" style="padding: 0px 20px">
+    <div class="load_itens shadow_">
         <!-- <h2>ITENS</h2> -->
         
-        <table class="table_itens">
+        <table class="table_itens_">
             <thead>
                 <tr>
-                    <th colspan="100%" class="load_title"><h3 >DESCARGAS</h3></th>
+                    <th colspan="100%" class="cargo_title"><h3 >DESCARGAS</h3></th>
                 </tr>
                 <tr class="col-itens">
                     <th>ID DE CARGA</th>
                     <th>TURNO / TIPO</th>
                     <th>REQUISITANTE</th>
                     <th>MATRÍCULA</th>
-                    <th>TELEFONE</th>
                     <th>GRADUAÇÃO</th>
+                    <th>ADJUNTO</th>
                     <th>QNT. DE ITENS</th>
-                    <th>DATA </th>
+                    <th>DATA</th>
+                    <th>PREVISÃO DE DESCARGA</th>
+                    <th>STATUS</th>
                     <th>DATA DE DESCARGA</th>
-                    
                 </tr>
             </thead>
             <tbody>
+                {% for i in loads %}
                 <tr>
-                    <td class="click_redirect"><a  href="">347</a></td>
-                    <td>6H</td>
-                    <td>João Fernandes de Oliveira</td>
-                    <td>11BC33T23</td>
-                    <td>(77) 9 9900-0000</td>
-                    <td>CB</td>
-                    <td>8</td>
-                    <td>14/06/2023 - 9:00</td>
-                    <td>14/06/2023 - 15:00</td>
+                    <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
+                    <td>{{i.0.turn_type}}</td>
+                    <td class="click_redirect"><a  href="">{{ i.0.police.nome }}</a></td>
+                    <td>{{ i.0.police.matricula }}</td>
+                    <td>{{ i.0.police.posto }}</td>
+                    <td class="click_redirect" ><a  href="">{{ i.0.adjunct.nome|default:'-' }}</a></td>
+                    <td>{{ i.1 }}</td>
+                    <td>{{ i.0.date_load|date:"d/m/Y  H:i:s" }}</td>
+                    <td>{{ i.0.expected_load_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>
+                    <td>{{ i.0.status}}</td>
+                    <td>{{ i.0.returned_load_date|date:"d/m/Y  H:i:s" |default:'NÃO DESCARREGADA' }}</td>
+
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
 
     </div>
-</section>
+</section> {% endcomment %}
 
 {% endblock content_final %} 

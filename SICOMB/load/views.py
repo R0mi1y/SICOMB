@@ -169,6 +169,13 @@ def get_loads_police(request, plate):
                 str(dicionario_load["expected_load_return_date"])
             )
 
+        # if timezone.now() > dicionario_load["expected_load_return_date"]:
+        #     load.status = 'ATRASADA'
+        # elif timezone.now() < dicionario_load["expected_load_return_date"]:
+        #     load.status = 'DENTRO DO PRAZO'
+        # else:
+        #     load.status = 'DESCARREGADA'
+        
         loads.append(dicionario_load)
 
     data = {"loads_police": loads}
@@ -327,6 +334,22 @@ def get_dashboard_loads(request):
     for i in loads:
         ec = Equipment_load.objects.filter(load=i)
         loads_aux.append([i, ec.__len__])
-
+        
+        
+        data_hora_atual = timezone.now()
+        expected_return_date = i.expected_load_return_date
+        if expected_return_date is not None:
+            if data_hora_atual > expected_return_date:
+                i.status = 'ATRASADA'
+            elif data_hora_atual < expected_return_date:
+                i.status = 'DENTRO DO PRAZO'
+            elif i.returned_load_date > expected_return_date:
+                i.status = 'DESCARREGADA COM ATRASO'
+            elif i.returned_load_date < expected_return_date:
+                i.status = 'DESGARREGADA DENTRO DO PRAZO'
+        else:
+            i.status = 'DATA DE RETORNO NÃO DEFINIDA'
+        
+        i.save()
     # return JsonResponse(json_loads)
     return render(request, "load/dashboard-load.html", {"loads": loads_aux})

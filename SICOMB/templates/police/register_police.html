@@ -1,7 +1,11 @@
 {% extends 'base/footer.html' %}
+
 {% load static %}
 
 {% block css %}{% static 'css/register_police.css' %}{% endblock %}
+
+
+
 {% block title %}SICOMB - Registrar{% endblock title %}
 {% block title_top %}CADASTRO DE POLICIAL{% endblock title_top %}
 
@@ -31,29 +35,29 @@
          <div class="input-div">
 
             <div class="input-box">
-               <label for="{{ form.nome.id_for_label }}" class="custom-label">Nome</label>
+               <label for="{{ form.nome.id_for_label }}" class="custom-label">NOME</label>
                {{form.nome}}
-               <label for="{{ form.matricula.id_for_label }}" class="custom-label">Matrícula</label>
+               <label for="{{ form.matricula.id_for_label }}" class="custom-label">MATRÍCULA</label>
                <div class="input-search">
                   {{form.matricula}}
                   <button type="button" id="buscar-button"><img src="{% static 'img/search.png'%}"
                         alt="Procurar"></button>
                </div>
-               <label for="{{ form.telefone.id_for_label }}" class="custom-label">Telefone</label>
+               <label for="{{ form.telefone.id_for_label }}" class="custom-label">TELEFONE</label>
                {{form.telefone}}
-               <label for="{{ form.lotacao.id_for_label }}" class="custom-label">Lotação</label>
+               <label for="{{ form.lotacao.id_for_label }}" class="custom-label">LOTAÇÃO</label>
                {{form.lotacao}}
             </div>
             <div class="input-box">
-               <label for="{{ form.posto.id_for_label }}" class="custom-label">Posto</label>
+               <label for="{{ form.posto.id_for_label }}" class="custom-label">POSTO / GRADUAÇÃO</label>
                {{form.posto}}
-               <label for="{{ form.email.id_for_label }}" class="custom-label">Email</label>
+               <label for="{{ form.email.id_for_label }}" class="custom-label">E-MAIL</label>
                {{form.email}}
-               <label for="{{ form.senha.id_for_label }}" class="custom-label">Senha</label>
+               <label for="{{ form.senha.id_for_label }}" class="custom-label">SENHA</label>
                {{form.senha}}
                <div class="file-input-container">
                   {{form.foto}}
-                  <label for="{{ form.foto.id_for_label }}" class="custom-file-input">Anexar foto</label>
+                  <label for="{{ form.foto.id_for_label }}" class="custom-file-input">ANEXAR FOTO</label>
                </div>
                <p id="fileSelectedMessage"></p>
             </div>

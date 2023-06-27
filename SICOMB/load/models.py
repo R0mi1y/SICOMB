@@ -11,9 +11,10 @@ from django.utils import timezone
 class Load(models.Model):
     date_load = models.DateTimeField(default=timezone.now)
     expected_load_return_date = models.DateTimeField("Data Prevista de Devolução", null=True)
+    returned_load_date = models.DateTimeField("Data de Descarregamento", null=True)
     turn_type = models.CharField(max_length=20)
     # nomear atributo que receberá os dados: 6h, 12h, 24h, conserto, requisição judicial ou indeterminado
-    status = models.CharField("horário_carga", max_length=20, default="Pendente")
+    status = models.CharField("horário_carga", max_length=50, default="Pendente")
     police = models.ForeignKey(RegisterPolice, on_delete=models.CASCADE)
     # adjunct = models.ForeignKey(Adjunct, on_delete=models.CASCADE) #Pega a chave primária do adjunto
     

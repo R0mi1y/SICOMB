@@ -24,14 +24,15 @@
         </table>
         <div class="row_color"><span><hr></span></div>
         
-        <form action="" method="POST" >
+        <form method="post" action="." id="form-equipment">
             <div class="input-div">
             
                 {% csrf_token %}
                 <div class="input-box">
+                    <h4 class="input-title">ID</h4>
+                    <input type="text" class="input-data" placeholder="">
                     {% comment %} <label for="" class="input-title">DESCRIÇÃO</label> {% endcomment %}
-                    <h4 class="input-title">NOME</h4>
-                    <input type="text" class="input-data" placeholder="Digite o nome">
+                    
 
                     {% comment %} <label for="{{form.type}}" class="input-title">TIPO DE EQUIPAMENTO</label>
                     {{form.type}} {% endcomment %}
@@ -56,8 +57,8 @@
                                                 
                 </div>
                 <div class="input-box">
-                    <h4 class="input-title">ID</h4>
-                    <input type="text" class="input-data" placeholder="">
+                    <h4 class="input-title">DESCRIÇÃO</h4>
+                    <input type="text" class="input-data" placeholder="Descrição">
                     <h4 class="input-title">QUANTIDADE</h4>
                     <input type="text" class="input-data" placeholder="Digite a quantidade">
 
