@@ -25,4 +25,6 @@ urlpatterns = [
     path("lista_equipamentos/get", views.get_list_equipment),
     # Retorna a lista da views
     path("dashboard_cargas/", views.get_dashboard_loads, name='dashboard_cargas'),
+    #Retorna a o policial resposável pela carga e a lista de equipamentos da carga
+    path("<str:pk>/carga_policial/", views.get_carga_policial, name='carga_polical'),
 ]

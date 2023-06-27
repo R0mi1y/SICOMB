@@ -437,3 +437,15 @@ footer{
     background-color: lightgray;
     /* background-color: rgb(117, 117, 238); */
 }
+
+
+
+/* Página de carga_policial */
+.div_load_specification{
+    padding: 0 20px;
+}
+
+.div_load_specification .cargo{
+    display: flex;
+    justify-content: center;
+}

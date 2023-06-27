@@ -1,0 +1,133 @@
+{% extends 'base/footer.html' %}
+{% load static %}
+
+{% block title %}SISCOEM - Especificações da carga{% endblock title %}
+{% block title_top %}ESPECIFICAÇÕES DA CARGA - ID:{{load.pk}}{% endblock title_top %}
+
+{% block css %}{% static 'css/police_page.css' %}{% endblock %}
+{% block css2 %}{% static 'css/carga.css' %}{% endblock%}
+
+
+{% block content_final %}
+<div class="div_load_specification">
+    <section class="cargo">
+        <div id="police_officer_field" class="police_officer_field shadow">
+            <table class="police_officer_table">
+                <thead>
+                    <tr>
+                        <th class="cargo_title">POLICIAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="#" ><img class="shadow" src="/media/{{load.police.foto}}" alt=""></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{load.police.nome}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{load.police.matricula}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{load.police.telefone}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{load.police.lotacao}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{load.police.email}}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section>
+        <div class="cargo_itens shadow">
+            <!-- <h2>ITENS</h2> -->
+
+            <table class="table_itens">
+                <thead>
+                    <tr>
+                        <th colspan="100%" class="cargo_title">
+                            <h3>ITENS</h3>
+                        </th>
+                    </tr>
+                    <tr class="col-itens">
+                        <th>Nª</th>
+                        <th>Nº DE SÉRIE</th>
+                        <th>DESCRIÇÃO</th>
+                        <th>TIPO</th>
+                        <th>CALIBRE</th>
+                        <th>QUANTIDADE</th>
+                        <th>TAMANHO</th>
+                        <th>STATUS</th>
+                        <th>OBSERVAÇÃO</th>
+
+                    </tr>
+                </thead>
+                <tbody >
+                    {% for equipment_load in equipment_loads %}
+                    <tr>
+                        <td>
+                            {{ forloop.counter}}
+                        </td>
+                        <td>
+                            {{equipment_load.equipment.serial_number}}
+                            
+                        </td>
+                        <td>
+                            {{ equipment_load.equipment.armament.description }}
+                            {{ equipment_load.equipment.accessory.description }}
+                            {{ equipment_load.equipment.wearable.description }}
+                            {{ equipment_load.equipment.grenada.description }}
+                            {{equipment_load.bullet.description}}
+
+
+                        </td>
+                        <td>
+                            {{equipment_load.equipment.accessory.model}}
+                            {{equipment_load.equipment.armament.model}}
+                            {{equipment_load.equipment.wearable.model}}
+                            {{equipment_load.equipment.grenada.model}}
+                            <!-- {{equipment_load.equipment.bullet.model}} -->
+                            Não tem atributo tipo pra munição no BD
+
+
+
+                        </td>
+                        <td>
+                            {{equipment_load.equipment.armament.caliber}}
+                            {{equipment_load.bullet.caliber}}
+                            
+
+
+                        </td>
+                        <td>
+                            {{equipment_load.amount}}
+                            
+                            <!-- {{equipment_load.bullet.amount}} -->
+                            <!-- Está errado para a quantidade de munições. Está pegando qnt total e não o foi colocado na carga -->
+
+                        </td>
+
+                        <td>
+                            {{equipment_load.equipment.wearable.size}}
+                            <!-- {{equipment_load.equipment.size}} -->
+
+                        </td>
+                        <td>
+                            {{equipment_load.equipment.status}}
+
+                        </td>
+                        <td>{{equipment_load.observation}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock content_final %} 

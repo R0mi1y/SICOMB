@@ -1,6 +1,6 @@
 from django.forms import model_to_dict
-from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from load.models import *
@@ -353,3 +353,13 @@ def get_dashboard_loads(request):
         i.save()
     # return JsonResponse(json_loads)
     return render(request, "load/dashboard-load.html", {"loads": loads_aux})
+
+def get_carga_policial(request, pk):
+    print("Chegou em carga_policial")
+    load = get_object_or_404(Load, pk=pk)
+    equipment_loads = load.equipment_load_set.all()
+    print(load)
+    print(equipment_loads)
+    return render(request, "load/carga_policial.html", {'load': load, 'equipment_loads': equipment_loads})
+    
+    
