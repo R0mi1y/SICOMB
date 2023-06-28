@@ -449,3 +449,31 @@ footer{
     display: flex;
     justify-content: center;
 }
+
+/* Tabela de descargas */
+.unload_itens{
+        /* background-color: blue; */
+        border-radius: 10px;
+        height: 400px;
+        /* margin: 20px 0px; */
+        max-height: 400px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+
+}
+
+.unload_itens .table_itens .cargo_title{
+    font-family: interBold;
+    color: #5B4939;
+    height: 50px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 10px 10px 0px 0px;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+}
+
+.unload_itens .table_itens thead th {
+    min-width: 60px;
+}

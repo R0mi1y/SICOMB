@@ -10,21 +10,27 @@ function changeTemplate(template) {
             .then(response => response.json())
             .then(data => {
                 var table_element = document.createElement('table');
+                table_element.className = 'table_itens';
 
                 table_element.innerHTML = `
                 <thead>
                     <tr>
-                        <th colspan="100%">TABELA DE CARGAS</th>
+                        <th colspan="100%" class="cargo_title"><h3>TABELA DE CARGAS<h3></th>
                     </tr>
-                    <tr>
+                    <tr class="col-itens">
                         <th>ID DE CARGA</th>
                         <th>TIPO</th>
                         <th>QNT. DE ITENS</th>
                         <th>DATA</th>
                         <th>PREVISÃO DE DESCARGA</th>
+                        <th>STATUS</th>
                     </tr>
+                    
                 </thead>
                 <tbody>
+                    <tr>
+                        <td colspan="100%">Escolha qual carga deseja descarregar</td>
+                     </tr>
                     `;
                 console.log(data.loads_police);
                 console.log("Chegou no tbody de cargas")
@@ -45,12 +51,23 @@ function changeTemplate(template) {
                         + `</td>  
                         <td>` + 
                             data.loads_police[i].expected_load_return_date
-                        + `</td>  
+                        + `</td> 
+                        <td>` +
+                            data.loads_police[i].status
+                        + `</td>
                     </tr>`;
                 }
+
                 table_element.innerHTML += '</tbody>';
 
-                document.getElementById("means_room_content").appendChild(table_element);
+                var unload_div = document.createElement('div');
+                unload_div.className = 'unload_itens';
+                unload_div.appendChild(table_element);
+
+                // Adicione o elemento cargo_div onde desejar
+                document.getElementById("means_room_content").appendChild(unload_div);
+
+                // document.getElementById("means_room_content").appendChild(table_element);
                 setTimeout(() => {
                     var script = document.createElement('script');
                     script.src = '/static/js/fetch_unload.js';
