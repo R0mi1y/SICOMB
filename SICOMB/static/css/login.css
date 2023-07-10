@@ -2,11 +2,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'interRegular';
 }
 
 
 .top-side {
     background: white;
+    font-family: interExtraBold;
+    color:  rgb(91,73,57);
+    font-style: italic;
 }
 
 .header-content {
@@ -28,7 +32,7 @@
 }
 
 body {
-    background: #004593 !important;
+    background-color: rgb(91,73,57) !important;
 }
 
 .container {
@@ -120,15 +124,16 @@ input[type="submit"] {
 }
 
 input[type="submit"] {
-    background-color: #004593;
+    background-color:  rgb(91,73,57);
     font-size: 15px;
     font-weight: bold;
     color: white;
     cursor: pointer;
+    transition: .5s;
 }
 
 input[type="submit"]:hover {
-    background-color: #1691c6;
+    background-color:  rgb(91,73,57, 0.8);
 }
 
 .mat-top {
