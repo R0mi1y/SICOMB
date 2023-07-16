@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
@@ -20,7 +20,7 @@ def register_equipment(request):
 
                 return render(
                     request,
-                    "equipment/teste.html",
+                    "equipment/register-equipment.html",
                     {"msm": "Munição não existe na base de dados!", "form": form},
                 )
             bullet.amount = int(bullet.amount) + int(request.POST.get("amount"))
@@ -30,12 +30,105 @@ def register_equipment(request):
             if form.is_valid():
                 form.save()
             else:
-                return render(request, "equipment/teste.html", {"form": form})
+                return render(request, "equipment/register-equipment.html", {"form": form})
     form = EquipmentForm()  # Se for bem sucedido ele zera o form
 
-    return render(request, "equipment/teste.html", {"form": form})
+    return render(request, "equipment/register-equipment.html", {"form": form})
 
 
+@login_required
+def register_edit_model(request, model_name=None, id=None):
+    model = None
+    if model_name:
+        if model_name == 'armament':
+            if id:
+                try:
+                    model = Model_armament.objects.get(id=id)
+                except Model_armament.DoesNotExist:
+                    form = Model_armamentForm()
+            form = Model_armamentForm(instance=model)
+            
+            if request.method == "POST":
+                form = Model_armamentForm(request.POST, request.FILES)
+                
+                if form.is_valid():
+                    form.save()
+                    
+                    return redirect("view_register_model")
+            return render(request, "equipment/form-model.html", {"form": form})
+                
+        elif model_name == 'accessory':
+            if id:
+                try:
+                    model = Model_accessory.objects.get(id=id)
+                except Model_accessory.DoesNotExist:
+                    form = Model_accessoryForm()
+            form = Model_accessoryForm(instance=model)
+            
+            if request.method == "POST":
+                form = Model_accessoryForm(request.POST, request.FILES)
+                
+                if form.is_valid():
+                    form.save()
+                    
+                    return redirect("view_register_model")
+            return render(request, "equipment/form-model.html", {"form": form})
+                
+        elif model_name == 'wearable':
+            if id:
+                try:
+                    model = Model_wearable.objects.get(id=id)
+                except Model_wearable.DoesNotExist:
+                    form = Model_wearableForm()
+            form = Model_wearableForm(instance=model)
+            
+            if request.method == "POST":
+                form = Model_wearableForm(request.POST, request.FILES)
+                
+                if form.is_valid():
+                    form.save()
+                    
+                    return redirect("view_register_model")
+            return render(request, "equipment/form-model.html", {"form": form})
+                
+        elif model_name == 'grenada':
+            if id:
+                try:
+                    model = Model_grenada.objects.get(id=id)
+                except Model_grenada.DoesNotExist:
+                    form = Model_grenadaForm()
+            form = Model_grenadaForm(instance=model)
+            
+            if request.method == "POST":
+                form = Model_grenadaForm(request.POST, request.FILES)
+                
+                if form.is_valid():
+                    form.save()
+                    
+                    return redirect("view_register_model")
+            return render(request, "equipment/form-model.html", {"form": form})
+        
+        elif model_name == 'bullet':
+            if id:
+                try:
+                    model = Bullet.objects.get(id=id)
+                except Bullet.DoesNotExist:
+                    form = BulletForm()
+                    
+            form = BulletForm(instance=model)
+            
+            if request.method == "POST":
+                form = BulletForm(request.POST, request.FILES)
+                
+                if form.is_valid():
+                    form.save()
+                    
+                    return redirect("view_register_model")
+            return render(request, "equipment/form-model.html", {"form": form})
+                
+    return render(request, "equipment/form-model.html", {"form": None})
+    
+    
 def get_bullets(request):
     bullets = Bullet.objects.all()
     data = {}

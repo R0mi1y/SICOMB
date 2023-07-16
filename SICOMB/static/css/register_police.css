@@ -65,7 +65,6 @@
 
 .input-box {
     width: 50%;
-    
 }
 
 .custom-label {
@@ -73,6 +72,8 @@
     color: #5B4939;
     display: block;
     width: 100%;
+    text-align: left;
+    margin-left: 14%;
 }
 
 .input-data {

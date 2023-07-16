@@ -7,89 +7,74 @@
 
 {% block content_final %}
 
-
 <section class="section_register shadow">
-    <div class="registration shadow">
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="100%" class="title"><h3>FORMULÁRIO DE CADASTRO DE EQUIPAMENTOS</h3></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="sub-title">PREENCHA O FORMULÁRIO PARA O CADASTRO <br>DE UM NOVO EQUIPAMENTO</td>
-                </tr>
-            </tbody>   
-        </table>
-        <div class="row_color"><span><hr></span></div>
-        
-        <form method="post" action="." id="form-equipment">
-            <div class="input-div">
-            
-                {% csrf_token %}
-                <div class="input-box">
-                    <h4 class="input-title">ID</h4>
-                    <input type="text" class="input-data" placeholder="">
-                    {% comment %} <label for="" class="input-title">DESCRIÇÃO</label> {% endcomment %}
-                    
-
-                    {% comment %} <label for="{{form.type}}" class="input-title">TIPO DE EQUIPAMENTO</label>
-                    {{form.type}} {% endcomment %}
-                    <h4 class="input-title">TIPO DE EQUIPAMENTO</h4>
-                    <!-- <label for="equipment-type"></label> -->
-                    <div class="select">
-                        <select id="choicesTypes" name="equipment-type" class="select-field">
-                            <option selected disabled>ESCOLHA O TIPO DO EQUIPAMENTO</option>
-                        </select>
-                        <span class="custom-arrow"></span>
-                    </div>
-                    <h4 class="input-title">NÚMERO DE SÉRIE</h4>
-                    <input type="text" class="input-data" placeholder="Digite o e-mail">
-                    
-                    <h4 class="input-title">TIPO DE ARMAMENTO</h4>
-                    <!-- <label for="armament-type">SELECIONE O TIPO DO ARMAMENTO</label> -->
-                    <div class="select">
-                        <select id="choicesModels" name="armament-type" class="select-field">
-                            <option selected disabled>SELECIONE O TIPO DO ARMAMENTO</option>
-                        </select>
-                    </div>
-                                                
-                </div>
-                <div class="input-box">
-                    <h4 class="input-title">DESCRIÇÃO</h4>
-                    <input type="text" class="input-data" placeholder="Descrição">
-                    <h4 class="input-title">QUANTIDADE</h4>
-                    <input type="text" class="input-data" placeholder="Digite a quantidade">
-
-                    <h4 class="input-title">CALIBRE</h4>
-                    <!-- <label for="armament-type">SELECIONE O CALIBRE DO ARMAMENTO</label> -->
-                    <div class="select">
-                        <select name="armament-type" class="select-field" display="none">
-                            <option selected disabled>SELECIONE O CALIBRE DO ARMAMENTO</option>
-                            <option value=".22mm">.22MM</option>
-                            <option value=".40mm">.40MM</option>
-                            <option value="5.56mm">5.56MM</option>
-                            <option value="7.62mm">7.62MM</option>
-                            <option value="9mm">9MM</option>
-                        </select>
-                    </div>
-                    <h4 class="input-title">ANEXAR IMAGEM</h4>
-                    <div class="file-div">
-                        <input class="input-file" type="file" id="file" accept="image/*">
-                        <label class="file-label" for="file">UPLOAD DE ARQUIVO +</label>
-                    </div>
-                </div>
-            
-             </div>
-
-        </form>
-        <div class="finalize-registration">
-            <label><input class="box-shadow-registration" type="submit" value="FINALIZAR CADASTRO"></label>
+  <div class="registration shadow box-form">
+    <table>
+        <thead>
+            <tr>
+                <th colspan="100%" class="title"><h3>FORMULÁRIO DE CADASTRO DE EQUIPAMENTOS</h3></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="sub-title">PREENCHA O FORMULÁRIO PARA O CADASTRO <br>DE UM NOVO EQUIPAMENTO</td>
+            </tr>
+        </tbody>   
+    </table>
+    <div class="row_color"><span><hr></span></div>
+      
+    <form method="post" action="." class="form-element" id="form-equipment">
+      <div class="input-div">
+        {% csrf_token %}
+        <div class="input-box">
+          <h4 class="input-title">TAG</h4>
+          <h4 id="text-uid" class="input-title input-data">Passe a tag no sensor</h4>
         </div>
-    </div>
+        <div class="input-box">
+          <h4 for="{{ form.serial_number.id_for_label }}" class="input-title">{{ form.serial_number.label }}</h4>
+          {{ form.serial_number }}
+        </div>
+        <div for="{{ form.type.id_for_label }}" class="input-box">
+          <h4 for="{{ form.type.id_for_label }}" class="input-title">{{ form.type.label }}</h4>
+          <div class="select">
+                {{ form.type }}
+          </div>
+        </div>
+        <div class="input-box">
+          <h4 for="{{ form.grenada.id_for_label }}" class="input-title">{{ form.grenada.label }}</h4>
+          <div class="select">
+                {{ form.grenada }}
+          </div>
+        </div>
+        <div class="input-box">
+          <h4 for="{{ form.wearable.id_for_label }}" class="input-title">{{ form.wearable.label }}</h4>
+          <div class="select">
+                {{ form.wearable }}
+          </div>
+        </div>
+        <div class="input-box">
+          <h4 for="{{ form.accessory.id_for_label }}" class="input-title">{{ form.accessory.label }}</h4>
+          <div class="select">
+                {{ form.accessory }}
+          </div>
+        </div>
+        <div class="input-box">
+          <h4 for="{{ form.armament.id_for_label }}" class="input-title">{{ form.armament.label }}</h4>
+          <div class="select">
+                {{ form.armament }}
+          </div>
+        </div>
+        <div class="finalize-registration">
+          <label><input type="button" id="submit-btn" class="box-shadow-registration" value="Enviar"></label>
+          <label><input type="button" id="clear-btn" class="box-shadow-registration" value="limpar uid"></label>
+          <label><input id="bullet-btn" type="button" class="box-shadow-registration" value="Cadastrar Munição"></label>
+        </div>
+        {{ form.uid }}
+      </div> 
+    </form>
+  </div>
 </section>
-
+              
 <script src="{% static 'js/register_equipment.js' %}"></script>
-
+              
 {% endblock content_final %}

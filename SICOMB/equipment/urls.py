@@ -4,6 +4,11 @@ from .views import *
 # /equipment
 urlpatterns = [
     path("cadastro/", register_equipment, name="register_equipment"), # registra o equipamento
+    
+    path("modelo/cadastro/", register_edit_model, name="view_register_model"), # registra o equipamento
+    path("modelo/cadastro/<str:model_name>", register_edit_model, name="register_model"), # registra o equipamento
+    path("modelo/edit/<str:model>/<int:id>", register_edit_model, name="edit_model"), # registra o equipamento
+    
     path("get_disponivel", get_equipment_avalible), # retorna em json o equipamento do uid inserido (em formato JSON)
     path("get_indisponivel", get_equipment_unvalible), # retorna em json o equipamento do uid inserido (em formato JSON)
     path("get/<str:serial_number>", get_equipment_serNum), # retorna em o equipamento do uid inserido (em formato JSON)

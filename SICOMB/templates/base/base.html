@@ -32,6 +32,10 @@
             font-family: interExtraLight;
             src: url({% static 'fonts/Inter-ExtraLight.ttf' %});
         }
+
+        html {
+            min-height: 100vh;
+        }
     </style>
 </head>
 
@@ -77,6 +81,10 @@
                     <li onclick="window.location='/equipamento/cadastro/'">
                         <img src="{% static 'img/warehouse.png' %}" alt="">
                         <span>Cadastrar Equipamento</span>
+                    </li>
+                    <li onclick="window.location='/equipamento/modelo/cadastro/'">
+                        <img src="{% static 'img/warehouse.png' %}" alt="">
+                        <span>Cadastrar Modelo</span>
                     </li>
                 </ul>
                 {% comment %} <div class="balls">

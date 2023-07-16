@@ -2,6 +2,7 @@
 
 .container{
     flex: 1;
+    min-height: 100vh;
 }
 
 .content{
@@ -260,7 +261,7 @@ table img{
     
 }
 .dashboard_loads{
-    width: 61%;
+    width: 85%;
 }
 .cargo_itens table{
     /* width: 500px; */

@@ -3,6 +3,25 @@
 .container {
     flex: 1;
 }
+.define-registration-div {
+    display: grid;
+    justify-items: center; /* alinhamento horizontal dos elementos */
+    align-items: center;
+    grid-template-columns: 1fr 1fr; /* duas colunas de largura igual */
+}
+
+.a-register-btn {
+    padding: 10px 20px;
+    background-color: rgb(91,73,57, 0.9);
+    border-radius: 10px;
+    border: 1px solid #90816A;
+    color:#fff;
+    font-family: interBold;
+    font-size: 15px;
+    box-shadow: -2px 4px 2px rgb(91,73,57);
+    margin: 20px;
+    width: 200px;
+}
 
 .section_register{
     display: flex;
@@ -139,12 +158,8 @@
     padding: 6% 5%;
 }
 
-.select-field option{
-    
-}
-
 .input-file{
-    display: none;
+    display: none !important;
 }
 
 .file-label{

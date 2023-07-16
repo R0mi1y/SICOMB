@@ -118,15 +118,12 @@ USE_TZ = True
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "sicomb_2",
+        "NAME": "sicomb",
         "USER": "root",
         "OPTIONS": {
             "sql_mode": "traditional",
         },
-        # <<<<<<< HEAD
-        'PASSWORD': '12345679',
-        # =======
-        # "PASSWORD": "",
+        'PASSWORD': '',
         "HOST": "localhost",
         "PORT": "3306",
     }

@@ -13,4 +13,8 @@ footer {
     color: #48382B;
     padding: 0px 20px;
     border-top: 1px solid rgb(91,73,57, 0.2);
+    position: relative;
+    bottom: 0px;
+    background-color: #fff;
+    width: 90%;
 }

@@ -22,8 +22,7 @@ header {
 }
 
 #navbar {
-    
-    display: grid;
+    height: 100vh;
     justify-content: center;
 }
 
@@ -71,7 +70,6 @@ ul {
     font-weight: normal;
     font-size: 16px;
     margin: 25px 0px 25px 10px;
-
 }
 
 #navbar li img {

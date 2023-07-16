@@ -18,14 +18,7 @@ function change_field() {
         choices[i].value = '';
     }
 
-    // nova label
-    var label = "<label id='lable-type-input' for='type-choices-" +
-        selectedValue + "'>Modelo de " +
-        choicesTypes.options[choicesTypes.selectedIndex].text + "</label>";
-
     if (selectedValue != '') { // se tiver selecionado algo
-        choicesTypes.insertAdjacentHTML('afterend', label);
-
         choiceModels.style.display = 'block'; // revela o select certo
         choiceModels.disabled = false; // Habilita o select pra poder mudar
     }
