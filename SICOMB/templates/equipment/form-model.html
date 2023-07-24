@@ -23,7 +23,7 @@
     </table>
     <div class="row_color"><span><hr></span></div>
     {% if form %}
-        <form method="post" action="." class="form-element" id="form-equipment" enctype="multipart/form-data">
+        <form method="post" action="{% url "register_model" model_name=model %}" class="form-element" id="form-equipment" enctype="multipart/form-data">
             <div class="input-div">
                 {% csrf_token %}
                 {% for field in form %}
@@ -34,6 +34,9 @@
                                 <label class="file-label" for="{{ field.id_for_label }}">UPLOAD DE ARQUIVO +</label>
                                 <input class="input-file" name="{{ field.name }}" type="file" id="{{ field.id_for_label }}" accept="image/*">
                             </div>
+                            {% if field.error %}
+                                {{ field.error }}
+                            {% endif %}
                         </div>
                     {% elif field.name == "caliber" %}
                         <div class="input-box">

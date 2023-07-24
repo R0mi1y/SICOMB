@@ -260,9 +260,6 @@ table img{
     border-radius: 10px;
     margin: 20px 0px;
     max-height: 75vh;
-    overflow-y: scroll;
-    overflow-x: scroll;
-    
 }
 .dashboard_loads{
     width: 85%;
@@ -304,17 +301,7 @@ table img{
 .table_itens td, th{
     padding: 0px 11px;
 }
-/* section.table_section{
-    overflow: hidden;
-} */
-/* .table_itens tbody td a{
-    background: red;
-    color: #fff;
-    font-family: 'interExtraBold';
-    font-size: 17px;
-} */
 .table_itens thead{
-    position: sticky;
     top: 0;
 }
 .table_itens thead th{
@@ -457,14 +444,11 @@ footer{
 
 /* Tabela de descargas */
 .unload_itens{
-        /* background-color: blue; */
-        border-radius: 10px;
-        height: 400px;
-        /* margin: 20px 0px; */
-        max-height: 400px;
-        overflow-y: scroll;
-        overflow-x: scroll;
-
+    /* background-color: blue; */
+    border-radius: 10px;
+    height: 400px;
+    /* margin: 20px 0px; */
+    max-height: 400px;
 }
 
 .unload_itens .table_itens .cargo_title{

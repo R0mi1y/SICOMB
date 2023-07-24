@@ -1,0 +1,197 @@
+{% extends 'base/footer.html' %}
+{% load static %}
+
+{% block title %}SICOMB - Lista equipamentos{% endblock title %}
+{% block title_top %}LISTA DE EQUIPAMENTOS{% endblock title_top %}
+{% block css2 %}{% static 'css/equipamentos.css' %}{% endblock%}
+
+{% block footer %}
+{% endblock footer %}
+{% block content_final %}
+<style>
+    .footer-div{
+        position: absolute;
+    }
+    .container {
+        max-width: 100%;
+    }
+    .dashboard_loads{
+        width: auto;
+    }
+    .button_promote {
+        width: 100%;
+        padding: 5px;
+        border-radius: 10px;
+        background-color: rgb(130, 241, 130);
+    }
+    .button_promote:hover {
+        background-color: rgb(90, 206, 90);
+    }
+    .button_delete {
+        width: 100%;
+        padding: 5px;
+        border-radius: 10px;
+        background-color: rgb(241, 130, 130);
+    }
+    .button_delete:hover {
+        background-color: rgb(206, 90, 90);
+    }
+    .cargo_itens {
+        overflow-y: none;
+        overflow-x: none;
+    }
+</style>
+<section style="padding: 0px 20px">
+    <div class="cargo_itens dashboard_loads shadow"> 
+         <table class="table_itens">
+            <thead>
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3 >ARMAMENTOS</h3></th>
+                </tr>
+                <tr class="col-itens">
+                    <th>NUMERO DE SÉRIE</th>
+                    <th>STATUS</th>
+                    <th>MODELO</th>
+                    <th>CALIBRE</th>
+                    <th>EDITAR</th>
+                    <th>DELETAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in equipments %}
+                {% if i.armament %}
+                <tr>
+                    <td>{{ i.serial_number }}</td>
+                    <td>{{ i.status }}</td>
+                    <td>{{ i.armament.model }}</td>
+                    <td>{{ i.armament.caliber }}</td>
+                    <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_equipment" id=i.pk %}'" name="pk" value="{{ i.pk }}">EDITAR<button></td>
+                    <td class="click_redirect"><button class="button_delete" type="button" onclick="window.location='{% url "delete_equipment" id=i.pk %}'" name="pk" value="{{ i.pk }}">DELETAR<button></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+         <table class="table_itens">
+            <thead>
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3>GRANADAS </h3></th>
+                </tr>
+                <tr class="col-itens">
+                    <th>NUMERO DE SÉRIE</th>
+                    <th>STATUS</th>
+                    <th>MODELO</th>
+                    <th>EDITAR</th>
+                    <th>DELETAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in equipments %}
+                {% if i.grenada %}
+                <tr>
+                    <td>{{ i.serial_number}}</td>
+                    <td>{{ i.status }}</td>
+                    <td>{{ i.grenada.model }}</td>
+                    <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_equipment" id=i.pk %}'" name="pk" value="{{ i.pk }}">EDITAR<button></td>
+                    <td class="click_redirect"><button class="button_delete" type="button" onclick="window.location='{% url "delete_equipment" id=i.pk %}'" name="pk" value="{{ i.pk }}">DELETAR<button></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+         <table class="table_itens">
+            <thead>
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3>VESTIMENTOS </h3></th>
+                </tr>
+                <tr class="col-itens">
+                    <th>NUMERO DE SÉRIE</th>
+                    <th>STATUS</th>
+                    <th>MODELO</th>
+                    <th>TAMANHO</th>
+                    <th>EDITAR</th>
+                    <th>DELETAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in equipments %}
+                {% if i.wearable %}
+                <tr>
+                    <td>{{ i.serial_number}}</td>
+                    <td>{{ i.status }}</td>
+                    <td>{{ i.wearable.model }}</td>
+                    <td>{{ i.wearable.size }}</td>
+                    <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_equipment" id=i.pk %}'" name="pk" value="{{ i.pk }}">EDITAR<button></td>
+                    <td class="click_redirect"><button class="button_delete" type="button" onclick="window.location='{% url "delete_equipment" id=i.pk %}'" name="pk" value="{{ i.pk }}">DELETAR<button></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+         <table class="table_itens">
+            <thead>
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3>ACESSÓRIOS </h3></th>
+                </tr>
+                <tr class="col-itens">
+                    <th>NUMERO DE SÉRIE</th>
+                    <th>STATUS</th>
+                    <th>MODELO</th>
+                    <th>EDITAR</th>
+                    <th>DELETAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for i in equipments %}
+                    {% if i.accessory %}
+                    <tr>
+                        <td>{{ i.serial_number}}</td>
+                        <td>{{ i.status }}</td>
+                        <td>{{ i.accessory.model }}</td>
+                        <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_equipment" id=i.pk %}'" name="pk" value="{{ i.pk }}">EDITAR<button></td>
+                        <td class="click_redirect"><button class="button_delete" type="button" onclick="window.location='{% url "delete_equipment" id=i.pk %}'" name="pk" value="{{ i.pk }}">DELETAR<button></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% if messages %}
+<script>
+
+   // Função para fechar o alerta
+   function closeAlert(alert) {
+      alert.remove();
+   }
+
+   // Função para exibir as mensagens de sucesso
+   function showSuccessMessages() {
+      {% for message in messages %}
+      var messageText = "{{ message }}";
+      // Crie um elemento de alerta para cada mensagem
+      var alert = document.createElement('div');
+      alert.className = 'alert alert-success';
+      alert.textContent = messageText;
+      // Crie um botão de fechamento (X)
+      var closeButton = document.createElement('span');
+      closeButton.className = 'alert-close';
+      closeButton.textContent = 'X';
+      closeButton.onclick =window.location=' function () {
+         closeAlert'(alert);
+      };
+      alert.appendChild(closeButton);
+      // Adicione o elemento ao corpo do documento
+      document.body.appendChild(alert);
+      // Defina um tempo limite para remover o elemento após 5 segundos
+      setTimeout(function () {
+         closeAlert(alert);
+      }, 5000); // 5000 milissegundos = 5 segundos
+      {% endfor %}
+   }
+
+   // Chame a função para exibir as mensagens de sucesso
+   showSuccessMessages();
+</script>
+{% endif %}
+{% endblock content_final %} 

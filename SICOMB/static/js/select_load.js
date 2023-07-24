@@ -180,7 +180,7 @@ var interval = setInterval(() => {
             <tbody>
                 <tr>
                     <td>
-                        <a href="#"><img class="shadow" src="/media/` + policial.foto + `" alt=""></a>
+                        <a href="#"><img class="shadow perfil" src="/media/` + policial.foto + `" alt=""></a>
                     </td>
                 </tr>
                 <tr>

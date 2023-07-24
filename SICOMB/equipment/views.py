@@ -10,7 +10,20 @@ uids = []
 
 # Registra o equipamento
 @login_required
-def register_equipment(request):
+def delete_equipment(request, id):
+    try:
+        Equipment.objects.get(pk=id).delete()
+    except Equipment.DoesNotExist:
+        pass
+        
+    return redirect("manage_equipment")
+
+@login_required
+def register_edit_equipment(request, id=None):
+    equipment = None
+    if id:
+        equipment = Equipment.objects.get(pk=id)
+    
     if request.method == "POST":
         if request.POST.get("bullet") and request.POST.get("amount"):
             try:
@@ -26,12 +39,12 @@ def register_equipment(request):
             bullet.amount = int(bullet.amount) + int(request.POST.get("amount"))
             bullet.save()
         else:
-            form = EquipmentForm(request.POST)
+            form = EquipmentForm(request.POST, instance=equipment)
             if form.is_valid():
                 form.save()
             else:
                 return render(request, "equipment/register-equipment.html", {"form": form})
-    form = EquipmentForm()  # Se for bem sucedido ele zera o form
+    form = EquipmentForm(instance=equipment)  # Se for bem sucedido ele zera o form
 
     return render(request, "equipment/register-equipment.html", {"form": form})
 
@@ -54,8 +67,8 @@ def register_edit_model(request, model_name=None, id=None):
                 if form.is_valid():
                     form.save()
                     
-                    return redirect("view_register_model")
-            return render(request, "equipment/form-model.html", {"form": form})
+                    return redirect("manage_model")
+            return render(request, "equipment/form-model.html", {"form": form, "model": model_name})
                 
         elif model_name == 'accessory':
             if id:
@@ -71,8 +84,8 @@ def register_edit_model(request, model_name=None, id=None):
                 if form.is_valid():
                     form.save()
                     
-                    return redirect("view_register_model")
-            return render(request, "equipment/form-model.html", {"form": form})
+                    return redirect("manage_model")
+            return render(request, "equipment/form-model.html", {"form": form, "model": model_name})
                 
         elif model_name == 'wearable':
             if id:
@@ -88,8 +101,8 @@ def register_edit_model(request, model_name=None, id=None):
                 if form.is_valid():
                     form.save()
                     
-                    return redirect("view_register_model")
-            return render(request, "equipment/form-model.html", {"form": form})
+                    return redirect("manage_model")
+            return render(request, "equipment/form-model.html", {"form": form, "model": model_name})
                 
         elif model_name == 'grenada':
             if id:
@@ -105,8 +118,8 @@ def register_edit_model(request, model_name=None, id=None):
                 if form.is_valid():
                     form.save()
                     
-                    return redirect("view_register_model")
-            return render(request, "equipment/form-model.html", {"form": form})
+                    return redirect("manage_model")
+            return render(request, "equipment/form-model.html", {"form": form, "model": model_name})
         
         elif model_name == 'bullet':
             if id:
@@ -123,8 +136,8 @@ def register_edit_model(request, model_name=None, id=None):
                 if form.is_valid():
                     form.save()
                     
-                    return redirect("view_register_model")
-            return render(request, "equipment/form-model.html", {"form": form})
+                    return redirect("manage_model")
+            return render(request, "equipment/form-model.html", {"form": form, "model": model_name})
                 
     return render(request, "equipment/form-model.html", {"form": None})
     
@@ -371,3 +384,53 @@ def set_uid(request):
 def get_uids(request):
     dicionario = dict(enumerate(uids))
     return JsonResponse(dicionario)
+
+
+@login_required
+def delete_model(request, model_name=None, id=None):
+    data = {}
+    if model_name:
+        if model_name == 'armament':
+            Model_armament.objects.get(pk=id).delete()
+            data['msm'] = 'Deletado com sucesso!'
+                
+        elif model_name == 'accessory':
+            Model_accessory.objects.get(pk=id).delete()
+            data['msm'] = 'Deletado com sucesso!'
+                
+        elif model_name == 'wearable':
+            Model_wearable.objects.get(pk=id).delete()
+            data['msm'] = 'Deletado com sucesso!'
+                
+        elif model_name == 'grenada':
+            Model_grenada.objects.get(pk=id).delete()
+            data['msm'] = 'Deletado com sucesso!'
+            
+        else:
+            data = {
+                'armament': Model_armament.objects.all(),
+                'accessory': Model_accessory.objects.all(),
+                'wearable': Model_wearable.objects.all(),
+                'grenada': Model_grenada.objects.all(),
+                'msm': 'Falha no deletar!'
+            }
+            return render(request, "equipment/models.html", data)
+    
+        return redirect("manage_model")
+
+    
+@login_required
+def manage_equipment(request):
+    return render(request, "equipment/equipments.html", {'equipments': Equipment.objects.all()})
+
+
+@login_required
+def manage_model(request):
+    data = {
+        'armament': Model_armament.objects.all(),
+        'accessory': Model_accessory.objects.all(),
+        'wearable': Model_wearable.objects.all(),
+        'grenada': Model_grenada.objects.all(),
+    }
+    
+    return render(request, "equipment/models.html", data)
