@@ -47,38 +47,45 @@ fetch("http://localhost:8000/carga/lista_equipamentos/get") // faz uma requisiç
     });
 
 
-// faz a requisição dos dados do equipamento atual de forma igual às api's
 function fetchEquipmentData(serial_number) {
-    let url = serial_number == null || serial_number == undefined ? 'http://localhost:8000/equipamento/get_disponivel' : 'http://localhost:8000/equipamento/get/' + serial_number;
-    fetch(url) // busca o equipamento do uid inserido
-        .then(response => response.json())
-        .then(data => {
-            if (data.uid !== '') {
-                // percorre a lista comparando o que já tem com o novo equipamento
-                if (data.equipment.serial_number != null && data.equipment.serial_number != undefined) {
-                    for (let key in list_equipment) {
-                        if (key == data.equipment.serial_number) {
-                            popUp('Equipamento já na lista!');
-                            return;
-                        }
-                    }
-                }
-                //se não tiver cadastrado
-                if (data.registred !== false) {
-                    list_awate_equipment.push(data);
+  // Caso a função receba o parâmetro serial_number, ela requisita o equipamento correspondente.
+  // Caso contrário, ela requisita o equipamento passado no sensor.
+  let url = (serial_number == null || serial_number == undefined ? 
+    'http://localhost:8000/equipamento/get_disponivel' : 
+    'http://localhost:8000/equipamento/get/' + serial_number);
 
-                    checkAwateList();
-                }
+  // Faz a requisição para a URL especificada
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.uid !== '') {
+        // Verifica se o equipamento já está na lista
+        if (data.equipment.serial_number != null && data.equipment.serial_number != undefined) {
+          for (let key in list_equipment) {
+            if (key == data.equipment.serial_number) {
+              popUp('Equipamento já na lista!');
+              return;
             }
-            if (data.msm != null) { // se tiver uma mensagem de erro na reguisição
-                popUp(data.msm);
+          }
+        }
 
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao buscar dados do equipamento:', error);
-        });
+        // Se o equipamento não estiver cadastrado, adiciona-o à lista de equipamentos em espera
+        if (data.registred !== false) {
+          list_awate_equipment.push(data);
+          checkAwateList();
+        }
+      }
+
+      // Se houver uma mensagem de erro na resposta, exibe-a
+      if (data.msm != null) {
+        popUp(data.msm);
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao buscar dados do equipamento:', error);
+    });
 }
+
 
 
 // Cria um intervalo para chamar a função a cada 1 segundo

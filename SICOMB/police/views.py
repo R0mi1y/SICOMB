@@ -1,5 +1,5 @@
 from django.forms import model_to_dict
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from police.forms import UserForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
@@ -142,3 +142,25 @@ def get_login_police(request):
         return JsonResponse({})
 
     return JsonResponse(police)
+
+
+@login_required
+def promote_police(request, id=None):
+    if id:
+        police = RegisterPolice.objects.get(pk=id)
+    
+    if request.method == 'POST':
+        Adjunct.objects.create(
+            password=police.senha,
+            foto=police.foto,
+            email=police.email,
+            telefone=police.telefone,
+            posto="Adjunto",
+            matricula=police.matricula,
+            lotacao=police.lotacao,
+            username=police.nome,
+        )
+        
+        police.delete()
+    
+    return render(request, 'police/promote_police.html', {"polices": RegisterPolice.objects.all()})

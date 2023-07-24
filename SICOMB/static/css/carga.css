@@ -253,9 +253,8 @@ table img{
 .cargo_itens{
     background-color: #fff;
     border-radius: 10px;
-    height: 470px;
     margin: 20px 0px;
-    max-height: 470px;
+    max-height: 75vh;
     overflow-y: scroll;
     overflow-x: scroll;
     

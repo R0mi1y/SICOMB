@@ -5,11 +5,12 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
-class Police(User):
-    patent = models.CharField("Patente", max_length=100)
-    plate = models.CharField("Matricula", max_length=20)
-    posto = models.CharField(max_length=10, default="Policial")
-    telefone = models.CharField(max_length=11)
+class Adjunct(User):
+    matricula = models.CharField(max_length=20, primary_key=True)
+    telefone = models.CharField(max_length=20)
+    lotacao = models.CharField(max_length=50)
+    posto = models.CharField(max_length=10)
+    foto = models.FileField(upload_to="media/")
 
 
 class RegisterPolice(models.Model):

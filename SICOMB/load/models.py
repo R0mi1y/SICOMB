@@ -1,6 +1,6 @@
 from django.db import models
 from equipment.models import Equipment, Bullet
-from police.models import Police, RegisterPolice
+from police.models import RegisterPolice
 from django.utils import timezone
 
 # from adjunct.models import Adjunct #Para importar o modelo do Adjunto
