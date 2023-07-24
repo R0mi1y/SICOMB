@@ -7,6 +7,17 @@
 {% block title_top %}FAZER CARGA{% endblock title_top %}
 
 {% block content_final %}
+<style>
+    .wating_list_div {
+        {% comment %} width: 140px;
+        height: 400px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 5px 10px rgb(0,0,0,0.50);
+        justify-content: center; {% endcomment %}
+        display: none;
+    }
+</style>
     <div class="content">
         <!-- <main role="main" > -->
         <section class="cargo">
@@ -31,7 +42,7 @@
                 </div>
             </div>
 
-            <div class="police_officer_field shadow">
+            <div class="wating_list_div">
                 <table class="police_officer_table">
                     <thead>
                         <tr>
@@ -69,8 +80,6 @@
         </section>
         <section>
             <div class="cargo_itens shadow">
-                <!-- <h2>ITENS</h2> -->
-
                 <table class="table_itens">
                     <thead>
                         <tr>
@@ -93,31 +102,13 @@
                     <tbody  id="body_table_itens">
                     </tbody>
                 </table>
-
-                {% comment %} <div class="waiting_auth">
-                    <table class="alert_auth">
-                        <thead>
-                            <tr>
-                                <th>AGUARDANDO <br> AUTENTICAÇÃO</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    É preciso que o policial solicitante faça autenticação por meio da digital ou matrícula e senha!
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div> {% endcomment %}
             </div>
         </section>
         <div class="finalize_load">
             <form action="." method="POST" id="form-equipment">
                 {% csrf_token %}
-                <div class=""><input class="btn_finalize btn_cancel shadow" type="button" onclick="window.location.href = './cancelar';" value="Limpar lista"></div>
-                <div class=""><input class="btn_finalize btn_confirm shadow" id="submit_btn" disabled type="button" onclick="confirmCargo()" value="Finalizar"></div>
+                <div class=""><input class="btn_finalize btn_cancel shadow" type="button" onclick="window.location.href = './cancelar';" value="Limpar lista">
+                <input class="btn_finalize btn_confirm shadow" id="submit_btn" disabled type="button" onclick="confirmCargo()" value="Finalizar"></div>
             </form>
         </div>
     </div>

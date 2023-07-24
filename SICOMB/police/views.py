@@ -145,22 +145,50 @@ def get_login_police(request):
 
 
 @login_required
-def promote_police(request, id=None):
-    if id:
-        police = RegisterPolice.objects.get(pk=id)
+def promote_police(request):
     
     if request.method == 'POST':
-        Adjunct.objects.create(
-            password=police.senha,
-            foto=police.foto,
-            email=police.email,
-            telefone=police.telefone,
-            posto="Adjunto",
-            matricula=police.matricula,
-            lotacao=police.lotacao,
-            username=police.nome,
-        )
-        
-        police.delete()
-    
+        id = request.POST.get("pk")
+        try:
+            police = RegisterPolice.objects.get(pk=id)
+            
+            Adjunct.objects.create(
+                password=police.senha,
+                foto=police.foto,
+                email=police.email,
+                telefone=police.telefone,
+                posto="Adjunto",
+                matricula=police.matricula,
+                lotacao=police.lotacao,
+                username=police.nome,
+            )
+            police.delete()
+            return render(request, 'police/promote_police.html', {"msm": "Promovido com sucesso!","polices": RegisterPolice.objects.all()})
+        except:
+            return render(request, 'police/promote_police.html', {"msm": "Falha, já existe um adjunto com esse nome!","polices": RegisterPolice.objects.all()})
     return render(request, 'police/promote_police.html', {"polices": RegisterPolice.objects.all()})
+
+
+@login_required
+def reduce_police(request):
+    
+    if request.method == 'POST':
+        id = request.POST.get("pk")
+        try:
+            adjunct = Adjunct.objects.get(pk=id)
+            
+            RegisterPolice.objects.create(
+                senha=adjunct.password,
+                foto=adjunct.foto,
+                email=adjunct.email,
+                telefone=adjunct.telefone,
+                posto="Policial",
+                matricula=adjunct.matricula,
+                lotacao=adjunct.lotacao,
+                nome=adjunct.username,
+            )
+            adjunct.delete()
+            return render(request, 'police/reduce_adjunct.html', {"msm": "Rebaixado com sucesso!","adjuncts": Adjunct.objects.all()})
+        except:
+            return render(request, 'police/reduce_adjunct.html', {"msm": "Falha, já existe um policial com esse nome!","adjuncts": Adjunct.objects.all()})
+    return render(request, 'police/reduce_adjunct.html', {"adjuncts": Adjunct.objects.all()})

@@ -121,25 +121,37 @@ function register_bullet() {
             var csrf = document.querySelector('input[type="hidden"][name="csrfmiddlewaretoken"]');
             var bullet_html =
             `
-            <form method="post" action=".">
-            ` + csrf.outerHTML + `
-            <label for="dropdown_bullets">Munições já cadastradas:</label>
-            <select name="bullet" id="dropdown_bullets" required>
-            ` +
-                bullet_options
-            + `
-            </select>
-            <br>
-            <label for="input_amount">Número:</label>
-            <input name="amount" type="number" id="input_amount" required>
-            
-            <input type="submit" value="Adicionar">
+            <form method="post" action="." class="form-element" style="min-height:220px;min-whidth:300px;">
+            <div style="background-color: rgb(91,73,57, 0.9); whidth: 100%; border-radius: 20px; text-align:center; color: #fff; padding:5px;">
+            <h3>
+            CADASTRAR MUNIÇÃO
+            </h3>
+            </div>
+                <div class="input-div">
+                ` + csrf.outerHTML + `
+                <div class="input-box">
+                    <h4 class="input-title">MUNIÇÕES</h4>
+                    <div class="select">
+                        <select name="bullet" class="select-field" id="dropdown_bullets" required>
+                ` +
+                    bullet_options
+                + `
+                        </select>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <h4 class="input-title" for="input_amount">QUANTIDADE:</h4>
+                    <input name="amount" class="input-data" type="number" id="input_amount" required>
+                </div>
+                <div class="finalize-registration" style="padding-bottom: 0px;">
+                    <label><input type="submit" id="submit-btn" class="box-shadow-registration" value="Adicionar"></label>
+                </div>
             </form>
             `;
 
-            popUp("Cadastro de munição", true, false, bullet_html);
+            popUp("", true, false, bullet_html);
         });
 }
 
 // Botão para cadastrar munição
-document.getElementById('bullet-btn').addEventListener('click', register_bullet);
+document.getElementById('bullet-btn').addEventListener('click', );
