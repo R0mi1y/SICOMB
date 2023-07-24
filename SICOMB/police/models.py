@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 
 class Adjunct(User):
+    nome = models.CharField(max_length=100, unique=True)
     matricula = models.CharField(max_length=20, primary_key=True)
     telefone = models.CharField(max_length=20)
     lotacao = models.CharField(max_length=50)

@@ -160,7 +160,8 @@ def promote_police(request):
                 posto="Adjunto",
                 matricula=police.matricula,
                 lotacao=police.lotacao,
-                username=police.nome,
+                username=police.matricula,
+                nome=police.nome,
             )
             police.delete()
             return render(request, 'police/promote_police.html', {"msm": "Promovido com sucesso!","polices": RegisterPolice.objects.all()})
@@ -185,7 +186,7 @@ def reduce_police(request):
                 posto="Policial",
                 matricula=adjunct.matricula,
                 lotacao=adjunct.lotacao,
-                nome=adjunct.username,
+                nome=adjunct.nome,
             )
             adjunct.delete()
             return render(request, 'police/reduce_adjunct.html', {"msm": "Rebaixado com sucesso!","adjuncts": Adjunct.objects.all()})
