@@ -43,6 +43,7 @@
 
     {% block content_main %}
     <main>
+        {% block nav %}
         <header>
             <nav id="navbar">
                 <ul class="alter">
@@ -104,6 +105,7 @@
 
             </nav>
         </header>
+        {% endblock nav %}
         
         {% block content %}{% endblock content %}
         

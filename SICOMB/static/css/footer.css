@@ -3,6 +3,8 @@ footer {
     background-color: #fff;
     width: 100%;
     bottom: 0;
+    height: 70px;
+    display: flex;
 }
 
 .footer-div {

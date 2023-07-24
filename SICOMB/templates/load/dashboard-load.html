@@ -38,12 +38,12 @@
             <tbody>
                 {% for i in loads %}
                 <tr>
-                    <td class="click_redirect"><a  href="/carga/{{i.0.pk}}/carga_policial/" >{{ i.0.pk }}</a></td>
+                    <td class="click_redirect"><a href="/carga/{{i.0.pk}}/carga_policial/" >{{ i.0.pk }}</a></td>
                     <td>{{i.0.turn_type}}</td>
-                    <td class="click_redirect"><a  href="">{{ i.0.police.nome }}</a></td>
-                    <td>{{ i.0.police.matricula }}</td>
-                    <td>{{ i.0.police.posto }}</td>
-                    <td class="click_redirect" ><a  href="">{{ i.0.adjunct.nome|default:'-' }}</a></td>
+                    <td class="click_redirect"><a href="">{{ i.0.police.nome|default:'Policial não cadastrado' }}</a></td>
+                    <td>{{ i.0.police.matricula |default:'Policial não cadastrado'}}</td>
+                    <td>{{ i.0.police.posto |default:'Policial não cadastrado'}}</td>
+                    <td class="click_redirect" ><a href="">{{ i.0.adjunct.nome|default:'Adjunto não cadastrado' }}</a></td>
                     <td>{{ i.1 }}</td>
                     <td>{{ i.0.date_load|date:"d/m/Y  H:i:s" }}</td>
                     <td>{{ i.0.expected_load_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>
