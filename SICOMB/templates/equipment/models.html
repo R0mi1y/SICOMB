@@ -43,7 +43,7 @@
 </style>
 <section style="padding: 0px 20px">
     <div class="cargo_itens dashboard_loads shadow"> 
-         <table class="table_itens">
+        <table class="table_itens">
             <thead>
                 <tr>
                     <th colspan="100%" class="cargo_title"><h3 >ARMAMENTOS </h3></th>
@@ -70,7 +70,9 @@
                 {% endfor %}
             </tbody>
         </table>
-         <table class="table_itens">
+    </div>
+    <div class="cargo_itens dashboard_loads shadow"> 
+        <table class="table_itens">
             <thead>
                 <tr>
                     <th colspan="100%" class="cargo_title"><h3>GRANADAS </h3></th>
@@ -95,6 +97,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
+        <div class="cargo_itens dashboard_loads shadow">
          <table class="table_itens">
             <thead>
                 <tr>
@@ -122,7 +126,9 @@
                 {% endfor %}
             </tbody>
         </table>
-         <table class="table_itens">
+        </div>
+        <div class="cargo_itens dashboard_loads shadow">
+        <table class="table_itens">
             <thead>
                 <tr>
                     <th colspan="100%" class="cargo_title"><h3>ACESSÓRIOS </h3></th>
@@ -136,7 +142,7 @@
                 </tr>
             </thead>
             <tbody>
-                    {% for i in accessory %}
+                {% for i in accessory %}
                     <tr>
                         <td>{{ i.id }}</td>
                         <td>{{ i.model }}</td>
@@ -144,9 +150,12 @@
                         <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_model" model_name="accessory" id=i.pk %}'" name="pk" value="{{ i.pk }}">EDITAR<button></td>
                         <td class="click_redirect"><button class="button_delete" type="button" onclick="window.location='{% url "delete_model" model_name="accessory" id=i.pk %}'" name="pk" value="{{ i.pk }}">DELETAR<button></td>
                     </tr>
-                    {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
+        <span>
+            <hr>
+        </span>
     </div>
 </section>
 {% if messages %}
