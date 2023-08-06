@@ -37,27 +37,76 @@
             <div class="input-box">
                <label for="{{ form.nome.id_for_label }}" class="custom-label">NOME</label>
                {{form.nome}}
+               {% if form.nome.errors %}
+                  <usl>
+                        {% for error in form.nome.errors %}
+                           <li>{{ error }}</li>
+                        {% endfor %}
+                  </usl>
+               {% endif %}<br>
                <label for="{{ form.matricula.id_for_label }}" class="custom-label">MATRÍCULA</label>
                <div class="input-search">
                   {{form.matricula}}
+                  {% if form.matricula.errors %}
+                  <usl>
+                        {% for error in form.matricula.errors %}
+                           <li>{{ error }}</li>
+                        {% endfor %}
+                  </usl>
+               {% endif %}<br>
                   <button type="button" id="buscar-button"><img src="{% static 'img/search.png'%}"
                         alt="Procurar"></button>
                </div>
                <label for="{{ form.telefone.id_for_label }}" class="custom-label">TELEFONE</label>
                {{form.telefone}}
+               {% if form.telefone.errors %}
+                  <usl>
+                        {% for error in form.telefone.errors %}
+                           <li>{{ error }}</li>
+                        {% endfor %}
+                  </usl>
+               {% endif %}<br>
                <label for="{{ form.lotacao.id_for_label }}" class="custom-label">LOTAÇÃO</label>
                {{form.lotacao}}
+               {% if form.lotacao.errors %}
+                  <usl>
+                        {% for error in form.lotacao.errors %}
+                           <li>{{ error }}</li>
+                        {% endfor %}
+                  </usl>
+               {% endif %}<br>
             </div>
             <div class="input-box">
                <label for="{{ form.posto.id_for_label }}" class="custom-label">POSTO / GRADUAÇÃO</label>
                {{form.posto}}
+               {% if form.posto.errors %}
+                  <usl>
+                        {% for error in form.posto.errors %}
+                           <li>{{ error }}</li>
+                        {% endfor %}
+                  </usl>
+               {% endif %}<br>
                <label for="{{ form.email.id_for_label }}" class="custom-label">E-MAIL</label>
                {{form.email}}
+               {% if form.email.errors %}
+                  <usl>
+                        {% for error in form.email.errors %}
+                           <li>{{ error }}</li>
+                        {% endfor %}
+                  </usl>
+               {% endif %}<br>
                <label for="{{ form.senha.id_for_label }}" class="custom-label">SENHA</label>
                {{form.senha}}
+               {% if form.senha.errors %}
+                  <usl>
+                        {% for error in form.senha.errors %}
+                           <li>{{ error }}</li>
+                        {% endfor %}
+                  </usl>
+               {% endif %}<br>
                <div class="file-input-container">
-                  {{form.foto}}
-                  <label for="{{ form.foto.id_for_label }}" class="custom-file-input">ANEXAR FOTO</label>
+                  <input type="file" name="foto" class="file-input" accept="image/*" onchange="handleFileSelection(event)" id="id_foto">
+                  <label for="{{ form.foto.id_for_label }}" class="custom-file-input">ANEXAR / ALTERAR FOTO</label>
                </div>
                <p id="fileSelectedMessage"></p>
             </div>

@@ -76,9 +76,6 @@ def search_police(request, matricula):
         messages.success(request, "Policial não encontrado!")
         return HttpResponseRedirect("/police/register/")
 
-    if policial:
-        policial.foto = None
-
     if request.method == "POST":
         form = PoliceForm(request.POST, request.FILES, instance=policial)
         if form.is_valid():

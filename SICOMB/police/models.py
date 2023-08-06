@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Adjunct(User):
     nome = models.CharField(max_length=100, unique=True)
     matricula = models.CharField(max_length=20, primary_key=True)
-    telefone = models.CharField(max_length=20)
+    telefone = models.CharField(max_length=20, unique=True)
     lotacao = models.CharField(max_length=50)
     posto = models.CharField(max_length=10)
     foto = models.FileField(upload_to="media/")
@@ -17,9 +17,13 @@ class Adjunct(User):
 class RegisterPolice(models.Model):
     nome = models.CharField(max_length=100, unique=True)
     matricula = models.CharField(max_length=20, primary_key=True)
-    telefone = models.CharField(max_length=20)
+    telefone = models.CharField(max_length=20, unique=True)
+    email = models.EmailField(max_length=254, unique=True)
     lotacao = models.CharField(max_length=50)
     posto = models.CharField(max_length=10)
     senha = models.CharField(max_length=100)
-    email = models.EmailField(max_length=254)
     foto = models.FileField(upload_to="media/")
+
+    class Meta:
+        verbose_name = 'Policial'
+        verbose_name_plural = 'Policiais'
