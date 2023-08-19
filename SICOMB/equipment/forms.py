@@ -4,103 +4,78 @@ from equipment.models import *
 
 class EquipmentForm(forms.ModelForm):
     OPCOES = [
-        ("", "Selecione"),
-        ("wearable", "Vestível"),
-        ("accessory", "Acessório"),
-        ("armament", "Armamento"),
-        ("grenada", "Granada"),
+        ("", "SELECIONE"),
+        ("wearable", "VESTÍVEL"),
+        ("accessory", "ACESSÓRIO"),
+        ("armament", "ARMAMENTO"),
+        ("grenada", "GRANADA"),
     ]
 
     uid = forms.CharField(
         max_length=20,
-        widget=forms.TextInput(
-            attrs={
-                "id": "input-uid",
-                "style": "display: none",
-            }
-        ),
+        widget=forms.TextInput(attrs={"id": "input-uid", "style": "display: none"}),
         label="",
     )
     serial_number = forms.CharField(
-        widget=forms.TextInput(
-            attrs={"class": "input-data", "id": "serial-number-input", "placeholder": "Número de série"}
-        ),
+        widget=forms.TextInput(attrs={"class": "input-data", "id": "serial-number-input", "placeholder": "Número de série"}),
         label="Número de Série",
     )
     type = forms.CharField(
-        widget=forms.Select(
-            attrs={"class": "select-field", "id": "type-choices"}, choices=OPCOES
-        ),
+        widget=forms.Select(attrs={"class": "select-field", "id": "type-choices"}, choices=OPCOES),
         label="Tipo",
     )
+    
+    armament = forms.ModelChoiceField(
+        queryset=Model_armament.objects.all(),
+        widget=forms.Select(attrs={"id": "type-choices-armament", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
+        label="ARMAMENTOS",
+        empty_label="SELECIONE",
+        required=False,
+    )
+    accessory = forms.ModelChoiceField(
+        queryset=Model_accessory.objects.all(),
+        widget=forms.Select(attrs={"id": "type-choices-accessory", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
+        label="ACESSÓRIOS",
+        empty_label="SELECIONE",
+        required=False,
+    )
+    wearable = forms.ModelChoiceField(
+        queryset=Model_wearable.objects.all(),
+        widget=forms.Select(attrs={"id": "type-choices-wearable", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
+        label="VESTIMENTOS",
+        empty_label="SELECIONE",
+        required=False,
+    )
+    grenada = forms.ModelChoiceField(
+        queryset=Model_grenada.objects.all(),
+        widget=forms.Select(attrs={"id": "type-choices-grenada", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
+        label="GRANADAS",
+        empty_label="SELECIONE",
+        required=False,
+    )
+    
+    def save(self, commit=True):
+        equipment = super().save(commit=False)
+        
+        # Define o tipo de modelo com base na escolha feita no campo "type"
+        if self.cleaned_data['type'] == 'armament':
+            equipment.model = self.cleaned_data['armament']
+        elif self.cleaned_data['type'] == 'accessory':
+            equipment.model = self.cleaned_data['accessory']
+        elif self.cleaned_data['type'] == 'wearable':
+            equipment.model = self.cleaned_data['wearable']
+        elif self.cleaned_data['type'] == 'grenada':
+            equipment.model = self.cleaned_data['grenada']
+
+        if commit:
+            equipment.save()
+        return equipment
 
     class Meta:
         model = Equipment
-        fields = [
-            "uid",
-            "serial_number",
-            "type",
-            "armament",
-            "accessory",
-            "wearable",
-            "grenada",
-        ]  # pra definir a ordem
+        fields = ["uid", "serial_number", "type"]
 
-        # os que não devem aparecer
         exclude = ("status", "observation")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # A partir daqui ele modifica todos os campos pois ele já
-        # vem setado com td certo e refazer daria mais trabalho
-
-        self.fields["armament"].widget = forms.Select(
-            attrs={
-                "id": "type-choices-armament",
-                "style": "display: none",
-                "class": "type-choices-type select-field",
-            }
-        )
-        self.fields["armament"].label = "ARMAMENTOS"
-        self.fields["armament"].initial = ""
-        self.fields["armament"].required = False
-        self.fields["armament"].queryset = Model_armament.objects.all()
-
-        self.fields["accessory"].widget = forms.Select(
-            attrs={
-                "id": "type-choices-accessory",
-                "style": "display: none",
-                "class": "type-choices-type select-field",
-            }
-        )
-        self.fields["accessory"].label = "ACESSÓRIOS"
-        self.fields["accessory"].initial = ""
-        self.fields["accessory"].required = False
-        self.fields["accessory"].queryset = Model_accessory.objects.all()
-
-        self.fields["wearable"].widget = forms.Select(
-            attrs={
-                "id": "type-choices-wearable",
-                "style": "display: none",
-                "class": "type-choices-type select-field",
-            }
-        )
-        self.fields["wearable"].label = "VESTIMENTOS"
-        self.fields["wearable"].initial = ""
-        self.fields["wearable"].required = False
-        self.fields["wearable"].queryset = Model_wearable.objects.all()
-
-        self.fields["grenada"].widget = forms.Select(
-            attrs={
-                "id": "type-choices-grenada",
-                "style": "display: none",
-                "class": "type-choices-type select-field",
-            }
-        )
-        self.fields["grenada"].label = "GRANADAS"
-        self.fields["grenada"].initial = ""
-        self.fields["grenada"].required = False
-        self.fields["grenada"].queryset = Model_grenada.objects.all()
 
 
 class Model_grenadaForm(forms.ModelForm):

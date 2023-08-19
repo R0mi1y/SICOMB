@@ -187,30 +187,8 @@ def get_equipment_serNum(request, serial_number):
             )
         data = {}
         data["equipment"] = model_to_dict(equipment)
-
-        if (
-            equipment.armament != None
-        ):  # Recupera o objeto armamento, que complementa o equipamento
-            data["registred"] = "armament"
-            data["model"] = model_to_dict(equipment.armament)
-
-        elif (
-            equipment.wearable != None
-        ):  # Recupera o objeto vestimento, que complementa o equipamento
-            data["registred"] = "wearable"
-            data["model"] = model_to_dict(equipment.wearable)
-
-        elif (
-            equipment.accessory != None
-        ):  # Recupera o objeto acessorio, que complementa o equipamento
-            data["registred"] = "accessory"
-            data["model"] = model_to_dict(equipment.accessory)
-
-        elif (
-            equipment.grenada != None
-        ):  # Recupera o objeto acessorio, que complementa o equipamento
-            data["registred"] = "grenada"
-            data["model"] = model_to_dict(equipment.grenada)
+        data["registred"] = equipment.model_type.model.replace("model_", "")
+        data["model"] = model_to_dict(equipment.model)
 
         return JsonResponse(data)
     elif serial_number[0] == ".":
@@ -269,30 +247,8 @@ def get_equipment_avalible(request):
             )
 
         data["equipment"] = model_to_dict(equipment)
-
-        if (
-            equipment.armament != None
-        ):  # Recupera o objeto armamento, que complementa o equipamento
-            data["registred"] = "armament"
-            data["model"] = model_to_dict(equipment.armament)
-
-        elif (
-            equipment.wearable != None
-        ):  # Recupera o objeto vestimento, que complementa o equipamento
-            data["registred"] = "wearable"
-            data["model"] = model_to_dict(equipment.wearable)
-
-        elif (
-            equipment.accessory != None
-        ):  # Recupera o objeto acessorio, que complementa o equipamento
-            data["registred"] = "accessory"
-            data["model"] = model_to_dict(equipment.accessory)
-
-        elif (
-            equipment.grenada != None
-        ):  # Recupera o objeto acessorio, que complementa o equipamento
-            data["registred"] = "grenada"
-            data["model"] = model_to_dict(equipment.grenada)
+        data["registred"] = equipment.model_type.model.replace("model_", "")
+        data["model"] = model_to_dict(equipment.model)
 
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
@@ -335,31 +291,9 @@ def get_equipment_unvalible(request):
             )
 
         data["equipment"] = model_to_dict(equipment)
-
-        if (
-            equipment.armament != None
-        ):  # Recupera o objeto armamento, que complementa o equipamento
-            data["registred"] = "armament"
-            data["model"] = model_to_dict(equipment.armament)
-
-        elif (
-            equipment.wearable != None
-        ):  # Recupera o objeto vestimento, que complementa o equipamento
-            data["registred"] = "wearable"
-            data["model"] = model_to_dict(equipment.wearable)
-
-        elif (
-            equipment.accessory != None
-        ):  # Recupera o objeto acessorio, que complementa o equipamento
-            data["registred"] = "accessory"
-            data["model"] = model_to_dict(equipment.accessory)
-
-        elif (
-            equipment.grenada != None
-        ):  # Recupera o objeto acessorio, que complementa o equipamento
-            data["registred"] = "grenada"
-            data["model"] = model_to_dict(equipment.grenada)
-
+        data["registred"] = equipment.model_type.model.replace("model_", "")
+        data["model"] = model_to_dict(equipment.model)
+        
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
 

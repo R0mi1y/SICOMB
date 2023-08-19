@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # imagem para caso não tenha uma imagem ainda
 img_alt = ""
@@ -51,18 +53,10 @@ class Equipment(models.Model):
     serial_number = models.CharField("Numero de série", max_length=20, null=True)
     uid = models.CharField("uid", max_length=20, primary_key=True, default=None)
     status = models.CharField("Estado atual", max_length=20, default="Disponível")
-    armament = models.ForeignKey(
-        Model_armament, on_delete=models.CASCADE, null=True, default=None
-    )
-    accessory = models.ForeignKey(
-        Model_accessory, on_delete=models.CASCADE, null=True, default=None
-    )
-    wearable = models.ForeignKey(
-        Model_wearable, on_delete=models.CASCADE, null=True, default=None
-    )
-    grenada = models.ForeignKey(
-        Model_grenada, on_delete=models.CASCADE, null=True, default=None
-    )
+    
+    model_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    model_id = models.PositiveIntegerField()
+    model = GenericForeignKey('model_type', 'model_id')
 
     def __str__(self):
         # na hora dos campos do select ele retorna isso

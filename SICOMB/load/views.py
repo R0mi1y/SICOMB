@@ -9,6 +9,7 @@ from police.models import *
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth import authenticate
 
 
 settings.AUX["list_equipment"] = {}  # lista de equipamentos
@@ -20,16 +21,11 @@ settings.AUX["list_equipment_removed"] = {}  # lista de equipamentos removidos
 def confirm_load(request):
     data = {}
     police = None
-# <<<<<<< HEAD
-#     if request.method == "POST" and len(settings.AUX["list_equipment"]) > 0 or len(settings.AUX["list_equipment_removed"]) > 0:
-#         turn_type = request.POST.get("turn_type")
-#         data_hora_atual = datetime.now()  # pega a data atual
-# =======
+    
     if request.method == "POST":
-        if len(settings.AUX["list_equipment"]) > 0 or len(settings.AUX["list_equipment_removed"] > 0):
+        if len(settings.AUX["list_equipment"]) > 0 or len(settings.AUX["list_equipment_removed"]) > 0:
             turn_type = request.POST.get("turn_type")
             data_hora_atual = datetime.now()  # pega a data atual
-# >>>>>>> d0f793067bc2127afa0b649b84a2310434f5e0dc
 
             if turn_type == "6H" or turn_type == "12H" or turn_type == "24H":
                 data_hora_futura = data_hora_atual + timedelta(
@@ -50,7 +46,6 @@ def confirm_load(request):
             )  # Cadastra a carga
             load.save()
 
-            print(settings.AUX["list_equipment"])
             # Cadastra a lista de equipamentos na tabela equipment_load
             # com a carga cadastrada e os equipamentos da lista
             for key in settings.AUX["list_equipment"]:
@@ -110,15 +105,6 @@ def confirm_load(request):
                     print("é uma munição\n")
                     bullet = Bullet.objects.get(caliber=key)
 
-# <<<<<<< HEAD
-#                 Equipment_load(
-#                     load=load,
-#                     bullet=bullet,
-#                     observation=settings.AUX["list_equipment_removed"][key]["observation"],
-#                     amount=settings.AUX["list_equipment_removed"][key]["amount"],
-#                     status="Retornado",
-#                 ).save()
-# # =======
                     Equipment_load(
                         load=load,
                         bullet=bullet,
@@ -126,12 +112,15 @@ def confirm_load(request):
                         amount=settings.AUX["list_equipment_removed"][key]["amount"],
                         status="Retornado",
                     ).save()
-# >>>>>>> d0f793067bc2127afa0b649b84a2310434f5e0dc
 
             settings.AUX["matricula"] = ""
 
             settings.AUX["list_equipment"].clear()
             settings.AUX["list_equipment_removed"].clear()
+        else:
+            data["error"] = "Error"
+            print("==< error >==")
+            print("Não há equipamentos na lista de equipamentos!")
 
         data["policial"] = police
 
@@ -193,30 +182,8 @@ def get_load(
         equipment_load = model_to_dict(load)
         equipment = {}
         equipment["equipment"] = model_to_dict(load.equipment)
-
-        if (
-            load.equipment.armament != None
-        ):  # Recupera o objeto armamento, que complementa o equipamento
-            equipment["registred"] = "armament"
-            equipment["model"] = model_to_dict(load.equipment.armament)
-
-        elif (
-            load.equipment.wearable != None
-        ):  # Recupera o objeto vestimento, que complementa o equipamento
-            equipment["registred"] = "wearable"
-            equipment["model"] = model_to_dict(load.equipment.wearable)
-
-        elif (
-            load.equipment.accessory != None
-        ):  # Recupera o objeto acessorio, que complementa o equipamento
-            equipment["registred"] = "accessory"
-            equipment["model"] = model_to_dict(load.equipment.accessory)
-
-        elif (
-            load.equipment.grenada != None
-        ):  # Recupera o objeto acessorio, que complementa o equipamento
-            equipment["registred"] = "grenada"
-            equipment["model"] = model_to_dict(load.equipment.grenada)
+        equipment["registred"] = equipment.model_type.model.replace("model_", "")
+        equipment["model"] = model_to_dict(equipment.model)
 
         equipment["amount"] = load.amount
         equipment_load["Equipment&model"] = equipment
@@ -245,72 +212,39 @@ def get_list_equipment(request):
     return JsonResponse(settings.AUX["list_equipment"])
 
 
-@csrf_exempt  # tira a necessidade do token csrf
-# adiciona um equipamento à lista na views vindo do front
-def add_list_equipment(request, serial_number, obs, amount):
+@csrf_exempt # Use o CSRF apenas se necessário
+def add_list_equipment(request, serial_number, obs, amount, user, password):
     if request.method == "POST":
-        if serial_number == "turn_type":
-            settings.AUX["list_equipment"]["turn_type"] = obs
-        elif serial_number.isdigit() or "ac" in serial_number:
-            equipment = Equipment.objects.get(
-                serial_number=serial_number
-            )  # Recupera o equipment pelo numero de série
-            data = {
-                "equipment": model_to_dict(equipment),  # Transforma em um dicionario
-            }
+        
+        if User.objects.get(username=user, password=password) is not None:
+            if serial_number == "turn_type":
+                settings.AUX["list_equipment"]["turn_type"] = obs
+            elif serial_number.isdigit() or "ac" in serial_number:
+                equipment = get_object_or_404(Equipment, serial_number=serial_number)
+                data = {
+                    "equipment": model_to_dict(equipment),
+                    "registred": equipment.model_type.model.replace("model_", ""),
+                    "model": model_to_dict(equipment.model),
+                    "observation": obs if obs != "-" else "",
+                    "amount": amount,
+                }
+                settings.AUX["list_equipment"][serial_number] = data
+            elif serial_number[0] == ".":  # se for uma munição
+                bullet = get_object_or_404(Bullet, caliber=serial_number)
+                data = {
+                    "model": model_to_dict(bullet),
+                    "equipment": model_to_dict(bullet),
+                    "campo": "Munição",
+                    "observation": obs if obs != "-" else "",
+                    "amount": amount,
+                }
+                settings.AUX["list_equipment"][serial_number] = data
 
-            if (
-                equipment.armament != None
-            ):  # Recupera o modelo armamento, que complementa o equipamento
-                data["model"] = model_to_dict(equipment.armament)
-                data["campo"] = "Armamento"
-
-            elif (
-                equipment.wearable != None
-            ):  # Recupera o modelo vestimento, que complementa o equipamento
-                data["model"] = model_to_dict(equipment.wearable)
-                data["campo"] = "Vestimento"
-
-            elif (
-                equipment.accessory != None
-            ):  # Recupera o modelo acessorio, que complementa o equipamento
-                data["model"] = model_to_dict(equipment.accessory)
-                data["campo"] = "Acessório"
-
-            elif (
-                equipment.grenada != None
-            ):  # Recupera o modelo acessorio, que complementa o equipamento
-                data["model"] = model_to_dict(equipment.grenada)
-                data["campo"] = "Granada"
-
-            # Adiciona na lista de equipamentos efetivamente
-            settings.AUX["list_equipment"][serial_number] = data
-            settings.AUX["list_equipment"][serial_number]["observation"] = (
-                obs if obs != "-" else ""
-            )
-            settings.AUX["list_equipment"][serial_number]["amount"] = amount
-        elif serial_number[0] == ".":  # se for uma munição
-            try:
-                bullet = Bullet.objects.get(caliber=serial_number)
-            except Bullet.DoesNotExist:
-                return JsonResponse(
-                    {"msm": "Munição não existe na base de dados!", "registred": False}
-                )
-            data = {}
-            data["model"] = model_to_dict(bullet)
-            data["equipment"] = model_to_dict(bullet)
-            data["campo"] = "Munição"
-
-            # Adiciona na lista de equipamentos efetivamente
-            settings.AUX["list_equipment"][serial_number] = data
-            settings.AUX["list_equipment"][serial_number]["observation"] = (
-                obs if obs != "-" else ""
-            )
-            settings.AUX["list_equipment"][serial_number]["amount"] = amount
-
-        return JsonResponse({"sucesso": "sucesso"})
+            return JsonResponse({"message": settings.AUX["list_equipment"]})
+        else:
+            return JsonResponse({"message": "Credenciais inválidas"})
     else:
-        return JsonResponse({"falha": "falha"})
+        return JsonResponse({"message": "Método HTTP não suportado"})
 
 
 # Remove da lista de equipamentos
@@ -335,7 +269,6 @@ def get_dashboard_loads(request):
         ec = Equipment_load.objects.filter(load=i)
         loads_aux.append([i, ec.__len__])
         
-        
         data_hora_atual = timezone.now()
         expected_return_date = i.expected_load_return_date
         if expected_return_date is not None:
@@ -351,7 +284,6 @@ def get_dashboard_loads(request):
             i.status = 'DATA DE RETORNO NÃO DEFINIDA'
         
         i.save()
-    # return JsonResponse(json_loads)
     return render(request, "load/dashboard-load.html", {"loads": loads_aux})
 
 def get_carga_policial(request, pk):

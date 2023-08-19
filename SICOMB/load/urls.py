@@ -15,7 +15,7 @@ urlpatterns = [
         "get/cargas_policial/<str:plate>/", views.get_loads_police
     ),  # Retorna uma resposta JSON com todas as cargas do policial com filtro por matricula (caso necessário)
     path(
-        "lista_equipamentos/add/<str:serial_number>/<str:obs>/<str:amount>/",
+        "lista_equipamentos/add/<str:serial_number>/<str:obs>/<str:amount>/<str:user>/<str:password>/",
         views.add_list_equipment,
     ),  # adiciona um equipamento à lista na views vindo do front
     path(

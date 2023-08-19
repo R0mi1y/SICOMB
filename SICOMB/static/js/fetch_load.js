@@ -108,11 +108,25 @@ insert_bttn.addEventListener('click', () => {
         equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ?? equipmentData.model.caliber;
 
         // adiciona no array de equipamentos do django => {
-        fetch("http://localhost:8000/carga/lista_equipamentos/add/" +
-            equipmentData.equipment.serial_number + "/" +
-            (observation.value != '' ? observation.value : '-') + "/" + equipmentData.amount + "/", {
-                method: 'POST',
-            });
+        // Montar a URL da solicitação
+        const url = `http://localhost:8000/carga/lista_equipamentos/add/${equipmentData.equipment.serial_number}/${
+            observation.value !== '' ? observation.value : '-'
+        }/${equipmentData.amount}/${user}/${pass}/`;
+        
+        // Fazer a solicitação Fetch
+        fetch(url, {
+            method: 'POST', // Método HTTP POST para enviar dados
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Manipular os dados recebidos, por exemplo, mostrar um pop-up
+            popUp(data["message"]);
+        })
+        .catch(error => {
+            // Lidar com erros de solicitação, se houver
+            console.error(error);
+        });
+  
         // => }
 
         equipmentData = null; // reseta os equipamentos atuais

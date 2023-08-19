@@ -12,7 +12,7 @@ function change_field() {
     if (labelClass) labelClass.remove(); // remove a lable pra por a outra
 
     // reseta todos os 4 campos
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < choices.length; i++) {
         choices[i].disabled = true; // Desabilitar o elemento durante o processamento
         choices[i].style.display = 'none'; // Desabilitar o elemento durante o processamento
         choices[i].value = '';
@@ -24,7 +24,7 @@ function change_field() {
     }
 }
 
-change_field(); // executa uma vez inicial para caso recarregue com algo selecionado
+// change_field(); // executa uma vez inicial para caso recarregue com algo selecionado
 choicesTypes.addEventListener('change', change_field); // executa toda vez q mudar o campo choicesTypes
 
 // requisita e valida o uid pra cadastrar
@@ -152,6 +152,3 @@ function register_bullet() {
             popUp("", true, false, bullet_html);
         });
 }
-
-// Botão para cadastrar munição
-document.getElementById('bullet-btn').addEventListener('click', );
