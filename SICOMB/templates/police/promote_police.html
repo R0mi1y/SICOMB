@@ -31,7 +31,7 @@
          <table class="table_itens">
             <thead>
                 <tr>
-                    <th colspan="100%" class="cargo_title"><h3 >CARGAS </h3></th>
+                    <th colspan="100%" class="cargo_title"><h3> POLICIAIS </h3></th>
                 </tr>
                 <tr class="col-itens">
                     <th>NOME</th>
@@ -46,11 +46,11 @@
                     {% csrf_token %}
                     {% for i in polices %}
                         <tr>
-                            <td>{{ i.nome }}</td>
+                            <td>{{ i.groups }}</td>
                             <td>{{ i.matricula }}</td>
                             <td>{{ i.posto }}</td>
                             <td>{{ i.lotacao }}</td>
-                            <td class="click_redirect"><button class="button_promote" type="submit" name="pk" value="{{ i.pk }}">PROMOVER<button></td>
+                            <td class="click_redirect"><button class="button_promote" type="submit" name="pk" value="{{ i.pk }}">{{ btn_promote }}<button></td>
                         </tr>
                     {% endfor %}
                 </form>

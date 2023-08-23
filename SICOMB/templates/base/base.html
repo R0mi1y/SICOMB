@@ -1,4 +1,6 @@
 {% load static %}
+{% load decorators %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -11,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="{% static 'css/topo.css' %}">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/popUp.css' %}">
     <title>{% block title %}{% endblock title %}</title>
     <style>
         @font-face {
@@ -40,91 +43,94 @@
 </head>
 
 <body>
-
     {% block content_main %}
-    <main>
-        {% block nav %}
-        <header>
-            <nav id="navbar">
-                <ul class="alter">
-                    <div class="logo">
-                        <img id="pm_nav_img" class="img-bpm" src="{% static 'img/policiamilitar_logo.png' %}"
-                            alt="17º Batalhão de Polícia Militar do Estado da Bahia">
-                        <h3>SISCOEM</h3>
-                    </div>
-                    <li onclick="window.location='#'">
-                        <img src="{% static 'img/dashboard.png' %}" alt="">
-                        <span>Dashboard</span>
-                    </li>
-                    <p>Gerenciamento</p>
-                    <li onclick="window.location='/carga/fazer_carga/'">
-                        <img src="{% static 'img/click.png' %}" alt="">
-                        <span>Fazer Carga/Descarga</span>
-                    </li>
-                    <li onclick="window.location='/carga/dashboard_cargas/'">
-                        <img src="{% static 'img/network.png' %}" alt="">
-                        <span>Cargas</span>
-                    </li>
-                    <li onclick="window.location='/equipamento/'">
-                        <img src="{% static 'img/disket.png' %}" alt="">
-                        <span>Equipamentos</span>
-                    </li>
-                    <li onclick="window.location='/equipamento/modelos/'">
-                        <img src="{% static 'img/disket.png' %}" alt="">
-                        <span>Modelos</span>
-                    </li>
-                    <li onclick="window.location='#'">
-                        <img src="{% static 'img/reports.png' %}" alt="">
-                        <span>Relatórios</span>
-                    </li>
-                    <hr>
-                    <p>Cadastramento</p>
-                    <li onclick="window.location='/police/register/'">
-                        <img src="{% static 'img/user.png' %}" alt="">
-                        <span>Cadastrar Policial</span>
-                    </li>
-                    <li onclick="window.location='/equipamento/cadastro/'">
-                        <img src="{% static 'img/warehouse.png' %}" alt="">
-                        <span>Cadastrar Equipamento</span>
-                    </li>
-                    <hr>
-                    <p>Admin</p>
-                    <li onclick="window.location='/equipamento/modelo/cadastro/'">
-                        <img src="{% static 'img/warehouse.png' %}" alt="">
-                        <span>Cadastrar Modelo</span>
-                    </li>
-                    <li onclick="window.location='/police/promote/'">
-                        <img src="{% static 'img/warehouse.png' %}" alt="">
-                        <span>Promover a Adjunto</span>
-                    </li>
-                    <li onclick="window.location='/police/reduce/'">
-                        <img src="{% static 'img/warehouse.png' %}" alt="">
-                        <span>Rebaixar a Policial</span>
-                    </li>
-                </ul>
-                {% comment %} <div class="balls">
-                    <div class="ball ball_blue"></div>
-                    <div class="ball ball_red"></div>
-                </div> {% endcomment %}
+        <main>
+            {% block nav %}
+            <header>
+                <nav id="navbar">
+                    <ul class="alter">
+                        {% if user|has_group:"adjunct" or user.is_superuser %}
+                            <div class="logo">
+                                <img id="pm_nav_img" class="img-bpm" src="{% static 'img/policiamilitar_logo.png' %}"
+                                    alt="17º Batalhão de Polícia Militar do Estado da Bahia">
+                                <h3>SISCOEM</h3>
+                            </div>
+                            <li onclick="window.location='#'">
+                                <img src="{% static 'img/dashboard.png' %}" alt="">
+                                <span>Dashboard</span>
+                            </li>
+                            <p>Gerenciamento</p>
+                            <li onclick="window.location='/carga/fazer_carga/'">
+                                <img src="{% static 'img/click.png' %}" alt="">
+                                <span>Fazer Carga/Descarga</span>
+                            </li>
+                            <li onclick="window.location='/carga/dashboard_cargas/'">
+                                <img src="{% static 'img/network.png' %}" alt="">
+                                <span>Cargas</span>
+                            </li>
+                            <li onclick="window.location='/equipamento/'">
+                                <img src="{% static 'img/disket.png' %}" alt="">
+                                <span>Equipamentos</span>
+                            </li>
+                            <li onclick="window.location='/equipamento/modelos/'">
+                                <img src="{% static 'img/disket.png' %}" alt="">
+                                <span>Modelos</span>
+                            </li>
+                            <li onclick="window.location='#'">
+                                <img src="{% static 'img/reports.png' %}" alt="">
+                                <span>Relatórios</span>
+                            </li>
+                            <hr>
+                            <p>Cadastramento</p>
+                            <li onclick="window.location='/police/register/'">
+                                <img src="{% static 'img/user.png' %}" alt="">
+                                <span>Cadastrar Policial</span>
+                            </li>
+                            <li onclick="window.location='/equipamento/cadastro/'">
+                                <img src="{% static 'img/warehouse.png' %}" alt="">
+                                <span>Cadastrar Equipamento</span>
+                            </li>
+                            <hr>
+                        {% endif %}
+                        {% if  user.is_superuser %}
+                            <p>Admin</p>
+                            <li onclick="window.location='/equipamento/modelo/cadastro/'">
+                                <img src="{% static 'img/warehouse.png' %}" alt="">
+                                <span>Cadastrar Modelo</span>
+                            </li>
+                            <li onclick="window.location='/police/promote/'">
+                                <img src="{% static 'img/warehouse.png' %}" alt="">
+                                <span>Promover a Adjunto</span>
+                            </li>
+                            <li onclick="window.location='/police/reduce/'">
+                                <img src="{% static 'img/warehouse.png' %}" alt="">
+                                <span>Rebaixar a Policial</span>
+                            </li>   
+                        {% endif %}
+                    </ul>
+                    {% comment %} <div class="balls">
+                        <div class="ball ball_blue"></div>
+                        <div class="ball ball_red"></div>
+                    </div> {% endcomment %}
 
-            </nav>
-        </header>
-        {% endblock nav %}
-        
-        {% block content %}{% endblock content %}
-        
-    </main>
+                </nav>
+            </header>
+            <div id="messages"></div>
+            {% endblock nav %}
+            
+            {% block content %}{% endblock content %}
+            
+        </main>
     {% endblock content_main %}
 
-    <script src="{% static 'js/script.js'%}"></script>
-    <script src="{% static 'js/utilitary.js'%}"></script>
     <script src="{% block js %}{% endblock js %}"></script>
+    <script src="{% static "js/utilitary.js" %}"></script>
     <script>
-        {% if msm %}
-            {% if msm == "Munição não existe na base de dados!"%}
-                register_bullet();
-            {% endif %}
-            popUp("{{msm}}");
+        {% if messages %}
+            {% for message in messages %}
+                // Crie um elemento de alerta para cada mensagem
+                popUp("{{ message }}");
+            {% endfor %}
         {% endif %}
     </script>
 </body>

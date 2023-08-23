@@ -256,9 +256,11 @@ footer {
     animation-name: fade-in-out;
     animation-duration: 5s;
     animation-fill-mode: forwards;
+    z-index: 0;
 }
 
 .alert-close {
+    z-index: 0;
     float: right;
     cursor: pointer;
     margin-left: 10px;

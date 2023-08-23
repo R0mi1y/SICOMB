@@ -40,10 +40,10 @@
                 <tr>
                     <td class="click_redirect"><a href="/carga/{{i.0.pk}}/carga_policial/" >{{ i.0.pk }}</a></td>
                     <td>{{i.0.turn_type}}</td>
-                    <td class="click_redirect"><a href="">{{ i.0.police.nome|default:'Policial não cadastrado' }}</a></td>
+                    <td class="click_redirect"><a href="">{{ i.0.police.username|default:'Policial não cadastrado' }}</a></td>
                     <td>{{ i.0.police.matricula |default:'Policial não cadastrado'}}</td>
                     <td>{{ i.0.police.posto |default:'Policial não cadastrado'}}</td>
-                    <td class="click_redirect" ><a href="">{{ i.0.adjunct.nome|default:'Adjunto não cadastrado' }}</a></td>
+                    <td class="click_redirect" ><a href="">{{ i.0.adjunct.username|default:'Adjunto não cadastrado' }}</a></td>
                     <td>{{ i.1 }}</td>
                     <td>{{ i.0.date_load|date:"d/m/Y  H:i:s" }}</td>
                     <td>{{ i.0.expected_load_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>
@@ -56,52 +56,5 @@
         </table>
     </div>
 </section>
-
-
-{% comment %} <section class="table_section" style="padding: 0px 20px">
-    <div class="load_itens shadow_">
-        <!-- <h2>ITENS</h2> -->
-        
-        <table class="table_itens_">
-            <thead>
-                <tr>
-                    <th colspan="100%" class="cargo_title"><h3 >DESCARGAS</h3></th>
-                </tr>
-                <tr class="col-itens">
-                    <th>ID DE CARGA</th>
-                    <th>TURNO / TIPO</th>
-                    <th>REQUISITANTE</th>
-                    <th>MATRÍCULA</th>
-                    <th>GRADUAÇÃO</th>
-                    <th>ADJUNTO</th>
-                    <th>QNT. DE ITENS</th>
-                    <th>DATA</th>
-                    <th>PREVISÃO DE DESCARGA</th>
-                    <th>STATUS</th>
-                    <th>DATA DE DESCARGA</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in loads %}
-                <tr>
-                    <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
-                    <td>{{i.0.turn_type}}</td>
-                    <td class="click_redirect"><a  href="">{{ i.0.police.nome }}</a></td>
-                    <td>{{ i.0.police.matricula }}</td>
-                    <td>{{ i.0.police.posto }}</td>
-                    <td class="click_redirect" ><a  href="">{{ i.0.adjunct.nome|default:'-' }}</a></td>
-                    <td>{{ i.1 }}</td>
-                    <td>{{ i.0.date_load|date:"d/m/Y  H:i:s" }}</td>
-                    <td>{{ i.0.expected_load_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>
-                    <td>{{ i.0.status}}</td>
-                    <td>{{ i.0.returned_load_date|date:"d/m/Y  H:i:s" |default:'NÃO DESCARREGADA' }}</td>
-
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-    </div>
-</section> {% endcomment %}
 
 {% endblock content_final %} 

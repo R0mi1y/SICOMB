@@ -1,6 +1,5 @@
 from django.forms import model_to_dict
 from django.shortcuts import redirect, render
-from police.forms import UserForm
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
@@ -10,6 +9,8 @@ from .models import *
 from load.models import Load, Equipment_load
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import Group
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 
@@ -25,15 +26,15 @@ def login(request):
     if request.method == "POST":
         if not request.POST.get("cancelar"):
             try:
-                police = RegisterPolice.objects.get(
+                police = Police.objects.get(
                     matricula=request.POST.get("matricula")
                 )
-            except RegisterPolice.DoesNotExist:
+            except Police.DoesNotExist:
                 return render(
                     request, "police/police_page.html", {"msm": "Matrícula incorreta"}
                 )
 
-            if check_password(request.POST.get("senha"), police.senha):
+            if check_password(request.POST.get("senha"), police.password):
                 settings.AUX["matricula"] = request.POST.get("matricula")
 
                 data["police"] = police
@@ -53,15 +54,22 @@ def register_police(request):
     if request.method == "POST":
         form = PoliceForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            police = form.save()
+            
+            group, created = Group.objects.get_or_create(name='police')
+            police.groups.add(group)
+            
             messages.success(request, "Cadastro realizado com sucesso!")
             return HttpResponseRedirect("/police/register/")
+        else:
+            print("Invalido")
     else:
         form = PoliceForm()
 
     return render(
         request,
-        "police/register_police.html",
+        "police/forms.html",
+        # "police/register_police.html",
         context={
             "form": form,
         },
@@ -70,8 +78,8 @@ def register_police(request):
 
 def search_police(request, matricula):
     try:
-        policial = RegisterPolice.objects.only("matricula").get(matricula=matricula)
-    except RegisterPolice.DoesNotExist:
+        policial = Police.objects.only("matricula").get(matricula=matricula)
+    except Police.DoesNotExist:
         policial = None
         messages.success(request, "Policial não encontrado!")
         return HttpResponseRedirect("/police/register/")
@@ -88,30 +96,15 @@ def search_police(request, matricula):
 
     return render(
         request,
-        "police/register_police.html",
+        "police/forms.html",
         context={
             "form": form,
         },
     )
 
 
-@login_required
-def register_user(request):
-    if request.method == "POST":
-        form = UserForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            print(form)
-            print(form)
-            print(form)
-            return HttpResponseRedirect("/carga/fazer_carga/")
-        else:
-            return HttpResponseRedirect("")
-
-    else:
-        form = UserForm()
-        return render(request, "registration/register.html", {"form": form})
+# def create_groups():
+#     police_group, created = Group.objects.get_or_create(name='police')
 
 
 def finalize_load(request):
@@ -120,21 +113,20 @@ def finalize_load(request):
 
 def get_login_police(request):
     try:
-        police = RegisterPolice.objects.get(matricula=settings.AUX["matricula"])
+        police = Police.objects.get(matricula=settings.AUX["matricula"])
         # settings.AUX["matricula"] = ""
-        fieldfile = police.foto
-        caminho_arquivo = fieldfile.name
+        caminho_arquivo = police.image_path.url
 
         police = {
             "foto": caminho_arquivo,
-            "nome": police.nome,
+            "nome": police.username,
             "matricula": police.matricula,
             "telefone": police.telefone,
             "lotacao": police.lotacao,
             "email": police.email,
         }
         print(police)
-    except RegisterPolice.DoesNotExist:
+    except Police.DoesNotExist:
         print(settings.AUX["matricula"])
         return JsonResponse({})
 
@@ -143,50 +135,49 @@ def get_login_police(request):
 
 @login_required
 def promote_police(request):
+    group, created = Group.objects.get_or_create(name='police')
+    
+    context = {
+        "btn_promote": "REBAIXAR",
+        "polices": Police.objects.filter(groups=group),
+    }
     
     if request.method == 'POST':
         id = request.POST.get("pk")
         try:
-            police = RegisterPolice.objects.get(pk=id)
+            police = Police.objects.get(pk=id)
             
-            Adjunct.objects.create(
-                password=police.senha,
-                foto=police.foto,
-                email=police.email,
-                telefone=police.telefone,
-                posto="Adjunto",
-                matricula=police.matricula,
-                lotacao=police.lotacao,
-                username=police.matricula,
-                nome=police.nome,
-            )
-            police.delete()
-            return render(request, 'police/promote_police.html', {"msm": "Promovido com sucesso!","polices": RegisterPolice.objects.all()})
+            police.groups.remove(group)
+            group_adjunct, created = Group.objects.get_or_create(name='adjunct')
+            police.groups.add(group_adjunct)
+            
+            context["msm"] = "Promovido com sucesso!"
+            return render(request, 'police/promote_police.html', context)
         except:
-            return render(request, 'police/promote_police.html', {"msm": "Falha, já existe um adjunto com esse nome!","polices": RegisterPolice.objects.all()})
-    return render(request, 'police/promote_police.html', {"polices": RegisterPolice.objects.all()})
+            context["msm"] = "Falha, já existe um adjunto com esse nome!"
+            return render(request, 'police/promote_police.html', context)
+    return render(request, 'police/promote_police.html', {"polices": Police.objects.filter(groups=group)})
 
 
 @login_required
 def reduce_police(request):
-    
+    group, created = Group.objects.get_or_create(name='adjunct')
+
+    context = {
+        "btn_promote": "PROMOVER",
+        "polices": Police.objects.filter(groups=group)
+    }
     if request.method == 'POST':
         id = request.POST.get("pk")
         try:
-            adjunct = Adjunct.objects.get(pk=id)
+            police = Police.objects.get(pk=id)
+            police.groups.add(group)
+
+            group_police, _ = Group.objects.get_or_create(name='police')
+            police.groups.remove(group_police)
             
-            RegisterPolice.objects.create(
-                senha=adjunct.password,
-                foto=adjunct.foto,
-                email=adjunct.email,
-                telefone=adjunct.telefone,
-                posto="Policial",
-                matricula=adjunct.matricula,
-                lotacao=adjunct.lotacao,
-                nome=adjunct.nome,
-            )
-            adjunct.delete()
-            return render(request, 'police/reduce_adjunct.html', {"msm": "Rebaixado com sucesso!","adjuncts": Adjunct.objects.all()})
-        except:
-            return render(request, 'police/reduce_adjunct.html', {"msm": "Falha, já existe um policial com esse nome!","adjuncts": Adjunct.objects.all()})
-    return render(request, 'police/reduce_adjunct.html', {"adjuncts": Adjunct.objects.all()})
+        finally:
+            context["msm"] = "Falha, o policial não foi encontrado!"
+            return render(request, 'police/reduce_police.html', context)
+
+    return render(request, 'police/promote_police.html', context)

@@ -5,6 +5,7 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 from .forms import *
+from django.contrib import messages
 
 uids = []
 

@@ -35,11 +35,11 @@
          <div class="input-div">
 
             <div class="input-box">
-               <label for="{{ form.nome.id_for_label }}" class="custom-label">NOME</label>
-               {{form.nome}}
-               {% if form.nome.errors %}
+               <label for="{{ form.username.id_for_label }}" class="custom-label">NOME</label>
+               {{form.username}}
+               {% if form.username.errors %}
                   <usl>
-                        {% for error in form.nome.errors %}
+                        {% for error in form.username.errors %}
                            <li>{{ error }}</li>
                         {% endfor %}
                   </usl>
@@ -95,11 +95,11 @@
                         {% endfor %}
                   </usl>
                {% endif %}<br>
-               <label for="{{ form.senha.id_for_label }}" class="custom-label">SENHA</label>
-               {{form.senha}}
-               {% if form.senha.errors %}
+               <label for="{{ form.password.id_for_label }}" class="custom-label">SENHA</label>
+               {{form.password}}
+               {% if form.password.errors %}
                   <usl>
-                        {% for error in form.senha.errors %}
+                        {% for error in form.password.errors %}
                            <li>{{ error }}</li>
                         {% endfor %}
                   </usl>

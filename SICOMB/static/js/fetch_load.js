@@ -158,7 +158,7 @@ function checkRemoveRow(rowNumber) {
     
     if (col[3].innerHTML != 'Munição'){
         serialNum = col[1].innerHTML; // 1 É A POSIÇÃO DO NUMERO DE SÉRIE, ou seja ele pega o numero de série
-        popUp("Passe de volta o equipamento", false); // o false tira o botão de excluir a notificação
+        popup = popUp("Passe de volta o equipamento", {closeBtn: false}); // o false tira o botão de excluir a notificação
 
     
         clearInterval(interval); // Para de ficar requisitando
@@ -173,7 +173,7 @@ function checkRemoveRow(rowNumber) {
                             if (key === data.equipment.serial_number) { // verifica se tá na lista
                                 if (key == serialNum) { // verifica se é o certo pois ele pode passar um q tá na lista mas é outro
                                     removeRow(rowNumber); // remove a linha da tabela do html
-                                    removerpopUp(); // remove o popUpa
+                                    document.body.removeChild(popup); // remove o popUpa
                                     clearInterval(interval); // Para de ficar requisitando
                                     // remove da lista do django
                                     console.log(list_equipment);

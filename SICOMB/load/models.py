@@ -1,9 +1,7 @@
 from django.db import models
 from equipment.models import Equipment, Bullet
-from police.models import RegisterPolice
+from police.models import Police
 from django.utils import timezone
-
-# from adjunct.models import Adjunct #Para importar o modelo do Adjunto
 
 # Create your models here.
 
@@ -15,8 +13,8 @@ class Load(models.Model):
     turn_type = models.CharField(max_length=20)
     # nomear atributo que receberá os dados: 6h, 12h, 24h, conserto, requisição judicial ou indeterminado
     status = models.CharField("horário_carga", max_length=50, default="Pendente")
-    police = models.ForeignKey(RegisterPolice, on_delete=models.DO_NOTHING)
-    # adjunct = models.ForeignKey(Adjunct, on_delete=models.CASCADE) #Pega a chave primária do adjunto
+    police = models.ForeignKey(Police, on_delete=models.DO_NOTHING)
+    # adjunct = models.ForeignKey(Police, on_delete=models.CASCADE) #Pega a chave primária do adjunto
     
     def __str__(self):
         return str(self.pk)

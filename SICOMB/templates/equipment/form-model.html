@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             <tr>
-                <td class="sub-title">PREENCHA O FORMULÁRIO PARA O CADASTRO <br>DE UM NOVO MODELO DE EQUIPAMENTO</td>
+                <td class="sub-title">PREENCHA O FORMULÁRIO PARA O CADASTRO DE UM NOVO MODELO DE EQUIPAMENTO</td>
             </tr>
         </tbody>   
     </table>
@@ -34,9 +34,6 @@
                                 <label class="file-label" for="{{ field.id_for_label }}">UPLOAD DE ARQUIVO +</label>
                                 <input class="input-file" name="{{ field.name }}" type="file" id="{{ field.id_for_label }}" accept="image/*">
                             </div>
-                            {% if field.error %}
-                                {{ field.error }}
-                            {% endif %}
                         </div>
                     {% elif field.name == "caliber" %}
                         <div class="input-box">
@@ -50,6 +47,13 @@
                             <h4 for="{{ field.id_for_label }}" class="input-title">{{ field.label }}</h4>
                             {{ field }}
                         </div>
+                    {% endif %}
+                    {% if field.errors %}
+                        <usl>
+                            {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </usl>
                     {% endif %}
                 {% endfor %}
                 <div class="finalize-registration">

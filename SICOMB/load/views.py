@@ -143,8 +143,9 @@ def convert_date(data_hora_utc):
 
 def get_loads_police(request, plate):
     # Filtrar os objetos load com base no campo "police" igual a "plate"
-    loads_filtrados = Load.objects.filter(police=plate, status="Pendente")
-
+    police = Police.objects.filter(matricula=plate).first()
+    loads_filtrados = Load.objects.filter(police=police, status="Pendente")
+    
     # Criar uma lista chamada "loads" e preencher com os dicionários dos objetos load filtrados
     loads = []
     for load in loads_filtrados:

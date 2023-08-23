@@ -149,6 +149,6 @@ function register_bullet() {
             </form>
             `;
 
-            popUp("", true, false, bullet_html);
+            popUp("", {closeBtn: true, adicional:bullet_html});
         });
 }

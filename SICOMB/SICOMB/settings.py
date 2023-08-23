@@ -150,8 +150,13 @@ AUX = {"UID": ""}
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-# AUTH_USER_MODEL = 'police.Police'
+AUTH_USER_MODEL = 'police.Police'
 CORS_ORIGIN_ALLOW_ALL = False
+
+AUTHENTICATION_BACKENDS = [
+    'police.auth_backends.MatriculaBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",

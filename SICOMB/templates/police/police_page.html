@@ -21,11 +21,11 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="#"><img class="shadow perfil" src="/media/{{police.foto}}" alt=""></a>
+                            <a href="#"><img class="shadow perfil" src="/media/{{police.image_path}}" alt=""></a>
                         </td>
                     </tr>
                     <tr>
-                        <td>{{police.nome}}</td>
+                        <td>{{police.username}}</td>
                     </tr>
                     <tr>
                         <td>{{police.matricula}}</td>
@@ -90,7 +90,7 @@
                             <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
                             <td>{{i.0.turn_type}}</td>
                             <td>{{ i.0.police.plate |default:"WA025ALM" }}</td>
-                            <td class="click_redirect" ><a  href="">{{ i.0.adjunct.name |default:"Adjunto Indisponível" }}</a></td>
+                            <td class="click_redirect" ><a  href="">{{ i.0.adjunct.username |default:"Adjunto Indisponível" }}</a></td>
                             <td>{{ i.0.police.patent |default:'Tenente'}}</td>
                             <td>{{ i.1 }}</td>
                             <td>{{ i.0.date_cargo }}</td>
