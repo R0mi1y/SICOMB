@@ -111,7 +111,8 @@ insert_bttn.addEventListener('click', () => {
         // Montar a URL da solicitação
         const url = `http://localhost:8000/carga/lista_equipamentos/add/${equipmentData.equipment.serial_number}/${
             observation.value !== '' ? observation.value : '-'
-        }/${equipmentData.amount}/${user}/${pass}/`;
+        }/${equipmentData.amount}/${user}/${pass.replace(/\//g, '%21%')}/`;
+        console.log(url);
         
         // Fazer a solicitação Fetch
         fetch(url, {
@@ -233,14 +234,10 @@ function confirmCargo() {
 function checkAwateList() {
     if (list_awate_equipment.length > 0) {
         equipmentData = list_awate_equipment[list_awate_equipment.length - 1];
-        // Armazena os dados do equipamento em uma variável para uso posterior
         data = list_awate_equipment[list_awate_equipment.length - 1];
         list_awate_equipment.pop();
-        // Para de ficar requisitando
         clearInterval(interval);
-        // variável auxiliar, o equipmentData['campo'] vai ter o nome em português
         addToSquare(data);
-        // => }
         if (semaphore) {
             semaphore = false;
         }

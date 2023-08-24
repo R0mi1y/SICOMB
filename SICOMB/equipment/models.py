@@ -1,13 +1,14 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from SICOMB import settings
 
 # imagem para caso não tenha uma imagem ainda
 
 
 class Model_armament(models.Model):
     model = models.TextField("Modelo do armamento")
-    caliber = models.CharField("Calibre", max_length=10)
+    caliber = models.CharField("Calibre", choices=settings.AUX['calibres'], default="SELECIONE", max_length=30)
     description = models.TextField("Descrição")
     image_path = models.FileField(upload_to="Modelos/armamentos/")
 
@@ -48,11 +49,21 @@ class Model_grenada(models.Model):
 
 
 class Equipment(models.Model):
+    CHOICES = (
+        ("Disponível", "Disponível"),
+        ("6H", "6H"),
+        ("8H", "8H"),
+        ("12H", "12H"),
+        ("24H", "24H"),
+        ("24H", "24H"),
+        ("CONSERTO", "CONSERTO"),
+        ("INDETERMINADO", "INDETERMINADO"),
+        ("REQUISIÇÃO JUDICIAL", "REQUISIÇÃO JUDICIAL"),
+    )
     # chave primária do equipamento
     serial_number = models.CharField("Numero de série", max_length=20, null=True)
     uid = models.CharField("uid", max_length=20, primary_key=True, default=None)
-    status = models.CharField("Estado atual", max_length=20, default="Disponível")
-
+    status = models.CharField("Estado atual", choices=CHOICES, max_length=20, default="Disponível")
     model_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     model_id = models.PositiveIntegerField()
     model = GenericForeignKey("model_type", "model_id")
@@ -68,7 +79,7 @@ class Equipment(models.Model):
 class Bullet(models.Model):
     amount = models.IntegerField("Quantidade", default=0)
     image_path = models.FileField(upload_to="Modelos/municoes/")
-    caliber = models.CharField("Calibre", max_length=50)
+    caliber = models.CharField("Calibre", choices=settings.AUX['calibres'], default="SELECIONE", max_length=30)
     description = models.TextField("Descrição")
 
     def __str__(self):

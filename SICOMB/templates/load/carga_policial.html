@@ -15,13 +15,14 @@
             <table class="police_officer_table">
                 <thead>
                     <tr>
-                        <th class="cargo_title">POLICIAL</th>
+                        <th colspan="100%" class="cargo_title">POLICIAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        {% comment %} <td rowspan="100%"> {% endcomment %}
                         <td>
-                            <a href="#" ><img class="shadow" src="/media/{{load.police.image_path.url}}" alt=""></a>
+                            <a href="#"><img class="shadow" src="{{load.police.image_path.url}}" alt=""></a>
                         </td>
                     </tr>
                     <tr>
@@ -39,7 +40,6 @@
                     <tr>
                         <td>{{load.police.email}}</td>
                     </tr>
-                    
                 </tbody>
             </table>
         </div>
@@ -79,48 +79,33 @@
                             
                         </td>
                         <td>
-                            {{ equipment_load.equipment.armament.description }}
-                            {{ equipment_load.equipment.accessory.description }}
-                            {{ equipment_load.equipment.wearable.description }}
-                            {{ equipment_load.equipment.grenada.description }}
-                            {{equipment_load.bullet.description}}
-
+                            {{ equipment_load.equipment.model.description }}
+                            {{ equipment_load.bullet.description}}
 
                         </td>
                         <td>
-                            {{equipment_load.equipment.accessory.model}}
-                            {{equipment_load.equipment.armament.model}}
-                            {{equipment_load.equipment.wearable.model}}
-                            {{equipment_load.equipment.grenada.model}}
-                            <!-- {{equipment_load.equipment.bullet.model}} -->
+                            {{equipment_load.equipment.model.model}}
+                            {{equipment_load.bullet.model}}
                             {% comment %} Não tem atributo tipo pra munição no BD {% endcomment %}
-
-
-
                         </td>
                         <td>
-                            {{equipment_load.equipment.armament.caliber}}
-                            {{equipment_load.bullet.caliber}}
-                            
-
-
+                            {% if equipment_load.equipment.model.caliber %}
+                                {{ equipment_load.equipment.model.caliber }}
+                            {% else %}
+                                {{ equipment_load.bullet.caliber|default:'-' }}
+                            {% endif %}
                         </td>
                         <td>
                             {{equipment_load.amount}}
                             
                             <!-- {{equipment_load.bullet.amount}} -->
                             <!-- Está errado para a quantidade de munições. Está pegando qnt total e não o foi colocado na carga -->
-
                         </td>
-
                         <td>
-                            {{equipment_load.equipment.wearable.size}}
-                            <!-- {{equipment_load.equipment.size}} -->
-
+                            {{equipment_load.equipment.model.size|default:"-"}}
                         </td>
                         <td>
                             {{equipment_load.equipment.status}}
-
                         </td>
                         <td>{{equipment_load.observation}}</td>
                     </tr>

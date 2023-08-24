@@ -14,7 +14,7 @@ class Load(models.Model):
     # nomear atributo que receberá os dados: 6h, 12h, 24h, conserto, requisição judicial ou indeterminado
     status = models.CharField("horário_carga", max_length=50, default="Pendente")
     police = models.ForeignKey(Police, on_delete=models.DO_NOTHING)
-    # adjunct = models.ForeignKey(Police, on_delete=models.CASCADE) #Pega a chave primária do adjunto
+    # adjunct = models.ForeignKey(Police, on_delete=models.DO_NOTHING) #Pega a chave primária do adjunto
     
     def __str__(self):
         return str(self.pk)

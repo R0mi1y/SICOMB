@@ -60,7 +60,7 @@
             <tbody>
                 {% for i in armament %}
                 <tr>
-                    <td>{{ i.serial_number }}</td>
+                    <td>{{ i.id }}</td>
                     <td>{{ i.model }}</td>
                     <td>{{ i.description }}</td>
                     <td>{{ i.caliber }}</td>
@@ -97,9 +97,9 @@
                 {% endfor %}
             </tbody>
         </table>
-        </div>
-        <div class="cargo_itens dashboard_loads shadow">
-         <table class="table_itens">
+    </div>
+    <div class="cargo_itens dashboard_loads shadow">
+        <table class="table_itens">
             <thead>
                 <tr>
                     <th colspan="100%" class="cargo_title"><h3>VESTIMENTOS </h3></th>
@@ -126,8 +126,8 @@
                 {% endfor %}
             </tbody>
         </table>
-        </div>
-        <div class="cargo_itens dashboard_loads shadow">
+    </div>
+    <div class="cargo_itens dashboard_loads shadow">
         <table class="table_itens">
             <thead>
                 <tr>
@@ -149,6 +149,38 @@
                         <td>{{ i.description }}</td>
                         <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_model" model_name="accessory" id=i.pk %}'" name="pk" value="{{ i.pk }}">EDITAR<button></td>
                         <td class="click_redirect"><button class="button_delete" type="button" onclick="window.location='{% url "delete_model" model_name="accessory" id=i.pk %}'" name="pk" value="{{ i.pk }}">DELETAR<button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <span>
+            <hr>
+        </span>
+    </div>
+    <div class="cargo_itens dashboard_loads shadow">
+        <table class="table_itens">
+            <thead>
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3>MUNIÇÕES</h3></th>
+                </tr>
+                <tr class="col-itens">
+                    <th>ID</th>
+                    <th>CALIBRE</th>
+                    <th>DESCRIÇÃO</th>
+                    <th>QUANTIDADE</th>
+                    <th>EDITAR</th>
+                    <th>DELETAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in bullet %}
+                    <tr>
+                        <td>{{ i.id }}</td>
+                        <td>{{ i.caliber }}</td>
+                        <td>{{ i.amount }}</td>
+                        <td>{{ i.description }}</td>
+                        <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_model" model_name="bullet" id=i.pk %}'" name="pk" value="{{ i.pk }}">EDITAR<button></td>
+                        <td class="click_redirect"><button class="button_delete" type="button" onclick="window.location='{% url "delete_model" model_name="bullet" id=i.pk %}'" name="pk" value="{{ i.pk }}">DELETAR<button></td>
                     </tr>
                 {% endfor %}
             </tbody>

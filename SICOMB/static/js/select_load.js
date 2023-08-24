@@ -12,7 +12,7 @@ function changeTemplate(template) {
                 var table_element = document.createElement('table');
                 table_element.className = 'table_itens';
 
-                table_element.innerHTML = `
+                var tabel = `
                 <thead>
                     <tr>
                         <th colspan="100%" class="cargo_title"><h3>TABELA DE CARGAS<h3></th>
@@ -32,33 +32,33 @@ function changeTemplate(template) {
                         <td colspan="100%">Escolha qual carga deseja descarregar</td>
                      </tr>
                     `;
-                console.log(data.loads_police);
-                console.log("Chegou no tbody de cargas")
                 for (i in data.loads_police) {
-                    table_element.innerHTML += 
-                    `<tr>
-                        <td><button onclick="selectCargo(` + data.loads_police[i].id + `)">` + 
+                    tabel +=
+                    `<tr class="tr_cargos" onclick="selectCargo(` + data.loads_police[i].id + `)">
+                        <td>` + 
                             data.loads_police[i].id
-                        + `</button></td>  
+                        + `</td> 
                         <td>` + 
                             data.loads_police[i].turn_type
-                        + `</td>  
+                        + `</td> 
                         <td>` + 
                             data.loads_police[i].itens_amount
-                        + `</td>  
-                        <td>` + 
-                            data.loads_police[i].date_load
-                        + `</td>  
-                        <td>` + 
-                            data.loads_police[i].expected_load_return_date
                         + `</td> 
+                        <td>` + 
+                            data.loads_police[i].date_load.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):\d{2}/, '$1/$2 - $4:$5')
+                        + `</td> 
+                        <td>` + 
+                            data.loads_police[i].expected_load_return_date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):\d{2}/, '$1/$2 - $4:$5')
+                        + `</td>
                         <td>` +
                             data.loads_police[i].status
                         + `</td>
                     </tr>`;
                 }
-
-                table_element.innerHTML += '</tbody>';
+                
+                tabel += '</tbody>';
+                console.log(tabel);
+                table_element.innerHTML = tabel;
 
                 var unload_div = document.createElement('div');
                 unload_div.className = 'unload_itens';
@@ -66,20 +66,6 @@ function changeTemplate(template) {
 
                 // Adicione o elemento cargo_div onde desejar
                 document.getElementById("means_room_content").appendChild(unload_div);
-
-                // document.getElementById("means_room_content").appendChild(table_element);
-                setTimeout(() => {
-                    var script = document.createElement('script');
-                    script.src = '/static/js/fetch_unload.js';
-                    script.id = 'fetch_load.js';
-                    document.head.appendChild(script);
-
-                    document.getElementById("search-btn").addEventListener("click", () => {
-                        let search = document.getElementById("search-camp");
-                        fetchEquipmentData(search.value);
-                        search.value = '';
-                    });
-            }, 1000);
             });
     } else {
         fetch("/static/html/" + template + ".html")
@@ -102,6 +88,38 @@ function changeTemplate(template) {
             }, 500)
         } 
     }
+}
+
+function selectCargo(id) {
+    fetch("/static/html/load.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("means_room_content").innerHTML = data;
+            set_date();
+
+            fetch('http://localhost:8000/carga/get/' + id + '/')
+                .then(response => response.json())
+                .then(data_cargo => {
+                    for (cargo in data_cargo.equipment_loads) {
+                        console.log(data_cargo.equipment_loads[cargo]['Equipment&model']);
+                        insertLine(data_cargo.equipment_loads[cargo]['Equipment&model'], false);
+                        list_equipment.push(data_cargo.equipment_loads[cargo]['Equipment&model']);
+                    }
+
+                    setTimeout(() => {
+                        var script = document.createElement('script');
+                        script.src = '/static/js/fetch_unload.js';
+                        script.id = 'fetch_load.js';
+                        document.head.appendChild(script);
+    
+                        document.getElementById("search-btn").addEventListener("click", () => {
+                            let search = document.getElementById("search-camp");
+                            fetchEquipmentData(search.value);
+                            search.value = '';
+                        });
+                    }, 1000);
+                });
+        })
 }
 
 
@@ -225,7 +243,7 @@ function addToSquare(data) {
     data['campo'] = data.registred == 'bullet' ? 'Munição' : data['campo'];
 
     // console.log(document.getElementById("means_room_product"));
-    document.getElementById("means_room_product").src = "/static/" + data.model.image_path; // Muda a imagem
+    document.getElementById("means_room_product").src = data.model.image_path; // Muda a imagem
 
     if (!data.equipment.serial_number) {
         document.getElementById("amount_input").disabled = false;

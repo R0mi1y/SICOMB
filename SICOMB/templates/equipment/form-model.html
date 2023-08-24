@@ -23,7 +23,7 @@
     </table>
     <div class="row_color"><span><hr></span></div>
     {% if form %}
-        <form method="post" action="{% url "register_model" model_name=model %}" class="form-element" id="form-equipment" enctype="multipart/form-data">
+        <form method="post" action="." class="form-element" id="form-equipment" enctype="multipart/form-data">
             <div class="input-div">
                 {% csrf_token %}
                 {% for field in form %}

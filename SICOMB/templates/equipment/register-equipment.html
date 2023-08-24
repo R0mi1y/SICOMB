@@ -40,6 +40,12 @@
                 {{ form.type }}
           </div>
         </div>
+        <div for="{{ form.status.id_for_label }}" class="input-box">
+          <h4 for="{{ form.status.id_for_label }}" class="input-title">{{ form.status.label }}</h4>
+          <div class="select">
+                {{ form.status }}
+          </div>
+        </div>
         <div class="input-box">
           <h4 for="{{ form.grenada.id_for_label }}" class="input-title">{{ form.grenada.label }}</h4>
           <div class="select">

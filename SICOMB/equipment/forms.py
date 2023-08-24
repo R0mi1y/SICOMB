@@ -73,9 +73,11 @@ class EquipmentForm(forms.ModelForm):
 
     class Meta:
         model = Equipment
-        fields = ["uid", "serial_number", "type"]
-
-        exclude = ("status", "observation")
+        fields = ["uid", "serial_number", "type", "status"]
+        
+        widgets = {
+            "status" : forms.Select(attrs={"class": "select-field"}),
+        }
 
 
 class Model_grenadaForm(forms.ModelForm):

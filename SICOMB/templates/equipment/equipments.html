@@ -37,8 +37,8 @@
         background-color: rgb(206, 90, 90);
     }
     .cargo_itens {
-        overflow-y: none;
-        overflow-x: none;
+        border-collapse: collapse;
+        overflow-y: scroll;
     }
 </style>
 <section style="padding: 0px 20px">
@@ -59,7 +59,7 @@
             </thead>
             <tbody>
                 {% for i in equipments %}
-                {% if i.armament %}
+                {% if i.model_type.model == "model_armament" %}
                 <tr>
                     <td>{{ i.serial_number }}</td>
                     <td>{{ i.status }}</td>
@@ -89,7 +89,7 @@
             </thead>
             <tbody>
                 {% for i in equipments %}
-                {% if i.grenada %}
+                {% if i.model_type.model == "model_grenada" %}
                 <tr>
                     <td>{{ i.serial_number}}</td>
                     <td>{{ i.status }}</td>
@@ -119,7 +119,7 @@
             </thead>
             <tbody>
                 {% for i in equipments %}
-                {% if i.wearable %}
+                {% if i.model_type.model == "model_wearable" %}
                 <tr>
                     <td>{{ i.serial_number}}</td>
                     <td>{{ i.status }}</td>
@@ -137,7 +137,7 @@
          <table class="table_itens">
             <thead>
                 <tr>
-                    <th colspan="100%" class="cargo_title"><h3>ACESSÓRIOS </h3></th>
+                    <th colspan="100%" class="cargo_title"><h3> ACESSÓRIOS </h3></th>
                 </tr>
                 <tr class="col-itens">
                     <th>NUMERO DE SÉRIE</th>
@@ -149,7 +149,7 @@
             </thead>
             <tbody>
                     {% for i in equipments %}
-                    {% if i.accessory %}
+                    {% if i.model_type.model == "model_accessory" %}
                     <tr>
                         <td>{{ i.serial_number}}</td>
                         <td>{{ i.status }}</td>

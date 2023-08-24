@@ -19,28 +19,6 @@ function set_date() {
 
 // => }
 
-function selectCargo(id) {
-
-    fetch("/static/html/load.html")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("means_room_content").innerHTML = data;
-            set_date();
-
-            fetch('http://localhost:8000/carga/get/' + id + '/')
-                .then(response => response.json())
-                .then(data_cargo => {
-                    for (cargo in data_cargo.equipment_loads) {
-                        console.log(data_cargo.equipment_loads[cargo]['Equipment&model']);
-                        insertLine(data_cargo.equipment_loads[cargo]['Equipment&model'], false);
-                        list_equipment.push(data_cargo.equipment_loads[cargo]['Equipment&model']);
-                    }
-                });
-        })
-}
-
-
-
 interval = setInterval(() => { // começa a requisitar mas mudando as verificações
     fetch('http://localhost:8000/equipamento/get_indisponivel') // requisita o equipamento
         .then(response => response.json())
@@ -90,7 +68,6 @@ function fetchEquipmentData (serial_number) {
             }
             if (data.msm != null) { // se tiver uma mensagem de erro na reguisição
                 popUp(data.msm);
-
             }
         })
         .catch(error => {
@@ -101,12 +78,9 @@ function fetchEquipmentData (serial_number) {
 function checkAwateList() {
     if (list_awate_equipment.length > 0) {
         equipmentData = list_awate_equipment[list_awate_equipment.length - 1];
-        // Armazena os dados do equipamento em uma variável para uso posterior
         data = list_awate_equipment[list_awate_equipment.length - 1];
         list_awate_equipment.pop();
-        // Para de ficar requisitando
         clearInterval(interval);
-        // variável auxiliar, o equipmentData['campo'] vai ter o nome em português
         addToSquare(data);
         // => }
         if (semaphore) {
