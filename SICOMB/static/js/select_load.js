@@ -1,6 +1,24 @@
 var plate; // variável auxiliar para armazenar a matrícula para requisitar do django
 var list_awate_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
+var list_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
 var turn_type;
+
+function set_date() {
+    var dataAtual = new Date();
+    var dia = dataAtual.getDate();
+    var mes = dataAtual.getMonth() + 1; // Lembrando que os meses começam em 0
+    var ano = dataAtual.getFullYear();
+
+    let diaFormatado = dia < 10 ? '0' + dia : dia;
+    let mesFormatado = mes < 10 ? '0' + mes : mes;
+
+    var time = dataAtual.getHours() + ':' + dataAtual.getMinutes();
+    var data = diaFormatado + '/' + mesFormatado + '/' + ano;
+
+    document.getElementById('date').innerText = data;
+    document.getElementById('time').innerText = time;
+    document.getElementById('turn_type').innerText = turn_type;
+}
 
 // responsável por mudar a tabela da sala de meios de acordo com a requisição
 function changeTemplate(template) {
@@ -106,18 +124,19 @@ function selectCargo(id) {
                         list_equipment.push(data_cargo.equipment_loads[cargo]['Equipment&model']);
                     }
 
+                    var script = document.createElement('script');
+                    script.src = '/static/js/fetch_unload.js';
+                    script.id = 'fetch_load.js';
+                    document.head.appendChild(script);
+
+                    document.getElementById("search-btn").addEventListener("click", () => {
+                        let search = document.getElementById("search-camp");
+                        fetchEquipmentData(search.value);
+                        search.value = '';
+                    });
                     setTimeout(() => {
-                        var script = document.createElement('script');
-                        script.src = '/static/js/fetch_unload.js';
-                        script.id = 'fetch_load.js';
-                        document.head.appendChild(script);
-    
-                        document.getElementById("search-btn").addEventListener("click", () => {
-                            let search = document.getElementById("search-camp");
-                            fetchEquipmentData(search.value);
-                            search.value = '';
-                        });
-                    }, 1000);
+                        set_carga_id(id);
+                    }, 500);
                 });
         })
 }

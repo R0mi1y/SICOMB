@@ -1,4 +1,5 @@
 var list_equipment = [];
+var id_cargo;
 
 // seta a data e a hora atual => {
 function set_date() {
@@ -19,14 +20,22 @@ function set_date() {
 
 // => }
 
+function set_carga_id(id) {
+    id_cargo = id;
+
+    console.log(id);
+}
+
 interval = setInterval(() => { // começa a requisitar mas mudando as verificações
-    fetch('http://localhost:8000/equipamento/get_indisponivel') // requisita o equipamento
+    fetch('http://localhost:8000/equipamento/get_indisponivel/' + id_cargo + '/') // requisita o equipamento
         .then(response => response.json())
         .then(data => {
             if (data.uid !== '') {
+                console.log(data);
                 // percorre procurando o equipamento correspondente na tabela
                 for (let i in list_equipment) {
                     if (list_equipment[i]['equipment']['serial_number'] === data.equipment.serial_number) { // verifica se tá na lista
+                        console.log("return;");
                         return;
                     } // a partir daqui é se o equipamento não é o certo
                 }
@@ -43,7 +52,7 @@ interval = setInterval(() => { // começa a requisitar mas mudando as verificaç
 
 
 
-function fetchEquipmentData (serial_number) {
+function fetchEquipmentData(serial_number) {
     let url = serial_number == null || serial_number == undefined ? 'http://localhost:8000/equipamento/get_disponivel' : 'http://localhost:8000/equipamento/get/' + serial_number;
     fetch(url) // busca o equipamento do uid inserido
         .then(response => response.json())

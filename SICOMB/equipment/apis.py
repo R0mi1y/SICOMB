@@ -3,6 +3,7 @@ from .models import *
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from SICOMB import settings
+from load.models import *
 
 def get_bullets(request):
     bullets = Bullet.objects.all()
@@ -123,7 +124,7 @@ def get_equipment_avalible(request):
 
 
 # Retorna o equipamento referente ao uid mais recente em formato JSON
-def get_equipment_unvalible(request):
+def get_equipment_unvalible(request, id):
     data = {"uid": ""}
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
@@ -138,8 +139,14 @@ def get_equipment_unvalible(request):
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
-
-            data["equipment"] = model_to_dict(bullet)
+            
+            if bullet in Equipment_load.objects.filter(load=id):
+                data["equipment"] = model_to_dict(bullet)
+                data["equipment"]['image_path'] = bullet.image_path.url if bullet.image_path else ''
+            else:
+                return JsonResponse(
+                    {"uid": "", "msm": "Equipamento não presente na carga atual."}
+                )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
 
     # Para os equipamentos com a tag
     if settings.AUX["uids"].__len__() > 0 and settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]:
@@ -160,11 +167,18 @@ def get_equipment_unvalible(request):
                     "msm": "Equipamento não disponível, equipamento não está na carga.",
                 }
             )
-
-        data["equipment"] = model_to_dict(equipment)
-        data["registred"] = equipment.model_type.model.replace("model_", "")
-        data["model"] = model_to_dict(equipment.model)
-
+        for equipment_load in Equipment_load.objects.filter(load=id):
+            if equipment == equipment_load.equipment:
+                data["equipment"] = model_to_dict(equipment)
+                data["registred"] = equipment.model_type.model.replace("model_", "")
+                data["model"] = model_to_dict(equipment.model)
+                data["model"]['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
+                
+                return JsonResponse(data)  # Retorna o dicionário em forma de api
+                
+        return JsonResponse(
+            {"uid": "", "msm": "Equipamento não presente na carga atual."}
+        )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
 

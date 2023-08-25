@@ -4,33 +4,15 @@ var type = document.getElementById("type");
 var amount = document.getElementById("amount");
 var observation = document.getElementById("note_equipment");
 var insert_bttn = document.getElementById("insert_btn");
-var list_equipment = {}; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
+var list_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
 let amount_input = document.getElementById("amount_input");
 var semaphore = true;
 //tem uma array de equipamentos igual no django para caso de refresh e essa se perca
 var equipmentData = null; // Equipamento atual só que de forma global, pra acessar depois, será setada depois
 
 // seta a data e a hora atual => {
-function set_date() {
-    var dataAtual = new Date();
-    var dia = dataAtual.getDate();
-    var mes = dataAtual.getMonth() + 1; // Lembrando que os meses começam em 0
-    var ano = dataAtual.getFullYear();
-
-    let diaFormatado = dia < 10 ? '0' + dia : dia;
-    let mesFormatado = mes < 10 ? '0' + mes : mes;
-
-    var time = dataAtual.getHours() + ':' + dataAtual.getMinutes();
-    var data = diaFormatado + '/' + mesFormatado + '/' + ano;
-
-    document.getElementById('date').innerText = data;
-    document.getElementById('time').innerText = time;
-    document.getElementById('turn_type').innerText = turn_type;
-}
 set_date()
 // => }
-
-
 
 // busca se já tem uma lista no sistema 
 //(serve para caso a página de refresh, tá salvo no sistema desde q ele não rreinicie o sistema)
@@ -72,6 +54,7 @@ function fetchEquipmentData(serial_number) {
         // Se o equipamento não estiver cadastrado, adiciona-o à lista de equipamentos em espera
         if (data.registred !== false) {
           list_awate_equipment.push(data);
+          console.log(list_awate_equipment);
           checkAwateList();
         }
       }
@@ -96,7 +79,6 @@ insert_bttn.addEventListener('click', () => {
     if (equipmentData != null) { // se tiver um equipamento no quadro
         equipmentData['amount'] = amount_input.value;
 
-        console.log(equipmentData);
         insertLine(equipmentData); // insere a linha
 
         list_equipment[equipmentData.equipment.serial_number ?? 'ac'+ equipmentData.equipment.id] = { // adiciona no array de equipamentos o numero de série e a observação
@@ -112,7 +94,6 @@ insert_bttn.addEventListener('click', () => {
         const url = `http://localhost:8000/carga/lista_equipamentos/add/${equipmentData.equipment.serial_number}/${
             observation.value !== '' ? observation.value : '-'
         }/${equipmentData.amount}/${user}/${pass.replace(/\//g, '%21%')}/`;
-        console.log(url);
         
         // Fazer a solicitação Fetch
         fetch(url, {
@@ -161,7 +142,6 @@ function checkRemoveRow(rowNumber) {
         serialNum = col[1].innerHTML; // 1 É A POSIÇÃO DO NUMERO DE SÉRIE, ou seja ele pega o numero de série
         popup = popUp("Passe de volta o equipamento", {closeBtn: false}); // o false tira o botão de excluir a notificação
 
-    
         clearInterval(interval); // Para de ficar requisitando
     
         interval = setInterval(() => { // começa a requisitar mas mudando as verificações

@@ -67,9 +67,17 @@ def get_load(
     for load in Equipment_load.objects.filter(load=load):
         equipment_load = model_to_dict(load)
         equipment = {}
-        equipment["equipment"] = model_to_dict(load.equipment)
-        equipment["registred"] = equipment.model_type.model.replace("model_", "")
-        equipment["model"] = model_to_dict(equipment.model)
+        if load.equipment:
+            equipment["equipment"] = model_to_dict(load.equipment)
+            equipment["registred"] = load.equipment.model_type.model.replace("model_", "")
+            equipment["model"] = model_to_dict(load.equipment.model)
+            equipment["model"]["image_path"] = load.equipment.model.image_path.url if load.equipment.model.image_path else ''
+        else:
+            equipment["equipment"] = model_to_dict(load.bullet)
+            equipment["equipment"]["image_path"] = load.bullet.image_path.url if load.bullet.image_path else ''
+            equipment["model"] = equipment["equipment"]
+            equipment["registred"] = "bullet"
+            
 
         equipment["amount"] = load.amount
         equipment_load["Equipment&model"] = equipment
@@ -83,10 +91,6 @@ def get_load(
 
 # Retorna a lista
 def get_list_equipment(request):
-    print("list_equipment = ||| = " + str(settings.AUX["list_equipment"]) + "\n\n\n")
-    print(
-        "list_equipment_removed = ||| = " + str(settings.AUX["list_equipment_removed"])
-    )
     return JsonResponse(settings.AUX["list_equipment"])
 
 
