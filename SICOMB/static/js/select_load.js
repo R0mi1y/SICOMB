@@ -1,3 +1,6 @@
+
+// var insert_btn = document.getElementById("insert_btn");
+var table_itens = document.getElementById('body_table_itens'); // tabela de itens do html
 var plate; // variável auxiliar para armazenar a matrícula para requisitar do django
 var list_awate_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
 var list_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
@@ -66,7 +69,7 @@ function changeTemplate(template) {
                             data.loads_police[i].date_load.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):\d{2}/, '$1/$2 - $4:$5')
                         + `</td> 
                         <td>` + 
-                            data.loads_police[i].expected_load_return_date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):\d{2}/, '$1/$2 - $4:$5')
+                            (data.loads_police[i].expected_load_return_date ?? "-").replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):\d{2}/, '$1/$2 - $4:$5')
                         + `</td>
                         <td>` +
                             data.loads_police[i].status
@@ -75,7 +78,6 @@ function changeTemplate(template) {
                 }
                 
                 tabel += '</tbody>';
-                console.log(tabel);
                 table_element.innerHTML = tabel;
 
                 var unload_div = document.createElement('div');
@@ -114,39 +116,28 @@ function selectCargo(id) {
         .then(data => {
             document.getElementById("means_room_content").innerHTML = data;
             set_date();
+            
+            var script = document.createElement('script');
+            script.src = '/static/js/fetch_unload.js';
+            script.id = 'fetch_load.js';
+            document.head.appendChild(script);
 
-            fetch('http://localhost:8000/carga/get/' + id + '/')
-                .then(response => response.json())
-                .then(data_cargo => {
-                    for (cargo in data_cargo.equipment_loads) {
-                        console.log(data_cargo.equipment_loads[cargo]['Equipment&model']);
-                        insertLine(data_cargo.equipment_loads[cargo]['Equipment&model'], false);
-                        list_equipment.push(data_cargo.equipment_loads[cargo]['Equipment&model']);
-                    }
+            document.getElementById("search-btn").addEventListener("click", () => {
+                let search = document.getElementById("search-camp");
+                fetchEquipmentData(search.value);
+                search.value = '';
+            });
 
-                    var script = document.createElement('script');
-                    script.src = '/static/js/fetch_unload.js';
-                    script.id = 'fetch_load.js';
-                    document.head.appendChild(script);
-
-                    document.getElementById("search-btn").addEventListener("click", () => {
-                        let search = document.getElementById("search-camp");
-                        fetchEquipmentData(search.value);
-                        search.value = '';
-                    });
-                    setTimeout(() => {
-                        set_carga_id(id);
-                    }, 500);
-                });
+            setTimeout(() => {
+                set_carga_id(id);
+            }, 500);
         })
 }
 
 
 // Insere na tabela uma line que é um objeto 
 // equipment com um model em formato json
-var table_itens = document.getElementById('body_table_itens'); // tabela de itens do html
 function insertLine(line, x) {
-    // console.log(line);
     x = x ?? true;
     table_itens.innerHTML += // Insere efetivamente na lista => {
         '<tr>' +
@@ -253,15 +244,44 @@ var interval = setInterval(() => {
         });
 }, 1000);
 
+
+function clearSquare() {
+    var serialNumberInput = document.getElementById("serial_number");
+    var description = document.getElementById("description");
+    var observation = document.getElementById("note_equipment");
+    var type = document.getElementById("type");
+    var amount = document.getElementById("amount");
+    let amount_input = document.getElementById("amount_input");
+    
+    document.getElementById("means_room_product").src = "/static/img/default.png";
+    serialNumberInput.innerText = '';
+    description.innerText = '';
+    observation.innerHTML = '';
+    type.innerText = '';
+    amount.innerText = '';
+    amount_input.value = '1';
+    amount_input.disabled = true;
+}
+
+
 // Adiciona o equipamento ao quadro da sala de meios
 function addToSquare(data) {
-    data['campo'] = data.registred == 'wearable' ? 'Vestmento' : data['campo'];
-    data['campo'] = data.registred == 'accessory' ? 'Acessório' : data['campo'];
-    data['campo'] = data.registred == 'armament' ? 'Armamento' : data['campo'];
-    data['campo'] = data.registred == 'grenada' ? 'Granada' : data['campo'];
-    data['campo'] = data.registred == 'bullet' ? 'Munição' : data['campo'];
+    var serialNumberInput = document.getElementById("serial_number");
+    var description = document.getElementById("description");
+    var observation = document.getElementById("note_equipment");
+    var type = document.getElementById("type");
+    var amount = document.getElementById("amount");
+    let amount_input = document.getElementById("amount_input");
 
-    // console.log(document.getElementById("means_room_product"));
+    tipo_model = {
+        'wearable' : 'Vestmento',
+        'accessory' : 'Acessório',
+        'armament' : 'Armamento',
+        'grenada' : 'Granada',
+        'bullet' : 'Munição',
+    }
+
+    data['campo'] = tipo_model[data.registred];
     document.getElementById("means_room_product").src = data.model.image_path; // Muda a imagem
 
     if (!data.equipment.serial_number) {

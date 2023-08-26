@@ -3,75 +3,97 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      background-color: #f5f5f5;
-      font-family: Arial, sans-serif;
-    }
-
+    /* Estilos para os links/botões */
     .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin: auto 400px;
     }
-
-    h1 {
-      text-align: center;
-      color: #333333;
-    }
-
-    p.success {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    button.resend-btn {
-      display: block;
-      margin: 0 auto;
-      padding: 10px 20px;
-      background-color: #996633;
-      color: #ffffff;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
     .uid-links {
-      text-align: center;
-      margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
     }
 
     .uid-link {
-      display: inline-block;
-      margin-right: 10px;
-      margin-bottom: 10px;
-      padding: 5px 10px;
-      background-color: #cc9966;
-      color: #ffffff;
-      text-decoration: none;
-      border-radius: 5px;
+        background-color: #f0f0f0;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin: 10px;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color 0.3s, color 0.3s;
     }
 
-    .uid-input {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #999999;
-      border-radius: 5px;
-      font-size: 16px;
+    .uid-link:hover {
+      transition: 0.2s;
+      filter: brightness(0.8);
+      color: white;
     }
 
+    /* Estilos para o botão de reenvio */
+    .resend-btn {
+        background-color: rgba(0, 0, 0, 0.54);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .resend-btn:hover {
+      background-color: rgba(0, 0, 0, 0.915);
+    }
+
+    /* Estilos para o botão de envio */
     .submit-btn {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #996633;
-      color: #ffffff;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
+        background-color: #008CBA;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .submit-btn:hover {
+        background-color: #005c7a;
+    }
+
+    .container-uid-links {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-content: space-between;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .ac {
+      background-color: #91e1fb;
+    }
+    .ar {
+      background-color: #8bff91;
+    }
+    .wb {
+      background-color: #ff94f8;
+    }
+    .gb {
+      background-color: #ff8c90;
     }
   </style>
 </head>
@@ -79,19 +101,29 @@
   <div class="container">
     <p class="success">Sucesso, uid = {{uid}}</p>
     <button class="resend-btn" onclick="location.href='set?uid={{uid}}'">Reenviar</button>
-    <div class="uid-links">
-      <a class="uid-link" href="set?uid=ac1">acessório 1</a>&nbsp;
-      <a class="uid-link" href="set?uid=ac2">acessório 2</a>&nbsp;
-      <a class="uid-link" href="set?uid=ar1">armamento 1</a>&nbsp;
-      <a class="uid-link" href="set?uid=ar2">armamento 2</a>
+    <div class="container-uid-links">
+      <div class="uid-links">
+        {% for numero in "0123456789" %}
+          <a class="uid-link ac" href="set?uid=ac{{ numero }}">acessório {{ numero }}</a>&nbsp;
+        {% endfor %}
+      </div>
+      <div class="uid-links">
+        {% for numero in "0123456789" %}
+          <a class="uid-link ar" href="set?uid=ar{{ numero }}">armamento {{ numero }}</a>&nbsp;
+        {% endfor %}
+      </div>
+      <div class="uid-links">
+        {% for numero in "0123456789" %}
+          <a class="uid-link wb" href="set?uid=wb{{ numero }}">vestível {{ numero }}</a>&nbsp;
+        {% endfor %}
+      </div>
+      <div class="uid-links">
+        {% for numero in "0123456789" %}
+          <a class="uid-link gb" href="set?uid=gd{{ numero }}">granada {{ numero }}</a>&nbsp;
+        {% endfor %}
+      </div>
     </div>
-    <div class="uid-links">
-      <a class="uid-link" href="set?uid=wb1">vestível 1</a>&nbsp;
-      <a class="uid-link" href="set?uid=wb2">vestível 2</a>&nbsp;
-      <a class="uid-link" href="set?uid=gd1">granada 1</a>&nbsp;
-      <a class="uid-link" href="set?uid=gd2">granada 2</a>&nbsp;
-      <a class="uid-link" href="set?uid=f1">não setado</a>
-    </div>
+    <a class="uid-link" href="set?uid=ns11">não setado</a>
     <h1>Novo uid</h1>
     <form method="GET">
       {% csrf_token %}

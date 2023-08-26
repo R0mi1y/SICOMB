@@ -8,21 +8,32 @@ from django.utils import timezone
 
 class Load(models.Model):
     date_load = models.DateTimeField(default=timezone.now)
-    expected_load_return_date = models.DateTimeField("Data Prevista de Devolução", null=True)
+    expected_load_return_date = models.DateTimeField(
+        "Data Prevista de Devolução", null=True
+    )
     returned_load_date = models.DateTimeField("Data de Descarregamento", null=True)
     turn_type = models.CharField(max_length=20)
     # nomear atributo que receberá os dados: 6h, 12h, 24h, conserto, requisição judicial ou indeterminado
-    status = models.CharField("horário_carga", max_length=50, default="Pendente")
-    police = models.ForeignKey(Police, on_delete=models.DO_NOTHING)
-    # adjunct = models.ForeignKey(Police, on_delete=models.z) #Pega a chave primária do adjunto
-    
+    status = models.CharField(
+        "horário_carga",
+        max_length=50,
+        default="DENTRO DO PRAZO",
+        choices=(("Devolvido", "Devolvido"), ("Pendente", "Pendente"), ("Parcialmente devolvido", "Parcialmente devolvido")),
+    )
+    police = models.ForeignKey(
+        Police, on_delete=models.DO_NOTHING, related_name="policial"
+    )
+    adjunct = models.ForeignKey(
+        Police, on_delete=models.DO_NOTHING, related_name="adjunto"
+    )
+
     def __str__(self):
         return str(self.pk)
 
 
 # Tabela que faz o relacionamento entre a carga e os equipamentos
 class Equipment_load(models.Model):
-    load = models.ForeignKey(Load, on_delete=models.CASCADE)
+    load = models.ForeignKey(Load, on_delete=models.CASCADE, related_name='equipment_loads')
     equipment = models.ForeignKey(
         Equipment, on_delete=models.CASCADE, null=True, default=None
     )
@@ -31,7 +42,11 @@ class Equipment_load(models.Model):
     )
     amount = models.IntegerField("Quantidade", null=True, default="1")
     observation = models.TextField("Observação", default=None, null=True)
-    status = models.CharField('Status', max_length=20, default='Aprovado')
-    
-    # o amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
+    status = models.CharField(
+        "Status",
+        max_length=20,
+        default="Pendente",
+        choices=(("Devolvido", "Devolvido"), ("Pendente", "Pendente")),
+    )
 
+    # o amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico

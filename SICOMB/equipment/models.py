@@ -55,7 +55,6 @@ class Equipment(models.Model):
         ("8H", "8H"),
         ("12H", "12H"),
         ("24H", "24H"),
-        ("24H", "24H"),
         ("CONSERTO", "CONSERTO"),
         ("INDETERMINADO", "INDETERMINADO"),
         ("REQUISIÇÃO JUDICIAL", "REQUISIÇÃO JUDICIAL"),
@@ -64,8 +63,8 @@ class Equipment(models.Model):
     serial_number = models.CharField("Numero de série", max_length=20, null=True)
     uid = models.CharField("uid", max_length=20, primary_key=True, default=None)
     status = models.CharField("Estado atual", choices=CHOICES, max_length=20, default="Disponível")
-    model_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    model_id = models.PositiveIntegerField()
+    model_type = models.ForeignKey(ContentType, verbose_name="Tipo do modelo", on_delete=models.CASCADE)
+    model_id = models.PositiveIntegerField(verbose_name="modelo")
     model = GenericForeignKey("model_type", "model_id")
 
     def __str__(self):

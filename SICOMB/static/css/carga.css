@@ -407,46 +407,46 @@ footer{
 
 /* LISTA DE CARGAS DA PÁGINA 'CARGAS' */
 
-.status-atrasada {
-    /* color: #fff; */
-    /* border-left: solid;
-    border-right: solid;
-    background-color: rgb(247, 117, 117); */
-
+.status-desviada-atraso {
     border-left: solid #5B4939;
     border-right: solid #5B4939;
+    background-color: darkorange;
     color: #fff;
-    background-color: darkred;
-}
-  
-.status-dentro-prazo {
-    /* color: #fff; */
-    border-left: solid #5B4939;
-    border-right: solid #5B4939;
-    background-color: lightgreen;
-    /* background-color: rgb(255, 255, 103); */
 }
 
-.status-descarregada-atraso {
+.status-desviada-prazo {
     border-left: solid #5B4939;
     border-right: solid #5B4939;
-    background-color: orange;
-  }
-
-.status-descarregada-prazo {
-    border-left: solid #5B4939;
-    border-right: solid #5B4939;
-    /* color: #fff; */
-    background-color: lightgreen;
-    /* background-color: rgb(79, 180, 79); */
+    background-color: yellow;
+    color: #5B4939;
 }
 
-.status-data-indefinida{
-    /* color: #fff; */
+.status-parcial-atraso {
     border-left: solid #5B4939;
     border-right: solid #5B4939;
-    background-color: lightgray;
-    /* background-color: rgb(117, 117, 238); */
+    background-color: red;
+    color: #fff;
+}
+
+.status-parcial-prazo {
+    border-left: solid #5B4939;
+    border-right: solid #5B4939;
+    background-color: green;
+    color: #fff;
+}
+
+.status-desviada-parcial-atraso {
+    border-left: solid #5B4939;
+    border-right: solid #5B4939;
+    background-color: brown;
+    color: #fff;
+}
+
+.status-desviada-parcial-prazo {
+    border-left: solid #5B4939;
+    border-right: solid #5B4939;
+    background-color: blue;
+    color: #fff;
 }
 
 

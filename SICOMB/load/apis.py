@@ -28,7 +28,9 @@ def convert_date(data_hora_utc):
 def get_loads_police(request, plate):
     # Filtrar os objetos load com base no campo "police" igual a "plate"
     police = Police.objects.filter(matricula=plate).first()
-    loads_filtrados = Load.objects.filter(police=police, status="Pendente")
+    loads_filtrados = Load.objects.filter(police=police, 
+    status__in=['ATRASADA', 'DENTRO DO PRAZO', 'DATA DE RETORNO NÃO DEFINIDA', 'PARCIALMENTE DESCARREGADA COM ATRASO', 'PARCIALMENTE DESCARREGADA DENTRO DO PRAZO']
+)
     
     # Criar uma lista chamada "loads" e preencher com os dicionários dos objetos load filtrados
     loads = []
@@ -43,13 +45,6 @@ def get_loads_police(request, plate):
                 str(dicionario_load["expected_load_return_date"])
             )
 
-        # if timezone.now() > dicionario_load["expected_load_return_date"]:
-        #     load.status = 'ATRASADA'
-        # elif timezone.now() < dicionario_load["expected_load_return_date"]:
-        #     load.status = 'DENTRO DO PRAZO'
-        # else:
-        #     load.status = 'DESCARREGADA'
-        
         loads.append(dicionario_load)
 
     data = {"loads_police": loads}
@@ -64,7 +59,7 @@ def get_load(
 ):  # Retorna uma resposta JSON com todas as cargas (caso necessário)
     load = Load.objects.get(id=id)
     equipment_loads = []
-    for load in Equipment_load.objects.filter(load=load):
+    for load in Equipment_load.objects.filter(load=load, status="Pendente"):
         equipment_load = model_to_dict(load)
         equipment = {}
         if load.equipment:
@@ -94,11 +89,10 @@ def get_list_equipment(request):
     return JsonResponse(settings.AUX["list_equipment"])
 
 
-@csrf_exempt # Use o CSRF apenas se necessário
+@csrf_exempt
 def add_list_equipment(request, serial_number, obs, amount, user, password):
     password = password.replace("%21%", "/")
     
-    print(f"Adding Equipment ==---=<{user}> ")
     if request.method == "POST":
         if Police.objects.filter(username=user, password=password).first is not None:
             if serial_number == "turn_type":
@@ -115,8 +109,6 @@ def add_list_equipment(request, serial_number, obs, amount, user, password):
                 
                 data["model"]["image_path"] = equipment.model.image_path.url if equipment.model.image_path else ''
                 
-                print(data)
-                
                 settings.AUX["list_equipment"][serial_number] = data
             elif serial_number[0] == ".":  # se for uma munição
                 bullet = get_object_or_404(Bullet, caliber=serial_number)
@@ -130,7 +122,7 @@ def add_list_equipment(request, serial_number, obs, amount, user, password):
                 data["equipment"] = data["model"]
                 settings.AUX["list_equipment"][serial_number] = data
 
-            return JsonResponse({"message": settings.AUX["list_equipment"]})
+            return JsonResponse({"uid": settings.AUX["list_equipment"]})
         else:
             return JsonResponse({"message": "Credenciais inválidas"})
     else:
@@ -150,3 +142,47 @@ def remove_list_equipment(request, serial_number, obs, amount):
         return JsonResponse({"sucesso": "sucesso"})
     else:
         return JsonResponse({"falha": "falha"})
+
+
+#            --------------------------------------------------            #
+#            --                  DESCARGA                    --            #
+#            --------------------------------------------------            #
+
+# @csrf_exempt # Use o CSRF apenas se necessário
+# def add_list_returned_equipment(request, serial_number, obs, amount, user, password):
+#     password = password.replace("%21%", "/")
+    
+#     if request.method == "POST":
+#         if Police.objects.filter(username=user, password=password).first is not None:
+#             if serial_number == "turn_type":
+#                 settings.AUX["list_returned_equipment"]["turn_type"] = obs
+#             elif serial_number.isdigit() or "ac" in serial_number:
+#                 equipment = get_object_or_404(Equipment, serial_number=serial_number)
+#                 data = {
+#                     "equipment": model_to_dict(equipment),
+#                     "model": model_to_dict(equipment.model),
+#                     "registred": equipment.model_type.model.replace("model_", ""),
+#                     "observation": obs if obs != "-" else "",
+#                     "amount": amount,
+#                 }
+                
+#                 data["model"]["image_path"] = equipment.model.image_path.url if equipment.model.image_path else ''
+                
+#                 settings.AUX["list_returned_equipment"][serial_number] = data
+#             elif serial_number[0] == ".":  # se for uma munição
+#                 bullet = get_object_or_404(Bullet, caliber=serial_number)
+#                 data = {
+#                     "model": model_to_dict(bullet),
+#                     "campo": "Munição",
+#                     "observation": obs if obs != "-" else "",
+#                     "amount": amount,
+#                 }
+#                 data["model"]["image_path"] = bullet.image_path.url if bullet.image_path else ''
+#                 data["equipment"] = data["model"]
+#                 settings.AUX["list_returned_equipment"][serial_number] = data
+
+#             return JsonResponse({"uid": settings.AUX["list_equipment"]})
+#         else:
+#             return JsonResponse({"message": "Credenciais inválidas"})
+#     else:
+#         return JsonResponse({"message": "Método HTTP não suportado"})

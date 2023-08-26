@@ -163,3 +163,52 @@ class BulletForm(forms.ModelForm):
             "amount": forms.NumberInput(attrs={"class": "input-data", "placeholder": "Modelo", "min":0}),
             "image_path": forms.FileInput(attrs={"class": "input-file", "id":"file", "accept":"image/*"})
         }
+        
+        
+        
+        
+        
+from django import forms
+from django.utils.translation import gettext_lazy as _
+from .models import Equipment
+
+class EquipmentFilterForm(forms.Form):
+    equipment_choices = Equipment.CHOICES
+    equipment_choices += ((None, "-----------"),)
+    
+    models_eqipment = (
+        (None, '----------'),
+        (ContentType.objects.get(app_label='equipment', model='Model_armament').pk, 'Armamento'),
+        (ContentType.objects.get(app_label='equipment', model='Model_accessory').pk, 'Acessório'),
+        (ContentType.objects.get(app_label='equipment', model='Model_wearable').pk, 'Vestimentos'),
+        (ContentType.objects.get(app_label='equipment', model='Model_grenada').pk, 'Granadas'),
+    )
+    
+    serial_number = forms.CharField(label=_("Número de Série"), max_length=20, required=False)
+    uid = forms.CharField(label=_("UID"), max_length=20, required=False)
+    status = forms.ChoiceField(
+        label=_("Estado Atual"),
+        choices=equipment_choices,
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+    )
+    model_type = forms.ChoiceField(
+        label=_("Tipo do Modelo"),
+        choices=models_eqipment,
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+    )
+
+    def filter_queryset(self, queryset):
+        data = self.cleaned_data
+
+        if data.get('serial_number'):
+            queryset = queryset.filter(serial_number__icontains=data['serial_number'])
+        if data.get('uid'):
+            queryset = queryset.filter(uid__icontains=data['uid'])
+        if data.get('status'):
+            queryset = queryset.filter(status__icontains=data['status'])
+        if data.get('model_type'):
+            queryset = queryset.filter(model_type=data['model_type'])
+
+        return queryset

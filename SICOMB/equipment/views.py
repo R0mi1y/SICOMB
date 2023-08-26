@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.contrib import messages
 
+
 # Registra o equipamento
 @login_required
 def delete_equipment(request, id):
@@ -18,7 +19,7 @@ def delete_equipment(request, id):
 @login_required
 def register_edit_equipment(request, id=None):
     equipment = None
-    if id: # Se houver o id, signigica que é uma edição
+    if id:  # Se houver o id, signigica que é uma edição
         equipment = Equipment.objects.get(pk=id)
 
     if request.method == "POST":
@@ -39,10 +40,8 @@ def register_edit_equipment(request, id=None):
             form = EquipmentForm(request.POST, instance=equipment)
             if form.is_valid():
                 form.save()
-                
-                return redirect(
-                    "manage_equipment"
-                )
+
+                return redirect("manage_equipment")
             else:
                 return render(
                     request, "equipment/register-equipment.html", {"form": form}
@@ -112,3 +111,27 @@ def manage_model(request):
     }
 
     return render(request, "equipment/models.html", data)
+
+
+def filter_equipment(request, name):
+    equipment_list = Equipment.objects.all()
+    filter_form = EquipmentFilterForm(request.GET)
+
+    if filter_form.is_valid():
+        model_name = {
+            "model_armament" : 'Armamento',
+            "model_accessory" : 'Acessório',
+            "model_wearable" : 'Vestimentos',
+            "model_grenada" : 'Granadas',
+        }
+        equipment_list = filter_form.filter_queryset(equipment_list)
+        
+
+    context = {
+        'equipment_list': equipment_list,
+        'filter_form': filter_form,
+        'model_name': model_name,
+        'name': "model_armament"
+    }
+
+    return render(request, 'equipment/filter.html', context)

@@ -47,7 +47,7 @@
                     <td>{{ i.1 }}</td>
                     <td>{{ i.0.date_load|date:"d/m/Y  H:i:s" }}</td>
                     <td>{{ i.0.expected_load_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>
-                    <td class="{% if i.0.status == 'ATRASADA' %}status-atrasada{% elif i.0.status == 'DENTRO DO PRAZO' %}status-dentro-prazo{% elif i.0.status == 'DESCARREGADA COM ATRASO' %}status-descarregada-atraso{% elif i.0.status == 'DESCARREGADA DENTRO DO PRAZO' %}status-descarregada-prazo{% elif i.0.status == 'DATA DE RETORNO NÃO DEFINIDA' %}status-data-indefinida{% endif %}">{{ i.0.status}}</td>
+                    <td class="{% if i.0.status == 'ATRASADA' %}status-atrasada{% elif i.0.status == 'DENTRO DO PRAZO' %}status-dentro-prazo{% elif i.0.status == 'DESCARREGADA COM ATRASO' %}status-descarregada-atraso{% elif i.0.status == 'DESCARREGADA DENTRO DO PRAZO' %}status-descarregada-prazo{% elif i.0.status == 'DATA DE RETORNO NÃO DEFINIDA' %}status-data-indefinida{% elif i.0.status == 'DESVIADA COM ATRASO' %}status-desviada-atraso{% elif i.0.status == 'DESVIADA DENTRO DO PRAZO' %}status-desviada-prazo{% elif i.0.status == 'PARCIALMENTE DESCARREGADA COM ATRASO' %}status-parcial-atraso{% elif i.0.status == 'PARCIALMENTE DESCARREGADA DENTRO DO PRAZO' %}status-parcial-prazo{% elif i.0.status == 'DESVIADA E PARCIALMENTE DESCARREGADA COM ATRASO' %}status-desviada-parcial-atraso{% elif i.0.status == 'DESVIADA E PARCIALMENTE DESCARREGADA DENTRO DO PRAZO' %}status-desviada-parcial-prazo{% endif %}">{{ i.0.status}}</td>
                     <td>{{ i.0.returned_load_date|date:"d/m/Y  H:i:s" |default:'NÃO DESCARREGADA' }}</td>
 
                 </tr>
