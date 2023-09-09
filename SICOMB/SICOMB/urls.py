@@ -3,10 +3,10 @@ from django.http import HttpResponseRedirect
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from equipment.views import manage_equipment
+from equipment.views import filter_equipment
 
 urlpatterns = [
-    path('', manage_equipment),
+    path('', filter_equipment),
     path('admin/', admin.site.urls),
     path('equipamento/', include('equipment.urls')),
     path('carga/', include('load.urls')),

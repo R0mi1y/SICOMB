@@ -60,7 +60,7 @@ class Equipment(models.Model):
         ("REQUISIÇÃO JUDICIAL", "REQUISIÇÃO JUDICIAL"),
     )
     # chave primária do equipamento
-    serial_number = models.CharField("Numero de série", max_length=20, null=True)
+    serial_number = models.CharField("Numero de série", max_length=20, null=True, unique=True)
     uid = models.CharField("uid", max_length=20, primary_key=True, default=None)
     status = models.CharField("Estado atual", choices=CHOICES, max_length=20, default="Disponível")
     model_type = models.ForeignKey(ContentType, verbose_name="Tipo do modelo", on_delete=models.CASCADE)

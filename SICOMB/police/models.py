@@ -9,7 +9,7 @@ class Police(AbstractUser):
     telefone = models.CharField(max_length=20, unique=True)
     lotacao = models.CharField(max_length=50)
     posto = models.CharField(max_length=10)
-    image_path = models.FileField(upload_to="policiais/%Y/%m/%d/")
+    image_path = models.FileField(upload_to="policiais/%Y-%m-%d/")
     tipo = models.CharField(max_length=20, default="Police")
 
     class Meta:

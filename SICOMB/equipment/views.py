@@ -3,6 +3,8 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.contrib import messages
+from itertools import chain
+from django.db.models import Q
 
 
 # Registra o equipamento
@@ -94,13 +96,6 @@ def delete_model(request, model_name=None, id=None):
 
 
 @login_required
-def manage_equipment(request):
-    return render(
-        request, "equipment/equipments.html", {"equipments": Equipment.objects.all()}
-    )
-
-
-@login_required
 def manage_model(request):
     data = {
         "armament": Model_armament.objects.all(),
@@ -113,7 +108,7 @@ def manage_model(request):
     return render(request, "equipment/models.html", data)
 
 
-def filter_equipment(request, name):
+def filter_equipment(request):
     equipment_list = Equipment.objects.all()
     filter_form = EquipmentFilterForm(request.GET)
 
@@ -125,13 +120,36 @@ def filter_equipment(request, name):
             "model_grenada" : 'Granadas',
         }
         equipment_list = filter_form.filter_queryset(equipment_list)
-        
 
     context = {
         'equipment_list': equipment_list,
         'filter_form': filter_form,
         'model_name': model_name,
-        'name': "model_armament"
     }
 
     return render(request, 'equipment/filter.html', context)
+
+
+def filter_model(request):
+    # Consulta todos os objetos dos diferentes modelos e os concatena
+    all_models = list(chain(
+        Model_armament.objects.all(),
+        Model_accessory.objects.all(),
+        Model_wearable.objects.all(),
+        Model_grenada.objects.all(),
+        Bullet.objects.all()
+    ))
+
+    filter_form = ModelFilterForm(request.GET)
+    
+    if filter_form.is_valid():
+        print("valido")
+        all_models = filter_form.filter_queryset(all_models)
+    
+    context = {
+        'model_list': all_models,
+        'filter_form': filter_form,
+        'name': "model_armament"
+    }
+
+    return render(request, "equipment/filter_model.html", context)

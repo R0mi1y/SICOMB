@@ -1,0 +1,162 @@
+{% extends 'base/footer.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}SICOMB - Lista de modelos{% endblock title %}
+{% block title_top %}LISTA DE MODELOS DE EQUIPAMENTOS{% endblock title_top %}
+{% block css2 %}{% static 'css/equipamentos.css' %}{% endblock%}
+
+{% block footer %}
+{% endblock footer %}
+{% block content_final %}
+<style>
+    .footer-div{
+        position: absolute;
+    }
+    .container {
+        max-width: 100%;
+    }
+    .dashboard_loads{
+        width: auto;
+    }
+    .cargo_itens {
+        overflow-y: none;
+        overflow-x: none;
+    }
+</style>
+<section style="padding: 0px 20px">
+    <div class="cargo_itens dashboard_loads shadow"> 
+        <table class="table_itens">
+            <thead>
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3>ARMAMENTOS</h3></th>
+                </tr>
+                <form method="get">
+                    <tr class="col-itens">
+                        <th colspan="100%" class=""><input type="submit" value="Filtrar"></th>
+                    </tr>
+                    <tr class="col-itens">
+                        {% for field in filter_form %}
+                            <th>
+                                {{ field }}
+                                {% for erro in field.errors %}
+                                    {{erro}}
+                                {% endfor %}
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </form>
+                <tr class="col-itens">
+                    {% for field in filter_form %}
+                        <td>
+                            {{ field.label }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for model in model_list %}
+                <tr>
+                    <td>{{ model|model_class }}</td>
+                    <td>{{ model.amount|default:"-" }}</td>
+                    <td>{{ model.caliber|default:"-" }}</td>
+                    <td>{{ model.model|default:"-" }}</td>
+                    <td>{{ model.description|default:"-" }}</td>
+                    <td>{{ model.size|default:"-" }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Nenhum equipamento encontrado.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% comment %} 
+
+    {
+        "campos": [
+            {
+                "nome": "Nome",
+                "tipo": "text"
+            },
+            {
+                "nome": "Calibre",
+                "tipo": "text"
+            },
+            {
+                "nome": "Peso",
+                "tipo": "number"
+            },
+            {
+                "nome": "Tipo",
+                "tipo": "select",
+                "options": ["Pistola", "Rifle", "Escopeta", "Metralhadora"]
+            },
+            {
+                "nome": "Ano de Fabricação",
+                "tipo": "number"
+            }
+        ],
+        "linhas": [
+            {
+                "columns": ["Colt M1911", ".45 ACP", 1.2, "Pistola", 1911]
+            },
+            {
+                "columns": ["AK-47", "7.62x39mm", 4.5, "Rifle", 1947]
+            },
+            {
+                "columns": ["Mossberg 500", "12-gauge", 3.5, "Escopeta", 1961]
+            },
+            {
+                "columns": ["M249", "5.56x45mm", 17.0, "Metralhadora", 1984]
+            }
+        ]
+    }
+
+{% endcomment %}
+
+
+        
+    <span>
+        <hr>
+    </span>
+</section>
+{% if messages %}
+<script>
+
+   // Função para fechar o alerta
+   function closeAlert(alert) {
+      alert.remove();
+   }
+
+   // Função para exibir as mensagens de sucesso
+   function showSuccessMessages() {
+      {% for message in messages %}
+      var messageText = "{{ message }}";
+      // Crie um elemento de alerta para cada mensagem
+      var alert = document.createElement('div');
+      alert.className = 'alert alert-success';
+      alert.textContent = messageText;
+      // Crie um botão de fechamento (X)
+      var closeButton = document.createElement('span');
+      closeButton.className = 'alert-close';
+      closeButton.textContent = 'X';
+      closeButton.onclick =window.location=' function () {
+         closeAlert'(alert);
+      };
+      alert.appendChild(closeButton);
+      // Adicione o elemento ao corpo do documento
+      document.body.appendChild(alert);
+      // Defina um tempo limite para remover o elemento após 5 segundos
+      setTimeout(function () {
+         closeAlert(alert);
+      }, 5000); // 5000 milissegundos = 5 segundos
+      {% endfor %}
+   }
+
+   // Chame a função para exibir as mensagens de sucesso
+   showSuccessMessages();
+</script>
+{% endif %}
+{% endblock content_final %} 

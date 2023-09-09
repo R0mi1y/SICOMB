@@ -3,12 +3,12 @@ from . import views, apis
 
 # /equipment
 urlpatterns = [
-    path("", views.manage_equipment, name="manage_equipment"), # mostra a tela de gerencia dos equipamentos
+    path("", views.filter_equipment, name="filter_equipment"), # mostra a tela de gerencia dos equipamentos
     path("cadastro/", views.register_edit_equipment, name="register_equipment"), # registra o equipamento
     path("editar/<str:id>/", views.register_edit_equipment, name="edit_equipment"), # registra o equipamento
     path("deletar/<str:id>/", views.delete_equipment, name="delete_equipment"), # registra o equipamento
     
-    path("modelos/", views.manage_model, name="manage_model"), # registra o equipamento
+    path("modelos/", views.filter_model, name="manage_model"), # registra o equipamento
     path("modelo/cadastro/", views.register_edit_model, name="view_register_model"), # registra o equipamento
     path("modelo/cadastro/<str:model_name>/", views.register_edit_model, name="register_model"), # registra o equipamento
     path("modelo/edit/<str:model_name>/<int:id>/", views.register_edit_model, name="edit_model"), # registra o equipamento

@@ -1,5 +1,7 @@
+from itertools import chain
 from django import forms
 from equipment.models import *
+from django.utils.translation import gettext_lazy as _
 
 
 class EquipmentForm(forms.ModelForm):
@@ -164,13 +166,6 @@ class BulletForm(forms.ModelForm):
             "image_path": forms.FileInput(attrs={"class": "input-file", "id":"file", "accept":"image/*"})
         }
         
-        
-        
-        
-        
-from django import forms
-from django.utils.translation import gettext_lazy as _
-from .models import Equipment
 
 class EquipmentFilterForm(forms.Form):
     equipment_choices = Equipment.CHOICES
@@ -210,5 +205,89 @@ class EquipmentFilterForm(forms.Form):
             queryset = queryset.filter(status__icontains=data['status'])
         if data.get('model_type'):
             queryset = queryset.filter(model_type=data['model_type'])
+
+        return queryset
+
+
+class ModelFilterForm(forms.Form):
+    TYPES = (
+        ('Model_armament', 'Armamento'),
+        ('Model_accessory', 'Acessório'),
+        ('Model_wearable', 'Vestimentos'),
+        ('Model_grenada', 'Granadas'),
+        ('Bullet', 'Munição'),
+    )
+    
+    type = forms.MultipleChoiceField(
+        label=_("Tipo do Modelo"), 
+        choices=TYPES, 
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control'}),
+    )
+    
+    amount = forms.DecimalField(
+        label=_("Quantidade"),
+        required=False,
+        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+    )
+    
+    caliber = forms.MultipleChoiceField(
+        label=_("Calibre"), 
+        choices=settings.AUX['calibres'],
+        required=False,
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+    )
+    
+    model = forms.CharField(
+        label=_("Modelo"), 
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+    
+    description = forms.CharField(
+        label=_("Descrição"), 
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+    
+    size = forms.CharField(
+        label=_("Tamanho"), 
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+    
+    def filter_queryset(self, queryset):
+        data = self.cleaned_data
+        
+        if data.get("type"):
+            queryset = []
+            
+            model_classes = {
+                'Model_armament': Model_armament,
+                'Model_accessory': Model_accessory,
+                'Model_wearable': Model_wearable,
+                'Model_grenada': Model_grenada,
+                'Bullet': Bullet,
+            }
+            for i in data.get("type"):
+                models_aux = model_classes[i].objects.all()
+                queryset = list(chain(queryset, models_aux))
+        
+        print(data["amount"])
+        if data["amount"]:
+            queryset = [obj for obj in queryset if hasattr(obj, 'amount') and obj.amount == data.get("amount")]
+
+        if data.get("caliber") and data.get("caliber")[0] != '':
+            print(data.get("caliber"))
+            queryset = [obj for obj in queryset if hasattr(obj, "caliber") and obj.caliber in data.get("caliber")]
+
+        if data.get("model"):
+            queryset = [obj for obj in queryset if hasattr(obj, "model") and data.get("model").lower() in obj.model.lower()]
+
+        if data.get("description"):
+            queryset = [obj for obj in queryset if hasattr(obj, "description") and data.get("description").lower() in obj.description.lower()]
+
+        if data.get("size"):
+            queryset = [obj for obj in queryset if hasattr(obj, 'size') and data.get("size").lower() in obj.size.lower()]
 
         return queryset
