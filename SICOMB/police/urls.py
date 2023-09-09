@@ -8,6 +8,5 @@ urlpatterns = [
     path("search/<str:matricula>/", views.search_police, name="procurar-policial"),
     path("reduce/", views.reduce_police, name="rebaixar-adjunto"),
     path("promote/", views.promote_police, name="promover-policial"),
-    path("police-page/", views.finalize_load, name="finalizar-carga"),
     path("get_login/", views.get_login_police)
 ]

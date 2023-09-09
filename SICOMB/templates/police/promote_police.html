@@ -46,7 +46,7 @@
                     {% csrf_token %}
                     {% for i in polices %}
                         <tr>
-                            <td>{{ i.groups }}</td>
+                            <td>{{ i.username }}</td>
                             <td>{{ i.matricula }}</td>
                             <td>{{ i.posto }}</td>
                             <td>{{ i.lotacao }}</td>

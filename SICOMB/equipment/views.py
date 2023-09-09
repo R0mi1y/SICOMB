@@ -107,7 +107,7 @@ def manage_model(request):
 
     return render(request, "equipment/models.html", data)
 
-
+@login_required
 def filter_equipment(request):
     equipment_list = Equipment.objects.all()
     filter_form = EquipmentFilterForm(request.GET)
@@ -127,7 +127,7 @@ def filter_equipment(request):
         'model_name': model_name,
     }
 
-    return render(request, 'equipment/filter.html', context)
+    return render(request, 'equipment/filter-equipment.html', context)
 
 
 def filter_model(request):
@@ -152,4 +152,4 @@ def filter_model(request):
         'name': "model_armament"
     }
 
-    return render(request, "equipment/filter_model.html", context)
+    return render(request, "equipment/filter-model.html", context)

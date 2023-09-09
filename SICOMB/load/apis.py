@@ -95,6 +95,7 @@ def add_list_equipment(request, serial_number, obs, amount, user, password):
     
     if request.method == "POST":
         if Police.objects.filter(username=user, password=password).first is not None:
+            print("Policial encontrado!")
             if serial_number == "turn_type":
                 settings.AUX["list_equipment"]["turn_type"] = obs
             elif serial_number.isdigit() or "ac" in serial_number:
@@ -110,7 +111,7 @@ def add_list_equipment(request, serial_number, obs, amount, user, password):
                 data["model"]["image_path"] = equipment.model.image_path.url if equipment.model.image_path else ''
                 
                 settings.AUX["list_equipment"][serial_number] = data
-            elif serial_number[0] == ".":  # se for uma munição
+            elif not serial_number.isdigit():  # se for uma munição
                 bullet = get_object_or_404(Bullet, caliber=serial_number)
                 data = {
                     "model": model_to_dict(bullet),

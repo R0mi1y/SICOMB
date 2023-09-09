@@ -31,7 +31,7 @@ def login(request):
                 )
             except Police.DoesNotExist:
                 return render(
-                    request, "police/police_page.html", {"msm": "Matrícula incorreta"}
+                    request, "police/request_cargo.html", {"msm": "Matrícula incorreta"}
                 )
 
             if check_password(request.POST.get("senha"), police.password):
@@ -42,11 +42,11 @@ def login(request):
                 data["loads"] = []
                 for i in loads:
                     ec = Equipment_load.objects.filter(load=i)
-                    data["loads"].append([i, ec.__len__])
+                    data["loads"].append([i, len(ec)])
             else:
                 data["msm"] = "Senha incorreta"
 
-    return render(request, "police/police_page.html", data)
+    return render(request, "police/request_cargo.html", data)
 
 
 @login_required
@@ -81,7 +81,7 @@ def search_police(request, matricula):
         policial = Police.objects.only("matricula").get(matricula=matricula)
     except Police.DoesNotExist:
         policial = None
-        messages.success(request, "Policial não encontrado!")
+        messages.error(request, "Policial não encontrado!")
         return HttpResponseRedirect("/police/register/")
 
     if request.method == "POST":
@@ -103,12 +103,16 @@ def search_police(request, matricula):
     )
 
 
-# def create_groups():
-#     police_group, created = Group.objects.get_or_create(name='police')
-
-
-def finalize_load(request):
-    return render(request, "police/police_page.html")
+def dashboard_police(request):
+    context = {
+        'cargos' : '',
+        "loads": [],
+    }
+    loads = Load.objects.filter(police=request.user)
+    for i in loads:
+        ec = Equipment_load.objects.filter(load=i)
+        context["loads"].append([i, len(ec)])
+    return render(request, "police/police_page.html", context)
 
 
 def get_login_police(request):
@@ -125,9 +129,7 @@ def get_login_police(request):
             "lotacao": police.lotacao,
             "email": police.email,
         }
-        print(police)
     except Police.DoesNotExist:
-        print(settings.AUX["matricula"])
         return JsonResponse({})
 
     return JsonResponse(police)
@@ -156,7 +158,8 @@ def promote_police(request):
         except:
             context["msm"] = "Falha, já existe um adjunto com esse nome!"
             return render(request, 'police/promote_police.html', context)
-    return render(request, 'police/promote_police.html', {"polices": Police.objects.filter(groups=group)})
+        
+    return render(request, 'police/promote_police.html', context)
 
 
 @login_required

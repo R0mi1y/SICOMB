@@ -55,7 +55,7 @@ def get_equipment_serNum(request, serial_number):
         data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
 
         return JsonResponse(data)
-    elif serial_number[0] == ".":
+    elif not serial_number.isdigit():
         try:
             bullet = Bullet.objects.get(caliber=serial_number)
         except Bullet.DoesNotExist:

@@ -1,12 +1,11 @@
 from django.contrib import admin
-from django.http import HttpResponseRedirect
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from equipment.views import filter_equipment
+from .main_view import main_view
 
 urlpatterns = [
-    path('', filter_equipment),
+    path('', main_view),
     path('admin/', admin.site.urls),
     path('equipamento/', include('equipment.urls')),
     path('carga/', include('load.urls')),

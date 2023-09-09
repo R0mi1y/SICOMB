@@ -10,6 +10,7 @@
 
 {% block content_final%}
     <section class="cargo">
+        {% if police %}
         <div class="police_officer_field shadow">
             <table class="police_officer_table">
                 <thead>
@@ -20,30 +21,30 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="#"><img class="shadow perfil" src="/media/{{user.image_path}}" alt=""></a>
+                            <a href="#"><img class="shadow perfil" src="/media/{{police.image_path}}" alt=""></a>
                         </td>
                     </tr>
                     <tr>
-                        <td>{{user.username}}</td>
+                        <td>{{police.username}}</td>
                     </tr>
                     <tr>
-                        <td>{{user.matricula}}</td>
+                        <td>{{police.matricula}}</td>
                     </tr>
                     <tr>
-                        <td>{{user.telefone}}</td>
+                        <td>{{police.telefone}}</td>
                     </tr>
                     <tr>
-                        <td>{{user.lotacao}}</td>
+                        <td>{{police.lotacao}}</td>
                     </tr>
                     <tr>
-                        <td>{{user.email}}</td>
+                        <td>{{police.email}}</td>
                     </tr>
                     <tr>
                         <td>
                             <form action="./" method="post">
                                 {% csrf_token %}
                                 <div class="btn_final">
-                                    <input class="btn_finalize btn_cancel shadow" name="cancelar" type="button" onclick="window.location='{% url "logout" %}'" value="Sair">
+                                    <input class="btn_finalize btn_cancel shadow" name="cancelar" type="submit" value="Cancelar">
                                 </div>
                             </form>
                         </td>
@@ -51,15 +52,26 @@
                 </tbody>
             </table>
         </div>
+
     </section>
     <section>
         <div class="cargo_itens shadow">
+            <!-- <h2>ITENS</h2> -->
+            
             <table class="table_itens">
                 <thead>
                     <tr>
                         <th colspan="100%" class="cargo_title"><h3 >ITENS</h3></th>
                     </tr>
                     <tr class="col-itens">
+                        {% comment %} <th>Nº DE SÉRIE</th>
+                        <th>DESCRIÇÃO</th>
+                        <th>TIPO</th>
+                        <th>CALIBRE</th>
+                        <th>QUANTIDADE</th>
+                        <th>TAMANHO</th>
+                        <th>OBSERVAÇÃO</th>
+                        <th>AÇÃO</th> {% endcomment %}
                         <th>ID DE CARGA</th>
                         <th>TIPO</th>
                         <th>MATRÍCULA</th>
@@ -92,5 +104,51 @@
 
         </div>
     </section>
+        {% else %}
+        <style>
+            .cargo {
+                height: 83%;
+            }
+        </style>
+        <div class="military_means_room shadow">
+            <div class="means_room_content">
+                <div class="means_room_table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="100%" class="title">LOGIN</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody_top_means_room">
+                            <tr>
+                                <td class="sub-title">PREENCHA O FORMULÁRIO <br> OU USE SUA DIGITAL</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row_color"><span><hr></span></div>
+                    <form action="./" method="POST">
+                        {% csrf_token %}
+                        <div class="input-div">
+                            <div class="input-box">
+                                <h4 class="input-title">MATRÍCULA</h4>
+                                <input type="text" name="matricula" class="input-data" placeholder="Digite a matrícula">
+                            </div>
+                            <div class="input-box">
+                                <!-- <h4 class="input-title">CONFIRME A CARGA COM SUA MATRÍCULA E SENHA.</h4> -->
+                                <h4 class="input-title">SENHA</h4>
+                                <input type="password" name="senha" class="input-data" placeholder="Digite a senha">
+                            </div>
+                            <div class="finalize-registration">
+                                <div class="btn_final">
+                                    <input class="btn_finalize btn_confirm shadow" type="submit" value="Confirmar">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+        {% endif %}
 {% endblock content_final%}
 

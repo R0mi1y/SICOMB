@@ -10,12 +10,12 @@ class Police(AbstractUser):
     lotacao = models.CharField(max_length=50)
     posto = models.CharField(max_length=10)
     image_path = models.FileField(upload_to="policiais/%Y-%m-%d/")
-    tipo = models.CharField(max_length=20, default="Police")
+    tipo = models.CharField(max_length=20, default="Police", choices=[("Police", "Policial"), ("Adjunct","Adjunto"), ("Admin", "Admin")])
 
     class Meta:
         verbose_name = 'Policial'
         verbose_name_plural = 'Policiais'
         
     def __str__(self):
-        return self.matricula
+        return self.username
         

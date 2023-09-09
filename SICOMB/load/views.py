@@ -6,6 +6,8 @@ from police.models import *
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.utils import timezone
+from .forms import *
+from django.contrib import messages
 
 
 settings.AUX["list_equipment"] = {}  # lista de equipamentos
@@ -18,14 +20,13 @@ def confirm_load(request):
     police = None
     
     if request.method == "POST":
-        print(settings.AUX["list_equipment"])
-        print(settings.AUX["list_equipment_removed"])
         if len(settings.AUX["list_equipment"]) > 0 or len(settings.AUX["list_equipment_removed"]) > 0:
-            
             turn_type = request.POST.get("turn_type")
             data_hora_atual = datetime.now()  # pega a data atual
             
-            if turn_type == "6H" or turn_type == "12H" or turn_type == "24H":
+            turn_types = ['6H', '12H', '24H', '8H']
+            
+            if turn_type in turn_types:
                 data_hora_futura = data_hora_atual + timedelta(
                     hours=int(turn_type.replace("H", ""))
                 )
@@ -44,8 +45,10 @@ def confirm_load(request):
                 adjunct=request.user,
             )  # Cadastra a carga
             load.save()
+            
+            turn_types = turn_types + ['descarga', 'REQUISIÇÃO JUDICIAL', 'CONSERTO', 'INDETERMINADO']
 
-            if turn_type == "6H" or turn_type == "12H" or turn_type == "24H":
+            if turn_type in turn_types:
                 # Cadastra a lista de equipamentos na tabela equipment_load
                 # com a carga cadastrada e os equipamentos da lista
                 for key in settings.AUX["list_equipment"]:
@@ -60,7 +63,7 @@ def confirm_load(request):
                             observation=settings.AUX["list_equipment"][key]["observation"],
                             amount=settings.AUX["list_equipment"][key]["amount"],
                         ).save()
-                    elif key[0] == ".":  # se for uma munição
+                    elif not key.isdigit():  # se for uma munição
                         bullet = Bullet.objects.get(caliber=key)
                         
                         if (int(bullet.amount) - int(settings.AUX["list_equipment"][key]["amount"]) < 0):
@@ -198,7 +201,9 @@ def confirm_load(request):
                 settings.AUX["list_equipment"].clear()
                 settings.AUX["list_equipment_removed"].clear()
             else:
-                data["error"] = "Error"
+                messages.error(request, "Error, Tipo do turno inválido!")
+        else:
+            messages.error(request, "Lista vazia!")
 
         data["policial"] = police
 
@@ -213,20 +218,31 @@ def cancel_load(request):
     return redirect("fazer_carga")
 
 
-def get_dashboard_loads(request):
-    loads = Load.objects.all().exclude(turn_type="descarga")
-    loads_aux = []
-    for i in loads:
+def filter_loads(request):
+    queryset = Load.objects.all().exclude(turn_type="descarga")
+    
+    form = LoadFilterForm(request.GET)
+    
+    if form.is_valid():
+        queryset = form.filter_queryset(queryset)
+    
+    loads = []
+    for i in queryset:
         ec = Equipment_load.objects.filter(load=i)
-        loads_aux.append([i, ec.__len__])
+        loads.append([i, len(ec)])
         
         check_load(i)
+    
+    context = {
+        "loads": loads,
+        "filter_form": form
+    }
         
-    return render(request, "load/dashboard-load.html", {"loads": loads_aux})
+    return render(request, "load/filter-load.html", context)
 
 def get_carga_policial(request, pk):
     load = get_object_or_404(Load, pk=pk)
-    equipment_loads = load.equipment_load_set.all()
+    equipment_loads = load.equipment_loads.all()
     return render(request, "load/carga_policial.html", {'load': load, 'equipment_loads': equipment_loads})
 
 

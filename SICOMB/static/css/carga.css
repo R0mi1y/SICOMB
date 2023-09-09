@@ -488,3 +488,71 @@ footer{
 .unload_itens .table_itens thead th {
     min-width: 60px;
 }
+
+/* status de cada carga */
+
+/* Status Atrasada */
+.status-atrasada {
+    background-color: #FF0000; /* Cor de fundo vermelha ou apropriada */
+    color: #FFFFFF; /* Cor do texto branca ou apropriada */
+}
+
+/* Status Dentro do Prazo */
+.status-dentro-prazo {
+    background-color: #00FF00; /* Cor de fundo verde ou apropriada */
+    color: #000000; /* Cor do texto preta ou apropriada */
+}
+
+/* Status Descarregada com Atraso */
+.status-descarregada-atraso {
+    background-color: #FFA500; /* Cor de fundo laranja ou apropriada */
+    color: #000000; /* Cor do texto preta ou apropriada */
+}
+
+/* Status Descarregada Dentro do Prazo */
+.status-descarregada-prazo {
+    background-color: #FFFF00; /* Cor de fundo amarela ou apropriada */
+    color: #000000; /* Cor do texto preta ou apropriada */
+}
+
+/* Status Data de Retorno Não Definida */
+.status-data-indefinida {
+    background-color: #808080; /* Cor de fundo cinza ou apropriada */
+    color: #FFFFFF; /* Cor do texto branca ou apropriada */
+}
+
+/* Status Desviada com Atraso */
+.status-desviada-atraso {
+    background-color: #800080; /* Cor de fundo roxa ou apropriada */
+    color: #FFFFFF; /* Cor do texto branca ou apropriada */
+}
+
+/* Status Desviada Dentro do Prazo */
+.status-desviada-prazo {
+    background-color: #800080; /* Cor de fundo roxa ou apropriada */
+    color: #FFFFFF; /* Cor do texto branca ou apropriada */
+}
+
+/* Status Parcialmente Descarregada com Atraso */
+.status-parcial-atraso {
+    background-color: #FFA500; /* Cor de fundo laranja ou apropriada */
+    color: #000000; /* Cor do texto preta ou apropriada */
+}
+
+/* Status Parcialmente Descarregada Dentro do Prazo */
+.status-parcial-prazo {
+    background-color: #FFFF00; /* Cor de fundo amarela ou apropriada */
+    color: #000000; /* Cor do texto preta ou apropriada */
+}
+
+/* Status Desviada e Parcialmente Descarregada com Atraso */
+.status-desviada-parcial-atraso {
+    background-color: #800080; /* Cor de fundo roxa ou apropriada */
+    color: #FFFFFF; /* Cor do texto branca ou apropriada */
+}
+
+/* Status Desviada e Parcialmente Descarregada Dentro do Prazo */
+.status-desviada-parcial-prazo {
+    background-color: #800080; /* Cor de fundo roxa ou apropriada */
+    color: #FFFFFF; /* Cor do texto branca ou apropriada */
+}
