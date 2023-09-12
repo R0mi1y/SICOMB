@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 
+# Configure as configurações de CORS
+
+# Adicione o middleware de CORS ao MIDDLEWARE do Django
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-=@-^(fuzcew496ttksj^_=+irgt1xd5oc86f2wr0ck6yo%qhtw"
@@ -21,11 +24,11 @@ INSTALLED_APPS = [
     "equipment",
     "load",
 ]
-
+    
 CORS_ORIGIN_ALLOW_ALL = True  # CORS configuração
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -137,7 +140,6 @@ AUTHENTICATION_BACKENDS = [
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:8000",
-    "https://9942-177-185-71-201.ngrok-free.app",
 ]
 
 CORS_ALLOW_METHODS = [
@@ -147,6 +149,7 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_HEADERS = [
     "cache-control",
+    'Content-Type'
 ]
 
 AUX = {

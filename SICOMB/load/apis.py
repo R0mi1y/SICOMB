@@ -29,7 +29,7 @@ def get_loads_police(request, plate):
     # Filtrar os objetos load com base no campo "police" igual a "plate"
     police = Police.objects.filter(matricula=plate).first()
     loads_filtrados = Load.objects.filter(police=police, 
-    status__in=['ATRASADA', 'DENTRO DO PRAZO', 'DATA DE RETORNO NÃO DEFINIDA', 'PARCIALMENTE DESCARREGADA COM ATRASO', 'PARCIALMENTE DESCARREGADA DENTRO DO PRAZO']
+    status__in=['ATRASADA', 'DENTRO DO PRAZO', 'DATA DE RETORNO NÃO DEFINIDA', 'PARCIALMENTE DESCARREGADA COM ATRASO', 'PARCIALMENTE DESCARREGADA']
 )
     
     # Criar uma lista chamada "loads" e preencher com os dicionários dos objetos load filtrados
@@ -90,15 +90,18 @@ def get_list_equipment(request):
 
 
 @csrf_exempt
-def add_list_equipment(request, serial_number, obs, amount, user, password):
-    password = password.replace("%21%", "/")
-    
+def add_list_equipment(request):
     if request.method == "POST":
-        if Police.objects.filter(username=user, password=password).first is not None:
+        password = request.POST.get('pass')
+        user = request.POST.get('user')
+        obs = request.POST.get('observation')
+        serial_number = request.POST.get('serialNumber')
+        amount = request.POST.get('amount')
+        
+        if Police.objects.filter(username=user, password=password).exists():
             print("Policial encontrado!")
-            if serial_number == "turn_type":
-                settings.AUX["list_equipment"]["turn_type"] = obs
-            elif serial_number.isdigit() or "ac" in serial_number:
+            
+            if serial_number.isdigit() or "ac" in serial_number:
                 equipment = get_object_or_404(Equipment, serial_number=serial_number)
                 data = {
                     "equipment": model_to_dict(equipment),
@@ -111,6 +114,7 @@ def add_list_equipment(request, serial_number, obs, amount, user, password):
                 data["model"]["image_path"] = equipment.model.image_path.url if equipment.model.image_path else ''
                 
                 settings.AUX["list_equipment"][serial_number] = data
+                
             elif not serial_number.isdigit():  # se for uma munição
                 bullet = get_object_or_404(Bullet, caliber=serial_number)
                 data = {
@@ -122,7 +126,9 @@ def add_list_equipment(request, serial_number, obs, amount, user, password):
                 data["model"]["image_path"] = bullet.image_path.url if bullet.image_path else ''
                 data["equipment"] = data["model"]
                 settings.AUX["list_equipment"][serial_number] = data
-
+            
+            print(settings.AUX["list_equipment"])
+            
             return JsonResponse({"uid": settings.AUX["list_equipment"]})
         else:
             return JsonResponse({"message": "Credenciais inválidas"})

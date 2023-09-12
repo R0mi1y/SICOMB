@@ -48,17 +48,48 @@ function set_carga_id(id) {
         });
 }
 
+setTimeout(() => {
+    document.getElementById("search-btn").addEventListener('click', search);
+}, 1000);
+
+function search() {
+    let search = document.getElementById("search-camp");
+    fetchUnvalibleEquipmentData(search.value);
+    search.value = '';
+}
+
 interval = setInterval(fetchUnvalibleEquipmentData, 1000);
 
-function fetchUnvalibleEquipmentData() { // começa a requisitar mas mudando as verificações
-    fetch('http://localhost:8000/equipamento/get_indisponivel/' + id_cargo + '/') // requisita o equipamento
+function fetchUnvalibleEquipmentData(serial_number) { // começa a requisitar mas mudando as verificações
+
+    let url = 'http://localhost:8000/equipamento/get_indisponivel/' + id_cargo + '/';
+    if (!(serial_number == null || serial_number == undefined)){
+        if (/^[0-9]+$/.test(serial_number)) {
+            console.log("Equipaamento");
+            url = 'http://localhost:8000/equipamento/get_indisponivel/' + id_cargo + '/' + '?type=equipment&pk=' + serial_number;
+        } else if (serial_number.includes('ac')) {
+            console.log("Acessório");
+            url = 'http://localhost:8000/equipamento/get_indisponivel/' + id_cargo + '/' + '?type=equipment&pk=' + serial_number;
+        } else {
+            console.log("Munição");
+            url = 'http://localhost:8000/equipamento/get_indisponivel/' + id_cargo + '/' + '?type=bullet&pk=' + serial_number;
+        }
+    }
+    fetch(url) // requisita o equipamento
         .then(response => response.json())
         .then(data => {
             if (data.uid !== '') {
-                console.log(data);
                 // percorre procurando o equipamento correspondente na tabela
                 for (let i in list_equipment) {
-                    if (list_equipment[i]['equipment']['serial_number'] === data.equipment.serial_number) { // verifica se tá na lista
+                    serial_number = list_equipment[i]['equipment']['serial_number'];
+                    caliber = list_equipment[i]['equipment']['caliber'];
+
+                    if (serial_number != undefined && serial_number === data.equipment.serial_number) { // verifica se tá na lista
+                        addToSquare(data);
+                        square_equipment = data;
+                        console.log(square_equipment);
+                        return;
+                    } else if (caliber != undefined && caliber === data.equipment.caliber) {
                         addToSquare(data);
                         square_equipment = data;
                         return;
@@ -73,7 +104,6 @@ function fetchUnvalibleEquipmentData() { // começa a requisitar mas mudando as 
             console.error('Erro ao buscar dados do equipamento:', error);
         });
 }
-
 
 
 function fetchEquipmentData(serial_number) {
@@ -137,25 +167,32 @@ function check_cargo_square() {
                 table_itens.childNodes[i].childNodes[8].innerHTML = '| V |';
                 table_itens.childNodes[i].childNodes[8].style.color = 'green';
 
-                clearSquare();
                 interval = setInterval(fetchUnvalibleEquipmentData, 1000);
                 // adiciona no array de equipamentos do django => {
                 // Montar a URL da solicitação
-                const url = `http://localhost:8000/carga/lista_equipamentos/add/${square_equipment.equipment.serial_number}/${
-                    observation.value !== '' ? observation.value : '-'
-                }/${amount_input.value}/${user}/${pass.replace(/\//g, '%21%')}/`;
 
-                square_equipment = null;
+                serialNumber = square_equipment.equipment['serial_number'] ?? square_equipment.equipment['caliber'] ?? '';
+                console.log(square_equipment.equipment);
+                console.log(amount_input.value);
 
-                console.log(url);
                 // Fazer a solicitação Fetch
-                fetch(url, {
+                fetch("http://localhost:8000/carga/lista_equipamentos/add/", {
                         method: 'POST', // Método HTTP POST para enviar dados
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            'serialNumber': serialNumber,
+                            'observation': observation.value,
+                            'amount': amount_input.value,
+                            'user': user,
+                            'pass': pass
+                        })
                     })
                     .then(response => response.json())
                     .then(data => {
-                        // Manipular os dados recebidos, por exemplo, mostrar um pop-up
-                        // popUp(data["message"]);
+                        clearSquare();
+                        square_equipment = null;
                     })
                     .catch(error => {
                         // Lidar com erros de solicitação, se houver

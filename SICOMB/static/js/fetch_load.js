@@ -19,12 +19,10 @@ set_date()
 fetch("http://localhost:8000/carga/lista_equipamentos/get") // faz uma requisição da lista
     .then(response => response.json())
     .then(data => {
-        if (data !== {}) {
-            list_equipment = data;
-            for (let key in list_equipment) { // percorre a lista se existir
-                console.log(list_equipment[key]);
-                insertLine(list_equipment[key]); // insere cada objeto novamente na tabela
-            }
+        list_equipment = data;
+        for (let key in list_equipment) { // percorre a lista se existir
+            console.log(list_equipment[key]);
+            insertLine(list_equipment[key]); // insere cada objeto novamente na tabela
         }
     });
 
@@ -88,24 +86,36 @@ function check_cargo_square() {
         equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ?? equipmentData.model.caliber;
 
         // adiciona no array de equipamentos do django => {
-        // Montar a URL da solicitação
-        const url = `http://localhost:8000/carga/lista_equipamentos/add/${equipmentData.equipment.serial_number}/${
-            observation.value !== '' ? observation.value : '-'
-        }/${equipmentData.amount}/${user}/${pass.replace(/\//g, '%21%')}/`;
+        console.log(equipmentData.equipment.serial_number);
+        console.log(observation.value);
+        console.log(equipmentData.amount);
+        console.log(user);
+        console.log(pass);
 
-        // Fazer a solicitação Fetch
-        fetch(url, {
-                method: 'POST', // Método HTTP POST para enviar dados
+        fetch('http://localhost:8000/carga/lista_equipamentos/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+                'serialNumber': equipmentData.equipment.serial_number,
+                'observation': observation.value ?? "-",
+                'amount': equipmentData.amount,
+                'user': user,
+                'pass': pass
+            }).toString()
             })
             .then(response => response.json())
             .then(data => {
-                // Manipular os dados recebidos, por exemplo, mostrar um pop-up
-                // popUp(data["message"]);
+            // Manipular os dados recebidos, por exemplo, mostrar um pop-up
+            console.log(data);
+            // popUp(data["message"]);
             })
             .catch(error => {
-                // Lidar com erros de solicitação, se houver
-                console.error(error);
+            // Lidar com erros de solicitação, se houver
+            console.error(error);
             });
+
 
         // => }
 
@@ -152,6 +162,7 @@ function checkRemoveRow(rowNumber) {
                                     console.log(list_equipment);
 
                                     fetch("http://localhost:8000/carga/lista_equipamentos/remover/" + serialNum + "/" + obs + "/" + amount + '/', {
+                                        mode: 'no-cors',
                                         method: 'POST',
                                     });
 
@@ -179,7 +190,8 @@ function checkRemoveRow(rowNumber) {
         caliber = col[4].innerHTML;
         removeRow(rowNumber);
         fetch("http://localhost:8000/carga/lista_equipamentos/remover/" + caliber + "/" + obs + "/" + amount + '/', {
-            method: 'POST',
+            mode: 'no-cors',
+            method: 'POST'
         });
     }
 

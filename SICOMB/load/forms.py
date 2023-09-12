@@ -87,9 +87,13 @@ class LoadFilterForm(forms.Form):
         label="Status",
         choices=(
             ('', "TODOS"), 
-            ("Devolvido", "Devolvido"), 
-            ("Pendente", "Pendente"), 
-            ("Parcialmente devolvido", "Parcialmente devolvido")
+            ("ATRASADA", "ATRASADA"), 
+            ("DATA DE RETORNO NÃO DEFINIDA", "DATA DE RETORNO NÃO DEFINIDA"), 
+            ("DENTRO DO PRAZO", "DENTRO DO PRAZO"),
+            ("DESCARREGADA", "DESCARREGADA"),
+            ("DESCARREGADA COM ATRASO", "DESCARREGADA COM ATRASO"),
+            ("PARCIALMENTE DESCARREGADA COM ATRASO", "PARCIALMENTE DESCARREGADA COM ATRASO"),
+            ("PARCIALMENTE DESCARREGADA", "PARCIALMENTE DESCARREGADA"),
         ),
         required=False,
     )

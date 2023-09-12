@@ -48,10 +48,11 @@ def get_equipment_serNum(request, serial_number):
             return JsonResponse(
                 {"msm": "Equipamento não existe na base de dados!", "registred": False}
             )
-        data = {}
-        data["equipment"] = model_to_dict(equipment)
-        data["registred"] = equipment.model_type.model.replace("model_", "")
-        data["model"] = model_to_dict(equipment.model)
+        data = {
+            "equipment": model_to_dict(equipment),
+            "registred": equipment.model_type.model.replace("model_", ""),
+            "model": model_to_dict(equipment.model),
+        }
         data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
 
         return JsonResponse(data)
@@ -66,38 +67,65 @@ def get_equipment_serNum(request, serial_number):
                     "uid": "",
                 }
             )
-        data = {}
-        data["model"] = model_to_dict(bullet)
-        data["registred"] = "bullet"
+        data = {
+            "uid": "Search",
+            "model": model_to_dict(bullet),
+            "registred": "bullet"
+        }
         data['model']['image_path'] = bullet.image_path.url if bullet.image_path else ''
         data["equipment"] = data["model"]
 
         return JsonResponse(data)
 
 
-# Retorna o equipamento referente ao uid mais recente em formato JSON
 def get_equipment_avalible(request):
+    """
+    Retorna o equipamento referente ao uid mais recente em formato JSON
+    Especificamente diferente na questão de que, se ele estiver indisponível 
+    ele retorna uma mensagem falando o motivo.
+    
+    Usado no processo de fetch load
+    """
+    
     data = {"uid": ""}
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get("type") != None:
-        data["registred"] = request.GET.get("type")
-
         # Caso seja uma munição
         if request.GET.get("type") == "bullet":
+            caliber = request.GET.get("pk").replace("%20", " ")
             try:
-                bullet = Bullet.objects.get(pk=request.GET.get("pk"))
+                bullet = Bullet.objects.get(caliber=caliber)
+            except Equipment.DoesNotExist:
+                return JsonResponse(
+                    {"uid": "", "msm": "Equipamento não cadastrado", "a": caliber}
+                )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
+
+            data = {
+                "uid": "Search",
+                "equipment": model_to_dict(bullet),
+                "registred": "bullet",
+            }
+            data['equipment']['image_path'] = bullet.image_path.url if bullet.image_path else ''
+            data['model'] = data['equipment']
+        elif request.GET.get("type") == "equipment":
+            try:
+                equipment = Equipment.objects.get(serial_number=request.GET.get("pk"))
             except Equipment.DoesNotExist:
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
-                )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
-
-            data["equipment"] = model_to_dict(bullet)
+                )
+            data = {
+                "uid": "Search",
+                "equipment": model_to_dict(equipment),
+                "registred": equipment.model_type.model.replace("model_", ""),
+                "model": model_to_dict(equipment.model),
+            }
+            data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
 
     # Para os equipamentos com a tag
-    if settings.AUX["uids"].__len__() > 0 and settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]:
-        uid = settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]
-        settings.AUX["uids"].pop()
+    elif len(settings.AUX["uids"]) > 0:
+        uid = settings.AUX["uids"].pop()
         data["uid"] = uid
 
         try:
@@ -123,8 +151,15 @@ def get_equipment_avalible(request):
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
 
-# Retorna o equipamento referente ao uid mais recente em formato JSON
 def get_equipment_unvalible(request, id):
+    """
+    Retorna o equipamento referente ao uid mais recente em formato JSON
+    Especificamente diferente na questão de que, se ele estiver disponível 
+    ele retorna uma mensagem falando o motivo.
+    
+    Usado no processo de fetch unload
+    """
+    
     data = {"uid": ""}
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
@@ -134,24 +169,49 @@ def get_equipment_unvalible(request, id):
         # Caso seja uma munição
         if request.GET.get("type") == "bullet":
             try:
-                bullet = Bullet.objects.get(pk=request.GET.get("pk"))
+                bullet = Bullet.objects.get(caliber=request.GET.get("pk"))
             except Equipment.DoesNotExist:
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
             
-            if bullet in Equipment_load.objects.filter(load=id):
+            if Equipment_load.objects.filter(load=id, bullet=bullet).exists():
+                data["uid"] = 'Search'
                 data["equipment"] = model_to_dict(bullet)
                 data["equipment"]['image_path'] = bullet.image_path.url if bullet.image_path else ''
+                data["model"] = data["equipment"]
             else:
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não presente na carga atual."}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
 
+        elif request.GET.get("type") == "equipment":
+            try:
+                equipment = Equipment.objects.get(serial_number=request.GET.get("pk"))
+            except Equipment.DoesNotExist:
+                return JsonResponse(
+                    {"uid": "", "msm": "Equipamento não cadastrado"}
+                )
+                
+            if Equipment_load.objects.filter(load=id, equipment=equipment).exists():
+                data = {
+                    "uid": "Search",
+                    "equipment": model_to_dict(equipment),
+                    "registred": equipment.model_type.model.replace("model_", ""),
+                    "model": model_to_dict(equipment.model),
+                }
+                data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
+
+                return JsonResponse(data)
+            else:
+                return JsonResponse(
+                    {"uid": "", "msm": "Equipamento não presente na carga atual."}
+                )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
+                
+                
     # Para os equipamentos com a tag
-    if settings.AUX["uids"].__len__() > 0 and settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]:
-        uid = settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]
-        settings.AUX["uids"].pop()
+    elif settings.AUX["uids"].__len__() > 0:
+        uid = settings.AUX["uids"].pop()
         data["uid"] = uid
 
         try:
@@ -164,7 +224,7 @@ def get_equipment_unvalible(request, id):
             return JsonResponse(
                 {
                     "uid": "",
-                    "msm": "Equipamento não disponível, equipamento não está na carga.",
+                    "msm": "Equipamento não está na carga.",
                 }
             )
         for equipment_load in Equipment_load.objects.filter(load=id):
@@ -182,12 +242,14 @@ def get_equipment_unvalible(request, id):
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
 
-# Recebe o UID do ESP
 def set_uid(request):
+    """
+    Método que recebe o UID do ESP e armazena na memória
+    """
+    
     data = {"uid": "Não setado"}
     # Armazena o UID recebido num array
     if request.method == "GET":
-        print(request.GET.get("uid"))
         if (
             request.GET.get("uid") != ""
             and request.GET.get("uid") != None
@@ -201,5 +263,9 @@ def set_uid(request):
 
 
 def get_uids(request):
+    """
+    Returns:
+        Array: JSON com todos os uids
+    """
     dicionario = dict(enumerate(settings.AUX["uids"]))
     return JsonResponse(dicionario)

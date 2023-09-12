@@ -122,12 +122,6 @@ function selectCargo(id) {
             script.id = 'fetch_load.js';
             document.head.appendChild(script);
 
-            document.getElementById("search-btn").addEventListener("click", () => {
-                let search = document.getElementById("search-camp");
-                fetchEquipmentData(search.value);
-                search.value = '';
-            });
-
             setTimeout(() => {
                 set_carga_id(id);
             }, 500);
@@ -254,11 +248,11 @@ function clearSquare() {
     let amount_input = document.getElementById("amount_input");
     
     document.getElementById("means_room_product").src = "/static/img/default.png";
-    serialNumberInput.innerText = '';
-    description.innerText = '';
-    observation.innerHTML = '';
-    type.innerText = '';
-    amount.innerText = '';
+    serialNumberInput.innerText = ' ';
+    description.innerText = ' ';
+    observation.innerHTML = ' ';
+    type.innerText = ' ';
+    amount.innerText = ' ';
     amount_input.value = '1';
     amount_input.disabled = true;
 }

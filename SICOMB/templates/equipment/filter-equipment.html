@@ -60,13 +60,14 @@
                                 {{ field }}
                             </th>
                         {% endfor %}
-                        <th></th>
+                        <th colspan='2'></th>
                     </tr>
                 </form>
                 <tr class="col-itens">
                     <td>Numero de Série</td>
                     <td>uid</td>
                     <td>Status</td>
+                    <td>Tipo</td>
                     <td>Modelo</td>
                     <th>EDITAR</th>
                 </tr>
@@ -86,6 +87,7 @@
                     {% elif equipment.model_type.name == "model_armament" %}
                         Armamento
                     {% endif %}</td>
+                    <td>{{ equipment.model.model }}</td>
                     <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_equipment" id=equipment.pk %}'" name="pk" value="{{ equipment.pk }}">EDITAR<button></td>
                 </tr>
             {% empty %}

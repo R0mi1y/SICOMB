@@ -23,9 +23,8 @@ def confirm_load(request):
         if len(settings.AUX["list_equipment"]) > 0 or len(settings.AUX["list_equipment_removed"]) > 0:
             turn_type = request.POST.get("turn_type")
             data_hora_atual = datetime.now()  # pega a data atual
-            
             turn_types = ['6H', '12H', '24H', '8H']
-            
+
             if turn_type in turn_types:
                 data_hora_futura = data_hora_atual + timedelta(
                     hours=int(turn_type.replace("H", ""))
@@ -35,7 +34,7 @@ def confirm_load(request):
 
             try:
                 police = Police.objects.get(matricula=request.POST.get("plate"))
-            except:
+            except Police.DoesNotExist:
                 pass
 
             load = Load(
@@ -43,18 +42,16 @@ def confirm_load(request):
                 turn_type=turn_type,
                 police=police,
                 adjunct=request.user,
-            )  # Cadastra a carga
+                status="-",
+            )
             load.save()
             
-            turn_types = turn_types + ['descarga', 'REQUISIÇÃO JUDICIAL', 'CONSERTO', 'INDETERMINADO']
+            turn_types += ['REQUISIÇÃO JUDICIAL', 'CONSERTO', 'INDETERMINADO']
 
             if turn_type in turn_types:
-                # Cadastra a lista de equipamentos na tabela equipment_load
-                # com a carga cadastrada e os equipamentos da lista
                 for key in settings.AUX["list_equipment"]:
-                    if key.isdigit() or "ac" in key:
+                    if key.isdigit() or key.startswith("ac"):
                         equipment = Equipment.objects.get(serial_number=key)
-                        equipment.status = turn_type
                         equipment.save()
 
                         Equipment_load(
@@ -63,48 +60,45 @@ def confirm_load(request):
                             observation=settings.AUX["list_equipment"][key]["observation"],
                             amount=settings.AUX["list_equipment"][key]["amount"],
                         ).save()
-                    elif not key.isdigit():  # se for uma munição
+                    elif not key.isdigit():
                         bullet = Bullet.objects.get(caliber=key)
-                        
-                        if (int(bullet.amount) - int(settings.AUX["list_equipment"][key]["amount"]) < 0):
-                            settings.AUX["list_equipment"][key]["amount"] = bullet.amount
+                        amount_to_subtract = int(settings.AUX["list_equipment"][key]["amount"])
+
+                        if bullet.amount - amount_to_subtract < 0:
+                            amount_to_subtract = bullet.amount
                             bullet.amount = 0
                             data["msm"] = "Munição insuficiente, munição zerada"
                         else:
-                            bullet.amount = int(bullet.amount) - int(
-                                settings.AUX["list_equipment"][key]["amount"]
-                            )
+                            bullet.amount -= amount_to_subtract
+
                         bullet.save()
                         
                         equipment_load = Equipment_load.objects.filter(load=load, bullet=bullet).first()
                         
-                        if (equipment_load is not None):
-                            equipment_load.amount = settings.AUX["list_equipment"][key]["amount"]
+                        if equipment_load is not None:
+                            equipment_load.amount = amount_to_subtract
                             equipment_load.save()
                         else:
                             Equipment_load(
                                 load=load,
                                 bullet=bullet,
                                 observation=settings.AUX["list_equipment"][key]["observation"],
-                                amount=settings.AUX["list_equipment"][key]["amount"],
+                                amount=amount_to_subtract,
                             ).save()
                             
                 for key in settings.AUX["list_equipment_removed"]:
-                    if key.isdigit() or "ac" in key:
+                    if key.isdigit() or key.startswith("ac"):
                         equipment = Equipment.objects.get(serial_number=key)
-                        equipment.status = turn_type
                         equipment.save()
 
                         Equipment_load(
                             load=load,
                             equipment=equipment,
-                            observation=settings.AUX["list_equipment_removed"][key][
-                                "observation"
-                            ],
+                            observation=settings.AUX["list_equipment_removed"][key]["observation"],
                             amount=settings.AUX["list_equipment_removed"][key]["amount"],
                             status="Pendente",
                         ).save()
-                    elif key[0] == ".":  # se for uma munição
+                    elif key.isalnum():
                         bullet = Bullet.objects.get(caliber=key)
 
                         Equipment_load(
@@ -116,13 +110,10 @@ def confirm_load(request):
                         ).save()
 
                 settings.AUX["matricula"] = ""
-
                 settings.AUX["list_equipment"].clear()
                 settings.AUX["list_equipment_removed"].clear()
-                # else:
-                #     data["error"] = "Error"
-            elif turn_type == "descarga":
                 
+            elif turn_type == "descarga":
                 load.returned_load_date = datetime.now()
                 load.status = "descarga"
                 load.save()
@@ -131,77 +122,85 @@ def confirm_load(request):
                 load_unload = Load.objects.filter(id=request.POST.get("load_id")).first()
                 equipment_load_list = Equipment_load.objects.filter(load=load_unload)
                 
-                # Cadastra a lista de equipamentos na tabela equipment_load
-                # com a carga cadastrada e os equipamentos da lista
                 for key in settings.AUX["list_equipment"]:
-                    if key.isdigit() or "ac" in key:
-                        load_unload.status = "Parcialmente devolvido"
+                    amount = int(settings.AUX["list_equipment"][key]["amount"])
+                    observation = settings.AUX["list_equipment"][key]["observation"]
+                    
+                    if key.isdigit() or key.startswith("ac"):
+                        print("acessório ou equipamento")
+                        load_unload.status = "Descarga da carga " + str(load_unload.pk)
+                        load_unload.save()
+                        
                         equipment = Equipment.objects.get(serial_number=key)
+                        print(equipment)
                         equipment.status = "Disponível"
                         equipment.save()
                         
                         eq_load = equipment_load_list.filter(equipment=equipment).first()
+                        print(eq_load)
                         eq_load.status = "Devolvido"
                         eq_load.save()
                         
                         Equipment_load(
                             load=load,
                             equipment=equipment,
-                            observation=settings.AUX["list_equipment"][key]["observation"],
-                            amount=settings.AUX["list_equipment"][key]["amount"],
+                            observation=observation,
+                            amount=amount,
+                            status="Retorno",
                         ).save()
                         
-                    elif key[0] == ".":  # se for uma munição
-                        load_unload.status = "Parcialmente devolvido"
+                    elif key.isalnum():
+                        print("Munição")
+                        load_unload.status = "Descarga da carga " + str(load_unload.pk)
+                        load_unload.save()
+                        
                         bullet = Bullet.objects.get(caliber=key)
-                        bullet.amount += int(settings.AUX["list_equipment"][key]["amount"])
+                        bullet.amount += amount
                         bullet.save()
                         
-                        equipment_load = Equipment_load.objects.filter(load=load, bullet=bullet).first()
+                        equipment_load = Equipment_load.objects.filter(load=load_unload, bullet=bullet).first()
                         
-                        if (equipment_load is not None):
-                            equipment_load.amount = settings.AUX["list_equipment"][key]["amount"]
-                            equipment_load.save()
-                        else:
+                        if equipment_load is not None:
+                            if equipment_load.amount - amount > 0:
+                                equipment_load.amount -= amount
+                                
+                                Equipment_load(
+                                    load=load_unload,
+                                    bullet=bullet,
+                                    observation=observation,
+                                    amount=amount,
+                                    status="Devolvido",
+                                ).save()
+                                
+                                equipment_load.save()
+                                
+                            elif equipment_load.amount - amount < 0:
+                                messages.error(request, "Quantidade incorreta! Munições totalmente devolvidas!")
+                                equipment_load.status = "Devolvido"
+                                equipment_load.save()
+                                
+                            else:
+                                equipment_load.status = "Devolvido"
+                                equipment_load.save()
+                            
                             Equipment_load(
                                 load=load,
                                 bullet=bullet,
-                                observation=settings.AUX["list_equipment"][key]["observation"],
-                                amount=settings.AUX["list_equipment"][key]["amount"],
+                                observation=observation,
+                                amount=amount,
+                                status="Retorno",
                             ).save()
+                        else:
+                            messages.error("Erro!")
                             
-                for key in settings.AUX["list_equipment_removed"]:
-                    if key.isdigit() or "ac" in key:
-                        equipment = Equipment.objects.get(serial_number=key)
-                        equipment.status = "Disponível"
-                        equipment.save()
-
-                        Equipment_load(
-                            load=load,
-                            equipment=equipment,
-                            observation=settings.AUX["list_equipment_removed"][key][
-                                "observation"
-                            ],
-                            amount=settings.AUX["list_equipment_removed"][key]["amount"],
-                            status="Retornado",
-                        ).save()
-                    elif key[0] == ".":  # se for uma munição
-                        bullet = Bullet.objects.get(caliber=key)
-
-                        Equipment_load(
-                            load=load,
-                            bullet=bullet,
-                            observation=settings.AUX["list_equipment_removed"][key]["observation"],
-                            amount=settings.AUX["list_equipment_removed"][key]["amount"],
-                            status="Retornado",
-                        ).save()
-
                 settings.AUX["matricula"] = ""
+                
+                check_load(load_unload)
 
                 settings.AUX["list_equipment"].clear()
                 settings.AUX["list_equipment_removed"].clear()
             else:
-                messages.error(request, "Error, Tipo do turno inválido!")
+                messages.error(request, "Erro, Tipo do turno inválido!")
         else:
             messages.error(request, "Lista vazia!")
 
@@ -214,7 +213,6 @@ def confirm_load(request):
 def cancel_load(request):
     settings.AUX["list_equipment"].clear()
     settings.AUX["list_equipment_removed"].clear()
-
     return redirect("fazer_carga")
 
 
@@ -239,6 +237,7 @@ def filter_loads(request):
     }
         
     return render(request, "load/filter-load.html", context)
+
 
 def get_carga_policial(request, pk):
     load = get_object_or_404(Load, pk=pk)

@@ -15,7 +15,7 @@ def delete_equipment(request, id):
     except Equipment.DoesNotExist:
         pass
 
-    return redirect("manage_equipment")
+    return redirect("filter_equipment")
 
 
 @login_required
@@ -43,7 +43,7 @@ def register_edit_equipment(request, id=None):
             if form.is_valid():
                 form.save()
 
-                return redirect("manage_equipment")
+                return redirect("filter_equipment")
             else:
                 return render(
                     request, "equipment/register-equipment.html", {"form": form}

@@ -407,7 +407,7 @@ footer{
 
 /* LISTA DE CARGAS DA PÁGINA 'CARGAS' */
 
-.status-desviada-atraso {
+/* .status-desviada-atraso {
     border-left: solid #5B4939;
     border-right: solid #5B4939;
     background-color: darkorange;
@@ -447,7 +447,7 @@ footer{
     border-right: solid #5B4939;
     background-color: blue;
     color: #fff;
-}
+} */
 
 
 
@@ -511,7 +511,7 @@ footer{
 
 /* Status Descarregada Dentro do Prazo */
 .status-descarregada-prazo {
-    background-color: #FFFF00; /* Cor de fundo amarela ou apropriada */
+    background-color: #0dff00; /* Cor de fundo amarela ou apropriada */
     color: #000000; /* Cor do texto preta ou apropriada */
 }
 
@@ -522,13 +522,13 @@ footer{
 }
 
 /* Status Desviada com Atraso */
-.status-desviada-atraso {
+.status-atraso {
     background-color: #800080; /* Cor de fundo roxa ou apropriada */
     color: #FFFFFF; /* Cor do texto branca ou apropriada */
 }
 
 /* Status Desviada Dentro do Prazo */
-.status-desviada-prazo {
+.status-prazo {
     background-color: #800080; /* Cor de fundo roxa ou apropriada */
     color: #FFFFFF; /* Cor do texto branca ou apropriada */
 }
@@ -546,13 +546,13 @@ footer{
 }
 
 /* Status Desviada e Parcialmente Descarregada com Atraso */
-.status-desviada-parcial-atraso {
+.status-parcial-atraso {
     background-color: #800080; /* Cor de fundo roxa ou apropriada */
     color: #FFFFFF; /* Cor do texto branca ou apropriada */
 }
 
 /* Status Desviada e Parcialmente Descarregada Dentro do Prazo */
-.status-desviada-parcial-prazo {
+.status-parcial-prazo {
     background-color: #800080; /* Cor de fundo roxa ou apropriada */
     color: #FFFFFF; /* Cor do texto branca ou apropriada */
 }

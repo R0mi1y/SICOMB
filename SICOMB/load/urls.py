@@ -14,8 +14,12 @@ urlpatterns = [
     path(
         "get/cargas_policial/<str:plate>/", apis.get_loads_police
     ),  # Retorna uma resposta JSON com todas as cargas do policial com filtro por matricula (caso necessário)
+    # path(
+    #     "lista_equipamentos/add/<str:serial_number>/<str:obs>/<str:amount>/<str:user>/<str:password>/",
+    #     apis.add_list_equipment,
+    # ),  # adiciona um equipamento à lista na views vindo do front
     path(
-        "lista_equipamentos/add/<str:serial_number>/<str:obs>/<str:amount>/<str:user>/<str:password>/",
+        "lista_equipamentos/add/",
         apis.add_list_equipment,
     ),  # adiciona um equipamento à lista na views vindo do front
     path(
