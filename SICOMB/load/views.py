@@ -19,7 +19,7 @@ def confirm_load(request):
     data = {}
     police = None
     
-    if request.method == "POST":
+    if request.method == "POST" and settings.AUX["confirmCargo"]:
         if len(settings.AUX["list_equipment"]) > 0 or len(settings.AUX["list_equipment_removed"]) > 0:
             turn_type = request.POST.get("turn_type")
             data_hora_atual = datetime.now()  # pega a data atual
@@ -204,6 +204,8 @@ def confirm_load(request):
 
         data["policial"] = police
 
+    settings.AUX["confirmCargo"] = False
+    
     return render(request, "load/load.html", data)
 
 
@@ -252,25 +254,28 @@ def check_load(load):
     # se tem alguma que ainda não foi devolvida
     has_not_devolved = load.equipment_loads.exclude(status='Devolvido').exists()
     
-    if expected_return_date:
-        if data_hora_atual > expected_return_date:
-            if has_devolved:
-                if has_not_devolved:
-                    load.status = 'PARCIALMENTE DESCARREGADA COM ATRASO'
+    status_descarregado = ['DESCARREGADA', 'DESCARREGADA COM ATRASO']
+    
+    if load.status not in status_descarregado: 
+        if expected_return_date:
+            if data_hora_atual > expected_return_date:
+                if has_devolved:
+                    if has_not_devolved:
+                        load.status = 'PARCIALMENTE DESCARREGADA COM ATRASO'
+                    else:
+                        load.status = 'DESCARREGADA COM ATRASO'
                 else:
-                    load.status = 'DESCARREGADA COM ATRASO'
+                    load.status = 'ATRASADA'
             else:
-                load.status = 'ATRASADA'
+                if has_devolved:
+                    if has_not_devolved:
+                        load.status = 'PARCIALMENTE DESCARREGADA'
+                    else:
+                        load.status = 'DESCARREGADA'
+                else:
+                    load.status = 'DENTRO DO PRAZO'
         else:
-            if has_devolved:
-                if has_not_devolved:
-                    load.status = 'PARCIALMENTE DESCARREGADA'
-                else:
-                    load.status = 'DESCARREGADA'
-            else:
-                load.status = 'DENTRO DO PRAZO'
-    else:
-        load.status = 'DATA DE RETORNO NÃO DEFINIDA'
+            load.status = 'DATA DE RETORNO NÃO DEFINIDA'
         
     load.save()
     return True

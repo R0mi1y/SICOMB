@@ -14,6 +14,7 @@ urlpatterns = [
     path("modelo/edit/<str:model_name>/<int:id>/", views.register_edit_model, name="edit_model"), # registra o equipamento
     path("modelo/delete/<str:model_name>/<int:id>/", views.delete_model, name="delete_model"), # registra o equipamento
     
+    path("allow_cargo", apis.allow_cargo), # retorna em json o equipamento do uid inserido (em formato JSON)
     path("get_disponivel", apis.get_equipment_avalible), # retorna em json o equipamento do uid inserido (em formato JSON)
     path("get_indisponivel/<int:id>/", apis.get_equipment_unvalible), # retorna em json o equipamento do uid inserido (em formato JSON)
     path("get/<str:serial_number>", apis.get_equipment_serNum), # retorna em o equipamento do uid inserido (em formato JSON)

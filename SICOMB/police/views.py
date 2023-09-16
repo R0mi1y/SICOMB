@@ -39,7 +39,7 @@ def login(request):
                 settings.AUX["matricula"] = request.POST.get("matricula")
 
                 data["police"] = police
-                loads = Load.objects.filter(police=police)
+                loads = Load.objects.filter(police=police).order_by('-date_load')[:15]
                 data["loads"] = []
                 for i in loads:
                     ec = Equipment_load.objects.filter(load=i)

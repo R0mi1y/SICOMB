@@ -11,7 +11,7 @@ var semaphore = true;
 var equipmentData = null; // Equipamento atual só que de forma global, pra acessar depois, será setada depois
 
 // seta a data e a hora atual => {
-set_date()
+set_date();
 // => }
 
 // busca se já tem uma lista no sistema 
@@ -72,6 +72,10 @@ function fetchEquipmentData(serial_number) {
                     console.log(list_awate_equipment);
                     checkAwateList();
                 }
+            } else if (data.confirmCargo) {
+                document.getElementById("submit_btn").disabled = false;
+                document.getElementById("submit_btn").classList.remove("btn_disabled");
+                document.getElementById("submit_btn").classList.add("btn_confirm");
             }
 
             // Se houver uma mensagem de erro na resposta, exibe-a
@@ -103,12 +107,6 @@ function check_cargo_square() {
         equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ?? equipmentData.model.caliber;
 
         // adiciona no array de equipamentos do django => {
-        console.log(equipmentData.equipment.serial_number);
-        console.log(observation.value);
-        console.log(equipmentData.amount);
-        console.log(user);
-        console.log(pass);
-
         fetch('http://localhost:8000/carga/lista_equipamentos/add/', {
             method: 'POST',
             headers: {
@@ -132,8 +130,6 @@ function check_cargo_square() {
             // Lidar com erros de solicitação, se houver
             console.error(error);
             });
-
-
         // => }
 
         equipmentData = null; // reseta os equipamentos atuais

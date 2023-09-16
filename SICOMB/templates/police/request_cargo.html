@@ -44,7 +44,8 @@
                             <form action="./" method="post">
                                 {% csrf_token %}
                                 <div class="btn_final">
-                                    <input class="btn_finalize btn_cancel shadow" name="cancelar" type="submit" value="Cancelar">
+                                    <input class="btn_finalize btn_cancel shadow" name="Cancelar" type="submit" value="Cancelar">
+                                    <input class="btn_finalize btn_confirm shadow" onclick="confirmCargo();" type="button" value="Confirmar carga">
                                 </div>
                             </form>
                         </td>
@@ -64,14 +65,6 @@
                         <th colspan="100%" class="cargo_title"><h3 >ITENS</h3></th>
                     </tr>
                     <tr class="col-itens">
-                        {% comment %} <th>Nº DE SÉRIE</th>
-                        <th>DESCRIÇÃO</th>
-                        <th>TIPO</th>
-                        <th>CALIBRE</th>
-                        <th>QUANTIDADE</th>
-                        <th>TAMANHO</th>
-                        <th>OBSERVAÇÃO</th>
-                        <th>AÇÃO</th> {% endcomment %}
                         <th>ID DE CARGA</th>
                         <th>TIPO</th>
                         <th>MATRÍCULA</th>
@@ -85,7 +78,6 @@
                 {% if loads %}
                 <tbody>
                     {% for i in loads %}
-                    <tr>
                         <tr>
                             <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
                             <td>{{i.0.turn_type}}</td>
@@ -93,18 +85,48 @@
                             <td class="click_redirect" ><a  href="">{{ i.0.adjunct.username |default:"Adjunto Indisponível" }}</a></td>
                             <td>{{ i.0.police.posto |default:'Tenente'}}</td>
                             <td>{{ i.1 }}</td>
-                            <td>{{ i.0.date_cargo }}</td>
+                            <td>{{ i.0.date_load }}</td>
                             <td>{{ i.0.expected_cargo_return_date |default:'-' }}</td>
                         </tr>
-                    </tr>
                     {% endfor %}
                 </tbody>
                 {% endif %}
             </table>
-
         </div>
     </section>
-        {% else %}
+    <section>
+        <div class="cargo_itens shadow">
+            <!-- <h2>ITENS</h2> -->
+            
+            <table class="table_itens">
+                <thead>
+                    <tr>
+                        <th colspan="100%" class="cargo_title"><h3 >ITENS</h3></th>
+                    </tr>
+                    <tr class="col-itens">
+                        <th>Nª</th>	
+                        <th>Nº DE SÉRIE</th>	
+                        <th>DESCRIÇÃO</th>	
+                        <th>TIPO</th>	
+                        <th>CALIBRE</th>	
+                        <th>QUANTIDADE</th>	
+                        <th>TAMANHO</th>	
+                        <th>OBSERVAÇÃO</th>	
+                        <th>AÇÃO</th>
+                    </tr>
+                </thead>
+                <tbody id="actually_load">
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script>
+        var user = "{{ user.username }}";
+        var pass = "{{ user.password }}";
+    </script>
+    <script src="{% static "js/police_request_page.js" %}"></script>
+    {% else %}
         <style>
             .cargo {
                 height: 83%;
@@ -149,6 +171,6 @@
             </div>
         </div>
     </section>
-        {% endif %}
+    {% endif %}
 {% endblock content_final%}
 

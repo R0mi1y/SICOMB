@@ -167,4 +167,5 @@ AUX = {
         ("7.62mm", "7.62mm"),
         (".22 LR", ".22 LR"),
     ),
+    "confirmCargo": False,
 }

@@ -21,6 +21,10 @@ function set_date() {
     document.getElementById('date').innerText = data;
     document.getElementById('time').innerText = time;
     document.getElementById('turn_type').innerText = turn_type;
+
+    document.getElementById("cancel_btn").disabled = false;
+    document.getElementById("cancel_btn").classList.remove("btn_disabled");
+    document.getElementById("cancel_btn").classList.add("btn_cancel");
 }
 
 // responsável por mudar a tabela da sala de meios de acordo com a requisição
@@ -129,7 +133,7 @@ function selectCargo(id) {
             script.src = '/static/js/fetch_unload.js';
             script.id = 'fetch_load.js';
             document.head.appendChild(script);
-
+            
             setTimeout(() => {
                 set_carga_id(id);
             }, 500);
@@ -247,7 +251,6 @@ var interval = setInterval(() => {
                 document.getElementById("form-equipment").appendChild(inputElement);
 
                 document.getElementById("police_officer_field").innerHTML = table;
-                document.getElementById("submit_btn").disabled = false;
 
                 changeTemplate("select_load");
             }

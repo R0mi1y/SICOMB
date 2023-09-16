@@ -100,7 +100,10 @@ def get_equipment_avalible(request):
     Usado no processo de fetch load
     """
     
-    data = {"uid": ""}
+    data = {
+        "uid": "",
+        "confirmCargo": settings.AUX["confirmCargo"],
+    }
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get("type") != None:
@@ -166,6 +169,15 @@ def get_equipment_avalible(request):
 
 @csrf_exempt
 @require_user_pass
+def allow_cargo(request):
+    print(settings.AUX["confirmCargo"])
+    settings.AUX["confirmCargo"] = True
+    print(settings.AUX["confirmCargo"])
+    return JsonResponse({})
+
+
+@csrf_exempt
+@require_user_pass
 def get_equipment_unvalible(request, id):
     """
     Retorna o equipamento referente ao uid mais recente em formato JSON
@@ -175,8 +187,11 @@ def get_equipment_unvalible(request, id):
     Usado no processo de fetch unload
     """
     
-    data = {"uid": ""}
-
+    data = {
+        "uid": "",
+        "confirmCargo": settings.AUX["confirmCargo"],
+    }
+    
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get("type") != None:
         print(request.GET.get("type"))

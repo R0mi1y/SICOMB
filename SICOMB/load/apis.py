@@ -139,17 +139,20 @@ def add_list_equipment(request):
             
         elif not serial_number.isdigit():  # se for uma munição
             bullet = get_object_or_404(Bullet, caliber=serial_number)
-            data = {
-                "model": model_to_dict(bullet),
-                "campo": "Munição",
-                "observation": obs if obs != "-" else "",
-                "amount": amount,
-            }
-            data["model"]["image_path"] = bullet.image_path.url if bullet.image_path else ''
-            data["equipment"] = data["model"]
-            settings.AUX["list_equipment"][serial_number] = data
-        
-        print(settings.AUX["list_equipment"])
+            
+            if settings.AUX["list_equipment"].get(serial_number) is not None:
+                print(settings.AUX["list_equipment"].get('serial_number'))
+                settings.AUX["list_equipment"][serial_number]["amount"] += int(amount)
+            else:
+                data = {
+                    "model": model_to_dict(bullet),
+                    "campo": "Munição",
+                    "observation": obs if obs != "-" else "",
+                    "amount": int(amount),
+                }
+                data["model"]["image_path"] = bullet.image_path.url if bullet.image_path else ''
+                data["equipment"] = data["model"]
+                settings.AUX["list_equipment"][serial_number] = data
         
         return JsonResponse({"uid": settings.AUX["list_equipment"]})
         # else:

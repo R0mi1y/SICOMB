@@ -18,6 +18,11 @@ function set_date() {
 
     document.getElementById('date').innerText = data;
     document.getElementById('time').innerText = time;
+
+    // troca a cor dos botões de submit e cancelar
+    document.getElementById("cancel_btn").disabled = false;
+    document.getElementById("cancel_btn").classList.remove("btn_disabled");
+    document.getElementById("cancel_btn").classList.add("btn_cancel");
 }
 // => }
 
@@ -84,7 +89,6 @@ function fetchUnvalibleEquipmentData(serial_number) { // começa a requisitar ma
             url = 'http://localhost:8000/equipamento/get_indisponivel/' + id_cargo + '/' + '?type=bullet&pk=' + serial_number;
         }
     }
-    console.log(url);
     fetch(url, {
             method: 'POST', // Método HTTP POST para enviar dados
             headers: {
@@ -114,7 +118,13 @@ function fetchUnvalibleEquipmentData(serial_number) { // começa a requisitar ma
                         return;
                     } // a partir daqui é se o equipamento não é o certo
                 }
-            } // exibe a msm q veio do django (se houver)
+            } else if (data.confirmCargo) {
+                document.getElementById("submit_btn").disabled = false;
+                document.getElementById("submit_btn").classList.remove("btn_disabled");
+                document.getElementById("submit_btn").classList.add("btn_confirm");
+            } 
+            
+            // exibe a msm q veio do django (se houver)
             if ('msm' in data) {
                 popUp(data.msm);
             }

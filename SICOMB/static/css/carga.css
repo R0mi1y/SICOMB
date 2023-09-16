@@ -343,18 +343,21 @@ table img{
     margin: 0px 0px 0px 20px;
 }
 
-.btn_cancel{
-    background-color: #C5033D;
-}
-.btn_confirm{
-    background-color: rgb(5, 168, 5);
+.btn_disabled {
+    background-color: rgba(177, 177, 177, 0.875);
 }
 
-.btn_cancel:hover{
-    background-color: #b63159;
+.btn_confirm{
+    background-color: rgba(2, 183, 2, 0.875);
 }
 .btn_confirm:hover{
-    background-color: rgb(5, 168, 5, 0.8);
+    background-color: rgba(60, 190, 60, 0.8);
+}
+.btn_cancel{
+    background-color: #c7180c;
+}
+.btn_cancel:hover{
+    background-color: #b63131;
 }
 
 footer{

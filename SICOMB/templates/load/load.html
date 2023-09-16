@@ -104,8 +104,8 @@
         <div class="finalize_load">
             <form action="." method="POST" id="form-equipment">
                 {% csrf_token %}
-                <div class=""><input class="btn_finalize btn_cancel shadow" type="button" onclick="window.location.href = './cancelar';" value="Limpar lista">
-                <input class="btn_finalize btn_confirm shadow" id="submit_btn" disabled type="button" onclick="confirmCargo()" value="Finalizar"></div>
+                <div class=""><input class="btn_finalize btn_disabled shadow" disabled type="button" id="cancel_btn" onclick="window.location.href = './cancelar';" value="Limpar lista">
+                <input class="btn_finalize btn_disabled shadow" id="submit_btn" disabled type="button" onclick="confirmCargo()" value="Finalizar"></div>
             </form>
         </div>
     </div>
