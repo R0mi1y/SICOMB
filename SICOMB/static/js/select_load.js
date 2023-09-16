@@ -27,7 +27,15 @@ function set_date() {
 function changeTemplate(template) {
     if (template == "loads_police") {
         document.getElementById("means_room_content").innerHTML = '';
-        fetch("http://localhost:8000/carga/get/cargas_policial/" + plate + "/")
+        fetch("http://localhost:8000/carga/get/cargas_policial/" + plate + "/", {
+            method: 'POST', // Método HTTP POST para enviar dados
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'user': user,
+                'pass': pass,
+            })})
             .then(response => response.json())
             .then(data => {
                 var table_element = document.createElement('table');
@@ -187,7 +195,15 @@ function setTurnType() {
 
 var interval = setInterval(() => {
     let url = 'http://localhost:8000/police/get_login/';
-    fetch(url)
+    fetch(url, {
+        method: 'POST', // Método HTTP POST para enviar dados
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            'user': user,
+            'pass': pass,
+        })})
         .then(response => response.json())
         .then(policial => {
             if (policial && Object.keys(policial).length !== 0) {

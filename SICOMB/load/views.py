@@ -52,6 +52,7 @@ def confirm_load(request):
                 for key in settings.AUX["list_equipment"]:
                     if key.isdigit() or key.startswith("ac"):
                         equipment = Equipment.objects.get(serial_number=key)
+                        equipment.status = turn_type
                         equipment.save()
 
                         Equipment_load(
@@ -89,6 +90,7 @@ def confirm_load(request):
                 for key in settings.AUX["list_equipment_removed"]:
                     if key.isdigit() or key.startswith("ac"):
                         equipment = Equipment.objects.get(serial_number=key)
+                        equipment.status = turn_type
                         equipment.save()
 
                         Equipment_load(
@@ -127,17 +129,14 @@ def confirm_load(request):
                     observation = settings.AUX["list_equipment"][key]["observation"]
                     
                     if key.isdigit() or key.startswith("ac"):
-                        print("acessório ou equipamento")
                         load_unload.status = "Descarga da carga " + str(load_unload.pk)
                         load_unload.save()
                         
                         equipment = Equipment.objects.get(serial_number=key)
-                        print(equipment)
                         equipment.status = "Disponível"
                         equipment.save()
                         
                         eq_load = equipment_load_list.filter(equipment=equipment).first()
-                        print(eq_load)
                         eq_load.status = "Devolvido"
                         eq_load.save()
                         
@@ -150,7 +149,6 @@ def confirm_load(request):
                         ).save()
                         
                     elif key.isalnum():
-                        print("Munição")
                         load_unload.status = "Descarga da carga " + str(load_unload.pk)
                         load_unload.save()
                         

@@ -11,7 +11,8 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
-
+from load.apis import require_user_pass
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
@@ -115,6 +116,8 @@ def dashboard_police(request):
     return render(request, "police/police_page.html", context)
 
 
+@csrf_exempt
+@require_user_pass
 def get_login_police(request):
     try:
         police = Police.objects.get(matricula=settings.AUX["matricula"])

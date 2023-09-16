@@ -38,7 +38,16 @@ function set_carga_id(id) {
 
     document.getElementById('insert_btn').value = "DEVOLVER";
 
-    fetch('http://localhost:8000/carga/get/' + id_cargo + '/')
+    fetch('http://localhost:8000/carga/get/' + id_cargo + '/', {
+            method: 'POST', // Método HTTP POST para enviar dados
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'user': user,
+                'pass': pass
+            })
+        })
         .then(response => response.json())
         .then(data_cargo => {
             for (cargo in data_cargo.equipment_loads) {
@@ -75,7 +84,17 @@ function fetchUnvalibleEquipmentData(serial_number) { // começa a requisitar ma
             url = 'http://localhost:8000/equipamento/get_indisponivel/' + id_cargo + '/' + '?type=bullet&pk=' + serial_number;
         }
     }
-    fetch(url) // requisita o equipamento
+    console.log(url);
+    fetch(url, {
+            method: 'POST', // Método HTTP POST para enviar dados
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'user': user,
+                'pass': pass
+            })
+        }) // requisita o equipamento
         .then(response => response.json())
         .then(data => {
             if (data.uid !== '') {
@@ -108,7 +127,16 @@ function fetchUnvalibleEquipmentData(serial_number) { // começa a requisitar ma
 
 function fetchEquipmentData(serial_number) {
     let url = serial_number == null || serial_number == undefined ? 'http://localhost:8000/equipamento/get_disponivel' : 'http://localhost:8000/equipamento/get/' + serial_number;
-    fetch(url) // busca o equipamento do uid inserido
+    fetch(url, {
+        method: 'POST', // Método HTTP POST para enviar dados
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            'user': user,
+            'pass': pass
+        })
+    }) // busca o equipamento do uid inserido
         .then(response => response.json())
         .then(data => {
             if (data.uid !== '') {

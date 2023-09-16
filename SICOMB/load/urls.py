@@ -23,7 +23,7 @@ urlpatterns = [
         apis.add_list_equipment,
     ),  # adiciona um equipamento à lista na views vindo do front
     path(
-        "lista_equipamentos/remover/<str:serial_number>/<str:obs>/<str:amount>/",
+        "lista_equipamentos/remover/",
         apis.remove_list_equipment,
     ),  # Remove um equipamento da lista na views vindo do front a solicitação
     path("lista_equipamentos/get", apis.get_list_equipment),

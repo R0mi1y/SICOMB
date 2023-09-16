@@ -16,7 +16,15 @@ set_date()
 
 // busca se já tem uma lista no sistema 
 //(serve para caso a página de refresh, tá salvo no sistema desde q ele não rreinicie o sistema)
-fetch("http://localhost:8000/carga/lista_equipamentos/get") // faz uma requisição da lista
+fetch("http://localhost:8000/carga/lista_equipamentos/get", {
+    method: 'POST', // Método HTTP POST para enviar dados
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+        'user': user,
+        'pass': pass,
+    })}) // faz uma requisição da lista
     .then(response => response.json())
     .then(data => {
         list_equipment = data;
@@ -35,7 +43,16 @@ function fetchEquipmentData(serial_number) {
         'http://localhost:8000/equipamento/get/' + serial_number);
 
     // Faz a requisição para a URL especificada
-    fetch(url)
+    fetch(url, {
+            method: 'POST', // Método HTTP POST para enviar dados
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'user': user,
+                'pass': pass,
+            })
+        })
         .then(response => response.json())
         .then(data => {
             if (data.uid !== '') {
@@ -147,7 +164,16 @@ function checkRemoveRow(rowNumber) {
         clearInterval(interval); // Para de ficar requisitando
 
         interval = setInterval(() => { // começa a requisitar mas mudando as verificações
-            fetch('http://localhost:8000/equipamento/get_disponivel') // requisita o equipamento
+            fetch('http://localhost:8000/equipamento/get_disponivel', {
+                    method: 'POST', // Método HTTP POST para enviar dados
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'user': user,
+                        'pass': pass,
+                    })
+                }) // requisita o equipamento
                 .then(response => response.json())
                 .then(data => {
                     if (data.uid !== '') {
@@ -161,9 +187,17 @@ function checkRemoveRow(rowNumber) {
                                     // remove da lista do django
                                     console.log(list_equipment);
 
-                                    fetch("http://localhost:8000/carga/lista_equipamentos/remover/" + serialNum + "/" + obs + "/" + amount + '/', {
-                                        mode: 'no-cors',
-                                        method: 'POST',
+                                    fetch("http://localhost:8000/carga/lista_equipamentos/remover/", {
+                                        method: 'POST', // Método HTTP POST para enviar dados
+                                        headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded'
+                                        },
+                                        body: new URLSearchParams({
+                                            'user': user,
+                                            'pass': pass,
+                                            'serial_number': caliber,
+                                            'obs': obs
+                                        })
                                     });
 
                                     interval = setInterval(fetchEquipmentData, 1000); // volta a ficar requisitando pra cadastrar outros
@@ -189,9 +223,17 @@ function checkRemoveRow(rowNumber) {
     } else {
         caliber = col[4].innerHTML;
         removeRow(rowNumber);
-        fetch("http://localhost:8000/carga/lista_equipamentos/remover/" + caliber + "/" + obs + "/" + amount + '/', {
-            mode: 'no-cors',
-            method: 'POST'
+        fetch("http://localhost:8000/carga/lista_equipamentos/remover/", {
+            method: 'POST', // Método HTTP POST para enviar dados
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'user': user,
+                'pass': pass,
+                'serial_number': caliber,
+                'obs': obs
+            })
         });
     }
 
@@ -229,7 +271,17 @@ function checkAwateList() {
 }
 
 function searchWatingList() {
-    fetch("http://localhost:8000/equipamento/lista_espera/get/").then(response => response)
+    fetch("http://localhost:8000/equipamento/lista_espera/get/", {
+            method: 'POST', // Método HTTP POST para enviar dados
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'user': user,
+                'pass': pass
+            })
+        })
+        .then(response => response)
         .then(response => response.json())
         .then(data => {
             let wating_list = "";

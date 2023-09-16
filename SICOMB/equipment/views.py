@@ -5,6 +5,8 @@ from .forms import *
 from django.contrib import messages
 from itertools import chain
 from django.db.models import Q
+from police.models import Police
+
 
 
 # Registra o equipamento

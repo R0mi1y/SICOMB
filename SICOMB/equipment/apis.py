@@ -4,7 +4,12 @@ from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from SICOMB import settings
 from load.models import *
+from load.apis import require_user_pass
+from django.views.decorators.csrf import csrf_exempt
 
+
+@csrf_exempt
+@require_user_pass
 def get_bullets(request):
     bullets = Bullet.objects.all()
     data = {}
@@ -16,6 +21,8 @@ def get_bullets(request):
 
 
 # valida o uid pra cadastro
+@csrf_exempt
+@require_user_pass
 def valid_uid(request):
     if settings.AUX["uids"].__len__() > 0:
         uid = settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]
@@ -32,6 +39,8 @@ def valid_uid(request):
 
 
 # valida o numero de série pra cadastro
+@csrf_exempt
+@require_user_pass
 def valid_serial_number(request, sn):
     try:
         Equipment.objects.get(serial_number=sn)
@@ -40,6 +49,8 @@ def valid_serial_number(request, sn):
     return JsonResponse({"msm": "Numero de série já cadastrado", "exists": True})
 
 
+@csrf_exempt
+@require_user_pass
 def get_equipment_serNum(request, serial_number):
     if serial_number.isdigit():
         try:
@@ -78,6 +89,8 @@ def get_equipment_serNum(request, serial_number):
         return JsonResponse(data)
 
 
+@csrf_exempt
+@require_user_pass
 def get_equipment_avalible(request):
     """
     Retorna o equipamento referente ao uid mais recente em formato JSON
@@ -151,6 +164,8 @@ def get_equipment_avalible(request):
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
 
+@csrf_exempt
+@require_user_pass
 def get_equipment_unvalible(request, id):
     """
     Retorna o equipamento referente ao uid mais recente em formato JSON
@@ -164,6 +179,7 @@ def get_equipment_unvalible(request, id):
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get("type") != None:
+        print(request.GET.get("type"))
         data["registred"] = request.GET.get("type")
 
         # Caso seja uma munição
@@ -208,7 +224,6 @@ def get_equipment_unvalible(request, id):
                     {"uid": "", "msm": "Equipamento não presente na carga atual."}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
                 
-                
     # Para os equipamentos com a tag
     elif settings.AUX["uids"].__len__() > 0:
         uid = settings.AUX["uids"].pop()
@@ -242,6 +257,8 @@ def get_equipment_unvalible(request, id):
     return JsonResponse(data)  # Retorna o dicionário em forma de api
 
 
+@csrf_exempt
+# @require_user_pass
 def set_uid(request):
     """
     Método que recebe o UID do ESP e armazena na memória
@@ -262,6 +279,8 @@ def set_uid(request):
     return render(request, "equipment/set_answer.html", data)
 
 
+@csrf_exempt
+@require_user_pass
 def get_uids(request):
     """
     Returns:
