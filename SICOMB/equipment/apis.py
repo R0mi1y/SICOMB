@@ -4,7 +4,7 @@ from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from SICOMB import settings
 from load.models import *
-from load.apis import require_user_pass
+from .templatetags.custom_filters import require_user_pass
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -22,13 +22,15 @@ def get_bullets(request):
 
 # valida o uid pra cadastro
 @csrf_exempt
-@require_user_pass
 def valid_uid(request):
     if settings.AUX["uids"].__len__() > 0:
-        uid = settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]
-        settings.AUX["uids"][settings.AUX["uids"].__len__() - 1] = ""
+        uid = settings.AUX["uids"].pop()
         try:
-            Equipment.objects.get(uid=uid)
+            equipment = Equipment.objects.get(uid=uid)
+            
+            if not equipment.activated:
+                return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""})
+                
         except Equipment.DoesNotExist:  # se não existe
             return JsonResponse(
                 {"uid": uid}
@@ -43,7 +45,11 @@ def valid_uid(request):
 @require_user_pass
 def valid_serial_number(request, sn):
     try:
-        Equipment.objects.get(serial_number=sn)
+        equipment = Equipment.objects.get(serial_number=sn)
+        
+        if not equipment.activated:
+            return JsonResponse({"msm": "Numero de série aguardando aprovação de um administrador!", "exists": True})
+
     except Equipment.DoesNotExist:  # se não existe
         return JsonResponse({"exists": False})  # retorna que não existe
     return JsonResponse({"msm": "Numero de série já cadastrado", "exists": True})
@@ -55,9 +61,12 @@ def get_equipment_serNum(request, serial_number):
     if serial_number.isdigit():
         try:
             equipment = Equipment.objects.get(serial_number=serial_number)
+            
+            if not equipment.activated:
+                return JsonResponse({"msm": "Equipamento aguardando aprovação de um administrador!", "registred": True, "uid": ""})
         except Equipment.DoesNotExist:
             return JsonResponse(
-                {"msm": "Equipamento não existe na base de dados!", "registred": False}
+                {"msm": "Equipamento não existe na base de dados!", "registred": False, "uid": ""}
             )
         data = {
             "equipment": model_to_dict(equipment),
@@ -70,6 +79,9 @@ def get_equipment_serNum(request, serial_number):
     elif not serial_number.isdigit():
         try:
             bullet = Bullet.objects.get(caliber=serial_number)
+            
+            if not bullet.activated:
+                return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!", "registred": True})
         except Bullet.DoesNotExist:
             return JsonResponse(
                 {
@@ -112,6 +124,9 @@ def get_equipment_avalible(request):
             caliber = request.GET.get("pk").replace("%20", " ")
             try:
                 bullet = Bullet.objects.get(caliber=caliber)
+                
+                if not bullet.activated:
+                    return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!"})
             except Equipment.DoesNotExist:
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado", "a": caliber}
@@ -127,6 +142,9 @@ def get_equipment_avalible(request):
         elif request.GET.get("type") == "equipment":
             try:
                 equipment = Equipment.objects.get(serial_number=request.GET.get("pk"))
+                
+                if not equipment.activated:
+                    return JsonResponse({"uid": "", "msm": "Equipamento aguardando aprovação de um administrador!"})
             except Equipment.DoesNotExist:
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
@@ -146,6 +164,9 @@ def get_equipment_avalible(request):
 
         try:
             equipment = Equipment.objects.get(uid=uid)  # Recupera o objeto Equipamento
+            
+            if not equipment.activated:
+                return JsonResponse({"uid": "", "msm": "Equipamento aguardando aprovação de um administrador!"})
         except Equipment.DoesNotExist:
             return JsonResponse(
                 {"uid": "", "msm": "Equipamento não cadastrado"}
@@ -170,9 +191,7 @@ def get_equipment_avalible(request):
 @csrf_exempt
 @require_user_pass
 def allow_cargo(request):
-    print(settings.AUX["confirmCargo"])
     settings.AUX["confirmCargo"] = True
-    print(settings.AUX["confirmCargo"])
     return JsonResponse({})
 
 
@@ -194,13 +213,15 @@ def get_equipment_unvalible(request, id):
     
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get("type") != None:
-        print(request.GET.get("type"))
         data["registred"] = request.GET.get("type")
 
         # Caso seja uma munição
         if request.GET.get("type") == "bullet":
             try:
                 bullet = Bullet.objects.get(caliber=request.GET.get("pk"))
+                
+                if not bullet.activated:
+                    return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!"})
             except Equipment.DoesNotExist:
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
@@ -219,6 +240,9 @@ def get_equipment_unvalible(request, id):
         elif request.GET.get("type") == "equipment":
             try:
                 equipment = Equipment.objects.get(serial_number=request.GET.get("pk"))
+                
+                if not equipment.activated:
+                    return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""})
             except Equipment.DoesNotExist:
                 return JsonResponse(
                     {"uid": "", "msm": "Equipamento não cadastrado"}
@@ -246,6 +270,9 @@ def get_equipment_unvalible(request, id):
 
         try:
             equipment = Equipment.objects.get(uid=uid)  # Recupera o objeto Equipamento
+            
+            if not equipment.activated:
+                return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""})
         except Equipment.DoesNotExist:
             return JsonResponse(
                 {"uid": "", "msm": "Equipamento não cadastrado"}

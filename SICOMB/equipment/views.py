@@ -2,29 +2,26 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import *
-from django.contrib import messages
 from itertools import chain
-from django.db.models import Q
-from police.models import Police
-
+from .templatetags.custom_filters import has_group
 
 
 # Registra o equipamento
-@login_required
+@has_group('admin')
 def delete_equipment(request, id):
     try:
-        Equipment.objects.get(pk=id).delete()
+        Equipment.objects.get(pk=id, activated=True).delete()
     except Equipment.DoesNotExist:
         pass
 
     return redirect("filter_equipment")
 
 
-@login_required
+@has_group('adjunct')
 def register_edit_equipment(request, id=None):
     equipment = None
     if id:  # Se houver o id, signigica que é uma edição
-        equipment = Equipment.objects.get(pk=id)
+        equipment = Equipment.objects.get(pk=id, activated=True)
 
     if request.method == "POST":
         if request.POST.get("bullet") and request.POST.get("amount"):
@@ -55,7 +52,7 @@ def register_edit_equipment(request, id=None):
     return render(request, "equipment/register-equipment.html", {"form": form})
 
 
-@login_required
+@has_group('admin')
 def register_edit_model(request, model_name=None, id=None):
     model = None
     form = None
@@ -85,7 +82,7 @@ def register_edit_model(request, model_name=None, id=None):
     )
 
 
-@login_required
+@has_group('admin')
 def delete_model(request, model_name=None, id=None):
     data = {}
     if model_name:
@@ -97,49 +94,31 @@ def delete_model(request, model_name=None, id=None):
         print("Error delete_model")
 
 
-@login_required
-def manage_model(request):
-    data = {
-        "armament": Model_armament.objects.all(),
-        "accessory": Model_accessory.objects.all(),
-        "wearable": Model_wearable.objects.all(),
-        "grenada": Model_grenada.objects.all(),
-        "bullet": Bullet.objects.all(),
-    }
-
-    return render(request, "equipment/models.html", data)
-
-@login_required
+@has_group('adjunct')
 def filter_equipment(request):
-    equipment_list = Equipment.objects.all()
+    equipment_list = Equipment.objects.filter(activated=True)
     filter_form = EquipmentFilterForm(request.GET)
 
     if filter_form.is_valid():
-        model_name = {
-            "model_armament" : 'Armamento',
-            "model_accessory" : 'Acessório',
-            "model_wearable" : 'Vestimentos',
-            "model_grenada" : 'Granadas',
-        }
         equipment_list = filter_form.filter_queryset(equipment_list)
 
     context = {
         'equipment_list': equipment_list,
         'filter_form': filter_form,
-        'model_name': model_name,
     }
 
     return render(request, 'equipment/filter-equipment.html', context)
 
 
+@has_group('adjunct')
 def filter_model(request):
     # Consulta todos os objetos dos diferentes modelos e os concatena
     all_models = list(chain(
-        Model_armament.objects.all(),
-        Model_accessory.objects.all(),
-        Model_wearable.objects.all(),
-        Model_grenada.objects.all(),
-        Bullet.objects.all()
+        Model_armament.objects.filter(activated=True),
+        Model_accessory.objects.filter(activated=True),
+        Model_wearable.objects.filter(activated=True),
+        Model_grenada.objects.filter(activated=True),
+        Bullet.objects.filter(activated=True)
     ))
 
     filter_form = ModelFilterForm(request.GET)
@@ -151,7 +130,51 @@ def filter_model(request):
     context = {
         'model_list': all_models,
         'filter_form': filter_form,
-        'name': "model_armament"
     }
 
     return render(request, "equipment/filter-model.html", context)
+
+
+@has_group('admin')
+def approve_model(request):
+    all_models = list(chain(
+        Model_armament.objects.filter(activated=False),
+        Model_accessory.objects.filter(activated=False),
+        Model_wearable.objects.filter(activated=False),
+        Model_grenada.objects.filter(activated=False),
+        Bullet.objects.filter(activated=False)
+    ))
+    
+    context = {
+        'model_list': all_models,
+    }
+    
+    if request.method == "POST":
+        models = {
+            "Acessório": Model_accessory,
+            "Armamento": Model_armament,
+            "Vestimentos": Model_wearable,
+            "Granadas": Model_grenada,
+            "Munição": Bullet,
+        }
+        
+        model = models[request.POST.get("model_name")].objects.filter(pk=request.POST.get("model_id")).first()
+        model.activated = True
+        model.save()
+        
+    return render(request, "equipment/approve_model.html", context)
+
+
+@has_group('admin')
+def approve_equipment(request):
+    equipment_list = Equipment.objects.filter(activated=False)
+
+    if request.method == 'POST':
+        equipment = Equipment.objects.filter(pk=request.POST.get("equipment_id")).first()
+        equipment.activated = True
+        equipment.save()
+        
+    context = {
+        'equipment_list': equipment_list,
+    }
+    return render(request, "equipment/approve_equipment.html", context)

@@ -28,28 +28,28 @@ class EquipmentForm(forms.ModelForm):
     )
     
     armament = forms.ModelChoiceField(
-        queryset=Model_armament.objects.all(),
+        queryset=Model_armament.objects.filter(activated=True),
         widget=forms.Select(attrs={"id": "type-choices-armament", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
         label="ARMAMENTOS",
         empty_label="SELECIONE",
         required=False,
     )
     accessory = forms.ModelChoiceField(
-        queryset=Model_accessory.objects.all(),
+        queryset=Model_accessory.objects.filter(activated=True),
         widget=forms.Select(attrs={"id": "type-choices-accessory", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
         label="ACESSÓRIOS",
         empty_label="SELECIONE",
         required=False,
     )
     wearable = forms.ModelChoiceField(
-        queryset=Model_wearable.objects.all(),
+        queryset=Model_wearable.objects.filter(activated=True),
         widget=forms.Select(attrs={"id": "type-choices-wearable", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
         label="VESTIMENTOS",
         empty_label="SELECIONE",
         required=False,
     )
     grenada = forms.ModelChoiceField(
-        queryset=Model_grenada.objects.all(),
+        queryset=Model_grenada.objects.filter(activated=True),
         widget=forms.Select(attrs={"id": "type-choices-grenada", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
         label="GRANADAS",
         empty_label="SELECIONE",

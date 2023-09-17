@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
+from equipment.templatetags.custom_filters import has_group
 from load.models import *
 from equipment.models import *
 from police.models import *
@@ -14,7 +15,7 @@ settings.AUX["list_equipment"] = {}  # lista de equipamentos
 settings.AUX["list_equipment_removed"] = {}  # lista de equipamentos removidos
 
 # cadastra a carga com a lista
-@login_required
+@has_group('adjunct')
 def confirm_load(request):
     data = {}
     police = None
@@ -210,12 +211,14 @@ def confirm_load(request):
 
 
 # Cancela a carga e zera as listas
+@has_group('adjunct')
 def cancel_load(request):
     settings.AUX["list_equipment"].clear()
     settings.AUX["list_equipment_removed"].clear()
     return redirect("fazer_carga")
 
 
+@has_group('adjunct')
 def filter_loads(request):
     queryset = Load.objects.all().exclude(turn_type="descarga")
     
@@ -239,6 +242,7 @@ def filter_loads(request):
     return render(request, "load/filter-load.html", context)
 
 
+@login_required
 def get_carga_policial(request, pk):
     load = get_object_or_404(Load, pk=pk)
     equipment_loads = load.equipment_loads.all()

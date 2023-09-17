@@ -6,25 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 from load.models import *
 from equipment.models import *
 from police.models import *
-from datetime import datetime, timedelta
 from django.conf import settings
 from django.utils import timezone
-
-
-def require_user_pass(funcao):
-    def wrapper(request, *args, **kwargs):
-        if request.method == 'POST':
-            password = request.POST.get('pass')
-            user = request.POST.get('user')
-            
-            if Police.objects.filter(username=user, password=password).exists():
-                
-                return funcao(request, *args, **kwargs)
-            else:
-                
-                return JsonResponse({"message": "Credenciais inválidas"})
-        
-    return wrapper
+from equipment.templatetags.custom_filters import require_user_pass
 
 
 def convert_date(data_hora_utc):

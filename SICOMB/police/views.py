@@ -1,8 +1,8 @@
-from django.forms import model_to_dict
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from equipment.templatetags.custom_filters import has_group
 from police.forms import PoliceForm
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -10,14 +10,9 @@ from load.models import Load, Equipment_load
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
-from django.contrib.auth import get_user_model
 from load.apis import require_user_pass
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
-
-
-def index(request):
-    HttpResponseRedirect("index")
 
 
 @login_required
@@ -50,7 +45,7 @@ def login(request):
     return render(request, "police/request_cargo.html", data)
 
 
-@login_required
+@has_group('adjunct')
 def register_police(request):
     if request.method == "POST":
         form = PoliceForm(request.POST, request.FILES)
@@ -77,6 +72,7 @@ def register_police(request):
     )
 
 
+@has_group('adjunct')
 def search_police(request, matricula):
     try:
         policial = Police.objects.only("matricula").get(matricula=matricula)
@@ -104,6 +100,7 @@ def search_police(request, matricula):
     )
 
 
+@login_required
 def dashboard_police(request):
     context = {
         'cargos' : '',
@@ -138,12 +135,12 @@ def get_login_police(request):
     return JsonResponse(police)
 
 
-@login_required
+@has_group('admin')
 def promote_police(request):
     group, created = Group.objects.get_or_create(name='police')
     
     context = {
-        "btn_promote": "REBAIXAR",
+        "btn_promote": "PROMOVER",
         "polices": Police.objects.filter(groups=group),
     }
     
@@ -165,12 +162,12 @@ def promote_police(request):
     return render(request, 'police/promote_police.html', context)
 
 
-@login_required
+@has_group('admin')
 def reduce_police(request):
     group, created = Group.objects.get_or_create(name='adjunct')
 
     context = {
-        "btn_promote": "PROMOVER",
+        "btn_promote": "REBAIXAR",
         "polices": Police.objects.filter(groups=group)
     }
     if request.method == 'POST':
@@ -187,3 +184,8 @@ def reduce_police(request):
             return render(request, 'police/reduce_police.html', context)
 
     return render(request, 'police/promote_police.html', context)
+
+
+@has_group('admin')
+def approve_police(request):
+    return render(request, "equipment", {})

@@ -48,52 +48,38 @@
         <table class="table_itens">
             <thead>
                 <tr>
-                    <th colspan="100%" class="cargo_title"><h3>EQUIPAMENTOS</h3></th>
+                    <th class="cargo_title" colspan="100%"><h3>EQUIPAMENTOS</h3></th>
                 </tr>
-                <form method="get">
-                    <tr class="col-itens">
-                        <th colspan="100%" class=""><input type="submit" value="Filtrar"></th>
-                    </tr>
-                    <tr class="col-itens">
-                        {% for field in filter_form %}
-                            <th>
-                                {{ field }}
-                            </th>
-                        {% endfor %}
-                        <th colspan='2'></th>
-                    </tr>
-                </form>
                 <tr class="col-itens">
                     <td>Numero de Série</td>
                     <td>uid</td>
                     <td>Status</td>
                     <td>Tipo</td>
                     <td>Modelo</td>
-                    {% if user.is_superuser %}
-                        <th>EDITAR</th>
-                    {% endif %}
+                    <th>APROVAR</th>
                 </tr>
             </thead>
             <tbody>
                 {% for equipment in equipment_list %}
-                <tr>
-                    <td>{{ equipment.serial_number }}</td>
-                    <td>{{ equipment.uid }}</td>
-                    <td>{{ equipment.status }}</td>
-                    <td>{% if equipment.model_type.name == "model_accessory" %}
-                        Acessório
-                    {% elif equipment.model_type.name == "model_grenada" %}
-                        Granada
-                    {% elif equipment.model_type.name == "model_wearable" %}
-                        Vestível
-                    {% elif equipment.model_type.name == "model_armament" %}
-                        Armamento
-                    {% endif %}</td>
-                    <td>{{ equipment.model.model }}</td>
-                    {% if user.is_superuser %}
-                        <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_equipment" id=equipment.pk %}'" name="pk" value="{{ equipment.pk }}">EDITAR<button></td>
-                    {% endif %}
-                </tr>
+                <form action="." method="post">
+                    {% csrf_token %}
+                    <tr>
+                        <td>{{ equipment.serial_number }}</td>
+                        <td>{{ equipment.uid }}</td>
+                        <td>{{ equipment.status }}</td>
+                        <td>{% if equipment.model_type.name == "model_accessory" %}
+                            Acessório
+                        {% elif equipment.model_type.name == "model_grenada" %}
+                            Granada
+                        {% elif equipment.model_type.name == "model_wearable" %}
+                            Vestível
+                        {% elif equipment.model_type.name == "model_armament" %}
+                            Armamento
+                        {% endif %}</td>
+                        <td>{{ equipment.model.model }}</td>
+                        <td class="click_redirect"><button class="button_promote" type="submit" name="equipment_id" value="{{ equipment.pk }}">APROVAR<button></td>
+                    </tr>
+                </form>
             {% empty %}
                 <tr>
                     <td colspan="100%">Nenhum equipamento encontrado.</td>

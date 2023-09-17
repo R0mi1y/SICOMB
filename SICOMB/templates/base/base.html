@@ -106,6 +106,18 @@
                                 <img src="{% static 'img/warehouse.png' %}" alt="">
                                 <span>Rebaixar a Policial</span>
                             </li>   
+                            <li onclick="window.location='/equipamento/approve/'">
+                                <img src="{% static 'img/warehouse.png' %}" alt="">
+                                <span>Aprovar Equipamentos</span>
+                            </li>
+                            <li onclick="window.location='/equipamento/modelos/approve/'">
+                                <img src="{% static 'img/warehouse.png' %}" alt="">
+                                <span>Aprovar Modelos</span>
+                            </li>
+                            <li onclick="window.location='/police/approve/'">
+                                <img src="{% static 'img/warehouse.png' %}" alt="">
+                                <span>Aprovar Policiais</span>
+                            </li>
                         {% endif %}
                     </ul>
                     {% comment %} <div class="balls">
