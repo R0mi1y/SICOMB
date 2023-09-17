@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Police(AbstractUser):
+    activated = models.BooleanField("Ativado", default=False)
     matricula = models.CharField(max_length=20)
     telefone = models.CharField(max_length=20, unique=True)
     lotacao = models.CharField(max_length=50)

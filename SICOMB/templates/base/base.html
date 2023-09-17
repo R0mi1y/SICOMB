@@ -60,11 +60,11 @@
                                 <span>Dashboard</span>
                             </li>
                             <p>Gerenciamento</p>
-                            <li onclick="window.location='/carga/fazer_carga/'">
+                            <li onclick="window.location='{% url 'fazer_carga' %}'">
                                 <img src="{% static 'img/click.png' %}" alt="">
                                 <span>Fazer Carga/Descarga</span>
                             </li>
-                            <li onclick="window.location='/carga/dashboard_cargas/'">
+                            <li onclick="window.location='{% url 'filter_cargas' %}'">
                                 <img src="{% static 'img/network.png' %}" alt="">
                                 <span>Cargas</span>
                             </li>
@@ -82,11 +82,11 @@
                             </li>
                             <hr>
                             <p>Cadastramento</p>
-                            <li onclick="window.location='/police/register/'">
+                            <li onclick="window.location='{% url 'register_police' %}'">
                                 <img src="{% static 'img/user.png' %}" alt="">
                                 <span>Cadastrar Policial</span>
                             </li>
-                            <li onclick="window.location='/equipamento/cadastro/'">
+                            <li onclick="window.location='{% url 'register_equipment' %}'">
                                 <img src="{% static 'img/warehouse.png' %}" alt="">
                                 <span>Cadastrar Equipamento</span>
                             </li>
@@ -94,27 +94,27 @@
                         {% endif %}
                         {% if  user.is_superuser %}
                             <p>Admin</p>
-                            <li onclick="window.location='/equipamento/modelo/cadastro/'">
+                            <li onclick="window.location='{% url 'register_model' %}'">
                                 <img src="{% static 'img/warehouse.png' %}" alt="">
                                 <span>Cadastrar Modelo</span>
                             </li>
-                            <li onclick="window.location='/police/promote/'">
+                            <li onclick="window.location='{% url 'promote_police' %}'">
                                 <img src="{% static 'img/warehouse.png' %}" alt="">
                                 <span>Promover a Adjunto</span>
                             </li>
-                            <li onclick="window.location='/police/reduce/'">
+                            <li onclick="window.location='{% url 'reduce_police' %}'">
                                 <img src="{% static 'img/warehouse.png' %}" alt="">
                                 <span>Rebaixar a Policial</span>
                             </li>   
-                            <li onclick="window.location='/equipamento/approve/'">
+                            <li onclick="window.location='{% url 'approve_equipment' %}'">
                                 <img src="{% static 'img/warehouse.png' %}" alt="">
                                 <span>Aprovar Equipamentos</span>
                             </li>
-                            <li onclick="window.location='/equipamento/modelos/approve/'">
+                            <li onclick="window.location='{% url 'approve_model' %}'">
                                 <img src="{% static 'img/warehouse.png' %}" alt="">
                                 <span>Aprovar Modelos</span>
                             </li>
-                            <li onclick="window.location='/police/approve/'">
+                            <li onclick="window.location='{% url 'approve_police' %}'">
                                 <img src="{% static 'img/warehouse.png' %}" alt="">
                                 <span>Aprovar Policiais</span>
                             </li>

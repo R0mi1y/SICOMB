@@ -28,7 +28,7 @@ urlpatterns = [
     ),  # Remove um equipamento da lista na views vindo do front a solicitação
     path("lista_equipamentos/get", apis.get_list_equipment),
     # Retorna a lista da views
-    path("dashboard_cargas/", views.filter_loads, name='dashboard_cargas'),
+    path("", views.filter_loads, name='filter_cargas'),
     #Retorna a o policial resposável pela carga e a lista de equipamentos da carga
     path("<str:pk>/carga_policial/", views.get_carga_policial, name='carga_polical'),
 ]

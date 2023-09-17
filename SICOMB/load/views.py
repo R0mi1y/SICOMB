@@ -7,6 +7,7 @@ from police.models import *
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.utils import timezone
+from police.pdf_emails_views import generate_pdf, send_relatory
 from .forms import *
 from django.contrib import messages
 
@@ -111,6 +112,8 @@ def confirm_load(request):
                             amount=settings.AUX["list_equipment_removed"][key]["amount"],
                             status="Pendente",
                         ).save()
+                
+                send_relatory(load)
 
                 settings.AUX["matricula"] = ""
                 settings.AUX["list_equipment"].clear()
@@ -191,7 +194,9 @@ def confirm_load(request):
                             ).save()
                         else:
                             messages.error("Erro!")
-                            
+                
+                send_relatory(load)
+                
                 settings.AUX["matricula"] = ""
                 
                 check_load(load_unload)

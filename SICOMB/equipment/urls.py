@@ -11,7 +11,7 @@ urlpatterns = [
     
     path("modelos/", views.filter_model, name="manage_model"), # registra o equipamento
     path("modelos/approve/", views.approve_model, name="approve_model"), # registra o equipamento
-    path("modelo/cadastro/", views.register_edit_model, name="view_register_model"), # registra o equipamento
+    path("modelo/cadastro/", views.register_edit_model, name="register_model"), # registra o equipamento
     path("modelo/cadastro/<str:model_name>/", views.register_edit_model, name="register_model"), # registra o equipamento
     path("modelo/edit/<str:model_name>/<int:id>/", views.register_edit_model, name="edit_model"), # registra o equipamento
     path("modelo/delete/<str:model_name>/<int:id>/", views.delete_model, name="delete_model"), # registra o equipamento

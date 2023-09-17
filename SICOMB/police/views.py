@@ -18,19 +18,27 @@ from django.views.decorators.csrf import csrf_exempt
 @login_required
 def login(request):
     settings.AUX["matricula"] = ''
-    data = {"msm": ""}
+    data = {}
     if request.method == "POST":
         if not request.POST.get("cancelar"):
             try:
                 police = Police.objects.get(
                     matricula=request.POST.get("matricula")
                 )
+                
             except Police.DoesNotExist:
+                messages.error(request, "Matrícula incorreta!")
+                
                 return render(
-                    request, "police/request_cargo.html", {"msm": "Matrícula incorreta"}
+                    request, "police/request_cargo.html"
                 )
 
             if check_password(request.POST.get("senha"), police.password):
+                if not police.activated:
+                    messages.error(request, "Policial aguardando aprovação de um administrador!")
+                    
+                    return render(request, "police/request_cargo.html", data)
+                
                 settings.AUX["matricula"] = request.POST.get("matricula")
 
                 data["police"] = police
@@ -40,7 +48,7 @@ def login(request):
                     ec = Equipment_load.objects.filter(load=i)
                     data["loads"].append([i, len(ec)])
             else:
-                data["msm"] = "Senha incorreta"
+                messages.error(request, "Senha incorreta!")
 
     return render(request, "police/request_cargo.html", data)
 
@@ -119,10 +127,9 @@ def get_login_police(request):
     try:
         police = Police.objects.get(matricula=settings.AUX["matricula"])
         # settings.AUX["matricula"] = ""
-        caminho_arquivo = police.image_path.url
-
+        
         police = {
-            "foto": caminho_arquivo,
+            "foto": police.image_path.url,
             "nome": police.username,
             "matricula": police.matricula,
             "telefone": police.telefone,
@@ -141,7 +148,7 @@ def promote_police(request):
     
     context = {
         "btn_promote": "PROMOVER",
-        "polices": Police.objects.filter(groups=group),
+        "polices": Police.objects.filter(groups=group, activated=True),
     }
     
     if request.method == 'POST':
@@ -159,7 +166,7 @@ def promote_police(request):
             context["msm"] = "Falha, já existe um adjunto com esse nome!"
             return render(request, 'police/promote_police.html', context)
         
-    return render(request, 'police/promote_police.html', context)
+    return render(request, 'police/manage_police.html', context)
 
 
 @has_group('admin')
@@ -168,7 +175,7 @@ def reduce_police(request):
 
     context = {
         "btn_promote": "REBAIXAR",
-        "polices": Police.objects.filter(groups=group)
+        "polices": Police.objects.filter(groups=group, activated=True)
     }
     if request.method == 'POST':
         id = request.POST.get("pk")
@@ -179,13 +186,30 @@ def reduce_police(request):
             group_police, _ = Group.objects.get_or_create(name='police')
             police.groups.remove(group_police)
             
-        finally:
+        except Police.DoesNotExist:
             context["msm"] = "Falha, o policial não foi encontrado!"
             return render(request, 'police/reduce_police.html', context)
 
-    return render(request, 'police/promote_police.html', context)
+    return render(request, 'police/manage_police.html', context)
 
 
 @has_group('admin')
 def approve_police(request):
-    return render(request, "equipment", {})
+    context = {
+        "btn_promote": "APROVAR",
+        "polices": Police.objects.filter(activated=False)
+    }
+    if request.method == 'POST':
+        id = request.POST.get("pk")
+        try:
+            police = Police.objects.get(pk=id)
+            
+            police.activated = True
+            police.save()
+            
+        except Police.DoesNotExist:
+            messages.error(request, "Falha, o policial não foi encontrado!")
+            
+            return render(request, 'police/reduce_police.html', context)
+
+    return render(request, 'police/manage_police.html', context)

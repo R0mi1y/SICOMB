@@ -23,8 +23,6 @@ class PoliceForm(forms.ModelForm):
             'image_path'
         ]
         
-        # fields = "__all__"
-        
         widgets = {
             'username': forms.TextInput(attrs={'class':'input-data', "required": True}),
             'matricula': forms.TextInput(attrs={'id':'matricula-input'}),

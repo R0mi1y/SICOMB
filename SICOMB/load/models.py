@@ -2,7 +2,6 @@ from django.db import models
 from equipment.models import Equipment, Bullet
 from police.models import Police
 from django.utils import timezone
-
 # Create your models here.
 
 
@@ -50,3 +49,5 @@ class Equipment_load(models.Model):
     )
 
     # o amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
+
+
