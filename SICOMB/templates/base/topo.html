@@ -57,8 +57,8 @@
             </span>
             
             <span class="top-item">
-                <h3>{{ request.user.first_name}} {{ request.user.last_name }}</h3>
-                <p>MATRÍCULA: {{ request.user }}</p>
+                <h3>{{ request.user.username}}</h3>
+                <p>MATRÍCULA: {{ request.user.matricula }}</p>
             </span class="top-item">
             <span>
                 <button type="button" onclick="toggleMenu()">

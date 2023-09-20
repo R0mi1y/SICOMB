@@ -24,10 +24,9 @@ def require_user_pass(funcao):
         if request.method == 'POST':
             password = request.POST.get('pass')
             user = request.POST.get('user')
-            
-            if Police.objects.filter(username=user, password=password).exists():
-                
-                if request.user.groups.filter(name="adjunct").exists() or request.user.is_superuser:
+            police = Police.objects.filter(username=user, password=password).first()
+            if police:
+                if police.groups.filter(name="adjunct").exists() or request.user.is_superuser:
                     return funcao(request, *args, **kwargs)
                 else:
                     return JsonResponse({"msm": "Usuário não tem permissão!"})
@@ -46,10 +45,16 @@ def has_group(group_name):
             if not request.user.is_authenticated:
                 return HttpResponseForbidden("Acesso negado. Você não está autenticado.")
             
-            # Verifica se o usuário pertence ao grupo especificado
-            if request.user.groups.filter(name=group_name).exists() or request.user.is_superuser:
-                return view_func(request, *args, **kwargs)
+            if isinstance(group_name, list):
+                # Verifica se o usuário pertence ao grupo especificado
+                for i in group_name:
+                    if request.user.groups.filter(name=i).exists() or request.user.is_superuser:
+                        return view_func(request, *args, **kwargs)
+                return HttpResponseForbidden("Acesso negado. Você não tem permissão para acessar esta página.")
+            
             else:
+                if request.user.groups.filter(name=group_name).exists() or request.user.is_superuser:
+                    return view_func(request, *args, **kwargs)
                 return HttpResponseForbidden("Acesso negado. Você não tem permissão para acessar esta página.")
         
         return wrapper

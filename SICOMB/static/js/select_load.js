@@ -210,6 +210,7 @@ var interval = setInterval(() => {
         })})
         .then(response => response.json())
         .then(policial => {
+            console.log(policial);
             if (policial && Object.keys(policial).length !== 0) {
                 clearInterval(interval);
 
