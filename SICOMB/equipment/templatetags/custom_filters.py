@@ -2,6 +2,7 @@ from django import template
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import redirect
 from police.models import Police
+from django.contrib.auth.models import Group
 
 register = template.Library()
 
@@ -26,7 +27,10 @@ def require_user_pass(funcao):
             
             if Police.objects.filter(username=user, password=password).exists():
                 
-                return funcao(request, *args, **kwargs)
+                if request.user.groups.filter(name="adjunct").exists() or request.user.is_superuser:
+                    return funcao(request, *args, **kwargs)
+                else:
+                    return JsonResponse({"msm": "Usuário não tem permissão!"})
             else:
                 return JsonResponse({"msm": "Credenciais inválidas"})
         else:

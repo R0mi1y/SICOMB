@@ -1,7 +1,9 @@
+import datetime
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from SICOMB import settings
+from django.utils import timezone
 
 # imagem para caso não tenha uma imagem ainda
 
@@ -63,6 +65,7 @@ class Equipment(models.Model):
         ("INDETERMINADO", "INDETERMINADO"),
         ("REQUISIÇÃO JUDICIAL", "REQUISIÇÃO JUDICIAL"),
     )
+    date_register = models.DateTimeField("Data de registro", default=timezone.now)
     activated = models.BooleanField("Ativado", default=False)
     serial_number = models.CharField("Numero de série", max_length=20, null=True, unique=True)
     uid = models.CharField("uid", max_length=20, primary_key=True, default=None)

@@ -267,6 +267,7 @@ def get_equipment_unvalible(request, id):
     elif settings.AUX["uids"].__len__() > 0:
         uid = settings.AUX["uids"].pop()
         data["uid"] = uid
+        print(uid)
 
         try:
             equipment = Equipment.objects.get(uid=uid)  # Recupera o objeto Equipamento
@@ -306,7 +307,9 @@ def set_uid(request):
     Método que recebe o UID do ESP e armazena na memória
     """
     
-    data = {"uid": "Não setado"}
+    data = {"uid": "Não setado",
+            "equipments": Equipment.objects.all()
+            }
     # Armazena o UID recebido num array
     if request.method == "GET":
         if (

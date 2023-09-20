@@ -71,7 +71,7 @@
     }
 
     .submit-btn:hover {
-        background-color: #005c7a;
+      background-color: #005c7a;
     }
 
     .container-uid-links {
@@ -86,15 +86,6 @@
     .ac {
       background-color: #91e1fb;
     }
-    .ar {
-      background-color: #8bff91;
-    }
-    .wb {
-      background-color: #ff94f8;
-    }
-    .gb {
-      background-color: #ff8c90;
-    }
   </style>
 </head>
 <body>
@@ -103,24 +94,11 @@
     <button class="resend-btn" onclick="location.href='set?uid={{uid}}'">Reenviar</button>
     <div class="container-uid-links">
       <div class="uid-links">
-        {% for numero in "0123456789" %}
-          <a class="uid-link ac" href="set?uid=ac{{ numero }}">acessório {{ numero }}</a>&nbsp;
-        {% endfor %}
-      </div>
-      <div class="uid-links">
-        {% for numero in "0123456789" %}
-          <a class="uid-link ar" href="set?uid=ar{{ numero }}">armamento {{ numero }}</a>&nbsp;
-        {% endfor %}
-      </div>
-      <div class="uid-links">
-        {% for numero in "0123456789" %}
-          <a class="uid-link wb" href="set?uid=wb{{ numero }}">vestível {{ numero }}</a>&nbsp;
-        {% endfor %}
-      </div>
-      <div class="uid-links">
-        {% for numero in "0123456789" %}
-          <a class="uid-link gb" href="set?uid=gd{{ numero }}">granada {{ numero }}</a>&nbsp;
-        {% endfor %}
+        <ul>
+          {% for i in equipments %}
+            <li><a class="uid-link ac" href="set?uid={{ i.uid }}">{{ i.model_type.name }} {{ i.model.model }} - {{ i.status }} - {{ i.uid }}</a></li><br>
+          {% endfor %}
+        </ul>
       </div>
     </div>
     <a class="uid-link" href="set?uid=ns11">não setado</a>

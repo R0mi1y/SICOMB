@@ -39,6 +39,8 @@ def login(request):
                     
                     return render(request, "police/request_cargo.html", data)
                 
+                settings.AUX["confirmCargo"] = False
+                
                 settings.AUX["matricula"] = request.POST.get("matricula")
 
                 data["police"] = police
@@ -161,10 +163,10 @@ def promote_police(request):
             police.groups.add(group_adjunct)
             
             context["msm"] = "Promovido com sucesso!"
-            return render(request, 'police/promote_police.html', context)
+            return render(request, 'police/manage_police.html', context)
         except:
             context["msm"] = "Falha, já existe um adjunto com esse nome!"
-            return render(request, 'police/promote_police.html', context)
+            return render(request, 'police/manage_police.html', context)
         
     return render(request, 'police/manage_police.html', context)
 
@@ -207,6 +209,27 @@ def approve_police(request):
             police.activated = True
             police.save()
             
+        except Police.DoesNotExist:
+            messages.error(request, "Falha, o policial não foi encontrado!")
+            
+            return render(request, 'police/reduce_police.html', context)
+
+    return render(request, 'police/manage_police.html', context)
+
+
+@has_group('admin')
+def filter_police(request):
+    context = {
+        "btn_promote": "EDITAR",
+        "polices": Police.objects.filter(activated=True)
+    }
+    if request.method == 'POST':
+        id = request.POST.get("pk")
+        try:
+            police = Police.objects.get(pk=id)
+            request.method = "GET"
+            
+            return search_police(request, police.matricula)
         except Police.DoesNotExist:
             messages.error(request, "Falha, o policial não foi encontrado!")
             

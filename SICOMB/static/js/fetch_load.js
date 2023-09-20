@@ -55,7 +55,7 @@ function fetchEquipmentData(serial_number) {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.uid !== '') {
+            if (data.uid !== '' && semaphore) {
                 // Verifica se o equipamento já está na lista
                 if (data.equipment.serial_number != null && data.equipment.serial_number != undefined) {
                     for (let key in list_equipment) {
@@ -76,6 +76,9 @@ function fetchEquipmentData(serial_number) {
                 document.getElementById("submit_btn").disabled = false;
                 document.getElementById("submit_btn").classList.remove("btn_disabled");
                 document.getElementById("submit_btn").classList.add("btn_confirm");
+
+                semaphore = false;
+                clearInterval(interval);
             }
 
             // Se houver uma mensagem de erro na resposta, exibe-a
@@ -139,7 +142,6 @@ function check_cargo_square() {
         interval = setInterval(fetchEquipmentData, 1000);
         checkAwateList();
         // => }
-        semaphore = true;
     }
 }
 
@@ -260,9 +262,6 @@ function checkAwateList() {
         list_awate_equipment.pop();
         clearInterval(interval);
         addToSquare(data);
-        if (semaphore) {
-            semaphore = false;
-        }
     }
 }
 

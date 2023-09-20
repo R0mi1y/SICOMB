@@ -53,7 +53,9 @@ function updateRowNumbers() {
     }
 }
 
-function confirmCargo() {
+function confirmCargo(self) {
+    self.style['background-color'] = "#9999";
+    self.style.color = "black";
     fetch('http://localhost:8000/equipamento/allow_cargo', {
             method: 'POST', // Método HTTP POST para enviar dados
         headers: {
