@@ -7,6 +7,7 @@ function popUp(message, options = {}) {
         yesFunction: false,
         noFunction: false,
         overlay: true,
+        textArea: false,
     };
 
     const settings = { ...defaultOptions, ...options };
@@ -86,6 +87,26 @@ function popUp(message, options = {}) {
             if (settings.overlay) document.body.removeChild(overlay);
             else document.getElementById("messages").removeChild(popUpElement);
         }, settings.timer);
+    }
+
+    if (settings.textArea) {
+        const textArea = document.createElement('textarea');
+        textArea.rows = 3;
+        textArea.cols = 60;
+
+        const button = document.createElement('button');
+        button.textContent = "CONFIRMAR";
+        button.classList.add('popup-button');
+        button.style.backgroundColor = "#5B4939";
+        button.addEventListener('click', () => {
+            document.body.removeChild(overlay);
+            console.log(textArea.value);
+            //TODO: terminar o add observação
+            fetch("/equipment/add_observacao/" + settings.rowSerialNumber);
+        });
+
+        popUpElement.appendChild(textArea);
+        popUpElement.appendChild(button);
     }
 
     return overlay;

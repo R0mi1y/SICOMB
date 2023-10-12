@@ -148,8 +148,14 @@ table img{
     border-bottom: 1px solid rgb(129, 108, 89);
 }
 .table_itens tbody td a{
-    background: red;
-    color: #fff;
+    /* background: red; */
+    color: #a82a2a;
+    font-family: 'interExtraBold';
+    font-size: 17px;
+}
+.table_itens tbody td a:hover{
+    /* background: red; */
+    color: #4e0f0f;
     font-family: 'interExtraBold';
     font-size: 17px;
 }

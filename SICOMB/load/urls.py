@@ -26,7 +26,9 @@ urlpatterns = [
         "lista_equipamentos/remover/",
         apis.remove_list_equipment,
     ),  # Remove um equipamento da lista na views vindo do front a solicitação
-    path("lista_equipamentos/get", apis.get_list_equipment),
+    path("lista_equipamentos/get", apis.get_list_equipment_avalible),
+    # Retorna a lista da views
+    path("lista_equipamentos_atual/get", apis.get_list_equipment),
     # Retorna a lista da views
     path("", views.filter_loads, name='filter_cargas'),
     #Retorna a o policial resposável pela carga e a lista de equipamentos da carga

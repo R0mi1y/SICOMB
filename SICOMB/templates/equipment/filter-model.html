@@ -43,7 +43,7 @@
                 </tr>
                 <form method="get">
                     <tr class="col-itens">
-                        <th colspan="100%" class=""><input type="submit" value="Filtrar"></th>
+                        <th colspan="100%" class=""><input type="submit" class="button" value="Filtrar"></th>
                     </tr>
                     <tr class="col-itens">
                         {% for field in filter_form %}
@@ -80,7 +80,7 @@
                     <td>{{ model.description|default:"-" }}</td>
                     <td>{{ model.size|default:"-" }}</td>
                     {% if user.is_superuser %}
-                        <td class="click_redirect"><button class="button_promote" type="button" onclick="window.location='{% url "edit_model" model_name="armament" id=model.pk %}'" name="pk" value="{{ model.pk }}">EDITAR<button></td>
+                        <td class="click_redirect"><button class="button" type="button" onclick="window.location='{% url "edit_model" model_name="armament" id=model.pk %}'" name="pk" value="{{ model.pk }}">EDITAR<button></td>
                     {% endif %}
                 </tr>
             {% empty %}

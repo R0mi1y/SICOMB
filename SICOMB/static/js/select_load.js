@@ -5,6 +5,7 @@ var plate; // variável auxiliar para armazenar a matrícula para requisitar do 
 var list_awate_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
 var list_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
 var turn_type;
+var square_on;
 
 function set_date() {
     var dataAtual = new Date();
@@ -42,6 +43,8 @@ function changeTemplate(template) {
             })})
             .then(response => response.json())
             .then(data => {
+                turn_type = "Descarga";
+
                 var table_element = document.createElement('table');
                 table_element.className = 'table_itens';
 
@@ -145,6 +148,9 @@ function selectCargo(id) {
 // equipment com um model em formato json
 function insertLine(line, x) {
     x = x ?? true;
+
+    console.log(line);
+
     table_itens.innerHTML += // Insere efetivamente na lista => {
         '<tr>' +
         '<td></td>' +
@@ -171,14 +177,18 @@ function updateRowNumbers(x) {
         var cells = rows[i].getElementsByTagName("td");
         cells[0].innerHTML = i + 1; // primeira coluna, a do numero de série da tabela
         if(x){
-            cells[cells.length - 1].innerHTML = '<a href="#" onclick="checkRemoveRow(' + i + ')">| X |</a>'; // ultima coluna, o botão de remover
+            cells[cells.length - 1].innerHTML = '<a onclick="checkRemoveRow(' + i + ')"><svg fill="red" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></a>'; // ultima coluna, o botão de remover
+            cells[cells.length - 1].innerHTML += ' | <a id="edit" onclick="edit(' + i + ')" href="#"><svg fill="brown" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h56l345-345-56-56-345 345v56Zm572-403L602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Zm-141-29-28-28 56 56-28-28Z"/></svg></a>'; // ultima coluna, o botão de remover
         } else {
-            cells[cells.length - 1].innerHTML = '| X |'; // ultima coluna, o botão de remover
-            cells[cells.length - 1].style.color = 'red'; // ultima coluna, o botão de remover
+            cells[cells.length - 1].innerHTML = '<svg height="100%" fill="red" viewBox="0 -960 960 960" width="26"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>'; // ultima coluna, o botão de remover
+            cells[cells.length - 1].innerHTML += ' | <a id="edit" onclick="addObs(' + i + ')" href="#"><svg fill="brown" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h56l345-345-56-56-345 345v56Zm572-403L602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Zm-141-29-28-28 56 56-28-28Z"/></svg></a>'; // ultima coluna, o botão de remover
         }
     }
 }
 
+function addObs(i) {
+    popUp("Adicione a observação: ", {textArea:true});
+}
 
 function setTurnType() {
     var radioSelecionado = document.querySelector('input[name="options_load"]:checked');
@@ -258,8 +268,33 @@ var interval = setInterval(() => {
         });
 }, 1000);
 
+function edit(i) {
+    if (square_on){
+        popUp("Quadro já em uso!");
+    } else {
+        var rows = table_itens.getElementsByTagName("tr"); // pega os tr da tabela
+        serialNum = rows[i].getElementsByTagName("td")[1].innerHTML;
+        console.log(serialNum);
+        equipmentData = list_equipment[serialNum];
+        clearInterval(interval);
+        addToSquare(list_equipment[serialNum]);
+        removeRow(i);
+    }
+}
+
+// Remove a linha da tabela
+function removeRow(rowNumber) {
+    var rows = table_itens.getElementsByTagName("tr"); // pega os tr da tabela
+    serialNum = rows[rowNumber].getElementsByTagName("td")[1].innerHTML; // 1 É A POSIÇÃO DO NUMERO DE SÉRIE, ou seja ele pega o numero de série
+    delete list_equipment[serialNum]; // deleta o equipamento da lista efetica da carga
+
+    table_itens.deleteRow(rowNumber);
+    updateRowNumbers();
+}
 
 function clearSquare() {
+    square_on = false;
+
     var serialNumberInput = document.getElementById("serial_number");
     var description = document.getElementById("description");
     var observation = document.getElementById("note_equipment");
@@ -280,6 +315,9 @@ function clearSquare() {
 
 // Adiciona o equipamento ao quadro da sala de meios
 function addToSquare(data) {
+    square_on = true;
+    console.log(data);
+
     var serialNumberInput = document.getElementById("serial_number");
     var description = document.getElementById("description");
     var observation = document.getElementById("note_equipment");

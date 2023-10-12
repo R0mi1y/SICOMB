@@ -98,7 +98,7 @@ def delete_model(request, model_name=None, id=None):
 def filter_equipment(request):
     equipment_list = Equipment.objects.filter(activated=True)
     filter_form = EquipmentFilterForm(request.GET)
-
+    # filter_form = None
     if filter_form.is_valid():
         equipment_list = filter_form.filter_queryset(equipment_list)
 
@@ -137,18 +137,6 @@ def filter_model(request):
 
 @has_group('admin')
 def approve_model(request):
-    all_models = list(chain(
-        Model_armament.objects.filter(activated=False),
-        Model_accessory.objects.filter(activated=False),
-        Model_wearable.objects.filter(activated=False),
-        Model_grenada.objects.filter(activated=False),
-        Bullet.objects.filter(activated=False)
-    ))
-    
-    context = {
-        'model_list': all_models,
-    }
-    
     if request.method == "POST":
         models = {
             "Acessório": Model_accessory,
@@ -162,6 +150,18 @@ def approve_model(request):
         model.activated = True
         model.save()
         
+    all_models = list(chain(
+        Model_armament.objects.filter(activated=False),
+        Model_accessory.objects.filter(activated=False),
+        Model_wearable.objects.filter(activated=False),
+        Model_grenada.objects.filter(activated=False),
+        Bullet.objects.filter(activated=False)
+    ))
+    
+    context = {
+        'model_list': all_models,
+    }
+    
     return render(request, "equipment/approve_model.html", context)
 
 

@@ -60,6 +60,15 @@ def get_loads_police(request, plate):
 def get_load(
     request, id
 ):  # Retorna uma resposta JSON com todas as cargas (caso necessário)
+    
+    tipo_model = {
+        'wearable' : 'Vestmento',
+        'accessory' : 'Acessório',
+        'armament' : 'Armamento',
+        'grenada' : 'Granada',
+        'bullet' : 'Munição',
+    }
+    
     load = Load.objects.get(id=id)
     equipment_loads = []
     for load in Equipment_load.objects.filter(load=load, status="Pendente"):
@@ -67,14 +76,16 @@ def get_load(
         equipment = {}
         if load.equipment:
             equipment["equipment"] = model_to_dict(load.equipment)
-            equipment["registred"] = load.equipment.model_type.model.replace("model_", "")
+            # equipment["registred"] = load.equipment.model_type.model.replace("model_", "")
+            equipment["campo"] = tipo_model[load.equipment.model_type.model.replace("model_", "")]
             equipment["model"] = model_to_dict(load.equipment.model)
             equipment["model"]["image_path"] = load.equipment.model.image_path.url if load.equipment.model.image_path else ''
         else:
             equipment["equipment"] = model_to_dict(load.bullet)
             equipment["equipment"]["image_path"] = load.bullet.image_path.url if load.bullet.image_path else ''
             equipment["model"] = equipment["equipment"]
-            equipment["registred"] = "bullet"
+            # equipment["registred"] = "bullet"
+            equipment["campo"] = "bullet"
             
 
         equipment["amount"] = load.amount
@@ -87,6 +98,17 @@ def get_load(
     return JsonResponse(load)
 
 
+# Retorna a lista apenas se não houver nenhum equipamento indisponível nela
+@csrf_exempt
+@require_user_pass
+def get_list_equipment_avalible(request):
+    for i in settings.AUX["list_equipment"]:
+        if settings.AUX["list_equipment"][i]["registred"] != "bullet":
+            if Equipment.objects.get(serial_number=i).status.lower() != "disponivel":
+                settings.AUX["list_equipment"] = {}
+    return JsonResponse(settings.AUX["list_equipment"])
+
+
 # Retorna a lista
 @csrf_exempt
 @require_user_pass
@@ -97,8 +119,6 @@ def get_list_equipment(request):
 @csrf_exempt
 @require_user_pass
 def add_list_equipment(request):
-    print("Policial encontrado!")
-    
     if request.method == "POST":
         # password = request.POST.get('pass')
         # user = request.POST.get('user')
@@ -163,46 +183,3 @@ def remove_list_equipment(request):
     else:
         return JsonResponse({"falha": "falha"})
 
-
-#            --------------------------------------------------            #
-#            --                  DESCARGA                    --            #
-#            --------------------------------------------------            #
-
-# @csrf_exempt # Use o CSRF apenas se necessário
-# def add_list_returned_equipment(request, serial_number, obs, amount, user, password):
-#     password = password.replace("%21%", "/")
-    
-#     if request.method == "POST":
-#         if Police.objects.filter(username=user, password=password).first is not None:
-#             if serial_number == "turn_type":
-#                 settings.AUX["list_returned_equipment"]["turn_type"] = obs
-#             elif serial_number.isdigit() or "ac" in serial_number:
-#                 equipment = get_object_or_404(Equipment, serial_number=serial_number)
-#                 data = {
-#                     "equipment": model_to_dict(equipment),
-#                     "model": model_to_dict(equipment.model),
-#                     "registred": equipment.model_type.model.replace("model_", ""),
-#                     "observation": obs if obs != "-" else "",
-#                     "amount": amount,
-#                 }
-                
-#                 data["model"]["image_path"] = equipment.model.image_path.url if equipment.model.image_path else ''
-                
-#                 settings.AUX["list_returned_equipment"][serial_number] = data
-#             elif serial_number[0] == ".":  # se for uma munição
-#                 bullet = get_object_or_404(Bullet, caliber=serial_number)
-#                 data = {
-#                     "model": model_to_dict(bullet),
-#                     "campo": "Munição",
-#                     "observation": obs if obs != "-" else "",
-#                     "amount": amount,
-#                 }
-#                 data["model"]["image_path"] = bullet.image_path.url if bullet.image_path else ''
-#                 data["equipment"] = data["model"]
-#                 settings.AUX["list_returned_equipment"][serial_number] = data
-
-#             return JsonResponse({"uid": settings.AUX["list_equipment"]})
-#         else:
-#             return JsonResponse({"message": "Credenciais inválidas"})
-#     else:
-#         return JsonResponse({"message": "Método HTTP não suportado"})

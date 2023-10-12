@@ -213,6 +213,9 @@ def confirm_load(request):
 
         data["policial"] = police
     
+    for i in Load.objects.all():
+        check_load(i)
+    
     return render(request, "load/load.html", data)
 
 
@@ -275,6 +278,7 @@ def check_load(load):
                             load.status = 'PARCIALMENTE DESCARREGADA COM ATRASO'
                         else:
                             load.status = 'DESCARREGADA COM ATRASO'
+                        load.returned_load_date = datetime.now()
                     else:
                         load.status = 'ATRASADA'
                 else:
@@ -283,6 +287,7 @@ def check_load(load):
                             load.status = 'PARCIALMENTE DESCARREGADA'
                         else:
                             load.status = 'DESCARREGADA'
+                        load.returned_load_date = datetime.now()
                     else:
                         load.status = 'DENTRO DO PRAZO'
             else:

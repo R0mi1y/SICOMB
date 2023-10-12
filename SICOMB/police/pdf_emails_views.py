@@ -47,8 +47,8 @@ def generate_pdf(load):
         ["Data de Descarregamento:", load.returned_load_date.strftime('%d/%m/%Y %H:%M') if load.returned_load_date else 'N/A'],
         ["Tipo de Turno:", load.turn_type],
         ["Status:", load.status],
-        ["Policial:", load.police.username],
-        ["Adjunto:", load.adjunct.username],
+        ["Policial:", load.police.name],
+        ["Adjunto:", load.adjunct.name],
     ]
     
     # Tabela para informações da carga

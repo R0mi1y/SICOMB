@@ -43,7 +43,8 @@
                     <tr class="col-itens">
                         <td>Tipo do Modelo</td>	
                         <td>Quantidade</td>	
-                        <td>Calibre	Modelo</td>	
+                        <td>Calibre</td>	
+                        <td>Modelo</td>	
                         <td>Descrição</td>	
                         <td>Tamanho</td>
                         <th>APROVAR</th>
@@ -63,7 +64,7 @@
                         <td>{{ model.model|default:"-" }}</td>
                         <td>{{ model.description|default:"-" }}</td>
                         <td>{{ model.size|default:"-" }}</td>
-                        <td class="click_redirect"><button class="button_promote" type="submit">APROVAR<button></td>
+                        <td class="click_redirect"><button class="button" type="submit">APROVAR<button></td>
                     </tr>
                 </form>
             {% empty %}

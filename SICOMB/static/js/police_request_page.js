@@ -4,7 +4,7 @@ let list_equipment;
 setInterval(fetchList, 1000);
 
 function fetchList() {
-    fetch("http://localhost:8000/carga/lista_equipamentos/get", {
+    fetch("http://localhost:8000/carga/lista_equipamentos_atual/get", {
     method: 'POST', // Método HTTP POST para enviar dados
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

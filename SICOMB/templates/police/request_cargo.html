@@ -1,7 +1,6 @@
 {% extends 'base/footer.html' %}
 {% load static %}
 
-
 {% block css %}{% static 'css/police_page.css' %}{% endblock %}
 {% block title %}SICOMB - Login Policial{% endblock title %}
 {% block title_top %}REQUISITAR CARGA{% endblock title_top %}
@@ -11,7 +10,7 @@
 {% block content_final%}
     <section class="cargo">
         {% if police %}
-        <div class="police_officer_field shadow">
+        <div class="police_officer_field shadow"  style="margin-right: 50px;">
             <table class="police_officer_table">
                 <thead>
                     <tr>
@@ -25,7 +24,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>{{police.username}}</td>
+                        <td>{{police.name}}</td>
                     </tr>
                     <tr>
                         <td>{{police.matricula}}</td>
@@ -54,47 +53,6 @@
             </table>
         </div>
 
-    </section>
-    <section>
-        <div class="cargo_itens shadow">
-            <!-- <h2>ITENS</h2> -->
-            
-            <table class="table_itens">
-                <thead>
-                    <tr>
-                        <th colspan="100%" class="cargo_title"><h3 >ITENS</h3></th>
-                    </tr>
-                    <tr class="col-itens">
-                        <th>ID DE CARGA</th>
-                        <th>TIPO</th>
-                        <th>MATRÍCULA</th>
-                        <th>ADJUNTO</th>
-                        <th>GRADUAÇÃO</th>
-                        <th>QNT. DE ITENS</th>
-                        <th>DATA</th>
-                        <th>PREVISÃO DE DESCARGA</th>
-                    </tr>
-                </thead>
-                {% if loads %}
-                <tbody>
-                    {% for i in loads %}
-                        <tr>
-                            <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
-                            <td>{{i.0.turn_type}}</td>
-                            <td>{{ i.0.police.matricula |default:"-" }}</td>
-                            <td class="click_redirect" ><a  href="">{{ i.0.adjunct.username |default:"Adjunto Indisponível" }}</a></td>
-                            <td>{{ i.0.police.posto |default:'Tenente'}}</td>
-                            <td>{{ i.1 }}</td>
-                            <td>{{ i.0.date_load }}</td>
-                            <td>{{ i.0.expected_cargo_return_date |default:'-' }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-                {% endif %}
-            </table>
-        </div>
-    </section>
-    <section>
         <div class="cargo_itens shadow">
             <!-- <h2>ITENS</h2> -->
             
@@ -120,9 +78,48 @@
             </table>
         </div>
     </section>
+    <section>
+        <div class="cargo_itens shadow">
+            <!-- <h2>ITENS</h2> -->
+            
+            <table class="table_itens">
+                <thead>
+                    <tr>
+                        <th colspan="100%" class="cargo_title"><h3 >CARGAS</h3></th>
+                    </tr>
+                    <tr class="col-itens">
+                        <th>ID DE CARGA</th>
+                        <th>TIPO</th>
+                        <th>MATRÍCULA</th>
+                        <th>ADJUNTO</th>
+                        <th>GRADUAÇÃO</th>
+                        <th>QNT. DE ITENS</th>
+                        <th>DATA</th>
+                        <th>PREVISÃO DE DESCARGA</th>
+                    </tr>
+                </thead>
+                {% if loads %}
+                <tbody>
+                    {% for i in loads %}
+                        <tr>
+                            <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
+                            <td>{{i.0.turn_type}}</td>
+                            <td>{{ i.0.police.matricula |default:"-" }}</td>
+                            <td class="click_redirect" ><a  href="">{{ i.0.adjunct.name |default:"Adjunto Indisponível" }}</a></td>
+                            <td>{{ i.0.police.posto |default:'Tenente'}}</td>
+                            <td>{{ i.1 }}</td>
+                            <td>{{ i.0.date_load }}</td>
+                            <td>{{ i.0.expected_cargo_return_date |default:'-' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                {% endif %}
+            </table>
+        </div>
+    </section>
 
     <script>
-        var user = "{{ user.username }}";
+        var user = "{{ user.name }}";
         var pass = "{{ user.password }}";
     </script>
     <script src="{% static "js/police_request_page.js" %}"></script>

@@ -4,8 +4,8 @@
 {% block title %}SICOMB - Registro de Equipamento{% endblock title %}
 {% block title_top %}REGISTRO DE EQUIPAMENTO{% endblock title_top %}
 {% block css2 %}{% static 'css/carga.css' %}{% endblock%}
-
 {% block content_final %}
+<link rel="stylesheet" href="{% static 'css/equipamentos.css' %}">
 <style>
     .footer-div{
         position: absolute;
@@ -23,7 +23,7 @@
                 </tr>
                 <form method="get">
                     <tr class="col-itens">
-                        <th colspan="100%" class=""><input type="submit" value="Filtrar"></th>
+                        <th colspan="100%" class=""><input type="submit" class="button" value="Filtrar"></th>
                     </tr>
                     <tr class="col-itens">
                         <th></th>
@@ -58,10 +58,10 @@
                 <tr>
                     <td class="click_redirect"><a href="/carga/{{i.0.pk}}/carga_policial/" >{{ i.0.pk }}</a></td>
                     <td>{{i.0.turn_type}}</td>
-                    <td class="click_redirect"><a href="">{{ i.0.police.username|default:'Policial não cadastrado' }}</a></td>
+                    <td class="click_redirect"><a href="">{{ i.0.police.name|default:'Policial não cadastrado' }}</a></td>
                     <td>{{ i.0.police.matricula |default:'Policial não cadastrado'}}</td>
                     <td>{{ i.0.police.posto |default:'Policial não cadastrado'}}</td>
-                    <td class="click_redirect" ><a href="">{{ i.0.adjunct.username|default:'Adjunto não cadastrado' }}</a></td>
+                    <td class="click_redirect" ><a href="">{{ i.0.adjunct.name|default:'Adjunto não cadastrado' }}</a></td>
                     <td>{{ i.1 }}</td>
                     <td>{{ i.0.date_load|date:"d/m/Y  H:i:s" }}</td>
                     <td>{{ i.0.expected_load_return_date|date:"d/m/Y  H:i:s" |default:'-' }}</td>

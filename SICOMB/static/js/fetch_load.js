@@ -6,7 +6,8 @@ var observation = document.getElementById("note_equipment");
 var insert_bttn = document.getElementById("insert_btn");
 let amount_input = document.getElementById("amount_input");
 var list_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
-var semaphore = true;
+var semaphore = true; 
+var square = false; 
 //tem uma array de equipamentos igual no django para caso de refresh e essa se perca
 var equipmentData = null; // Equipamento atual só que de forma global, pra acessar depois, será setada depois
 
@@ -69,7 +70,6 @@ function fetchEquipmentData(serial_number) {
                 // Se o equipamento não estiver cadastrado, adiciona-o à lista de equipamentos em espera
                 if (data.registred !== false) {
                     list_awate_equipment.push(data);
-                    console.log(list_awate_equipment);
                     checkAwateList();
                 }
             } else if (data.confirmCargo) {
@@ -104,7 +104,10 @@ function check_cargo_square() {
         list_equipment[equipmentData.equipment.serial_number ?? 'ac' + equipmentData.equipment.id] = { // adiciona no array de equipamentos o numero de série e a observação
             'serial_number': equipmentData.equipment.serial_number,
             'observation': observation.innerText,
-            'amount': amount_input.value
+            'amount': amount_input.value,
+            'model': {
+                'image_path': document.getElementById('means_room_product').src,
+            }
         };
 
         equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ?? equipmentData.model.caliber;
@@ -150,7 +153,7 @@ function checkRemoveRow(rowNumber) {
     var rows = table_itens.getElementsByTagName("tr"); // pega os tr da tabela
     var col = rows[rowNumber].getElementsByTagName("td"); // pega os td da tr
 
-    obs = col[7].innerHTML; // assim por diante
+    obs = col[7].innerHTML;
     amount = col[5].innerHTML;
 
     if (col[3].innerHTML != 'Munição') {
@@ -248,6 +251,14 @@ function removeRow(rowNumber) {
     updateRowNumbers();
 }
 
+function edit(i) {
+    var rows = table_itens.getElementsByTagName("tr"); // pega os tr da tabela
+    serialNum = rows[i].getElementsByTagName("td")[1].innerHTML;
+    console.log(rows);
+    addToSquare(list_equipment[serialNum]);
+    removeRow(i);
+}
+
 // checa se a lista tá vazia
 function confirmCargo() {
     var rows = table_itens.getElementsByTagName("tr");
@@ -260,8 +271,9 @@ function checkAwateList() {
         equipmentData = list_awate_equipment[list_awate_equipment.length - 1];
         data = list_awate_equipment[list_awate_equipment.length - 1];
         list_awate_equipment.pop();
-        clearInterval(interval);
+        // clearInterval(interval);
         addToSquare(data);
+        check_cargo_square();
     }
 }
 

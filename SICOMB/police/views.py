@@ -127,21 +127,24 @@ def dashboard_police(request):
 @require_user_pass
 def get_login_police(request):
     print(settings.AUX["matricula"])
-    try:
-        police = Police.objects.get(matricula=settings.AUX["matricula"])
-        settings.AUX["matricula"] = ''
-        
-        police = {
-            "foto": police.image_path.url,
-            "nome": police.username,
-            "matricula": police.matricula,
-            "telefone": police.telefone,
-            "lotacao": police.lotacao,
-            "email": police.email,
-        }
-    except Police.DoesNotExist:
+    if settings.AUX["matricula"]:
+        try:
+            police = Police.objects.get(matricula=settings.AUX["matricula"])
+            settings.AUX["matricula"] = ''
+            
+            police = {
+                "foto": police.image_path.url,
+                "nome": police.name,
+                "matricula": police.matricula,
+                "telefone": police.telefone,
+                "lotacao": police.lotacao,
+                "email": police.email,
+            }
+        except Police.DoesNotExist:
+            return JsonResponse({})
+        return JsonResponse(police)
+    else:
         return JsonResponse({})
-    return JsonResponse(police)
         
 
 

@@ -110,11 +110,13 @@ function fetchUnvalibleEquipmentData(serial_number) { // começa a requisitar ma
                     if (serial_number != undefined && serial_number === data.equipment.serial_number) { // verifica se tá na lista
                         addToSquare(data);
                         square_equipment = data;
+                        check_cargo_square()
                         console.log(square_equipment);
                         return;
                     } else if (caliber != undefined && caliber === data.equipment.caliber) {
                         addToSquare(data);
                         square_equipment = data;
+                        check_cargo_square()
                         return;
                     } // a partir daqui é se o equipamento não é o certo
                 }
@@ -161,7 +163,7 @@ function fetchEquipmentData(serial_number) {
                 }
 
                 //se não tiver cadastrado
-                if (data.registred !== false) {
+                if (data.campo !== false) {
                     list_awate_equipment.push(data);
 
                     checkAwateList();
@@ -182,8 +184,8 @@ function checkAwateList() {
         data = list_awate_equipment[list_awate_equipment.length - 1];
         list_awate_equipment.pop();
 
-        clearInterval(interval);
         addToSquare(data);
+        check_cargo_square();
 
         if (semaphore) {
             semaphore = false;
@@ -202,7 +204,7 @@ function check_cargo_square() {
             if (table_itens.childNodes[i].childNodes[1] && serialNumberInput.innerHTML == table_itens.childNodes[i].childNodes[1].innerHTML) {
                 list_returned_equipment.push(square_equipment);
 
-                table_itens.childNodes[i].childNodes[8].innerHTML = '| V |';
+                table_itens.childNodes[i].childNodes[8].innerHTML = '<svg fill="green" height="24" viewBox="0 -960 960 960" width="24"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>';
                 table_itens.childNodes[i].childNodes[8].style.color = 'green';
 
                 interval = setInterval(fetchUnvalibleEquipmentData, 1000);

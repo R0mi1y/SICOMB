@@ -24,9 +24,10 @@ def require_user_pass(funcao):
         if request.method == 'POST':
             password = request.POST.get('pass')
             user = request.POST.get('user')
-            police = Police.objects.filter(username=user, password=password).first()
+            police = Police.objects.filter(name=user, password=password).first()
+            
             if police:
-                if police.groups.filter(name="adjunct").exists() or request.user.is_superuser:
+                if police.groups.filter(name="adjunct").exists() or police.is_superuser:
                     return funcao(request, *args, **kwargs)
                 else:
                     return JsonResponse({"msm": "Usuário não tem permissão!"})

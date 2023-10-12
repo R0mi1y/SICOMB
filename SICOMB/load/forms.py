@@ -17,7 +17,7 @@ class LoadFilterForm(forms.Form):
         max_length=20,
         required=False,
         widget=forms.Select(
-            attrs={'class': 'form-control'}, 
+            attrs={'class': 'form-control input-data'}, 
             choices=[
                 ('', 'TODOS'), 
                 ('6h', '6h'), 
@@ -32,56 +32,58 @@ class LoadFilterForm(forms.Form):
         label="Policial",
         queryset=Police.objects.filter(tipo="Police"),  # Certifique-se de importar o modelo Police
         required=False,
+        widget=forms.Select(attrs={'class': 'form-control input-data'}),
     )
     plate = forms.CharField(
         label="Matrícula", 
         required=False,
-        # widget=forms.
+        widget=forms.TextInput(attrs={'class': 'form-control input-data'})
     )
     graduation = forms.CharField(
         label="Graduação", 
         required=False,
-        # widget=forms.
+        widget=forms.TextInput(attrs={'class': 'form-control input-data'})
     )
     adjunct = forms.ModelChoiceField(
         label="Adjunto",
         queryset=Police.objects.filter(tipo="Adjunct"),  # Certifique-se de importar o modelo Police
         required=False,
+        widget=forms.Select(attrs={'class': 'form-control input-data'}),
     )
     amount_items = forms.DecimalField(
         label="Quantidade de itens", 
         required=False,
-        # widget=forms.
+        widget=forms.NumberInput(attrs={'class': 'form-control input-data'}),
     )
     date_load_start = forms.DateTimeField(
         label="Data de Carregamento (início)", 
         required=False,
-        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local'}),
+        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local', 'class': 'form-control input-data'}),
     )
     date_load_end = forms.DateTimeField(
         label="Data de Carregamento (fim)", 
         required=False,
-        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local'}),
+        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local', 'class': 'form-control input-data'}),
     )
     expected_load_return_date_start = forms.DateTimeField(
         label="Data Prevista de Devolução (início)", 
         required=False,
-        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local'}),
+        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local', 'class': 'form-control input-data'}),
     )
     expected_load_return_date_end = forms.DateTimeField(
         label="Data Prevista de Devolução (fim)", 
         required=False,
-        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local'}),
+        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local', 'class': 'form-control input-data'}),
     )
     returned_load_date_start = forms.DateTimeField(
         label="Data de Descarregamento (início)", 
         required=False,
-        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local'}),
+        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local', 'class': 'form-control input-data'}),
     )
     returned_load_date_end = forms.DateTimeField(
         label="Data de Descarregamento (fim)", 
         required=False,
-        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local'}),
+        widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local', 'class': 'form-control input-data'}),
     )
     status = forms.ChoiceField(
         label="Status",
@@ -96,6 +98,7 @@ class LoadFilterForm(forms.Form):
             ("PARCIALMENTE DESCARREGADA", "PARCIALMENTE DESCARREGADA"),
         ),
         required=False,
+        widget=forms.Select(attrs={'class': 'form-control input-data'}),
     )
     
     def filter_queryset(self, queryset):

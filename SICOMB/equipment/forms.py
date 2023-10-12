@@ -179,19 +179,38 @@ class EquipmentFilterForm(forms.Form):
         (ContentType.objects.get(app_label='equipment', model='Model_grenada').pk, 'Granadas'),
     )
     
-    serial_number = forms.CharField(label=_("Número de Série"), max_length=20, required=False)
-    uid = forms.CharField(label=_("UID"), max_length=20, required=False)
+    serial_number = forms.CharField(
+        label=_("Número de Série"), 
+        max_length=20, required=False, 
+        widget=forms.TextInput(
+            attrs={'class': 'form-control input-data'}),
+    )
+    uid = forms.CharField(
+        label=_("UID"), 
+        max_length=20, 
+        required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control input-data'}),
+    )
     status = forms.ChoiceField(
         label=_("Estado Atual"),
         choices=equipment_choices,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        widget=forms.Select(attrs={'class': 'form-control input-data'}),
     )
     model_type = forms.ChoiceField(
         label=_("Tipo do Modelo"),
         choices=models_eqipment,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        widget=forms.Select(attrs={'class': 'form-control input-data'}),
+    )
+    
+    model = forms.CharField(
+        label=_("UID"), 
+        max_length=20, 
+        required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control input-data'}),
     )
 
     def filter_queryset(self, queryset):
@@ -205,6 +224,8 @@ class EquipmentFilterForm(forms.Form):
             queryset = queryset.filter(status__icontains=data['status'])
         if data.get('model_type'):
             queryset = queryset.filter(model_type=data['model_type'])
+        if data.get('model'):
+            queryset = [i for i in queryset.all() if data['model'].lower() in i.model.model.lower()]
 
         return queryset
 
@@ -222,38 +243,38 @@ class ModelFilterForm(forms.Form):
         label=_("Tipo do Modelo"), 
         choices=TYPES, 
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control'}),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control chekboxes '}),
     )
     
     amount = forms.DecimalField(
         label=_("Quantidade"),
         required=False,
-        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        widget=forms.NumberInput(attrs={'class': 'form-control input-data'}),
     )
     
     caliber = forms.MultipleChoiceField(
         label=_("Calibre"), 
         choices=settings.AUX['calibres'],
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
+        widget=forms.SelectMultiple(attrs={'class': 'form-control input-data select-multiple'}),
     )
     
     model = forms.CharField(
         label=_("Modelo"), 
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
     )
     
     description = forms.CharField(
         label=_("Descrição"), 
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
     )
     
     size = forms.CharField(
         label=_("Tamanho"), 
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
     )
     
     def filter_queryset(self, queryset):
@@ -270,8 +291,13 @@ class ModelFilterForm(forms.Form):
                 'Bullet': Bullet,
             }
             for i in data.get("type"):
-                models_aux = model_classes[i].objects.all()
-                queryset = list(chain(queryset, models_aux))
+                if not i == 'Bullet':
+                    models_aux = model_classes[i].objects.filter(activated=True)
+                    queryset = list(chain(queryset, models_aux))
+                else:
+                    models_aux = model_classes[i].objects.all()
+                    queryset = list(chain(queryset, models_aux))
+                    
         
         print(data["amount"])
         if data["amount"]:

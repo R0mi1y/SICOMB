@@ -1,7 +1,6 @@
 {% extends 'base/footer.html' %}
 {% load static %}
 
-
 {% block css %}{% static 'css/police_page.css' %}{% endblock %}
 {% block title %}SICOMB - Login Policial{% endblock title %}
 {% block title_top %}REQUISITAR CARGA{% endblock title_top %}
@@ -24,7 +23,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>{{user.username}}</td>
+                        <td>{{user.name}}</td>
                     </tr>
                     <tr>
                         <td>{{user.matricula}}</td>
@@ -78,7 +77,7 @@
                             <td class="click_redirect"><a  href="">{{ i.0.pk }}</a></td>
                             <td>{{i.0.turn_type}}</td>
                             <td>{{ i.0.police.matricula |default:"-" }}</td>
-                            <td class="click_redirect" ><a  href="">{{ i.0.adjunct.username |default:"Adjunto Indisponível" }}</a></td>
+                            <td class="click_redirect" ><a  href="">{{ i.0.adjunct.name |default:"Adjunto Indisponível" }}</a></td>
                             <td>{{ i.0.police.posto |default:'Tenente'}}</td>
                             <td>{{ i.1 }}</td>
                             <td>{{ i.0.date_cargo }}</td>

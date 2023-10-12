@@ -3,9 +3,6 @@
 {% load static %}
 
 {% block css %}{% static 'css/register_police.css' %}{% endblock %}
-
-
-
 {% block title %}SICOMB - Registrar{% endblock title %}
 {% block title_top %}CADASTRO DE POLICIAL{% endblock title_top %}
 
@@ -35,11 +32,11 @@
          <div class="input-div">
 
             <div class="input-box">
-               <label for="{{ form.username.id_for_label }}" class="custom-label">NOME</label>
-               {{form.username}}
-               {% if form.username.errors %}
+               <label for="{{ form.name.id_for_label }}" class="custom-label">NOME</label>
+               {{form.name}}
+               {% if form.name.errors %}
                   <usl>
-                        {% for error in form.username.errors %}
+                        {% for error in form.name.errors %}
                            <li>{{ error }}</li>
                         {% endfor %}
                   </usl>

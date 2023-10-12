@@ -6,6 +6,7 @@
 {% block css2 %}{% static 'css/carga.css' %}{% endblock%}
 
 {% block content_final %}
+<link rel="stylesheet" href="{% static 'css/equipamentos.css' %}">
 <style>
     .footer-div{
         position: absolute;
@@ -46,11 +47,15 @@
                     {% csrf_token %}
                     {% for i in polices %}
                         <tr>
-                            <td>{{ i.username }}</td>
+                            <td>{{ i.name }}</td>
                             <td>{{ i.matricula }}</td>
                             <td>{{ i.posto }}</td>
                             <td>{{ i.lotacao }}</td>
-                            <td class="click_redirect"><button class="button_promote" type="submit" name="pk" value="{{ i.pk }}">{{ btn_promote }}<button></td>
+                            <td class="click_redirect"><button class="button" type="submit" name="pk" value="{{ i.pk }}">{{ btn_promote }}<button></td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="100%">Nenhum policial encontrado.</td>
                         </tr>
                     {% endfor %}
                 </form>

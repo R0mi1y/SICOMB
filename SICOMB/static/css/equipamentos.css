@@ -1,5 +1,49 @@
 @import 'header.css';
 
+.input-data {
+    background-color: #eeeceb;
+    padding: 2% 5%;
+    border-radius: 10px;
+    border: 2px solid rgb(91,73,57, 0.6);
+    font-size: 14px;
+    font-family: 'interBold';
+    color: #757575;
+    height: 30px;
+    width: 110px;
+}
+select.input-data.select-multiple {
+    height: auto !important;
+}
+
+select.input-data {
+    height: 38px !important;
+}
+
+.button {
+    margin-top: 10px !important;
+    font-family: interBold;
+    font-size: 15px;
+    color: #fff;
+    background-color: rgba(74, 58, 45, 0.9);
+    border-radius: 10px;
+    border: 1px solid #90816A;
+    padding: 10px 20px;
+    height: 40px;
+    width: 90%;
+    margin: auto 20px;
+    cursor: pointer;
+    box-shadow: -2px 4px 2px rgb(65, 35, 6);
+}
+
+.chekboxes div {
+    text-align: left;
+    height: 25px;
+    margin-left: 10px;
+}
+.chekboxes {
+    margin-bottom: 20px;
+}
+
 .container{
     flex: 1;
     min-height: 100vh;
@@ -259,7 +303,7 @@ table img{
     background-color: #fff;
     border-radius: 10px;
     margin: 20px 0px;
-    max-height: 75vh;
+    /* max-height: 75vh; */
 }
 .dashboard_loads{
     width: 85%;
@@ -296,7 +340,7 @@ table img{
 .table_itens tbody{
     font-size: 14px;
     /* border-bottom: 1px solid #5B4939; */
-    line-height: 30px;
+    /* line-height: 30px; */
 }
 .table_itens td, th{
     padding: 0px 11px;
@@ -373,7 +417,7 @@ footer{
 
 ::-webkit-scrollbar{
     width: 0.5rem;
-    height: 0.5rem
+    height: 0.5rem;
 }
 ::-webkit-scrollbar-track{
     background: gainsboro;
