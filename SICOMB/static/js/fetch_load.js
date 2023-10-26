@@ -36,7 +36,7 @@ fetch("http://localhost:8000/carga/lista_equipamentos/get", {
     });
 
 
-function fetchEquipmentData(serial_number) {
+function fetchEquipmentData(serial_number, type='none') {
     // Caso a função receba o parâmetro serial_number, ela requisita o equipamento correspondente.
     // Caso contrário, ela requisita o equipamento passado no sensor.
     let url = (serial_number == null || serial_number == undefined ?
@@ -70,7 +70,7 @@ function fetchEquipmentData(serial_number) {
                 // Se o equipamento não estiver cadastrado, adiciona-o à lista de equipamentos em espera
                 if (data.registred !== false) {
                     list_awate_equipment.push(data);
-                    checkAwateList();
+                    checkAwateList(type);
                 }
             } else if (data.confirmCargo) {
                 document.getElementById("submit_btn").disabled = false;
@@ -266,14 +266,18 @@ function confirmCargo() {
     else popUp("Lista vazia!");
 }
 
-function checkAwateList() {
+function checkAwateList(type='none') {
+    console.log(type);
     if (list_awate_equipment.length > 0) {
         equipmentData = list_awate_equipment[list_awate_equipment.length - 1];
         data = list_awate_equipment[list_awate_equipment.length - 1];
         list_awate_equipment.pop();
         // clearInterval(interval);
         addToSquare(data);
-        check_cargo_square();
+        
+        if (type != "search") {
+            check_cargo_square();
+        }
     }
 }
 

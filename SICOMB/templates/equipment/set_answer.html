@@ -15,7 +15,7 @@
       margin: auto 400px;
     }
     .uid-links {
-        display: flex;
+        display: grid;
         flex-wrap: wrap;
         margin-bottom: 15px;
     }
@@ -79,7 +79,6 @@
 
     .container-uid-links {
       display: flex;
-      flex-direction: row;
       flex-wrap: nowrap;
       align-content: space-between;
       justify-content: center;
@@ -97,11 +96,9 @@
     <button class="resend-btn" onclick="location.href='set?uid={{uid}}'">Reenviar</button>
     <div class="container-uid-links">
       <div class="uid-links">
-        <ul>
           {% for i in equipments %}
-            <li><a class="uid-link ac" href="set?uid={{ i.uid }}">{{ i.model_type.name }} {{ i.model.model }} - {{ i.status }} - {{ i.uid }}</a></li><br>
+            <a class="uid-link ac" href="set?uid={{ i.uid }}">{{ i.model_type.name }} {{ i.model.model }} - {{ i.status }} - {{ i.uid }}</a>
           {% endfor %}
-        </ul>
       </div>
     </div>
     <a class="uid-link" href="set?uid=ns11">não setado</a>
@@ -110,6 +107,9 @@
       {% csrf_token %}
       <input class="uid-input" name="uid" type="text" placeholder="UID">
       <input class="submit-btn" type="submit">
+      <br>
+      <br>
+      <a class="uid-link ac" href="./set">Recarregar página</a>
     </form>
   </div>
 </body>

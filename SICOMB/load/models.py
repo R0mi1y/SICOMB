@@ -6,6 +6,7 @@ from django.utils import timezone
 
 
 class Load(models.Model):
+    load_unload = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, default=None)
     date_load = models.DateTimeField(default=timezone.now)
     expected_load_return_date = models.DateTimeField(
         "Data Prevista de Devolução", null=True

@@ -69,7 +69,7 @@ function search() {
     fetchUnvalibleEquipmentData(search.val(), "search");
     search.val("");
 }
-
+    
 
 interval = setInterval(fetchUnvalibleEquipmentData, 1000);
 
@@ -189,34 +189,18 @@ function checkAwateList(type = "none") {
 
 function check_cargo_square() {
     var observation = $("#note_equipment").val();
+    var serialNumberInput = $("#serial_number").text();
     var table_itens = $("#body_table_itens");
     var amount_input = $("#amount_input").val();
-    var serialNumberInput = $("#serial_number").text();
 
-    console.log(square_equipment);
-    if (serialNumberInput == "-"){
-        serialNumberValue = square_equipment['equipment']['caliber'];
-    } else {
-        serialNumberValue = serialNumberInput
-    }
-    
     var lines = table_itens.find('tr');
-    console.log("Olá");
 
     $.each(list_equipment, function(i, equipment) {
         lines.each(function(j, line) {
             var camps = $(line).find('td');
-            var status = camps.eq(8).html();
-
-            if (serialNumberInput == "-"){
-                var line_serial_number = camps.eq(4).text();
-            } else {
-                var line_serial_number = camps.eq(1).text();
-            }
-
             if (
-                line_serial_number == serialNumberValue &&
-                status !== '<svg fill="green" height="24" viewBox="0 -960 960 960" width="24"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path></svg>'
+                camps.eq(1).text() === serialNumberInput &&
+                camps.eq(8).html() !== '<svg fill="green" height="24" viewBox="0 -960 960 960" width="24"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path></svg>'
             ) {
                 console.log(camps.eq(8).html());
                 if (parseInt(camps.eq(5).text()) > amount_input) {
@@ -226,7 +210,7 @@ function check_cargo_square() {
                     ultimaLinha.find('td').eq(5).html(parseInt(ultimaLinha.find('td').eq(5).text()) - amount_input);
 
                     table_itens.append(ultimaLinha);
-                    updateRowNumbers(false);
+                    updateRowNumbers();
                 }
 
                 list_returned_equipment.push(square_equipment);

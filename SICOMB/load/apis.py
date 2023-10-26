@@ -103,8 +103,11 @@ def get_load(
 @require_user_pass
 def get_list_equipment_avalible(request):
     for i in settings.AUX["list_equipment"]:
-        if settings.AUX["list_equipment"][i]["registred"] != "bullet":
+        print(settings.AUX["list_equipment"][i])
+        
+        if settings.AUX["list_equipment"][i]["registred"] and settings.AUX["list_equipment"][i]["registred"] != "bullet":
             if Equipment.objects.get(serial_number=i).status.lower() != "disponivel":
+                
                 settings.AUX["list_equipment"] = {}
     return JsonResponse(settings.AUX["list_equipment"])
 

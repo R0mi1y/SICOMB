@@ -124,15 +124,19 @@ def confirm_load(request):
             elif turn_type == "descarga":
                 load.returned_load_date = datetime.now()
                 load.status = "descarga"
-                load.save()
                 load.returned_load_date = datetime.now()
                 
                 load_unload = Load.objects.filter(id=request.POST.get("load_id")).first()
+                load.load_unload = load_unload
+                load.save()
+                
                 equipment_load_list = Equipment_load.objects.filter(load=load_unload)
                 
                 for key in settings.AUX["list_equipment"]:
                     amount = int(settings.AUX["list_equipment"][key]["amount"])
                     observation = settings.AUX["list_equipment"][key]["observation"]
+                    print(key)
+                    no_especial_char = ''.join(c if c.isalnum() or c.isspace() else 'x' for c in key)
                     
                     if key.isdigit() or key.startswith("ac"):
                         load_unload.status = "Descarga da carga " + str(load_unload.pk)
@@ -154,7 +158,10 @@ def confirm_load(request):
                             status="Retorno",
                         ).save()
                         
-                    elif key.isalnum():
+                        print("Entrou aqui1")
+                    elif no_especial_char.replace(" ", "").isalnum():
+                        print("Entrou aqui2")
+                        
                         load_unload.status = "Descarga da carga " + str(load_unload.pk)
                         load_unload.save()
                         

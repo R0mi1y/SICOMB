@@ -187,4 +187,6 @@ AUX = {
         (".22 LR", ".22 LR"),
     ),
     "confirmCargo": False,
+    "errors": [],
+    "list_equipment": [],
 }
