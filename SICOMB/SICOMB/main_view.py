@@ -1,16 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from equipment.views import filter_equipment
-from police.views import dashboard_police
+from police.views import dashboard
 from django.contrib.auth.models import Group
 from django.contrib import messages
 
 def error_page(request):
     return render(request, "error.html")
 
-VIEW_POLICE = dashboard_police
-VIEW_ADJUNCT = filter_equipment
-VIEW_ADMIN = filter_equipment
+VIEW_POLICE = dashboard
+VIEW_ADJUNCT = dashboard
+VIEW_ADMIN = dashboard
 VIEW_ERROR = error_page
 
 

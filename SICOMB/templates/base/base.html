@@ -41,7 +41,40 @@
         html {
             min-height: 100vh;
         }
+
+        .d-none {
+            display: none !important;
+            animation: 0.5s;
+        }
+
+        .arrow-direction {
+            transform: rotate(-90deg);
+            animation: 0.5s;
+        }
+
+        .arrow {
+            left: 0px;
+            transition: 0.2s;
+        }
+
+        .section_nav {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding-right: 15px;
+            color: white;
+            cursor: pointer;
+        }
     </style>
+    <script>
+        function toggle_nav_group(group) {
+            $('.group-nav').not('#' + group).addClass('d-none');
+            $('.arrow').not('#arrow-' + group).addClass('arrow-direction');
+            $('#' + group).toggleClass('d-none'); 
+            $('#arrow-' + group).toggleClass('arrow-direction');
+        }
+    </script>
 </head>
 
 <body>
@@ -57,73 +90,130 @@
                                     alt="17º Batalhão de Polícia Militar do Estado da Bahia">
                                 <h3>SISCOEM</h3>
                             </div>
-                            <li onclick="window.location='#'">
+                            <li onclick="window.location='/'">
                                 <img src="{% static 'img/dashboard.png' %}" alt="">
                                 <span>Dashboard</span>
                             </li>
-                            <p>Gerenciamento</p>
-                            <li onclick="window.location='{% url 'fazer_carga' %}'">
-                                <img src="{% static 'img/click.png' %}" alt="">
-                                <span>Fazer Carga/Descarga</span>
-                            </li>
-                            <li onclick="window.location='{% url 'filter_cargas' %}'">
-                                <img src="{% static 'img/network.png' %}" alt="">
-                                <span>Cargas</span>
-                            </li>
-                            <li onclick="window.location='{% url "filter_equipment" %}'">
-                                <img src="{% static 'img/disket.png' %}" alt="">
-                                <span>Equipamentos</span>
-                            </li>
-                            <li onclick="window.location='{% url 'filter_police' %}'">
-                                <img src="{% static 'img/warehouse.png' %}" alt="">
-                                <span>Policiais</span>
-                            </li>
-                            <li onclick="window.location='/equipamento/modelos/'">
-                                <img src="{% static 'img/disket.png' %}" alt="">
-                                <span>Modelos</span>
-                            </li>
-                            <li onclick="window.location='#'">
-                                <img src="{% static 'img/reports.png' %}" alt="">
-                                <span>Relatórios</span>
-                            </li>
+                            <div onclick="toggle_nav_group('gerenciamento')" class="section_nav">
+                                <p>Gerenciamento</p>
+                                <svg
+                                    id="arrow-gerenciamento"
+                                    class="arrow-direction arrow"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                    d="M16.929 5L18.3432 6.41421L12.6863 12.0711L18.3432 17.7279L16.929 19.1421L9.85789 12.0711L16.929 5Z"
+                                    fill="currentColor"
+                                    />
+                                    <path d="M8 19V5H6V19H8Z" fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div id="gerenciamento" class="d-none group-nav">
+                                <li onclick="window.location='{% url 'fazer_carga' %}'">
+                                    <img src="{% static 'img/click.png' %}" alt="">
+                                    <span>Fazer Carga/Descarga</span>
+                                </li>
+                                <li onclick="window.location='{% url 'filter_cargas' %}'">
+                                    <img src="{% static 'img/network.png' %}" alt="">
+                                    <span>Cargas</span>
+                                </li>
+                                <li onclick="window.location='{% url "filter_equipment" %}'">
+                                    <img src="{% static 'img/disket.png' %}" alt="">
+                                    <span>Equipamentos</span>
+                                </li>
+                                <li onclick="window.location='{% url 'filter_police' %}'">
+                                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                                    <span>Policiais</span>
+                                </li>
+                                <li onclick="window.location='/equipamento/modelos/'">
+                                    <img src="{% static 'img/disket.png' %}" alt="">
+                                    <span>Modelos</span>
+                                </li>
+                                <li onclick="window.location='#'">
+                                    <img src="{% static 'img/reports.png' %}" alt="">
+                                    <span>Relatórios</span>
+                                </li>
+                            </div>
                             <hr>
-                            <p>Cadastramento</p>
-                            <li onclick="window.location='{% url 'register_police' %}'">
-                                <img src="{% static 'img/user.png' %}" alt="">
-                                <span>Cadastrar Policial</span>
-                            </li>
-                            <li onclick="window.location='{% url 'register_equipment' %}'">
-                                <img src="{% static 'img/warehouse.png' %}" alt="">
-                                <span>Cadastrar Equipamento</span>
-                            </li>
+                            <div onclick="toggle_nav_group('cadastramento')" class="section_nav">
+                                <p>Cadastramento</p>
+                                <svg
+                                    id="arrow-cadastramento"
+                                    class="arrow-direction arrow"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                    d="M16.929 5L18.3432 6.41421L12.6863 12.0711L18.3432 17.7279L16.929 19.1421L9.85789 12.0711L16.929 5Z"
+                                    fill="currentColor"
+                                    />
+                                    <path d="M8 19V5H6V19H8Z" fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div id="cadastramento" class="d-none group-nav">
+                                <li onclick="window.location='{% url 'register_police' %}'">
+                                    <img src="{% static 'img/user.png' %}" alt="">
+                                    <span>Cadastrar Policial</span>
+                                </li>
+                                <li onclick="window.location='{% url 'register_equipment' %}'">
+                                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                                    <span>Cadastrar Equipamento</span>
+                                </li>
+                            </div>
                             <hr>
                         {% endif %}
                         {% if  user.is_superuser %}
+                        <div onclick="toggle_nav_group('admin')" class="section_nav">
                             <p>Admin</p>
-                            <li onclick="window.location='{% url 'register_model' %}'">
-                                <img src="{% static 'img/warehouse.png' %}" alt="">
-                                <span>Cadastrar Modelo</span>
-                            </li>
-                            <li onclick="window.location='{% url 'promote_police' %}'">
-                                <img src="{% static 'img/warehouse.png' %}" alt="">
-                                <span>Promover a Adjunto</span>
-                            </li>
-                            <li onclick="window.location='{% url 'reduce_police' %}'">
-                                <img src="{% static 'img/warehouse.png' %}" alt="">
-                                <span>Rebaixar a Policial</span>
-                            </li>   
-                            <li onclick="window.location='{% url 'approve_equipment' %}'">
-                                <img src="{% static 'img/warehouse.png' %}" alt="">
-                                <span>Aprovar Equipamentos</span>
-                            </li>
-                            <li onclick="window.location='{% url 'approve_model' %}'">
-                                <img src="{% static 'img/warehouse.png' %}" alt="">
-                                <span>Aprovar Modelos</span>
-                            </li>
-                            <li onclick="window.location='{% url 'approve_police' %}'">
-                                <img src="{% static 'img/warehouse.png' %}" alt="">
-                                <span>Aprovar Policiais</span>
-                            </li>
+                            <svg
+                                id="arrow-admin"
+                                class="arrow-direction arrow"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                d="M16.929 5L18.3432 6.41421L12.6863 12.0711L18.3432 17.7279L16.929 19.1421L9.85789 12.0711L16.929 5Z"
+                                fill="currentColor"
+                                />
+                                <path d="M8 19V5H6V19H8Z" fill="currentColor" />
+                            </svg>
+                        </div>
+                            <div id="admin" class="d-none group-nav">
+                                <li onclick="window.location='{% url 'register_model' %}'">
+                                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                                    <span>Cadastrar Modelo</span>
+                                </li>
+                                <li onclick="window.location='{% url 'promote_police' %}'">
+                                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                                    <span>Promover a Adjunto</span>
+                                </li>
+                                <li onclick="window.location='{% url 'reduce_police' %}'">
+                                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                                    <span>Rebaixar a Policial</span>
+                                </li>   
+                                <li onclick="window.location='{% url 'approve_equipment' %}'">
+                                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                                    <span>Aprovar Equipamentos</span>
+                                </li>
+                                <li onclick="window.location='{% url 'approve_model' %}'">
+                                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                                    <span>Aprovar Modelos</span>
+                                </li>
+                                <li onclick="window.location='{% url 'approve_police' %}'">
+                                    <img src="{% static 'img/warehouse.png' %}" alt="">
+                                    <span>Aprovar Policiais</span>
+                                </li>
+                            </div>
                         {% endif %}
                     </ul>
                     {% comment %} <div class="balls">

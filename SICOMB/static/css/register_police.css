@@ -9,6 +9,7 @@
 .section_register {
     display: flex;
     justify-content: center;
+    height: 100%;
 }
 
 .registration {

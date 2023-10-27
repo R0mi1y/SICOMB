@@ -240,3 +240,7 @@ def filter_police(request):
             return render(request, 'police/reduce_police.html', context)
 
     return render(request, 'police/manage_police.html', context)
+
+
+def dashboard(request):
+    return render(request, 'dashboard.html', {})

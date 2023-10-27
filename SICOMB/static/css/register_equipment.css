@@ -2,6 +2,7 @@
 
 .container {
     flex: 1;
+    min-height: 100%;
 }
 
 .section_register{
