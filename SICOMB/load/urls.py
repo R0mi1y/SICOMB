@@ -23,6 +23,10 @@ urlpatterns = [
         apis.add_list_equipment,
     ),  # adiciona um equipamento à lista na views vindo do front
     path(
+        "lista_equipamentos/add/observation/",
+        apis.add_obs,
+    ),  # adiciona uma observação a um equipamento em uma descarga
+    path(
         "lista_equipamentos/remover/",
         apis.remove_list_equipment,
     ),  # Remove um equipamento da lista na views vindo do front a solicitação

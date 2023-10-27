@@ -76,17 +76,14 @@
                         </td>
                         <td>
                             {{equipment_load.equipment.serial_number}}
-                            
+                            {{equipment_load.bullet.caliber}}
                         </td>
                         <td>
                             {{ equipment_load.equipment.model.description }}
                             {{ equipment_load.bullet.description}}
-
                         </td>
                         <td>
-                            {{equipment_load.equipment.model.model}}
-                            {{equipment_load.bullet.model}}
-                            {% comment %} Não tem atributo tipo pra munição no BD {% endcomment %}
+                            {{equipment_load.equipment.model.model|default:equipment_load.bullet}}
                         </td>
                         <td>
                             {% if equipment_load.equipment.model.caliber %}
@@ -105,7 +102,7 @@
                             {{equipment_load.equipment.model.size|default:"-"}}
                         </td>
                         <td>
-                            {{equipment_load.equipment.status}}
+                            {{equipment_load.status}}
                         </td>
                         <td>{{equipment_load.observation}}</td>
                     </tr>

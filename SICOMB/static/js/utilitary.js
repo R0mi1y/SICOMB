@@ -2,7 +2,7 @@ function popUp(message, options = {}) {
     const defaultOptions = {
         closeBtn: true,
         yn: false,
-        adicional: '',
+        adicional: "",
         timer: null,
         yesFunction: false,
         noFunction: false,
@@ -11,100 +11,96 @@ function popUp(message, options = {}) {
     };
 
     const settings = { ...defaultOptions, ...options };
-    const overlay = document.createElement('a');
+
+    const overlay = $("<a></a>");
     if (settings.overlay) {
-        overlay.classList.add('popup-overlay');
+        overlay.addClass("popup-overlay");
     }
-    
-    const popUpElement = document.createElement('div');
-    popUpElement.style.opacity = '0';
-    popUpElement.classList.add('popup');
+
+    const popUpElement = $("<div></div>");
+    popUpElement.css("opacity", "0");
+    popUpElement.addClass("popup");
 
     if (settings.closeBtn) {
-        const closeButton = document.createElement('button');
-        closeButton.textContent = 'x';
-        closeButton.classList = 'close-button';
-        closeButton.addEventListener('click', () => {
-            if (settings.overlay) document.body.removeChild(overlay);
-            else document.getElementById("messages").removeChild(popUpElement);
+        const closeButton = $("<button>x</button>");
+        closeButton.addClass("close-button");
+        closeButton.on("click", () => {
+            if (settings.overlay) overlay.remove();
+            else $("#messages").remove(popUpElement);
         });
-        popUpElement.appendChild(closeButton);
-        
-        // if (settings.overlay) {
-        //     overlay.addEventListener('click', () => {
-        //         document.body.removeChild(overlay);
-        //     });
-        // }
+        popUpElement.append(closeButton);
     }
 
-    const messageElement = document.createElement('p');
-    messageElement.textContent = message;
-    popUpElement.appendChild(messageElement);
+    const messageElement = $("<p></p>");
+    messageElement.text(message);
+    popUpElement.append(messageElement);
 
     if (settings.adicional) {
-        popUpElement.insertAdjacentHTML('beforeend', settings.adicional);
+        popUpElement.append($(settings.adicional));
     }
 
     if (settings.yn) {
-        const yesButton = document.createElement('button');
-        yesButton.textContent = "SIM";
-        yesButton.classList.add('popup-button', 'green');
-        yesButton.addEventListener('click', () => {
-            if (settings.overlay) document.body.removeChild(overlay);
-            else document.getElementById("messages").removeChild(popUpElement);
+        const yesButton = $("<button>SIM</button>");
+        yesButton.addClass("popup-button green");
+        yesButton.on("click", () => {
+            if (settings.overlay) overlay.remove();
+            else $("#messages").remove(popUpElement);
             settings.yesFunction();
         });
 
-        const noButton = document.createElement('button');
-        noButton.textContent = "NÃO";
-        noButton.classList.add('popup-button', 'red');
-        noButton.addEventListener('click', () => {
-            if (settings.overlay) document.body.removeChild(overlay);
-            else document.getElementById("messages").removeChild(popUpElement);
+        const noButton = $("<button>NÃO</button>");
+        noButton.addClass("popup-button red");
+        noButton.on("click", () => {
+            if (settings.overlay) overlay.remove();
+            else $("#messages").remove(popUpElement);
             settings.noFunction();
         });
 
-        popUpElement.appendChild(yesButton);
-        popUpElement.appendChild(noButton);
+        popUpElement.append(yesButton);
+        popUpElement.append(noButton);
     }
 
     if (settings.overlay) {
-        overlay.appendChild(popUpElement);
-        document.body.appendChild(overlay);
-    }
-    else document.getElementById("messages").appendChild(popUpElement);
+        overlay.append(popUpElement);
+        $("body").append(overlay);
+    } else $("#messages").append(popUpElement);
 
     setTimeout(() => {
         if (settings.overlay) {
-            overlay.style.opacity = '1'; // Torna o pop-up visível
-            popUpElement.style.opacity = '1';
-        } else popUpElement.style.opacity = '1';
-        
+            overlay.css("opacity", "1");
+            popUpElement.css("opacity", "1");
+        } else popUpElement.css("opacity", "1");
     }, 10);
 
     if (settings.timer) {
         setTimeout(() => {
-            if (settings.overlay) document.body.removeChild(overlay);
-            else document.getElementById("messages").removeChild(popUpElement);
+            if (settings.overlay) overlay.remove();
+            else $("#messages").remove(popUpElement);
         }, settings.timer);
     }
 
     if (settings.textArea) {
-        const textArea = document.createElement('textarea');
-        textArea.rows = 3;
-        textArea.cols = 60;
+        const textArea = $("<textarea></textarea>");
+        textArea.attr("rows", 10);
+        textArea.attr("cols", 60);
 
-        const button = document.createElement('button');
-        button.textContent = "CONFIRMAR";
-        button.classList.add('popup-button');
-        button.style.backgroundColor = "#5B4939";
-        button.addEventListener('click', () => {
-            document.body.removeChild(overlay);
-            settings.function_textarea(settings.parm1, textArea.value);
+        textArea.css("border", "solid 1px #685949");
+        textArea.css("border-radius", "5px");
+        textArea.css("background-color", "#efe5da");
+        textArea.css("margin-top", "10px");
+
+        const button = $("<button>CONFIRMAR</button>");
+        button.addClass("popup-button");
+        button.css("background-color", "#685949");
+        button.css("color", "#fff");
+        button.on("click", () => {
+            overlay.remove();
+            settings.function_textarea(settings.parm1, textArea.val());
         });
 
-        popUpElement.appendChild(textArea);
-        popUpElement.appendChild(button);
+        popUpElement.append(textArea);
+        popUpElement.append(button);
+        popUpElement.css("display", "grid");
     }
 
     return overlay;
@@ -112,19 +108,19 @@ function popUp(message, options = {}) {
 
 // Função para alternar a visibilidade do menu
 function toggleMenu() {
-    var menu = document.getElementById('menu');
-    if (menu.style.opacity === '1') {
-        menu.style.opacity = '0';
-        menu.style.pointerEvents = 'none'; // Impede interações com o menu oculto
+    var menu = document.getElementById("menu");
+    if (menu.style.opacity === "1") {
+        menu.style.opacity = "0";
+        menu.style.pointerEvents = "none"; // Impede interações com o menu oculto
     } else {
-        menu.style.opacity = '1';
-        menu.style.pointerEvents = 'auto'; // Restaura interações com o menu visível
+        menu.style.opacity = "1";
+        menu.style.pointerEvents = "auto"; // Restaura interações com o menu visível
     }
 }
 
 function handleFileSelection(event) {
     const fileInput = event.target;
-    const fileSelectedMessage = document.querySelector('#fileSelectedMessage');
+    const fileSelectedMessage = document.querySelector("#fileSelectedMessage");
     console.log(fileSelectedMessage);
     if (fileInput.files && fileInput.files.length > 0) {
         const fileName = fileInput.files[0].name;

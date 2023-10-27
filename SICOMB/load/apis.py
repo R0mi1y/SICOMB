@@ -62,7 +62,7 @@ def get_load(
 ):  # Retorna uma resposta JSON com todas as cargas (caso necessário)
     
     tipo_model = {
-        'wearable' : 'Vestmento',
+        'wearable' : 'Vestimento',
         'accessory' : 'Acessório',
         'armament' : 'Armamento',
         'grenada' : 'Granada',
@@ -186,3 +186,31 @@ def remove_list_equipment(request):
     else:
         return JsonResponse({"falha": "falha"})
 
+
+@csrf_exempt
+@require_user_pass
+def add_obs(request):
+    if request.method == "POST":
+        serial_number = request.POST.get('serialNumber')
+        obs = request.POST.get('observation')
+        id_cargo = request.POST.get('id_cargo')
+        
+        eq_loads = Load.objects.get(id=id_cargo).equipment_loads.all()
+        
+        no_especial_char = ''.join(c if c.isalnum() or c.isspace() else 'x' for c in serial_number)
+        
+        if serial_number.isdigit() or serial_number.startswith("ac"):
+            for eq in eq_loads:
+                if eq.equipment and eq.equipment.serial_number == serial_number:
+                    eq.observation = obs
+                    eq.save()
+                    return JsonResponse({"sucesso": "sucesso"})
+
+        elif no_especial_char.replace(" ", "").isalnum():
+            for eq in eq_loads:
+                if eq.bullet and eq.bullet.caliber == serial_number:
+                    eq.observation = obs
+                    eq.save()
+                    return JsonResponse({"sucesso": "sucesso"})
+    else:
+        return JsonResponse({"message": "Método HTTP não suportado"})

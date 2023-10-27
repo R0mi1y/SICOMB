@@ -149,8 +149,6 @@ function selectCargo(id) {
 function insertLine(line, x) {
     x = x ?? true;
 
-    console.log(line);
-
     table_itens.innerHTML += // Insere efetivamente na lista => {
         '<tr>' +
         '<td></td>' +
@@ -180,17 +178,40 @@ function updateRowNumbers(x) {
             cells[cells.length - 1].innerHTML = '<a onclick="checkRemoveRow(' + i + ')"><svg fill="red" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></a>'; // ultima coluna, o botão de remover
             cells[cells.length - 1].innerHTML += ' | <a id="edit" onclick="edit(' + i + ')" href="#"><svg fill="brown" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h56l345-345-56-56-345 345v56Zm572-403L602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Zm-141-29-28-28 56 56-28-28Z"/></svg></a>'; // ultima coluna, o botão de remover
         } else if (cells[cells.length - 1].innerHTML != "<svg fill=\"green\" height=\"24\" viewBox=\"0 -960 960 960\" width=\"24\"><path d=\"M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z\"></path></svg>"){
+            if (cells[1].innerHTML == '-') {
+                var key = cells[4].innerHTML;
+            } else {
+                var key = cells[1].innerHTML;
+            }
+
             cells[cells.length - 1].innerHTML = '<svg height="100%" fill="red" viewBox="0 -960 960 960" width="26"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>'; // ultima coluna, o botão de remover
-            cells[cells.length - 1].innerHTML += ' | <a id="edit" onclick="addObs(' + cells[1].innerHTML + ')" href="#"><svg fill="brown" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h56l345-345-56-56-345 345v56Zm572-403L602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Zm-141-29-28-28 56 56-28-28Z"/></svg></a>'; // ultima coluna, o botão de remover
+            cells[cells.length - 1].innerHTML += ' | <a id="edit" onclick="addObs(\'' + key +'\')" href="#"><svg fill="brown" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h56l345-345-56-56-345 345v56Zm572-403L602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Zm-141-29-28-28 56 56-28-28Z"/></svg></a>'; // ultima coluna, o botão de remover
         }
     }
 }
 
 function setObservation(serial_number, observation) {
-    
+    $.ajax({
+        url: "/carga/lista_equipamentos/add/observation/",
+        type: "POST",
+        dataType: "json",
+        data: {
+            serialNumber: serial_number,
+            observation: observation,
+            id_cargo: id_cargo,
+            user: user,
+            pass: pass,
+        },
+        success: function (data) {
+        },
+        error: function (error) {
+            popUp(error);
+            console.error(error);
+        }
+    });
 }
 
-function addObs(i) {
+function addObs(i, id_cargo) {
     popUp("Adicione a observação: ", {textArea:true, function_textarea: setObservation, parm1:i});
 }
 
@@ -330,7 +351,7 @@ function addToSquare(data) {
     let amount_input = document.getElementById("amount_input");
 
     tipo_model = {
-        'wearable' : 'Vestmento',
+        'wearable' : 'Vestimento',
         'accessory' : 'Acessório',
         'armament' : 'Armamento',
         'grenada' : 'Granada',

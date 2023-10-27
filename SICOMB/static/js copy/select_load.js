@@ -329,7 +329,7 @@ function addToSquare(data) {
     let amount_input = document.getElementById("amount_input");
 
     tipo_model = {
-        'wearable' : 'Vestmento',
+        'wearable' : 'Vestimento',
         'accessory' : 'Acessório',
         'armament' : 'Armamento',
         'grenada' : 'Granada',

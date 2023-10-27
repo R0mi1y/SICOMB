@@ -2,6 +2,8 @@ var list_equipment = [];
 var square_equipment;
 var list_returned_equipment = [];
 var id_cargo;
+var done_svg =
+    '<svg fill="green" height="24" viewBox="0 -960 960 960" width="24"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></path></svg>';
 
 // seta a data e a hora atual => {
 function set_date() {
@@ -19,7 +21,10 @@ function set_date() {
     $("#date").text(data);
     $("#time").text(time);
 
-    $("#cancel_btn").prop("disabled", false).removeClass("btn_disabled").addClass("btn_cancel");
+    $("#cancel_btn")
+        .prop("disabled", false)
+        .removeClass("btn_disabled")
+        .addClass("btn_cancel");
 }
 
 function set_carga_id(id) {
@@ -28,40 +33,106 @@ function set_carga_id(id) {
     var inputHidden = $("<input>").attr({
         type: "hidden",
         name: "turn_type",
-        value: "descarga"
+        value: "descarga",
     });
     $("#form-equipment").append(inputHidden);
 
     inputHidden = $("<input>").attr({
         type: "hidden",
         name: "load_id",
-        value: id
+        value: id,
     });
     $("#form-equipment").append(inputHidden);
 
     $("#insert_btn").val("DEVOLVER");
 
     $.ajax({
-        url: "http://localhost:8000/carga/get/" + id_cargo + "/",
+        url: "/carga/get/" + id_cargo + "/",
         type: "POST",
         dataType: "json",
         data: {
             user: user,
-            pass: pass
+            pass: pass,
         },
         success: function (data_cargo) {
             $.each(data_cargo.equipment_loads, function (cargo, equipment) {
                 insertLine(equipment["Equipment&model"], false);
                 list_equipment.push(equipment["Equipment&model"]);
             });
-        }
+            $(document).ready(function () {
+                $.ajax({
+                    url: "/carga/lista_equipamentos_atual/get",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        user: user,
+                        pass: pass,
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        var table_itens = $("#body_table_itens");
+                        var lines = table_itens.find("tr");
+
+                        lines.each(function (j, line) {
+                            var camps = $(line).find("td");
+                            $.each(data, function (key, eq) {
+                                let amount_input = eq.amount;
+
+                                if (camps.eq(1).text() == "-") {
+                                    var line_serial_number = camps.eq(4).text();
+                                } else {
+                                    var line_serial_number = camps.eq(1).text();
+                                }
+
+                                if (line_serial_number == key) {
+                                    if (
+                                        parseInt(camps.eq(5).text()) >
+                                        amount_input
+                                    ) {
+                                        var ultimaLinha = $(line).clone(true);
+                                        camps.eq(5).text(amount_input);
+
+                                        ultimaLinha
+                                            .find("td")
+                                            .eq(5)
+                                            .html(
+                                                parseInt(
+                                                    ultimaLinha
+                                                        .find("td")
+                                                        .eq(5)
+                                                        .text()
+                                                ) - amount_input
+                                            );
+
+                                        table_itens.append(ultimaLinha);
+                                        updateRowNumbers(false);
+                                    }
+
+                                    list_returned_equipment.push(
+                                        square_equipment
+                                    );
+
+                                    camps.eq(8).html(done_svg);
+
+                                    interval = setInterval(
+                                        fetchUnvalibleEquipmentData,
+                                        1000
+                                    );
+                                }
+
+                                console.log(eq);
+                            });
+                            console.log(line);
+                        });
+                    },
+                });
+            });
+        },
     });
 }
 
 $(document).ready(function () {
-    setTimeout(function () {
-        $("#search-btn").on("click", search);
-    }, 1000);
+    $("#search-btn").on("click", search);
 });
 
 function search() {
@@ -70,22 +141,33 @@ function search() {
     search.val("");
 }
 
-
 interval = setInterval(fetchUnvalibleEquipmentData, 1000);
 
 function fetchUnvalibleEquipmentData(serial_number, type = "none") {
-    let url = "http://localhost:8000/equipamento/get_indisponivel/" + id_cargo + "/";
-    
+    let url = "/equipamento/get_indisponivel/" + id_cargo + "/";
+
     if (!(serial_number == null || serial_number == undefined)) {
         if (/^[0-9]+$/.test(serial_number)) {
             console.log("Equipaamento");
-            url = "http://localhost:8000/equipamento/get_indisponivel/" + id_cargo + "/?type=equipment&pk=" + serial_number;
+            url =
+                "/equipamento/get_indisponivel/" +
+                id_cargo +
+                "/?type=equipment&pk=" +
+                serial_number;
         } else if (serial_number.includes("ac")) {
             console.log("Acessório");
-            url = "http://localhost:8000/equipamento/get_indisponivel/" + id_cargo + "/?type=equipment&pk=" + serial_number;
+            url =
+                "/equipamento/get_indisponivel/" +
+                id_cargo +
+                "/?type=equipment&pk=" +
+                serial_number;
         } else {
             console.log("Munição");
-            url = "http://localhost:8000/equipamento/get_indisponivel/" + id_cargo + "/?type=bullet&pk=" + serial_number;
+            url =
+                "/equipamento/get_indisponivel/" +
+                id_cargo +
+                "/?type=bullet&pk=" +
+                serial_number;
         }
     }
 
@@ -99,18 +181,24 @@ function fetchUnvalibleEquipmentData(serial_number, type = "none") {
         },
         success: function (data) {
             if (data.uid !== "") {
-                $.each(list_equipment, function(i, equipment) {
+                $.each(list_equipment, function (i, equipment) {
                     serial_number = equipment.equipment["serial_number"];
                     caliber = equipment.equipment["caliber"];
-                    console.log(type);
-                    if (serial_number != undefined && serial_number === data.equipment.serial_number) {
+
+                    if (
+                        serial_number != undefined &&
+                        serial_number === data.equipment.serial_number
+                    ) {
                         addToSquare(data);
                         square_equipment = data;
                         if (type != "search") {
                             check_cargo_square(type);
                         }
                         return false;
-                    } else if (caliber != undefined && caliber === data.equipment.caliber) {
+                    } else if (
+                        caliber != undefined &&
+                        caliber === data.equipment.caliber
+                    ) {
                         addToSquare(data);
                         square_equipment = data;
                         if (type != "search") {
@@ -120,7 +208,10 @@ function fetchUnvalibleEquipmentData(serial_number, type = "none") {
                     }
                 });
             } else if (data.confirmCargo) {
-                $("#submit_btn").prop("disabled", false).removeClass("btn_disabled").addClass("btn_confirm");
+                $("#submit_btn")
+                    .prop("disabled", false)
+                    .removeClass("btn_disabled")
+                    .addClass("btn_confirm");
             }
             if ("msm" in data) {
                 popUp(data.msm);
@@ -128,14 +219,15 @@ function fetchUnvalibleEquipmentData(serial_number, type = "none") {
         },
         error: function (error) {
             console.error("Erro ao buscar dados do equipamento:", error);
-        }
+        },
     });
 }
 
 function fetchEquipmentData(serial_number, type = "none") {
-    let url = (serial_number == null || serial_number == undefined) ?
-        "http://localhost:8000/equipamento/get_disponivel" :
-        "http://localhost:8000/equipamento/get/" + serial_number;
+    let url =
+        serial_number == null || serial_number == undefined
+            ? "/equipamento/get_disponivel"
+            : "/equipamento/get/" + serial_number;
 
     $.ajax({
         url: url,
@@ -147,9 +239,17 @@ function fetchEquipmentData(serial_number, type = "none") {
         },
         success: function (data) {
             if (data.uid !== "") {
-                if (data.equipment.serial_number != null && data.equipment.serial_number != undefined) {
-                    let equipAlreadyInList = list_equipment.find(function (equipment) {
-                        return equipment.equipment.serial_number == data.equipment.serial_number;
+                if (
+                    data.equipment.serial_number != null &&
+                    data.equipment.serial_number != undefined
+                ) {
+                    let equipAlreadyInList = list_equipment.find(function (
+                        equipment
+                    ) {
+                        return (
+                            equipment.equipment.serial_number ==
+                            data.equipment.serial_number
+                        );
                     });
 
                     if (equipAlreadyInList) {
@@ -169,7 +269,7 @@ function fetchEquipmentData(serial_number, type = "none") {
         },
         error: function (error) {
             console.error("Erro ao buscar dados do equipamento:", error);
-        }
+        },
     });
 }
 
@@ -186,84 +286,83 @@ function checkAwateList(type = "none") {
     }
 }
 
-
 function check_cargo_square() {
     var observation = $("#note_equipment").val();
     var table_itens = $("#body_table_itens");
     var amount_input = $("#amount_input").val();
     var serialNumberInput = $("#serial_number").text();
 
-    console.log(square_equipment);
-    if (serialNumberInput == "-"){
-        serialNumberValue = square_equipment['equipment']['caliber'];
+    if (serialNumberInput == "-") {
+        serialNumberValue = square_equipment["equipment"]["caliber"];
     } else {
-        serialNumberValue = serialNumberInput
+        serialNumberValue = serialNumberInput;
     }
-    
-    var lines = table_itens.find('tr');
-    console.log("Olá");
 
-    $.each(list_equipment, function(i, equipment) {
-        lines.each(function(j, line) {
-            var camps = $(line).find('td');
-            var status = camps.eq(8).html();
+    var lines = table_itens.find("tr");
 
-            if (serialNumberInput == "-"){
-                var line_serial_number = camps.eq(4).text();
-            } else {
-                var line_serial_number = camps.eq(1).text();
+    lines.each(function (j, line) {
+        var camps = $(line).find("td");
+        var status = camps.eq(8).html();
+
+        if (serialNumberInput == "-" && camps.eq(1).text() == "-") {
+            var line_serial_number = camps.eq(4).text();
+        } else {
+            var line_serial_number = camps.eq(1).text();
+        }
+
+        if (line_serial_number == serialNumberValue && status !== done_svg) {
+            if (parseInt(camps.eq(5).text()) > amount_input) {
+                var ultimaLinha = $(line).clone(true);
+                camps.eq(5).text(amount_input);
+
+                ultimaLinha
+                    .find("td")
+                    .eq(5)
+                    .html(
+                        parseInt(ultimaLinha.find("td").eq(5).text()) -
+                            amount_input
+                    );
+
+                table_itens.append(ultimaLinha);
+                updateRowNumbers(false);
             }
 
-            if (
-                line_serial_number == serialNumberValue &&
-                status !== '<svg fill="green" height="24" viewBox="0 -960 960 960" width="24"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"></path></svg>'
-            ) {
-                console.log(camps.eq(8).html());
-                if (parseInt(camps.eq(5).text()) > amount_input) {
-                    var ultimaLinha = $(line).clone(true);
-                    camps.eq(5).text(amount_input);
+            list_returned_equipment.push(square_equipment);
 
-                    ultimaLinha.find('td').eq(5).html(parseInt(ultimaLinha.find('td').eq(5).text()) - amount_input);
+            camps.eq(8).html(done_svg);
 
-                    table_itens.append(ultimaLinha);
-                    updateRowNumbers(false);
-                }
+            interval = setInterval(fetchUnvalibleEquipmentData, 1000);
+            // Adicionar ao array de equipamentos do Django
 
-                list_returned_equipment.push(square_equipment);
+            var serialNumber =
+                square_equipment.equipment["serial_number"] ??
+                square_equipment.equipment["caliber"] ??
+                "";
 
-                camps.eq(8).html('<svg fill="green" height="24" viewBox="0 -960 960 960" width="24"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>');
-
-                interval = setInterval(fetchUnvalibleEquipmentData, 1000);
-                // Adicionar ao array de equipamentos do Django
-
-                var serialNumber = square_equipment.equipment["serial_number"] ?? square_equipment.equipment["caliber"] ?? "";
-
-                // Realizar solicitação Ajax
-                $.ajax({
-                    url: "http://localhost:8000/carga/lista_equipamentos/add/",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        serialNumber: serialNumber,
-                        observation: observation,
-                        amount: amount_input,
-                        user: user,
-                        pass: pass,
-                    },
-                    success: function (data) {
-                        clearSquare();
-                        square_equipment = null;
-                    },
-                    error: function (error) {
-                        console.error(error);
-                    }
-                });
-                return false;
-            }
-        });
+            // Realizar solicitação Ajax
+            $.ajax({
+                url: "/carga/lista_equipamentos/add/",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    serialNumber: serialNumber,
+                    observation: observation,
+                    amount: amount_input,
+                    user: user,
+                    pass: pass,
+                },
+                success: function (data) {
+                    clearSquare();
+                    square_equipment = null;
+                },
+                error: function (error) {
+                    console.error(error);
+                },
+            });
+            return false;
+        }
     });
 }
-
 
 // checa se a lista tá vazia
 function confirmCargo() {

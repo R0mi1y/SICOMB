@@ -135,7 +135,6 @@ def confirm_load(request):
                 for key in settings.AUX["list_equipment"]:
                     amount = int(settings.AUX["list_equipment"][key]["amount"])
                     observation = settings.AUX["list_equipment"][key]["observation"]
-                    print(key)
                     no_especial_char = ''.join(c if c.isalnum() or c.isspace() else 'x' for c in key)
                     
                     if key.isdigit() or key.startswith("ac"):
