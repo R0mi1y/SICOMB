@@ -38,3 +38,10 @@ class PoliceForm(forms.ModelForm):
         password = make_password(data)
         return password
     
+    def clean_name(self):
+        data = self.cleaned_data["name"]
+        if Police.objects.filter(username=data).first() == None:
+            return data
+        else:
+            raise "Nome já cadastrado"
+    
