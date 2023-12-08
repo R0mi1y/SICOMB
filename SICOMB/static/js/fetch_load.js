@@ -142,6 +142,7 @@ function check_cargo_square() {
         // Reseta o quadro do equipamento => {
             
         clearSquare();
+        clearInterval(interval);
         interval = setInterval(fetchEquipmentData, 1000);
         checkAwateList();
         // => }
@@ -154,15 +155,17 @@ function checkRemoveRow(rowNumber) {
     var col = rows[rowNumber].getElementsByTagName("td"); // pega os td da tr
 
     obs = col[7].innerHTML;
+    caliber = col[4].innerHTML;
     amount = col[5].innerHTML;
 
     if (col[3].innerHTML != 'Munição') {
         serialNum = col[1].innerHTML; // 1 É A POSIÇÃO DO NUMERO DE SÉRIE, ou seja ele pega o numero de série
-        popup = popUp("Passe de volta o equipamento", {
+        let popup = popUp("Passe de volta o equipamento", {
             closeBtn: false
         }); // o false tira o botão de excluir a notificação
 
         clearInterval(interval); // Para de ficar requisitando
+        clearInterval(interval);
 
         interval = setInterval(() => { // começa a requisitar mas mudando as verificações
             fetch('http://localhost:8000/equipamento/get_disponivel', {
@@ -183,7 +186,7 @@ function checkRemoveRow(rowNumber) {
                             if (key === data.equipment.serial_number) { // verifica se tá na lista
                                 if (key == serialNum) { // verifica se é o certo pois ele pode passar um q tá na lista mas é outro
                                     removeRow(rowNumber); // remove a linha da tabela do html
-                                    document.body.removeChild(popup); // remove o popUpa
+                                    popup['close_function'](); // remove o popUpa
                                     clearInterval(interval); // Para de ficar requisitando
                                     // remove da lista do django
                                     console.log(list_equipment);
@@ -196,7 +199,7 @@ function checkRemoveRow(rowNumber) {
                                         body: new URLSearchParams({
                                             'user': user,
                                             'pass': pass,
-                                            'serial_number': caliber,
+                                            'serial_number': serialNum,
                                             'obs': obs
                                         })
                                     });
@@ -302,4 +305,5 @@ function searchWatingList() {
             document.getElementById("wating_list").innerHTML = wating_list;
         });
 }
-var intervalWatingList = setInterval(searchWatingList, 1000);
+searchWatingList();
+// var intervalWatingList = setInterval(searchWatingList, 1000);

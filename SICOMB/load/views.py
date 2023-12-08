@@ -201,7 +201,7 @@ def confirm_load(request):
                                 status="Retorno",
                             ).save()
                         else:
-                            messages.error("Erro!")
+                            messages.error(request, "Erro!")
                 
                 send_relatory(load)
                 

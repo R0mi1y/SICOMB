@@ -30,77 +30,27 @@
       <form action="" method="POST" enctype="multipart/form-data">
          {% csrf_token %}
          <div class="input-div">
-
             <div class="input-box">
                <label for="{{ form.name.id_for_label }}" class="custom-label">NOME</label>
-               {{form.name}}
-               {% if form.name.errors %}
-                  <usl>
-                        {% for error in form.name.errors %}
-                           <li>{{ error }}</li>
-                        {% endfor %}
-                  </usl>
-               {% endif %}<br>
+                  {{ form.name }}
                <label for="{{ form.matricula.id_for_label }}" class="custom-label">MATRÍCULA</label>
                <div class="input-search">
-                  {{form.matricula}}
-                  {% if form.matricula.errors %}
-                  <usl>
-                        {% for error in form.matricula.errors %}
-                           <li>{{ error }}</li>
-                        {% endfor %}
-                  </usl>
-               {% endif %}<br>
+                  {{ form.matricula }}
                   <button type="button" id="buscar-button"><img src="{% static 'img/search.png'%}"
                         alt="Procurar"></button>
                </div>
                <label for="{{ form.telefone.id_for_label }}" class="custom-label">TELEFONE</label>
-               {{form.telefone}}
-               {% if form.telefone.errors %}
-                  <usl>
-                        {% for error in form.telefone.errors %}
-                           <li>{{ error }}</li>
-                        {% endfor %}
-                  </usl>
-               {% endif %}<br>
+                  {{ form.telefone }}
                <label for="{{ form.lotacao.id_for_label }}" class="custom-label">LOTAÇÃO</label>
-               {{form.lotacao}}
-               {% if form.lotacao.errors %}
-                  <usl>
-                        {% for error in form.lotacao.errors %}
-                           <li>{{ error }}</li>
-                        {% endfor %}
-                  </usl>
-               {% endif %}<br>
+                  {{ form.lotacao }}
             </div>
             <div class="input-box">
                <label for="{{ form.posto.id_for_label }}" class="custom-label">POSTO / GRADUAÇÃO</label>
-               {{form.posto}}
-               {% if form.posto.errors %}
-                  <usl>
-                        {% for error in form.posto.errors %}
-                           <li>{{ error }}</li>
-                        {% endfor %}
-                  </usl>
-               {% endif %}<br>
+                  {{ form.posto }}
                <label for="{{ form.email.id_for_label }}" class="custom-label">E-MAIL</label>
-               {{form.email}}
-               {% if form.email.errors %}
-                  <usl>
-                        {% for error in form.email.errors %}
-                           <li>{{ error }}</li>
-                        {% endfor %}
-                  </usl>
-               {% endif %}<br>
+                  {{ form.email }}
                <label for="{{ form.password.id_for_label }}" class="custom-label">SENHA</label>
-               {{form.password}}
-               {% if form.password.errors %}
-                  <usl>
-                        {% for error in form.password.errors %}
-                           <li>{{ error }}</li>
-                        {% endfor %}
-                  </usl>
-               {% endif %}<br>
+                  {{ form.password }}
                <div class="file-input-container">
                   <input type="file" name="foto" class="file-input" accept="image/*" onchange="handleFileSelection(event)" id="id_foto">
                   <label for="{{ form.foto.id_for_label }}" class="custom-file-input">ANEXAR / ALTERAR FOTO</label>
@@ -148,6 +98,42 @@
       }, 5000); // 5000 milissegundos = 5 segundos
       {% endfor %}
    }
+
+   {% if form.posto.errors %}
+      {% for error in form.posto.errors %}
+         popUp("{{ error }}");
+      {% endfor %}
+   {% endif %}
+   {% if form.email.errors %}
+      {% for error in form.email.errors %}
+         popUp("{{ error }}");
+      {% endfor %}
+   {% endif %}
+   {% if form.lotacao.errors %}
+      {% for error in form.lotacao.errors %}
+         popUp("{{ error }}");
+      {% endfor %}
+   {% endif %}
+   {% if form.password.errors %}
+      {% for error in form.password.errors %}
+         popUp("{{ error }}");
+      {% endfor %}
+   {% endif %}
+   {% if form.telefone.errors %}
+      {% for error in form.telefone.errors %}
+         popUp("{{ error }}");
+      {% endfor %}
+   {% endif %}
+   {% if form.matricula.errors %}
+      {% for error in form.matricula.errors %}
+         popUp("{{ error }}");
+      {% endfor %}
+   {% endif %}
+   {% if form.name.errors %}
+      {% for error in form.name.errors %}
+         popUp("{{ error }}");
+      {% endfor %}
+   {% endif %}
 
    // Chame a função para exibir as mensagens de sucesso
    showSuccessMessages();

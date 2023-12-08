@@ -49,13 +49,6 @@
                     {{ field }}
                 </div>
             {% endif %}
-            {% if field.errors %}
-                <usl>
-                    {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </usl>
-            {% endif %}
         {% endfor %}
         <div class="finalize-registration">
           <label><input type="submit" class="box-shadow-registration" value="Enviar"></label>
@@ -77,5 +70,14 @@
             popUp(messageText, {timer: 2000, overlay: false});
         }
     }
+    $(document).ready(function () {
+        {% for field in form %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    popUp("{{ error }}", {});
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    });
 </script>
 {% endblock content_final %}

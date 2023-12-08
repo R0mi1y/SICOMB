@@ -13,6 +13,7 @@ class PoliceForm(forms.ModelForm):
     class Meta:
         model = Police
         fields = [
+            'username',
             'name',
             'matricula',
             'posto',
@@ -24,6 +25,7 @@ class PoliceForm(forms.ModelForm):
         ]
         
         widgets = {
+            'username': forms.TextInput(attrs={'class':'input-data', "required": True}),
             'name': forms.TextInput(attrs={'class':'input-data', "required": True}),
             'matricula': forms.TextInput(attrs={'id':'matricula-input'}),
             'posto': forms.TextInput(attrs={'class':'input-data'}),
