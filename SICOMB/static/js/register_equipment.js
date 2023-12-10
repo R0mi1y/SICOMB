@@ -1,27 +1,62 @@
+function register_bullet() {
+    $.ajax({
+        url: 'http://localhost:8000/equipamento/bullets/get/',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            user: user,
+            pass: pass
+        },
+        success: function (bullets) {
+            var bullet_options = '';
+            if (bullets) {
+                $.each(bullets, function (i, bullet) {
+                    bullet_options += '\n<option value="' + bullet['id'] + '">' + bullet['description'] + '</option>';
+                });
+            }
+
+            var csrf = $('input[type="hidden"][name="csrfmiddlewaretoken"]');
+            var bullet_html =
+                `
+                <form method="post" action="." class="form-element" style="min-height:220px;min-whidth:300px;">
+                    <div style="background-color: rgb(91,73,57, 0.9); whidth: 100%; border-radius: 20px; text-align:center; color: #fff; padding:5px;">
+                        </div>
+                            <h3 class="input-title">
+                                CADASTRAR MUNIÇÃO
+                            </h3>
+                            <div class="input-div">
+                            ` + csrf[0].outerHTML + `
+                            <div class="input-box">
+                                <h4 class="input-title">MUNIÇÕES</h4>
+                                <div class="select">
+                                    <select name="bullet" class="select-field" id="dropdown_bullets" required>
+                ` +
+                    bullet_options
+                + `
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="input-box">
+                            <h4 class="input-title">QUANTIDADE</h4>
+                                <input name="amount" class="input-data" type="number" id="input_amount" required>
+                            </div>
+                        <div class="finalize-registration" style="padding-bottom: 0px;">
+                        <label><input type="submit" id="submit-btn" class="box-shadow-registration" value="Adicionar"></label>
+                    </div>
+                </form>
+                `;
+
+            popUp("", { closeBtn: true, adicional: bullet_html });
+        },
+        error: function (error) {
+            console.error('Erro ao buscar dados da munição:', error);
+        }
+    });
+}
+
 $(document).ready(function () {
     var choicesTypes = $("#type-choices");
     choicesTypes.val(""); 
-
-    // Libera o campo certo com base no tipo selecionado
-    function change_field() {
-        var selectedValue = choicesTypes.val();
-        var choiceModels = $("#type-choices-" + selectedValue);
-        var choices = $(".type-choices-type");
-        var labelClass = $("#lable-type-input");
-
-        if (labelClass) labelClass.remove();
-
-        choices.prop('disabled', true).hide().val('');
-
-        if (selectedValue !== '') {
-            choiceModels.show().prop('disabled', false);
-        }
-    }
-
-    // Executa a função uma vez inicialmente
-    change_field();
-
-    choicesTypes.on('change', change_field);
 
     // Requisita e valida o UID para cadastrar
     function fetchUid() {
@@ -112,59 +147,30 @@ $(document).ready(function () {
     });
 
     // Função para registrar munição
-    function register_bullet() {
-        $.ajax({
-            url: 'http://localhost:8000/equipamento/bullets/get/',
-            type: 'GET',
-            dataType: 'json',
-            success: function (bullets) {
-                var bullet_options = '';
-                if (bullets) {
-                    $.each(bullets, function (i, bullet) {
-                        bullet_options += '\n<option value="' + bullet['id'] + '">' + bullet['description'] + '</option>';
-                    });
-                }
-
-                var csrf = $('input[type="hidden"][name="csrfmiddlewaretoken"]');
-                var bullet_html =
-                    `
-                    <form method="post" action="." class="form-element" style="min-height:220px;min-whidth:300px;">
-                    <div style="background-color: rgb(91,73,57, 0.9); whidth: 100%; border-radius: 20px; text-align:center; color: #fff; padding:5px;">
-                    <h3>
-                    CADASTRAR MUNIÇÃO
-                    </h3>
-                    </div>
-                        <div class="input-div">
-                        ` + csrf[0].outerHTML + `
-                        <div class="input-box">
-                            <h4 class="input-title">MUNIÇÕES</h4>
-                            <div class="select">
-                                <select name="bullet" class="select-field" id="dropdown_bullets" required>
-                    ` +
-                        bullet_options
-                    + `
-                                </select>
-                            </div>
-                        </div>
-                        <div class="input-box">
-                            <h4 class "input-title" for="input_amount">QUANTIDADE:</h4>
-                            <input name="amount" class="input-data" type="number" id="input_amount" required>
-                        </div>
-                        <div class="finalize-registration" style="padding-bottom: 0px;">
-                            <label><input type="submit" id="submit-btn" class="box-shadow-registration" value="Adicionar"></label>
-                        </div>
-                    </form>
-                    `;
-
-                popUp("", { closeBtn: true, adicional: bullet_html });
-            },
-            error: function (error) {
-                console.error('Erro ao buscar dados da munição:', error);
-            }
-        });
-    }
-
+    
     $("#register-bullet-btn").on('click', function () {
         register_bullet();
     });
+
+    // Libera o campo certo com base no tipo selecionado
+    function change_field() {
+        var selectedValue = choicesTypes.val();
+        var choiceModels = $("#type-choices-" + selectedValue);
+        var choices = $(".type-choices-type");
+        var labelClass = $("#lable-type-input");
+
+        if (labelClass) labelClass.remove();
+
+        choices.prop('disabled', true).hide().val('');
+
+        if (selectedValue !== '') {
+            choiceModels.show().prop('disabled', false);
+        }
+    }
+
+    // Executa a função uma vez inicialmente
+    change_field();
+
+    choicesTypes.on('change', change_field);
 });
+

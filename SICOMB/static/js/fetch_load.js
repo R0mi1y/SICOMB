@@ -35,7 +35,7 @@ fetch("http://localhost:8000/carga/lista_equipamentos/get", {
         }
     });
 
-
+    
 function fetchEquipmentData(serial_number, type='none') {
     // Caso a função receba o parâmetro serial_number, ela requisita o equipamento correspondente.
     // Caso contrário, ela requisita o equipamento passado no sensor.

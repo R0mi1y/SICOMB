@@ -28,7 +28,7 @@
         {% for field in form %}
             {% if field.name == "image_path" %}
                 <div class="input-box">
-                    <h4 class="input-title">{{ field.label }}</h4>
+                    <h4 class="input-title {% if field.errors %}input-error{% endif %}">{{ field.label }}</h4>
                     <div class="file-div">
                         <label class="file-label" for="{{ field.id_for_label }}">UPLOAD DE ARQUIVO +</label>
                         <input class="input-file" name="{{ field.name }}" type="file" id="{{ field.id_for_label }}" accept="image/*">
@@ -36,16 +36,16 @@
                 </div>
             {% elif field.name == "matricula" %}
                 <div class="input-box">
-                    <h4 for="{{ field.id_for_label }}" class="input-title">{{ field.label }}</h4>
+                    <h4 for="{{ field.id_for_label }}" class="input-title {% if field.errors %}input-error{% endif %}">{{ field.label }}</h4>
                     <div class="input-search">
                         {{ field }}
-                        <button type="button" onclick="search()"><img src="{% static 'img/search.png'%}"
-                            alt="Procurar"></button>
+                        {% comment %} <button type="button" onclick="search()"><img src="{% static 'img/search.png'%}"
+                            alt="Procurar"></button> {% endcomment %}
                     </div>
                 </div>
             {% else %}
                 <div class="input-box">
-                    <h4 for="{{ field.id_for_label }}" class="input-title">{{ field.label }}</h4>
+                    <h4 for="{{ field.id_for_label }}" class="input-title {% if field.errors %}input-error{% endif %}">{{ field.label }}</h4>
                     {{ field }}
                 </div>
             {% endif %}
@@ -71,13 +71,22 @@
         }
     }
     $(document).ready(function () {
+        let timer = 2000;
         {% for field in form %}
             {% if field.errors %}
                 {% for error in field.errors %}
-                    popUp("{{ error }}", {});
+                    popUp("{{ error }}", {timer: timer, overlay: false});
+                    timer += 1000;
                 {% endfor %}
             {% endif %}
         {% endfor %}
     });
 </script>
 {% endblock content_final %}
+
+
+
+
+
+
+

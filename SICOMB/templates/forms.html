@@ -56,7 +56,8 @@
     </form>
   </div>
 </section>
-              
-<script src="{% static 'js/register_equipment.js' %}"></script>
+{% block js %}
+    <script src="{% static 'js/register_equipment.js' %}"></script>
+{% endblock js %}
               
 {% endblock content_final %}

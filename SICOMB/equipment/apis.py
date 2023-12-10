@@ -17,7 +17,7 @@ def get_bullets(request):
         data[i] = model_to_dict(caliber)
         data[i]['image_path'] = caliber.image_path.url if caliber.image_path else ''
 
-    return JsonResponse(data)
+    return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
 
 
 # valida o uid pra cadastro
@@ -29,15 +29,16 @@ def valid_uid(request):
             equipment = Equipment.objects.get(uid=uid)
             
             if not equipment.activated:
-                return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""})
+                return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""}, json_dumps_params={'ensure_ascii': False})
                 
         except Equipment.DoesNotExist:  # se não existe
             return JsonResponse(
-                {"uid": uid}
+                {"uid": uid},
+                json_dumps_params={'ensure_ascii': False}
             )  # retorna o uid pq significa que pode cadastrar
-        return JsonResponse({"msm": "UID já cadastrado", "uid": ""})
+        return JsonResponse({"msm": "UID já cadastrado", "uid": ""}, json_dumps_params={'ensure_ascii': False})
     else:
-        return JsonResponse({"uid": ""})
+        return JsonResponse({"uid": ""}, json_dumps_params={'ensure_ascii': False})
 
 
 # valida o numero de série pra cadastro
@@ -48,11 +49,11 @@ def valid_serial_number(request, sn):
         equipment = Equipment.objects.get(serial_number=sn)
         
         if not equipment.activated:
-            return JsonResponse({"msm": "Numero de série aguardando aprovação de um administrador!", "exists": True})
+            return JsonResponse({"msm": "Numero de série aguardando aprovação de um administrador!", "exists": True}, json_dumps_params={'ensure_ascii': False})
 
     except Equipment.DoesNotExist:  # se não existe
-        return JsonResponse({"exists": False})  # retorna que não existe
-    return JsonResponse({"msm": "Numero de série já cadastrado", "exists": True})
+        return JsonResponse({"exists": False})  # retorna que não exist, json_dumps_params={'ensure_ascii': False}e
+    return JsonResponse({"msm": "Numero de série já cadastrado", "exists": True}, json_dumps_params={'ensure_ascii': False})
 
 
 @csrf_exempt
@@ -63,10 +64,11 @@ def get_equipment_serNum(request, serial_number):
             equipment = Equipment.objects.get(serial_number=serial_number)
             
             if not equipment.activated:
-                return JsonResponse({"msm": "Equipamento aguardando aprovação de um administrador!", "registred": True, "uid": ""})
+                return JsonResponse({"msm": "Equipamento aguardando aprovação de um administrador!", "registred": True, "uid": ""}, json_dumps_params={'ensure_ascii': False})
         except Equipment.DoesNotExist:
             return JsonResponse(
-                {"msm": "Equipamento não existe na base de dados!", "registred": False, "uid": ""}
+                {"msm": "Equipamento não existe na base de dados!", "registred": False, "uid": ""}, 
+                json_dumps_params={'ensure_ascii': False}
             )
         data = {
             "equipment": model_to_dict(equipment),
@@ -75,20 +77,21 @@ def get_equipment_serNum(request, serial_number):
         }
         data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
 
-        return JsonResponse(data)
+        return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
     elif not serial_number.isdigit():
         try:
             bullet = Bullet.objects.get(caliber=serial_number)
             
             if not bullet.activated:
-                return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!", "registred": True})
+                return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!", "registred": True}, json_dumps_params={'ensure_ascii': False})
         except Bullet.DoesNotExist:
             return JsonResponse(
                 {
                     "msm": "Munição não existe na base de dados!",
                     "registred": False,
                     "uid": "",
-                }
+                }, 
+                json_dumps_params={'ensure_ascii': False}
             )
         data = {
             "uid": "Search",
@@ -98,7 +101,7 @@ def get_equipment_serNum(request, serial_number):
         data['model']['image_path'] = bullet.image_path.url if bullet.image_path else ''
         data["equipment"] = data["model"]
 
-        return JsonResponse(data)
+        return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
 
 
 @csrf_exempt
@@ -126,10 +129,11 @@ def get_equipment_avalible(request):
                 bullet = Bullet.objects.get(caliber=caliber)
                 
                 if not bullet.activated:
-                    return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!"})
+                    return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!"}, json_dumps_params={'ensure_ascii': False})
             except Equipment.DoesNotExist:
                 return JsonResponse(
-                    {"uid": "", "msm": "Equipamento não cadastrado", "a": caliber}
+                    {"uid": "", "msm": "Equipamento não cadastrado", "a": caliber}, 
+                    json_dumps_params={'ensure_ascii': False}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
 
             data = {
@@ -144,10 +148,11 @@ def get_equipment_avalible(request):
                 equipment = Equipment.objects.get(serial_number=request.GET.get("pk"))
                 
                 if not equipment.activated:
-                    return JsonResponse({"uid": "", "msm": "Equipamento aguardando aprovação de um administrador!"})
+                    return JsonResponse({"uid": "", "msm": "Equipamento aguardando aprovação de um administrador!"}, json_dumps_params={'ensure_ascii': False})
             except Equipment.DoesNotExist:
                 return JsonResponse(
-                    {"uid": "", "msm": "Equipamento não cadastrado"}
+                    {"uid": "", "msm": "Equipamento não cadastrado"}, 
+                    json_dumps_params={'ensure_ascii': False}
                 )
             data = {
                 "uid": "Search",
@@ -166,7 +171,7 @@ def get_equipment_avalible(request):
             equipment = Equipment.objects.get(uid=uid)  # Recupera o objeto Equipamento
             
             if not equipment.activated:
-                return JsonResponse({"uid": "", "msm": "Equipamento aguardando aprovação de um administrador!"})
+                return JsonResponse({"uid": "", "msm": "Equipamento aguardando aprovação de um administrador!"}, json_dumps_params={'ensure_ascii': False})
         except Equipment.DoesNotExist:
             return JsonResponse(
                 {"uid": "", "msm": "Equipamento não cadastrado"}
@@ -177,7 +182,8 @@ def get_equipment_avalible(request):
                     "uid": "",
                     "msm": "Equipamento não disponível, equipamento em uma carga de "
                     + equipment.status,
-                }
+                },
+                json_dumps_params={'ensure_ascii': False}
             )
 
         data["equipment"] = model_to_dict(equipment)
@@ -185,14 +191,14 @@ def get_equipment_avalible(request):
         data["model"] = model_to_dict(equipment.model)
         data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
 
-    return JsonResponse(data)  # Retorna o dicionário em forma de api
+    return JsonResponse(data)  # Retorna o dicionário em forma de ap, json_dumps_params={'ensure_ascii': False}i
 
 
 @csrf_exempt
 @require_user_pass
 def allow_cargo(request):
     settings.AUX["confirmCargo"] = True
-    return JsonResponse({})
+    return JsonResponse({}, json_dumps_params={'ensure_ascii': False})
 
 
 @csrf_exempt
@@ -221,10 +227,11 @@ def get_equipment_unvalible(request, id):
                 bullet = Bullet.objects.get(caliber=request.GET.get("pk"))
                 
                 if not bullet.activated:
-                    return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!"})
+                    return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!"}, json_dumps_params={'ensure_ascii': False})
             except Equipment.DoesNotExist:
                 return JsonResponse(
-                    {"uid": "", "msm": "Equipamento não cadastrado"}
+                    {"uid": "", "msm": "Equipamento não cadastrado"}, 
+                    json_dumps_params={'ensure_ascii': False}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
             
             if Equipment_load.objects.filter(load=id, bullet=bullet).exists():
@@ -234,7 +241,8 @@ def get_equipment_unvalible(request, id):
                 data["model"] = data["equipment"]
             else:
                 return JsonResponse(
-                    {"uid": "", "msm": "Equipamento não presente na carga atual."}
+                    {"uid": "", "msm": "Equipamento não presente na carga atual."}, 
+                    json_dumps_params={'ensure_ascii': False}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
 
         elif request.GET.get("type") == "equipment":
@@ -242,10 +250,11 @@ def get_equipment_unvalible(request, id):
                 equipment = Equipment.objects.get(serial_number=request.GET.get("pk"))
                 
                 if not equipment.activated:
-                    return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""})
+                    return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""}, json_dumps_params={'ensure_ascii': False})
             except Equipment.DoesNotExist:
                 return JsonResponse(
-                    {"uid": "", "msm": "Equipamento não cadastrado"}
+                    {"uid": "", "msm": "Equipamento não cadastrado"}, 
+                    json_dumps_params={'ensure_ascii': False}
                 )
                 
             if Equipment_load.objects.filter(load=id, equipment=equipment).exists():
@@ -257,10 +266,11 @@ def get_equipment_unvalible(request, id):
                 }
                 data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
 
-                return JsonResponse(data)
+                return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
             else:
                 return JsonResponse(
-                    {"uid": "", "msm": "Equipamento não presente na carga atual."}
+                    {"uid": "", "msm": "Equipamento não presente na carga atual."}, 
+                    json_dumps_params={'ensure_ascii': False}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
                 
     # Para os equipamentos com a tag
@@ -273,17 +283,19 @@ def get_equipment_unvalible(request, id):
             equipment = Equipment.objects.get(uid=uid)  # Recupera o objeto Equipamento
             
             if not equipment.activated:
-                return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""})
+                return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""}, json_dumps_params={'ensure_ascii': False})
         except Equipment.DoesNotExist:
             return JsonResponse(
-                {"uid": "", "msm": "Equipamento não cadastrado"}
+                {"uid": "", "msm": "Equipamento não cadastrado"}, 
+                json_dumps_params={'ensure_ascii': False}
             )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
         if equipment.status == "Disponível":
             return JsonResponse(
                 {
                     "uid": "",
                     "msm": "Equipamento não está na carga.",
-                }
+                }, 
+                json_dumps_params={'ensure_ascii': False}
             )
         for equipment_load in Equipment_load.objects.filter(load=id):
             if equipment == equipment_load.equipment:
@@ -292,12 +304,13 @@ def get_equipment_unvalible(request, id):
                 data["model"] = model_to_dict(equipment.model)
                 data["model"]['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
                 
-                return JsonResponse(data)  # Retorna o dicionário em forma de api
+                return JsonResponse(data)  # Retorna o dicionário em forma de ap, json_dumps_params={'ensure_ascii': False}i
                 
         return JsonResponse(
-            {"uid": "", "msm": "Equipamento não presente na carga atual."}
+            {"uid": "", "msm": "Equipamento não presente na carga atual."}, 
+            json_dumps_params={'ensure_ascii': False}
         )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
-    return JsonResponse(data)  # Retorna o dicionário em forma de api
+    return JsonResponse(data)  # Retorna o dicionário em forma de ap, json_dumps_params={'ensure_ascii': False}i
 
 
 @csrf_exempt
@@ -332,4 +345,4 @@ def get_uids(request):
         Array: JSON com todos os uids
     """
     dicionario = dict(enumerate(settings.AUX["uids"]))
-    return JsonResponse(dicionario)
+    return JsonResponse(dicionario, json_dumps_params={'ensure_ascii': False})

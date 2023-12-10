@@ -1,8 +1,24 @@
 {% extends 'base/footer.html' %}
 {% load static %}
 
-{% block title %}SICOMB - Promover a adjunto{% endblock title %}
-{% block title_top %}PROMOVER A ADJUNTO{% endblock title_top %}
+{% block title %}
+    SICOMB - 
+    {% if btn_promote == "EDITAR" %}
+        Policiais
+    {% elif btn_promote == "PROMOVER" %}
+        Promover a adjunto
+    {% elif btn_promote == "REBAIXAR" %}
+        Rebaixar a policial
+    {% endif %}{% endblock title %}
+{% block title_top %}
+    {% if btn_promote == "EDITAR" %}
+        POLICIAIS
+    {% elif btn_promote == "PROMOVER" %}
+        PROMOVER A ADJUNTO
+    {% elif btn_promote == "REBAIXAR" %}
+        REBAIXAR A POLICIAIS
+    {% endif %}
+{% endblock title_top %}
 {% block css2 %}{% static 'css/carga.css' %}{% endblock%}
 
 {% block content_final %}
@@ -32,25 +48,54 @@
          <table class="table_itens">
             <thead>
                 <tr>
-                    <th colspan="100%" class="cargo_title"><h3> POLICIAIS </h3></th>
+                    <th colspan="100%" class="cargo_title"><h3> 
+                    {% if btn_promote == "EDITAR" or btn_promote == "PROMOVER" %}
+                        POLICIAIS
+                    {% elif btn_promote == "REBAIXAR" %}
+                        ADJUNTOS
+                    {% endif %} </h3></th>
                 </tr>
+                <form method="get">
+                    <tr class="col-itens">
+                        <th colspan="100%" class=""><input type="submit" class="button" value="Filtrar"></th>
+                    </tr>
+                    <tr class="col-itens">
+                        {% for field in filter_form %}
+                            <th>
+                                {{ field }}
+                                {% for erro in field.errors %}
+                                    {{erro}}
+                                {% endfor %}
+                            </th>
+                        {% endfor %}
+                        {% if user.is_superuser %}
+                        <th></th>
+                        {% endif %}
+                    </tr>
+                </form>
                 <tr class="col-itens">
-                    <th>NOME</th>
-                    <th>MATRÍCULA</th>
-                    <th>GRADUAÇÃO</th>
-                    <th>LOTAÇÃO</th>
-                    <th>TORNAR ADJUNTO</th>
+                    {% for field in filter_form %}
+                        <td>
+                            {{ field.label }}
+                        </td>
+                    {% endfor %}
+                    {% if user.is_superuser %}
+                        <th>EDITAR</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
                 <form action="." method="post">
                     {% csrf_token %}
-                    {% for i in polices %}
+                    {% for i in police_list %}
                         <tr>
                             <td>{{ i.name }}</td>
                             <td>{{ i.matricula }}</td>
-                            <td>{{ i.posto }}</td>
+                            <td>{{ i.telefone }}</td>
                             <td>{{ i.lotacao }}</td>
+                            <td>{{ i.posto }}</td>
+                            <td>{{ i.tipo }}</td>
+                            <td>{{ i.activator }}</td>
                             <td class="click_redirect"><button class="button" type="submit" name="pk" value="{{ i.pk }}">{{ btn_promote }}<button></td>
                         </tr>
                     {% empty %}

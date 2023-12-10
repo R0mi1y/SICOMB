@@ -25,14 +25,15 @@ def convert_date(data_hora_utc):
     return data_hora_formatada
 
 
+
 @csrf_exempt
 @require_user_pass
 def get_loads_police(request, plate):
     # Filtrar os objetos load com base no campo "police" igual a "plate"
     police = Police.objects.filter(matricula=plate).first()
     loads_filtrados = Load.objects.filter(police=police, 
-    status__in=['ATRASADA', 'DENTRO DO PRAZO', 'DATA DE RETORNO NÃO DEFINIDA', 'PARCIALMENTE DESCARREGADA COM ATRASO', 'PARCIALMENTE DESCARREGADA']
-)
+        status__in=['ATRASADA', 'DENTRO DO PRAZO', 'DATA DE RETORNO NÃO DEFINIDA', 'PARCIALMENTE DESCARREGADA COM ATRASO', 'PARCIALMENTE DESCARREGADA']
+    )
     
     # Criar uma lista chamada "loads" e preencher com os dicionários dos objetos load filtrados
     loads = []
@@ -98,6 +99,7 @@ def get_load(
     return JsonResponse(load)
 
 
+
 # Retorna a lista apenas se não houver nenhum equipamento indisponível nela
 @csrf_exempt
 @require_user_pass
@@ -112,11 +114,13 @@ def get_list_equipment_avalible(request):
     return JsonResponse(settings.AUX["list_equipment"])
 
 
+
 # Retorna a lista
 @csrf_exempt
 @require_user_pass
 def get_list_equipment(request):
     return JsonResponse(settings.AUX["list_equipment"])
+
 
 
 @csrf_exempt
@@ -168,6 +172,7 @@ def add_list_equipment(request):
         return JsonResponse({"message": "Método HTTP não suportado"})
 
 
+
 # Remove da lista de equipamentos
 @csrf_exempt
 @require_user_pass
@@ -185,6 +190,7 @@ def remove_list_equipment(request):
         return JsonResponse({"sucesso": "sucesso"})
     else:
         return JsonResponse({"falha": "falha"})
+
 
 
 @csrf_exempt

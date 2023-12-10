@@ -68,8 +68,17 @@ table img{
 .military_means_room{
     background-color: #fff;
     border-radius: 10px;
-    width: 300px;
+    width: 300px; /**/
     height: 400px;
+    /* width: 60%; */
+    /* height: 85%; */
+}
+
+.military_means_room_form{
+    background-color: #fff;
+    border-radius: 10px;
+    width: 60%;
+    height: 90%;
 }
 
 .shadow{
@@ -218,10 +227,21 @@ table img{
 .row_color span{
     background-color: rgb(91,73,57, 0.45);;   
 }
+.row_color_police_login span{
+    width: 80%
+}
+
+.form_police_login{
+    display: flex;
+    justify-content: center;
+}
 
 .input-div{
     display: grid;
     justify-content: space-around;
+}
+.input-div-form-police{
+    width: 50%;
 }
 .input-box{
     /* padding: 0% 10%; */
@@ -235,6 +255,12 @@ table img{
     font-size: 14px;
     padding: 10% 5% 5% 5%;
 }
+.input-error{
+    color:  rgb(190, 24, 24) !important;
+}
+.input-title-form-police{
+    padding: 5%;
+}
 .input-data{
     background-color: rgb(129, 108, 89, 0.10);
     padding: 2% 5%;
@@ -247,7 +273,9 @@ table img{
     width: 89%;
 }
 /* ----------------------------------------------------------------------------------- */
-
+::-webkit-input-placeholder {
+    color: #4e0f0f;
+ }
 /* Para a página do policial */
 .row_color{
     padding: 0% 0%;;
@@ -259,6 +287,13 @@ body{
 
 .btn_finalize{
     cursor: pointer;
+}
+
+.btn_finalize_form_police{
+    width:100%;
+    height: 50px;
+    margin-top: 20px;
+
 }
 
 .input-div{

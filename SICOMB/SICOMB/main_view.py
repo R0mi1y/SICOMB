@@ -28,8 +28,10 @@ def main_view(request):
         elif adjunct_group in request.user.groups.all():
             return VIEW_ADJUNCT(request)
         else:
+            print("O usuário não está presente em nenhum grupo de usuário!")
             messages.error(request, "O usuário não está presente em nenhum grupo de usuário!")
             return VIEW_ERROR(request)
     except Group.DoesNotExist:
+        print("O usuário está presente em um grupo de usuário não existente!")
         messages.error(request, "O usuário está presente em um grupo de usuário não existente!")
         return VIEW_ERROR(request)

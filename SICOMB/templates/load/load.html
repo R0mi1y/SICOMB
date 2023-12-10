@@ -109,11 +109,9 @@
             </form>
         </div>
     </div>
-    <script>
-        var user = "{{ user.name }}";
-        var pass = "{{ user.password }}";
-    </script>
-<script src="{% static 'js/select_load.js' %}"></script>
-
+    
+    {% block js %}
+        <script src="{% static 'js/select_load.js' %}"></script>
+    {% endblock js %}
 
 {% endblock content_final %}

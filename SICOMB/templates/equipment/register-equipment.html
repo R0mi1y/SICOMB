@@ -47,6 +47,7 @@
           <h4 for="{{ form.type.id_for_label }}" class="input-title">{{ form.type.label }}</h4>
           <div class="select">
             {{ form.type }}
+            <div class="custom-arrow"></div>
           </div>
           {% if form.type %}
             <ul>
@@ -62,6 +63,7 @@
           <h4 for="{{ form.status.id_for_label }}" class="input-title">{{ form.status.label }}</h4>
           <div class="select">
             {{ form.status }}
+            <div class="custom-arrow"></div>
           </div>
           {% if form.status %}
             <ul>
@@ -77,6 +79,7 @@
           <h4 for="{{ form.grenada.id_for_label }}" class="input-title">{{ form.grenada.label }}</h4>
           <div class="select">
             {{ form.grenada }}
+            <div class="custom-arrow"></div>
           </div>
           {% if form.grenada %}
             <ul>
@@ -92,6 +95,7 @@
           <h4 for="{{ form.wearable.id_for_label }}" class="input-title">{{ form.wearable.label }}</h4>
           <div class="select">
             {{ form.wearable }}
+            <div class="custom-arrow"></div>
           </div>
           {% if form.wearable %}
             <ul>
@@ -107,6 +111,7 @@
           <h4 for="{{ form.accessory.id_for_label }}" class="input-title">{{ form.accessory.label }}</h4>
           <div class="select">
             {{ form.accessory }}
+            <div class="custom-arrow"></div>
           </div>
           {% if form.accessory %}
             <ul>
@@ -122,6 +127,8 @@
           <h4 for="{{ form.armament.id_for_label }}" class="input-title">{{ form.armament.label }}</h4>
           <div class="select">
             {{ form.armament }}
+            <div class="custom-arrow"></div>
+          </div>
             {% if form.armament %}
               <ul>
                 {% for erro in form.armament.errors %}
@@ -143,7 +150,9 @@
     </form>
   </div>
 </section>
-              
-<script src="{% static 'js/register_equipment.js' %}"></script>
+
+{% block js %}
+  <script src="{% static 'js/register_equipment.js' %}"></script>
+{% endblock js %}         
               
 {% endblock content_final %}

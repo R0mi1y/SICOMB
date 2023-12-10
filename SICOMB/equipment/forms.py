@@ -212,6 +212,13 @@ class EquipmentFilterForm(forms.Form):
         widget=forms.TextInput(
             attrs={'class': 'form-control input-data'}),
     )
+    
+    activator = forms.ModelChoiceField(
+        label="Policial Aprovador",
+        queryset=Police.objects.filter(tipo="Police"),  # Certifique-se de importar o modelo Police
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control input-data'}),
+    )
 
     def filter_queryset(self, queryset):
         data = self.cleaned_data
@@ -224,6 +231,8 @@ class EquipmentFilterForm(forms.Form):
             queryset = queryset.filter(status__icontains=data['status'])
         if data.get('model_type'):
             queryset = queryset.filter(model_type=data['model_type'])
+        if data.get('activator'):
+            queryset = queryset.filter(activator=data['activator'])
         if data.get('model'):
             queryset = [i for i in queryset.all() if data['model'].lower() in i.model.model.lower()]
 
@@ -277,6 +286,13 @@ class ModelFilterForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
     )
     
+    activator = forms.ModelChoiceField(
+        label="Policial Aprovador",
+        queryset=Police.objects.filter(tipo="Police"),  # Certifique-se de importar o modelo Police
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control input-data'}),
+    )
+    
     def filter_queryset(self, queryset):
         data = self.cleaned_data
         
@@ -315,5 +331,8 @@ class ModelFilterForm(forms.Form):
 
         if data.get("size"):
             queryset = [obj for obj in queryset if hasattr(obj, 'size') and data.get("size").lower() in obj.size.lower()]
+            
+        if data.get("activator"):
+            queryset = [obj for obj in queryset if hasattr(obj, 'activator') and data.get("activator") == obj.activator]
 
         return queryset

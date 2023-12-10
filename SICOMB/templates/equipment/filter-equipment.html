@@ -67,6 +67,7 @@
                     <td>Status</td>
                     <td>Tipo</td>
                     <td>Modelo</td>
+                    <td>Policial Ativador</td>
                     {% if user.is_superuser %}
                         <th>EDITAR</th>
                     {% endif %}
@@ -88,6 +89,7 @@
                         Armamento
                     {% endif %}</td>
                     <td>{{ equipment.model.model }}</td>
+                    <td>{{ equipment.activator|default:"-" }}</td>
                     {% if user.is_superuser %}
                         <td class="click_redirect"><button class="button" type="button" onclick="window.location='{% url "edit_equipment" id=equipment.pk %}'" name="pk" value="{{ equipment.pk }}">EDITAR<button></td>
                     {% endif %}

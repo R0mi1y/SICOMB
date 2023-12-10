@@ -122,18 +122,16 @@
     align-items: center;
     content: '\25BC';
     color: #fff;
-    /* position: absolute; */
-    /* top: 0%; */
-    /* right: 0%; */
     padding: 0 1em;
     background: rgb(91,73,57, 0.6);
     cursor: pointer;
     pointer-events: none;
     transition: .25s all ease;
+    pointer-events: all;
 }
 .select:hover::after{
-    /* background-color: #004593; */
     color: #004593;
+    pointer-events: none;
 }
 
 .file-label{
@@ -177,7 +175,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 50px 0px;
+    /* padding: 50px 0px; */
 }
 
 .form-element {

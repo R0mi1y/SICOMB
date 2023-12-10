@@ -1,8 +1,10 @@
 from django import template
 from django.http import HttpResponseForbidden, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from police.models import Police
 from django.contrib.auth.models import Group
+from django.contrib import messages
+
 
 register = template.Library()
 
@@ -30,11 +32,11 @@ def require_user_pass(funcao):
                 if police.groups.filter(name="adjunct").exists() or police.is_superuser:
                     return funcao(request, *args, **kwargs)
                 else:
-                    return JsonResponse({"msm": "Usuário não tem permissão!"})
+                    return JsonResponse({"msm": "Usuário não tem permissão!"}, status=403, json_dumps_params={'ensure_ascii': False})
             else:
-                return JsonResponse({"msm": "Credenciais inválidas"})
+                return JsonResponse({"msm": "Credenciais inválidas"}, status=401, json_dumps_params={'ensure_ascii': False})
         else:
-            return JsonResponse({"msm": "Credenciais inválidas"})
+            return JsonResponse({"msm": "Método não suportado"}, status=405, json_dumps_params={'ensure_ascii': False})
         
     return wrapper
 
@@ -44,19 +46,25 @@ def has_group(group_name):
         def wrapper(request, *args, **kwargs):
             # Verifica se o usuário está autenticado
             if not request.user.is_authenticated:
-                return HttpResponseForbidden("Acesso negado. Você não está autenticado.")
+                print("Acesso negado. Você não está autenticado.")
+                messages.error(request, "Acesso negado. Você não está autenticado.")
+                return render(request, "error.html")
             
             if isinstance(group_name, list):
                 # Verifica se o usuário pertence ao grupo especificado
                 for i in group_name:
                     if request.user.groups.filter(name=i).exists() or request.user.is_superuser:
                         return view_func(request, *args, **kwargs)
-                return HttpResponseForbidden("Acesso negado. Você não tem permissão para acessar esta página.")
+                print("Acesso negado. Você não tem permissão para acessar esta página.")
+                messages.error(request, "Acesso negado. Você não tem permissão para acessar esta página.")
+                return render(request, "error.html")
             
             else:
                 if request.user.groups.filter(name=group_name).exists() or request.user.is_superuser:
                     return view_func(request, *args, **kwargs)
-                return HttpResponseForbidden("Acesso negado. Você não tem permissão para acessar esta página.")
+                print("Acesso negado. Você não tem permissão para acessar esta página.")
+                messages.error(request, "Acesso negado. Você não tem permissão para acessar esta página.")
+                return render(request, "error.html")
         
         return wrapper
     

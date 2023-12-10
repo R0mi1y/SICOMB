@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from equipment.templatetags.custom_filters import has_group
-from police.forms import PoliceForm
+from police.forms import PoliceFilterForm, PoliceForm
 from django.contrib.auth.decorators import login_required
 from .models import *
 from load.models import Load, Equipment_load
@@ -12,7 +12,6 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
 from load.apis import require_user_pass
 from django.views.decorators.csrf import csrf_exempt
-# Create your views here.
 
 
 @login_required
@@ -75,7 +74,6 @@ def register_police(request):
     return render(
         request,
         "police/forms.html",
-        # "police/register_police.html",
         context={
             "form": form,
         },
@@ -83,9 +81,9 @@ def register_police(request):
 
 
 @has_group('adjunct')
-def search_police(request, matricula):
+def search_police(request, id):
     try:
-        policial = Police.objects.only("matricula").get(matricula=matricula)
+        policial = Police.objects.only("id").get(id=id)
     except Police.DoesNotExist:
         policial = None
         messages.error(request, "Policial não encontrado!")
@@ -93,8 +91,9 @@ def search_police(request, matricula):
 
     if request.method == "POST":
         form = PoliceForm(request.POST, request.FILES, instance=policial)
+        
         if form.is_valid():
-            print(form)
+            
             form.save()
             messages.success(request, "Atulização realizada com sucesso!")
             return HttpResponseRedirect("/police/register/")
@@ -123,39 +122,21 @@ def dashboard_police(request):
     return render(request, "police/police_page.html", context)
 
 
-@csrf_exempt
-@require_user_pass
-def get_login_police(request):
-    print(settings.AUX["matricula"])
-    if settings.AUX["matricula"]:
-        try:
-            police = Police.objects.get(matricula=settings.AUX["matricula"])
-            settings.AUX["matricula"] = ''
-            
-            police = {
-                "foto": police.image_path.url,
-                "nome": police.name,
-                "matricula": police.matricula,
-                "telefone": police.telefone,
-                "lotacao": police.lotacao,
-                "email": police.email,
-            }
-        except Police.DoesNotExist:
-            return JsonResponse({})
-        return JsonResponse(police)
-    else:
-        return JsonResponse({})
-        
-
-
 @has_group('admin')
 def promote_police(request):
     group, created = Group.objects.get_or_create(name='police')
+    police_list = Police.objects.filter(groups=group, activated=True)
+    filter_form = PoliceFilterForm(request.GET)
+    
+    if filter_form.is_valid():
+        police_list = filter_form.filter_queryset(police_list)
     
     context = {
         "btn_promote": "PROMOVER",
-        "polices": Police.objects.filter(groups=group, activated=True),
+        "police_list": police_list,
+        'filter_form': filter_form,
     }
+    
     
     if request.method == 'POST':
         id = request.POST.get("pk")
@@ -178,11 +159,18 @@ def promote_police(request):
 @has_group('admin')
 def reduce_police(request):
     group, created = Group.objects.get_or_create(name='adjunct')
-
+    police_list = Police.objects.filter(groups=group, activated=True)
+    filter_form = PoliceFilterForm(request.GET)
+    
+    if filter_form.is_valid():
+        police_list = filter_form.filter_queryset(police_list)
+    
     context = {
         "btn_promote": "REBAIXAR",
-        "polices": Police.objects.filter(groups=group, activated=True)
+        "police_list": police_list,
+        'filter_form': filter_form,
     }
+
     if request.method == 'POST':
         id = request.POST.get("pk")
         try:
@@ -201,16 +189,26 @@ def reduce_police(request):
 
 @has_group('admin')
 def approve_police(request):
+    police_list = Police.objects.filter(activated=False)
+    filter_form = PoliceFilterForm(request.GET)
+    
+    if filter_form.is_valid():
+        police_list = filter_form.filter_queryset(police_list)
+    
     context = {
         "btn_promote": "APROVAR",
-        "polices": Police.objects.filter(activated=False)
+        "police_list": police_list,
+        'filter_form': filter_form,
     }
+    
     if request.method == 'POST':
         id = request.POST.get("pk")
         try:
             police = Police.objects.get(pk=id)
             
             police.activated = True
+            police.activator = request.user
+            
             police.save()
             
         except Police.DoesNotExist:
@@ -223,23 +221,38 @@ def approve_police(request):
 
 @has_group('adjunct')
 def filter_police(request):
-    context = {
-        "btn_promote": "EDITAR",
-        "polices": Police.objects.filter(activated=True)
-    }
+    police_list = Police.objects.all()
+    filter_form = PoliceFilterForm(request.GET)
+    
     if request.method == 'POST':
         id = request.POST.get("pk")
         try:
-            police = Police.objects.get(pk=id)
             request.method = "GET"
             
-            return search_police(request, police.matricula)
+            return HttpResponseRedirect("/police/search/" + id + "/")
         except Police.DoesNotExist:
             messages.error(request, "Falha, o policial não foi encontrado!")
             
             return render(request, 'police/reduce_police.html', context)
+    
+    if filter_form.is_valid():
+        police_list = filter_form.filter_queryset(police_list)
+    
+    context = {
+        "btn_promote": "EDITAR",
+        'police_list': police_list,
+        'filter_form': filter_form,
+    }
 
     return render(request, 'police/manage_police.html', context)
+
+# def filter_police(request):
+    # context = {
+        
+    #     "polices": Police.objects.filter(activated=True)
+    # }
+    
+
 
 
 def dashboard(request):

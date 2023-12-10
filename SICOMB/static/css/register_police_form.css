@@ -172,12 +172,12 @@
     justify-content: center;
     padding: 10px;
     position: relative;
-    bottom: 0; 
+    bottom: 0;
     position: absolute;
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 50px 0px;
+    /* padding: 50px 0px; */
 }
 
 .form-element {

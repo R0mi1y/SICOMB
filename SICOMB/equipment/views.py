@@ -148,6 +148,8 @@ def approve_model(request):
         
         model = models[request.POST.get("model_name")].objects.filter(pk=request.POST.get("model_id")).first()
         model.activated = True
+        model.activator = request.user
+        
         model.save()
         
     all_models = list(chain(
@@ -172,6 +174,8 @@ def approve_equipment(request):
     if request.method == 'POST':
         equipment = Equipment.objects.filter(pk=request.POST.get("equipment_id")).first()
         equipment.activated = True
+        equipment.activator = request.user
+        
         equipment.save()
         
     context = {
