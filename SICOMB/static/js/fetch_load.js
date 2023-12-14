@@ -61,7 +61,7 @@ function fetchEquipmentData(serial_number, type='none') {
                 if (data.equipment.serial_number != null && data.equipment.serial_number != undefined) {
                     for (let key in list_equipment) {
                         if (key == data.equipment.serial_number) {
-                            popUp('Equipamento já na lista!');
+                            // popUp('Equipamento já na lista!');
                             return;
                         }
                     }

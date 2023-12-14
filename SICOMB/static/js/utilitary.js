@@ -1,4 +1,5 @@
 var popUp = function (message, options = {}) {
+    console.log(message, options);
     const defaultOptions = {
         closeBtn: true,
         yn: false,

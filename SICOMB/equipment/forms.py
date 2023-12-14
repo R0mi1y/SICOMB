@@ -14,7 +14,7 @@ class EquipmentForm(forms.ModelForm):
     ]
 
     uid = forms.CharField(
-        max_length=20,
+        max_length=200,
         widget=forms.TextInput(attrs={"id": "input-uid", "style": "display: none"}),
         label="",
     )
@@ -181,13 +181,13 @@ class EquipmentFilterForm(forms.Form):
     
     serial_number = forms.CharField(
         label=_("Número de Série"), 
-        max_length=20, required=False, 
+        max_length=200, required=False, 
         widget=forms.TextInput(
             attrs={'class': 'form-control input-data'}),
     )
     uid = forms.CharField(
         label=_("UID"), 
-        max_length=20, 
+        max_length=200, 
         required=False,
         widget=forms.TextInput(
             attrs={'class': 'form-control input-data'}),
@@ -207,7 +207,7 @@ class EquipmentFilterForm(forms.Form):
     
     model = forms.CharField(
         label=_("UID"), 
-        max_length=20, 
+        max_length=200, 
         required=False,
         widget=forms.TextInput(
             attrs={'class': 'form-control input-data'}),

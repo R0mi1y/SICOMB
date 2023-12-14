@@ -102,6 +102,7 @@ $(document).ready(function () {
 
     // Checa tudo antes de dar o submit
     $("#submit-btn").on('click', function () {
+        console.log("Submit");
         var choices = $(".type-choices-type");
         var selectedIndex = 0;
 

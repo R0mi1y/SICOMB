@@ -31,25 +31,51 @@ def login(request):
                 return render(
                     request, "police/request_cargo.html"
                 )
-
-            if check_password(request.POST.get("senha"), police.password):
-                if not police.activated:
-                    messages.error(request, "Policial aguardando aprovação de um administrador!")
+            
+            if request.POST.get("type_login") == "password":
+                if check_password(request.POST.get("senha"), police.password):
+                    if not police.activated:
+                        messages.error(request, "Policial aguardando aprovação de um administrador!")
+                        
+                        return render(request, "police/request_cargo.html", data)
                     
-                    return render(request, "police/request_cargo.html", data)
-                
-                settings.AUX["confirmCargo"] = False
-                
-                settings.AUX["matricula"] = request.POST.get("matricula")
+                    settings.AUX["confirmCargo"] = False
+                    
+                    settings.AUX["matricula"] = request.POST.get("matricula")
 
-                data["police"] = police
-                loads = Load.objects.filter(police=police).order_by('-date_load')[:15]
-                data["loads"] = []
-                for i in loads:
-                    ec = Equipment_load.objects.filter(load=i)
-                    data["loads"].append([i, len(ec)])
-            else:
-                messages.error(request, "Senha incorreta!")
+                    data["police"] = police
+                    loads = Load.objects.filter(police=police).order_by('-date_load')[:15]
+                    data["loads"] = []
+                    for i in loads:
+                        ec = Equipment_load.objects.filter(load=i)
+                        data["loads"].append([i, len(ec)])
+                else:
+                    messages.error(request, "Senha incorreta!")
+                    
+            if request.POST.get("type_login") == "fingerprint":
+                if request.POST.get("token") != settings.AUX["token_login_police"]:
+                    print(request.POST.get("token")) 
+                    print(settings.AUX["token_login_police"])
+                    messages.error(request, "Token de acesso incoerente!")
+                else:
+                    if not police.activated:
+                        messages.error(request, "Policial aguardando aprovação de um administrador!")
+                        
+                        return render(request, "police/request_cargo.html", data)
+                    
+                    settings.AUX["confirmCargo"] = False
+                    
+                    settings.AUX["matricula"] = request.POST.get("matricula")
+
+                    data["police"] = police
+                    loads = Load.objects.filter(police=police).order_by('-date_load')[:15]
+                    data["loads"] = []
+                    
+                    for i in loads:
+                        ec = Equipment_load.objects.filter(load=i)
+                        data["loads"].append([i, len(ec)])
+            settings.AUX["token_login_police"] = None
+
 
     return render(request, "police/request_cargo.html", data)
 

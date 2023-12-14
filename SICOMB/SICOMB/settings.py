@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import serial
 
 # Configure as configurações de CORS
 
@@ -111,8 +112,8 @@ DATABASES = {
         "OPTIONS": {
             "sql_mode": "traditional",
         },
-        # "PASSWORD": "",
-        "PASSWORD": "12345679",
+        "PASSWORD": "",
+        # "PASSWORD": "12345679",
         "HOST": "localhost",
         "PORT": "3306",
     }
@@ -190,4 +191,8 @@ AUX = {
     "confirmCargo": False,
     "errors": [],
     "list_equipment": [],
+    # "porta_serial": serial.Serial('COM13', 115200),
+    "porta_serial": None,
+    "token_login_police": None,
 }
+

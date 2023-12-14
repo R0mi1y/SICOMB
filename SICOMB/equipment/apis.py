@@ -1,3 +1,4 @@
+import time
 from django.shortcuts import render
 from .models import *
 from django.forms.models import model_to_dict
@@ -6,7 +7,7 @@ from SICOMB import settings
 from load.models import *
 from .templatetags.custom_filters import require_user_pass
 from django.views.decorators.csrf import csrf_exempt
-
+import threading
 
 @csrf_exempt
 @require_user_pass
@@ -43,7 +44,7 @@ def valid_uid(request):
 
 # valida o numero de série pra cadastro
 @csrf_exempt
-@require_user_pass
+# @require_user_pass
 def valid_serial_number(request, sn):
     try:
         equipment = Equipment.objects.get(serial_number=sn)
@@ -321,8 +322,9 @@ def set_uid(request):
     """
     
     data = {"uid": "Não setado",
-            "equipments": Equipment.objects.all()
-            }
+        "equipments": Equipment.objects.all()
+    }
+    
     # Armazena o UID recebido num array
     if request.method == "GET":
         if (
@@ -332,9 +334,38 @@ def set_uid(request):
         ):
             settings.AUX["uids"].append(request.GET.get("uid"))
             data["uid"] = settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]
-    print(settings.AUX["uids"])
-
+        
+        print(settings.AUX["uids"])
     return render(request, "equipment/set_answer.html", data)
+    
+    # else:
+    #     thread = threading.Thread(target=set_uid_from_arduino)
+    #     thread.start()
+        
+    #     return JsonResponse({})
+
+
+def set_uid_from_arduino():
+    while True:
+        linha = settings.AUX["porta_serial"].readline().decode('utf-8').strip()
+
+        print("printando linha")
+        print(linha)
+        
+        time.sleep(200)
+        
+        # Armazena o UID recebido num array
+        linha = linha.split("::")
+        if linha[0] == "TAG_CODE":
+            code = linha[1]
+            if (
+                code != ""
+                and code != None
+                and code not in settings.AUX["uids"]
+            ):
+                settings.AUX["uids"].append(code)
+                settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]
+            print(settings.AUX["uids"])
 
 
 @csrf_exempt
@@ -344,5 +375,6 @@ def get_uids(request):
     Returns:
         Array: JSON com todos os uids
     """
+
     dicionario = dict(enumerate(settings.AUX["uids"]))
     return JsonResponse(dicionario, json_dumps_params={'ensure_ascii': False})

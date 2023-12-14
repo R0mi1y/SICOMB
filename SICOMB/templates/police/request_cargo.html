@@ -8,6 +8,7 @@
 {% block perfil %}{% endblock perfil %}
 
 {% block content_final%}
+    <div id="messages"></div>
     <section class="cargo">
         {% if police %}
         <div class="police_officer_field shadow"  style="margin-right: 50px;">
@@ -118,9 +119,6 @@
         </div>
     </section>
     
-    {% block js %}
-        <script src="{% static "js/police_request_page.js" %}"></script>
-    {% endblock js %}
     {% else %}
         <style>
             .cargo {
@@ -143,8 +141,10 @@
                         </tbody>
                     </table>
                     <div class="row_color row_color_police_login"><span><hr></span></div>
-                    <form class="form_police_login" action="./" method="POST">
+                    <form class="form_police_login" id="form_login" action="./" method="POST">
                         {% csrf_token %}
+                        <input type='hidden' name='type_login' value='password'>
+                        <input type='hidden' name='token'>
                         <div class="input-div-form-police">
                             <div class="input-box">
                                 <h4 class="input-title input-title-form-police">MATRÍCULA</h4>
@@ -168,4 +168,13 @@
     </section>
     {% endif %}
 {% endblock content_final%}
+
+{% block js %}
+    <script src="{% static "js/utilitary.js" %}"></script>
+    {% if police %}
+        <script src="{% static "js/police_request_page.js" %}"></script>
+    {% else %}
+        <script src="{% static "js/login_police_request_page.js" %}"></script>
+    {% endif %}
+{% endblock js %}
 

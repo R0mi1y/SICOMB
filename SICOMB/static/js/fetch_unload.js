@@ -114,10 +114,10 @@ function set_carga_id(id) {
 
                                     camps.eq(8).html(done_svg);
 
-                                    interval = setInterval(
-                                        fetchUnvalibleEquipmentData,
-                                        1000
-                                    );
+                                    // interval = setInterval(
+                                    //     fetchUnvalibleEquipmentData,
+                                    //     1000
+                                    // );
                                 }
 
                                 console.log(eq);
@@ -253,7 +253,7 @@ function fetchEquipmentData(serial_number, type = "none") {
                     });
 
                     if (equipAlreadyInList) {
-                        popUp("Equipamento já na lista!");
+                        // popUp("Equipamento já na lista!");
                         return;
                     }
                 }
@@ -331,7 +331,7 @@ function check_cargo_square() {
 
             camps.eq(8).html(done_svg);
 
-            interval = setInterval(fetchUnvalibleEquipmentData, 1000);
+            // interval = setInterval(fetchUnvalibleEquipmentData, 1000);
             // Adicionar ao array de equipamentos do Django
 
             var serialNumber =

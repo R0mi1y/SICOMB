@@ -47,6 +47,7 @@ def register_edit_equipment(request, id=None):
                 return render(
                     request, "equipment/register-equipment.html", {"form": form}
                 )
+    settings.AUX["uids"] = []
     form = EquipmentForm(instance=equipment)  # Se for bem sucedido ele zera o form
 
     return render(request, "equipment/register-equipment.html", {"form": form})

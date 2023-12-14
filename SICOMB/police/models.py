@@ -14,6 +14,7 @@ class Police(AbstractUser):
     posto = models.CharField(max_length=10)
     image_path = models.FileField(upload_to="policiais/%Y-%m-%d/")
     tipo = models.CharField(max_length=20, default="Police", choices=[("Policial", "Policial"), ("Adjunto","Adjunto"), ("Admin", "Admin")])
+    fingerprint = models.CharField(max_length=250, null=True, default=None)
 
     class Meta:
         verbose_name = 'Policial'

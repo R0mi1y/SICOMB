@@ -29,6 +29,15 @@
         <div class="input-box">
           <h4 class="input-title">TAG</h4>
           <h4 id="text-uid" class="input-title input-data">Passe a tag no sensor</h4>
+          {% if form.uid %}
+          <ul>
+            {% for erro in form.uid.errors %}
+            <li>
+              <p class="input-title">{{ erro }}</p>
+            </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
         </div>
         <div class="input-box">
           <h4 for="{{ form.serial_number.id_for_label }}" class="input-title">{{ form.serial_number.label }}</h4>
@@ -151,8 +160,22 @@
   </div>
 </section>
 
-{% block js %}
-  <script src="{% static 'js/register_equipment.js' %}"></script>
-{% endblock js %}         
-              
 {% endblock content_final %}
+
+{% block js %}
+
+  {% if form.errors %}
+  <script>
+    {% for field in form %}
+    // Crie um elemento de alerta para cada mensagem
+      {% if field.errors %}
+        {% for message in field.errors %}
+          popUp("{{ message }}");
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </script>
+  {% endif %}
+  <script src="{% static 'js/register_equipment.js' %}"></script>
+  
+{% endblock js %}         

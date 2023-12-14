@@ -57,4 +57,5 @@ function confirmCargo(self) {
             pass: pass
         }
     });
+    location.reload();
 }
