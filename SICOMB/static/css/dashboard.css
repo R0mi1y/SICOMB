@@ -40,16 +40,16 @@
 
 .card_report{
     background-color: #90816A;
-    box-shadow: 0 0 12px #6A5A4A;  
+    box-shadow: 3px 4px 1px #6A5A4A;  
 }
 .card_equipment_available{
     background-color: #19A502;
-    box-shadow: 0 0 12px #169602;
+    box-shadow: 3px 4px 1px #106d01;
 
 }
 .card_equipment_unavailable{
     background-color: #C5033D;
-    box-shadow: 0 0 12px #C5033D;
+    box-shadow: 3px 4px 1px #7a0428;
 
 }
 
@@ -98,12 +98,12 @@
 
 .card_report .top-card span{
     background-color: #b49d7a;
-    box-shadow: 1px 3px 10px #90816A;
+    box-shadow: 3px 4px 1px #87755a;
 }
 
 .card_equipment_available .top-card span{
     background-color: #47b836;
-    box-shadow: 1px 3px 10px #19A502;
+    box-shadow: 3px 4px 1px rgb(19, 126, 3)
 }
 
 .cards-row-2{
@@ -116,8 +116,8 @@
 .card-2{
     padding: 2%;
     color: white;
-    width: 250px;
-    height: 100px;
+    width: fit-content;
+    height: 200px;
     transition: 1s;
 
 }
@@ -136,11 +136,11 @@
 
 .card_police{
     background-color: #48382B;
-    box-shadow: 0 0 12px #48382B;
+    box-shadow: 3px 4px 1px #34271c;
 }
 
 .card_equipment_justice{
     background-color: #D7C103;
-    box-shadow: 0 0 12px #D7C103;
+    box-shadow: 3px 4px 1px #a59406;
 
 }

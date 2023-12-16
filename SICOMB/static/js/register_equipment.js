@@ -1,6 +1,6 @@
 function register_bullet() {
     $.ajax({
-        url: 'http://localhost:8000/equipamento/bullets/get/',
+        url: '/equipamento/bullets/get/',
         type: 'POST',
         dataType: 'json',
         data: {
@@ -61,7 +61,7 @@ $(document).ready(function () {
     // Requisita e valida o UID para cadastrar
     function fetchUid() {
         $.ajax({
-            url: 'http://localhost:8000/equipamento/valid_uid',
+            url: '/equipamento/valid_uid',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
@@ -120,7 +120,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
-            url: 'http://localhost:8000/equipamento/valid_serial_number/' + serial_num + '/',
+            url: '/equipamento/valid_serial_number/' + serial_num + '/',
             type: 'GET',
             dataType: 'json',
             success: function (data) {

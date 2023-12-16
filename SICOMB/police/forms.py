@@ -50,6 +50,12 @@ class PoliceFilterForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
     )
+    email = forms.CharField(
+        label="E-mail",
+        max_length=200,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
+    )
     matricula = forms.CharField(
         label="Matrícula",
         max_length=20,
@@ -90,6 +96,8 @@ class PoliceFilterForm(forms.Form):
     def filter_queryset(self, queryset):
         data = self.cleaned_data
 
+        if data.get('email'):
+            queryset = queryset.filter(email__icontains=data['email'])
         if data.get('name'):
             queryset = queryset.filter(name__icontains=data['name'])
         if data.get('matricula'):

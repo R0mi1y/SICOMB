@@ -5,10 +5,16 @@
     min-height: 100vh;
 }
 
-.tr_cargos:hover {}
+.tr_cargos {
+    cursor: pointer;
+    height: 40px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 50px;
+}
 
 .tr_cargos:hover {
-    background-color: #ccc;
+    background-color: #5b493960;
 }
 
 .content{
@@ -180,7 +186,7 @@ table img{
     max-height: 80px;
     overflow-y: scroll;
 }
-.info_product tbodey tr:nth-child(even){
+.info_product tbody tr:nth-child(even){
     background-color: rgb(235, 235, 235);
 }
 
@@ -265,13 +271,12 @@ table img{
     background-color: #fff;
     border-radius: 10px;
     margin: 20px 0px;
-    max-height: 75vh;
-    overflow-y: scroll;
-    overflow-x: scroll;
-    
+    /* max-height: 75vh; */
+    /* overflow-y: scroll; */
+    /* overflow-x: scroll; */
 }
 .dashboard_loads{
-    width: 85%;
+    width: 100%;
 }
 .cargo_itens table{
     /* width: 500px; */
@@ -305,10 +310,15 @@ table img{
 .table_itens tbody{
     font-size: 14px;
     /* border-bottom: 1px solid #5B4939; */
-    line-height: 30px;
+    /* line-height: 30px; */
+}
+.table_itens tbody td{
+    /* padding: 10px; */
+    /* line-height: 30px; */
 }
 .table_itens td, th{
     padding: 0px 11px;
+    /* line-height: 50px; */
 }
 /* section.table_section{
     overflow: hidden;
@@ -326,7 +336,7 @@ table img{
 .table_itens thead th{
     min-width: 100px;
 }
-
+.unload_itens{}
 .finalize_load{
     justify-content: flex-end;
     display: flex;
@@ -490,37 +500,41 @@ footer{
 
 .unload_itens .table_itens thead th {
     min-width: 60px;
+    padding: 0px;
 }
 
+.unload_itens tbody tr:nth-child(even){
+    background-color: rgb(235, 235, 235);
+}
 /* status de cada carga */
 
 /* Status Atrasada */
 .status-atrasada {
-    background-color: #FF0000; /* Cor de fundo vermelha ou apropriada */
-    color: #FFFFFF; /* Cor do texto branca ou apropriada */
+     background-color: #9f0000db; /* Cor de fundo vermelha ou apropriada */
+     color: #FFFFFF;/* Cor do texto branca ou apropriada */
 }
 
 /* Status Dentro do Prazo */
 .status-dentro-prazo {
-    background-color: #00FF00; /* Cor de fundo verde ou apropriada */
-    color: #000000; /* Cor do texto preta ou apropriada */
+    background-color: rgb(238, 236, 144); /* Cor de fundo verde ou apropriada */
+    color: #FFFFFF; /*Cor do texto preta ou apropriada*/
 }
 
 /* Status Descarregada com Atraso */
 .status-descarregada-atraso {
-    background-color: #FFA500; /* Cor de fundo laranja ou apropriada */
-    color: #000000; /* Cor do texto preta ou apropriada */
+    background-color: #ff9100c0; /* Cor de fundo laranja ou apropriada */
+    color: #FFFFFF; /* Cor do texto preta ou apropriada */
 }
 
 /* Status Descarregada Dentro do Prazo */
 .status-descarregada-prazo {
-    background-color: #0dff00; /* Cor de fundo amarela ou apropriada */
-    color: #000000; /* Cor do texto preta ou apropriada */
+    background-color: rgb(82, 240, 82); /* Cor de fundo amarela ou apropriada */
+    color: #FFFFFF; /* Cor do texto preta ou apropriada */
 }
 
 /* Status Data de Retorno Não Definida */
 .status-data-indefinida {
-    background-color: #808080; /* Cor de fundo cinza ou apropriada */
+    background-color: #808080ce; /* Cor de fundo cinza ou apropriada */
     color: #FFFFFF; /* Cor do texto branca ou apropriada */
 }
 

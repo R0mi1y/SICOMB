@@ -4,6 +4,7 @@ var list_returned_equipment = [];
 var id_cargo;
 var done_svg =
     '<svg fill="green" height="24" viewBox="0 -960 960 960" width="24"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></path></svg>';
+window.obs_seted = false;
 
 // seta a data e a hora atual => {
 function set_date() {
@@ -55,7 +56,9 @@ function set_carga_id(id) {
             pass: pass,
         },
         success: function (data_cargo) {
+
             $.each(data_cargo.equipment_loads, function (cargo, equipment) {
+                equipment["Equipment&model"]["observation"] = equipment['observation'];
                 insertLine(equipment["Equipment&model"], false);
                 list_equipment.push(equipment["Equipment&model"]);
             });
@@ -69,7 +72,6 @@ function set_carga_id(id) {
                         pass: pass,
                     },
                     success: function (data) {
-                        console.log(data);
                         var table_itens = $("#body_table_itens");
                         var lines = table_itens.find("tr");
 
@@ -113,16 +115,9 @@ function set_carga_id(id) {
                                     );
 
                                     camps.eq(8).html(done_svg);
-
-                                    // interval = setInterval(
-                                    //     fetchUnvalibleEquipmentData,
-                                    //     1000
-                                    // );
                                 }
 
-                                console.log(eq);
                             });
-                            console.log(line);
                         });
                     },
                 });
@@ -148,21 +143,18 @@ function fetchUnvalibleEquipmentData(serial_number, type = "none") {
 
     if (!(serial_number == null || serial_number == undefined)) {
         if (/^[0-9]+$/.test(serial_number)) {
-            console.log("Equipaamento");
             url =
                 "/equipamento/get_indisponivel/" +
                 id_cargo +
                 "/?type=equipment&pk=" +
                 serial_number;
         } else if (serial_number.includes("ac")) {
-            console.log("Acessório");
             url =
                 "/equipamento/get_indisponivel/" +
                 id_cargo +
                 "/?type=equipment&pk=" +
                 serial_number;
         } else {
-            console.log("Munição");
             url =
                 "/equipamento/get_indisponivel/" +
                 id_cargo +
@@ -214,7 +206,7 @@ function fetchUnvalibleEquipmentData(serial_number, type = "none") {
                     .addClass("btn_confirm");
             }
             if ("msm" in data) {
-                popUp(data.msm);
+                popUp(data.msm, {timer: 2000, overlay: false});
             }
         },
         error: function (error) {
@@ -253,7 +245,7 @@ function fetchEquipmentData(serial_number, type = "none") {
                     });
 
                     if (equipAlreadyInList) {
-                        // popUp("Equipamento já na lista!");
+                        // popUp("Equipamento já na lista!", {timer: 2000, overlay: false});
                         return;
                     }
                 }
@@ -264,7 +256,7 @@ function fetchEquipmentData(serial_number, type = "none") {
                 }
             }
             if (data.msm != null) {
-                popUp(data.msm);
+                popUp(data.msm, {timer: 2000, overlay: false});
             }
         },
         error: function (error) {
@@ -366,9 +358,8 @@ function check_cargo_square() {
 
 // checa se a lista tá vazia
 function confirmCargo() {
-    console.log(list_returned_equipment);
-    if (list_returned_equipment.length > 0)
-        document.getElementById("form-equipment").submit();
     // se tiver certo redireciona pra confirmar a carga
-    else popUp("Lista vazia!");
+    if (list_returned_equipment.length > 0 || window.obs_seted)
+        document.getElementById("form-equipment").submit();
+    else popUp("Lista vazia!", {timer: 2000, overlay: false});
 }

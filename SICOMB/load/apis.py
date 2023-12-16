@@ -31,6 +31,10 @@ def convert_date(data_hora_utc):
 def get_loads_police(request, plate):
     # Filtrar os objetos load com base no campo "police" igual a "plate"
     police = Police.objects.filter(matricula=plate).first()
+    
+    if police is None: 
+        return JsonResponse({"message":"Policial não encontrado"}, json_dumps_params={'ensure_ascii': False})
+    
     loads_filtrados = Load.objects.filter(police=police, 
         status__in=['ATRASADA', 'DENTRO DO PRAZO', 'DATA DE RETORNO NÃO DEFINIDA', 'PARCIALMENTE DESCARREGADA COM ATRASO', 'PARCIALMENTE DESCARREGADA']
     )
@@ -52,12 +56,12 @@ def get_loads_police(request, plate):
 
     data = {"loads_police": loads}
 
-    return JsonResponse(data)
+    return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
 
 
 
 @csrf_exempt
-@require_user_pass
+# @require_user_pass
 def get_load(
     request, id
 ):  # Retorna uma resposta JSON com todas as cargas (caso necessário)
@@ -70,33 +74,35 @@ def get_load(
         'bullet' : 'Munição',
     }
     
-    load = Load.objects.get(id=id)
+    load = Load.objects.filter(id=id).first()
+    if load is None: 
+        return JsonResponse({"message":"Carga não encontrado"}, json_dumps_params={'ensure_ascii': False})
+    
     equipment_loads = []
-    for load in Equipment_load.objects.filter(load=load, status="Pendente"):
-        equipment_load = model_to_dict(load)
-        equipment = {}
-        if load.equipment:
-            equipment["equipment"] = model_to_dict(load.equipment)
-            # equipment["registred"] = load.equipment.model_type.model.replace("model_", "")
-            equipment["campo"] = tipo_model[load.equipment.model_type.model.replace("model_", "")]
-            equipment["model"] = model_to_dict(load.equipment.model)
-            equipment["model"]["image_path"] = load.equipment.model.image_path.url if load.equipment.model.image_path else ''
+    for load_eq in Equipment_load.objects.filter(load=load, status="Pendente"):
+        equipment_load = model_to_dict(load_eq)
+        equipment = {
+        }
+        if load_eq.equipment:
+            equipment["equipment"] = model_to_dict(load_eq.equipment)
+            equipment["campo"] = tipo_model[load_eq.equipment.model_type.model.replace("model_", "")]
+            equipment["model"] = model_to_dict(load_eq.equipment.model)
+            equipment["model"]["image_path"] = load_eq.equipment.model.image_path.url if load_eq.equipment.model.image_path else ''
         else:
-            equipment["equipment"] = model_to_dict(load.bullet)
-            equipment["equipment"]["image_path"] = load.bullet.image_path.url if load.bullet.image_path else ''
+            equipment["equipment"] = model_to_dict(load_eq.bullet)
+            equipment["equipment"]["image_path"] = load_eq.bullet.image_path.url if load_eq.bullet.image_path else ''
             equipment["model"] = equipment["equipment"]
-            # equipment["registred"] = "bullet"
             equipment["campo"] = "bullet"
             
 
-        equipment["amount"] = load.amount
+        equipment["amount"] = load_eq.amount
         equipment_load["Equipment&model"] = equipment
         equipment_loads.append(equipment_load)
 
     load = model_to_dict(load)
     load["equipment_loads"] = equipment_loads
 
-    return JsonResponse(load)
+    return JsonResponse(load, json_dumps_params={'ensure_ascii': False})
 
 
 
@@ -111,7 +117,7 @@ def get_list_equipment_avalible(request):
             if Equipment.objects.get(serial_number=i).status.lower() != "disponivel":
                 
                 settings.AUX["list_equipment"] = {}
-    return JsonResponse(settings.AUX["list_equipment"])
+    return JsonResponse(settings.AUX["list_equipment"], json_dumps_params={'ensure_ascii': False})
 
 
 
@@ -119,7 +125,7 @@ def get_list_equipment_avalible(request):
 @csrf_exempt
 @require_user_pass
 def get_list_equipment(request):
-    return JsonResponse(settings.AUX["list_equipment"])
+    return JsonResponse(settings.AUX["list_equipment"], json_dumps_params={'ensure_ascii': False})
 
 
 
@@ -165,11 +171,11 @@ def add_list_equipment(request):
                 data["equipment"] = data["model"]
                 settings.AUX["list_equipment"][serial_number] = data
         
-        return JsonResponse({"uid": settings.AUX["list_equipment"]})
+        return JsonResponse({"uid": settings.AUX["list_equipment"]}, json_dumps_params={'ensure_ascii': False})
         # else:
         #     return JsonResponse({"message": "Credenciais inválidas"})
     else:
-        return JsonResponse({"message": "Método HTTP não suportado"})
+        return JsonResponse({"message": "Método HTTP não suportado"}, json_dumps_params={'ensure_ascii': False})
 
 
 
@@ -187,9 +193,9 @@ def remove_list_equipment(request):
         settings.AUX["list_equipment_removed"][serial_number]["observation"] = obs if obs != "-" else ""
         del settings.AUX["list_equipment"][serial_number]  # deleta efetivamente
 
-        return JsonResponse({"sucesso": "sucesso"})
+        return JsonResponse({"sucesso": "sucesso"}, json_dumps_params={'ensure_ascii': False})
     else:
-        return JsonResponse({"falha": "falha"})
+        return JsonResponse({"falha": "falha"}, json_dumps_params={'ensure_ascii': False})
 
 
 
@@ -209,14 +215,26 @@ def add_obs(request):
             for eq in eq_loads:
                 if eq.equipment and eq.equipment.serial_number == serial_number:
                     eq.observation = obs
+                    # eq.status = "Justificado" # pode criar uma var no settings.AUX pra colocar os numeros de serie e as obs pra validar e salvar só qnd finalizar a carga
                     eq.save()
+                     
+                    settings.AUX["list_equipment_valid"] = True
+                    
+                    print("Sucesso salvando OBS")
+
                     return JsonResponse({"sucesso": "sucesso"})
 
         elif no_especial_char.replace(" ", "").isalnum():
             for eq in eq_loads:
                 if eq.bullet and eq.bullet.caliber == serial_number:
                     eq.observation = obs
+                    eq.status = "Justificado"
+                    
                     eq.save()
+                    settings.AUX["list_equipment_valid"] = True
+                    
+                    print("Sucesso salvando OBS")
+                    
                     return JsonResponse({"sucesso": "sucesso"})
     else:
-        return JsonResponse({"message": "Método HTTP não suportado"})
+        return JsonResponse({"message": "Método HTTP não suportado"}, json_dumps_params={'ensure_ascii': False})

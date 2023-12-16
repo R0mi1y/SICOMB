@@ -60,6 +60,8 @@
                         <th colspan="100%" class=""><input type="submit" class="button" value="Filtrar"></th>
                     </tr>
                     <tr class="col-itens">
+                        <th>
+                        </th>
                         {% for field in filter_form %}
                             <th>
                                 {{ field }}
@@ -74,13 +76,14 @@
                     </tr>
                 </form>
                 <tr class="col-itens">
+                    <th>Foto</th>
                     {% for field in filter_form %}
                         <td>
                             {{ field.label }}
                         </td>
                     {% endfor %}
                     {% if user.is_superuser %}
-                        <th>EDITAR</th>
+                        <td>Ação</td>
                     {% endif %}
                 </tr>
             </thead>
@@ -89,7 +92,9 @@
                     {% csrf_token %}
                     {% for i in police_list %}
                         <tr>
+                            <td style="align-itens:center;"><img src="{{ i.image_path.url }}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do policial" style="max-height:80px; width: auto; border-radius:500px; margin-top: 10px;"></td>
                             <td>{{ i.name }}</td>
+                            <td>{{ i.email }}</td>
                             <td>{{ i.matricula }}</td>
                             <td>{{ i.telefone }}</td>
                             <td>{{ i.lotacao }}</td>

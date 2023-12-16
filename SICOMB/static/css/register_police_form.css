@@ -85,10 +85,10 @@
 }
 
 .select-field{
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    appearance: none;
+    /* -webkit-appearance: none; */
+    /* -moz-appearance: none; */
+    /* -ms-appearance: none; */
+    /* appearance: none; */
     outline: 0;
     box-shadow: none;
     border: 0 !important;
@@ -102,9 +102,9 @@
     font-size: 14px;
     padding: 2% 5%;
 } 
-.select-field::-ms-expand{
-    display: none;
-}
+/* .select-field::-ms-expand{ */
+    /* display: none; */
+/* } */
 .select{
     height: 3.5em;
     background-color: rgb(91,73,57, 0.1);
@@ -117,24 +117,24 @@
 }
 
 
-.select::after{
-    display: flex;
-    align-items: center;
-    content: '\25BC';
-    color: #fff;
+/* .select::after{ */
+    /* display: flex; */
+    /* align-items: center; */
+    /* content: '\25BC';
+    color: #fff; */
     /* position: absolute; */
     /* top: 0%; */
     /* right: 0%; */
-    padding: 0 1em;
-    background: rgb(91,73,57, 0.6);
-    cursor: pointer;
-    pointer-events: none;
-    transition: .25s all ease;
-}
-.select:hover::after{
+    /* padding: 0 1em; */
+    /* background: rgb(91,73,57, 0.6); */
+    /* cursor: pointer; */
+    /* pointer-events: none; */
+    /* transition: .25s all ease; */
+/* } */
+/* .select:hover::after{ */
     /* background-color: #004593; */
-    color: #004593;
-}
+    /* color: #004593; */
+/* } */
 
 .file-label{
     padding: 6% 5%;

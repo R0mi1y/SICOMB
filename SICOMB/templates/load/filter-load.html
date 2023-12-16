@@ -11,10 +11,10 @@
         position: absolute;
     }
     .container {
-        max-width: 100%;
+        {% comment %} max-width: 100%; {% endcomment %}
     }
 </style>
-<section style="padding: 0px 20px">
+<section style="/*display:grid;*/ padding: 0px 20px">
     <div class="cargo_itens dashboard_loads shadow"> 
          <table class="table_itens">
             <thead>
@@ -56,7 +56,7 @@
             </thead>
             <tbody>
                 {% for i in loads %}
-                <tr>
+                <tr class="row-tbody">
                     <td class="click_redirect"><a href="/carga/{{i.0.pk}}/carga_policial/" >{{ i.0.pk }}</a></td>
                     <td>{{i.0.turn_type}}</td>
                     <td class="click_redirect"><a href="">{{ i.0.police.name|default:'Policial não cadastrado' }}</a></td>

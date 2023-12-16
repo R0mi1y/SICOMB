@@ -63,7 +63,6 @@
                 </form>
                 <tr class="col-itens">
                     <td>Numero de Série</td>
-                    <td>uid</td>
                     <td>Status</td>
                     <td>Tipo</td>
                     <td>Modelo</td>
@@ -71,13 +70,13 @@
                     {% if user.is_superuser %}
                         <th>EDITAR</th>
                     {% endif %}
+                    <td></td>
                 </tr>
             </thead>
             <tbody>
                 {% for equipment in equipment_list %}
-                <tr>
+                <tr class="row-tbody">
                     <td>{{ equipment.serial_number }}</td>
-                    <td>{{ equipment.uid }}</td>
                     <td>{{ equipment.status }}</td>
                     <td>{% if equipment.model_type.name == "model_accessory" %}
                         Acessório
@@ -93,6 +92,7 @@
                     {% if user.is_superuser %}
                         <td class="click_redirect"><button class="button" type="button" onclick="window.location='{% url "edit_equipment" id=equipment.pk %}'" name="pk" value="{{ equipment.pk }}">EDITAR<button></td>
                     {% endif %}
+                    <td></td>
                 </tr>
             {% empty %}
                 <tr>

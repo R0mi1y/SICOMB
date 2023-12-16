@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from equipment.models import Equipment
 from equipment.templatetags.custom_filters import has_group
 from police.forms import PoliceFilterForm, PoliceForm
 from django.contrib.auth.decorators import login_required
@@ -282,4 +283,23 @@ def filter_police(request):
 
 
 def dashboard(request):
-    return render(request, 'dashboard.html', {})
+    data = {
+        "loads": {
+            "completed": Load.objects.filter(status="DESCARREGADA").count(),
+            "executed": Load.objects.all().exclude(status="descarga").count(),
+            "pending": Load.objects.all().exclude(status="descarga").exclude(status="DESCARREGADA").count(),
+        },
+        "equipment": {
+            "total": Equipment.objects.all().count(),
+            "available": Equipment.objects.filter(status="disponível").count(),
+            "unavailable": Equipment.objects.all().exclude(status="disponível").count(),
+            "repair": Equipment.objects.all().filter(status="CONSERTO").count(),
+            "judicial_request": Equipment.objects.all().filter(status="REQUISIÇÃO JUDICIAL").count(),
+        },
+        "police": {
+            "total": Police.objects.all().count(),
+            "inactive": Police.objects.filter(activated=False).count(),
+        },
+    }
+    
+    return render(request, 'dashboard.html', data)

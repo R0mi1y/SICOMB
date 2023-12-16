@@ -207,20 +207,26 @@ def confirm_load(request):
                 
                 settings.AUX["matricula"] = ""
                 
-                if load_unload: check_load(load_unload) 
-                check_load(load)
+                if load_unload: load_unload.check_load() 
+                load.check_load()
 
                 settings.AUX["list_equipment"].clear()
                 settings.AUX["list_equipment_removed"].clear()
             else:
                 messages.error(request, "Erro, Tipo do turno inválido!")
+        elif settings.AUX["list_equipment_valid"]:
+            settings.AUX["list_equipment_valid"] = False
+            settings.AUX["list_equipment"].clear()
+            settings.AUX["list_equipment_removed"].clear()
+        elif settings.AUX["list_equipment_valid"]:
+            pass
         else:
             messages.error(request, "Lista vazia!")
 
         data["policial"] = police
     
     for i in Load.objects.all():
-        check_load(i)
+        i.check_load()
     
     return render(request, "load/load.html", data)
 
@@ -247,7 +253,7 @@ def filter_loads(request):
         ec = Equipment_load.objects.filter(load=i)
         loads.append([i, len(ec)])
         
-        check_load(i)
+        i.check_load()
     
     context = {
         "loads": loads,
@@ -264,50 +270,6 @@ def get_carga_policial(request, pk):
     return render(request, "load/carga_policial.html", {'load': load, 'equipment_loads': equipment_loads})
 
 
-def check_load(load):
-    data_hora_atual = timezone.now()
-    expected_return_date = load.expected_load_return_date
-    
-    # se tem alguma que já foi devolvida
-    has_devolved = load.equipment_loads.filter(status='Devolvido').exists()
-    # se tem alguma que ainda não foi devolvida
-    has_not_devolved = load.equipment_loads.exclude(status='Devolvido').exists()
-    
-    status_descarregado = ['DESCARREGADA', 'DESCARREGADA COM ATRASO']
-    
-    if load.turn_type != 'descarga':
-        if load.status not in status_descarregado: 
-            if expected_return_date:
-                if data_hora_atual > expected_return_date:
-                    if has_devolved:
-                        if has_not_devolved:
-                            load.status = 'PARCIALMENTE DESCARREGADA COM ATRASO'
-                        else:
-                            load.status = 'DESCARREGADA COM ATRASO'
-                        load.returned_load_date = datetime.now()
-                    else:
-                        load.status = 'ATRASADA'
-                else:
-                    if has_devolved:
-                        if has_not_devolved:
-                            load.status = 'PARCIALMENTE DESCARREGADA'
-                        else:
-                            load.status = 'DESCARREGADA'
-                        load.returned_load_date = datetime.now()
-                    else:
-                        load.status = 'DENTRO DO PRAZO'
-            else:
-                if has_devolved:
-                    if has_not_devolved:
-                        load.status = 'PARCIALMENTE DESCARREGADA'
-                    else:
-                        load.status = 'DESCARREGADA'
-                else:
-                    load.status = 'DATA DE RETORNO NÃO DEFINIDA'
-    else:
-        load.status = 'descarga'
-                
-    load.save()
-    return True
+
 
         

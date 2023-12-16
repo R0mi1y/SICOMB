@@ -6,6 +6,9 @@ var list_awate_equipment = []; // array de equipamentos com os equipamentos a se
 var list_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
 var turn_type;
 var square_on;
+var obs_seted = false;
+var interval_get_login;
+var stop_fetching_police = false;
 
 function set_date() {
     var dataAtual = new Date();
@@ -32,7 +35,7 @@ function set_date() {
 function changeTemplate(template) {
     if (template == "loads_police") {
         document.getElementById("means_room_content").innerHTML = '';
-        fetch("http://localhost:8000/carga/get/cargas_policial/" + plate + "/", {
+        fetch("/carga/get/cargas_policial/" + plate + "/", {
             method: 'POST', // Método HTTP POST para enviar dados
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -70,7 +73,7 @@ function changeTemplate(template) {
                     `;
                 for (i in data.loads_police) {
                     tabel +=
-                    `<tr class="tr_cargos" onclick="selectCargo(` + data.loads_police[i].id + `)">
+                    `<tr class="tr_cargos row-tbody" onclick="selectCargo(` + data.loads_police[i].id + `)">
                         <td>` + 
                             data.loads_police[i].id
                         + `</td> 
@@ -158,7 +161,7 @@ function insertLine(line, x) {
         '<td>' + (line.model.caliber == null || line.model.caliber == undefined ? "-" : line.model.caliber) + '</td>' +
         '<td>' + (line.amount == null || line.amount == undefined || line.amount == '' ? "1" : line.amount) + '</td>' +
         '<td>' + (line.registred == 'wearable' ? line.model.size : "-") + '</td>' +
-        '<td>' + (line.equipment.observation == null || line.equipment.observation == undefined ? "-" : line.equipment.observation) + '</td>' +
+        '<td>' + ((line.observation && line.observation.length > 15) ? line.observation.slice(0, 15) + "..." : (line.observation || "-")) + '</td>' +
         '<td></td>' +
         '</tr>' // => }
 
@@ -176,7 +179,6 @@ function updateRowNumbers(x) {
         cells[0].innerHTML = i + 1; // primeira coluna, a do numero de série da tabela
         if(x){
             cells[cells.length - 1].innerHTML = '<a onclick="checkRemoveRow(' + i + ')"><svg fill="red" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></a>'; // ultima coluna, o botão de remover
-            // cells[cells.length - 1].innerHTML += ' | <a id="edit" onclick="edit(' + i + ')" href="#"><svg fill="brown" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h56l345-345-56-56-345 345v56Zm572-403L602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Zm-141-29-28-28 56 56-28-28Z"/></svg></a>'; // ultima coluna, o botão de remover
         } else if (cells[cells.length - 1].innerHTML != "<svg fill=\"green\" height=\"24\" viewBox=\"0 -960 960 960\" width=\"24\"><path d=\"M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z\"></path></svg>"){
             if (cells[1].innerHTML == '-') {
                 var key = cells[4].innerHTML;
@@ -184,8 +186,7 @@ function updateRowNumbers(x) {
                 var key = cells[1].innerHTML;
             }
 
-            cells[cells.length - 1].innerHTML = '<svg height="100%" fill="red" viewBox="0 -960 960 960" width="26"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>'; // ultima coluna, o botão de remover
-            cells[cells.length - 1].innerHTML += ' | <a id="edit" onclick="addObs(' + i + ', \'' + key +'\')" href="#"><svg fill="brown" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h56l345-345-56-56-345 345v56Zm572-403L602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Zm-141-29-28-28 56 56-28-28Z"/></svg></a>'; // ultima coluna, o botão de remover
+            cells[cells.length - 1].innerHTML = '<a id="edit" onclick="addObs(' + i + ', \'' + key +'\')" href="#"><svg fill="brown" height="24" viewBox="0 -960 960 960" width="24"><path d="M200-200h56l345-345-56-56-345 345v56Zm572-403L602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Zm-141-29-28-28 56 56-28-28Z"/></svg></a>'; // ultima coluna, o botão de remover
         }
     }
 }
@@ -203,7 +204,19 @@ function setObservation(serial_number, row, observation) {
             pass: pass,
         },
         success: function (data) {
-            row.innerHTML = observation;
+            row[7].innerHTML = observation.slice(0, 15) + (observation.length > 15 ? "..." : "");
+            row[8].innerHTML += (!row[8].innerHTML.includes("|") ? "| " + done_svg : "");
+
+            for (var i = 0; i < list_equipment.length; i++) {
+                console.log(i);
+                console.log(list_equipment[i]);
+                if (list_equipment[i].equipment.serial_number == serial_number) {
+                    list_equipment[i].observation = observation;
+                    console.log("Obs: " + list_equipment[i].observation);
+                }
+            }
+
+            popUp("Observação adicionada com sucesso!", {timer: 2000, overlay: false});
         },
         error: function (error) {
             popUp(error);
@@ -214,9 +227,10 @@ function setObservation(serial_number, row, observation) {
 
 function addObs(i, id_cargo) {
     var rows = table_itens.getElementsByTagName("tr");
-    let row = rows[i].getElementsByTagName("td")[7];
-    console.log(row);
-    popUp("Adicione a observação: ", {textArea:true, function_textarea: setObservation, parm1:id_cargo, parm2: row, contentTextarea: row.innerHTML});
+    let row = rows[i].getElementsByTagName("td");
+    window.obs_seted = true;
+
+    popUp("Adicione a observação: ", {textArea:true, function_textarea: setObservation, parm1:id_cargo, parm2: row, contentTextarea: list_equipment[i].observation});
 }
 
 function setTurnType() {
@@ -236,8 +250,10 @@ function setTurnType() {
     }
 }
 
-var interval = setInterval(() => {
-    let url = 'http://localhost:8000/police/get_login/';
+function fetch_police(){
+    if (stop_fetching_police) return;
+
+    let url = '/police/get_login/';
     fetch(url, {
         method: 'POST', // Método HTTP POST para enviar dados
         headers: {
@@ -249,39 +265,41 @@ var interval = setInterval(() => {
         })})
         .then(response => response.json())
         .then(policial => {
-            console.log(policial);
             if (policial && Object.keys(policial).length !== 0) {
-                clearInterval(interval);
+                clearInterval(interval_get_login);
+                stop_fetching_police = true;
 
-                let table = `<table class="police_officer_table">
-            <thead>
-                <tr>
-                    <th class="cargo_title">POLICIAL</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <a href="#"><img class="shadow perfil" src="` + policial.foto + `" alt=""></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>` + policial.nome + `</td>
-                </tr>
-                <tr>
-                    <td>` + policial.matricula + `</td>
-                </tr>
-                <tr>
-                    <td>` + policial.telefone + `</td>
-                </tr>
-                <tr>
-                    <td>` + policial.lotacao + `</td>
-                </tr>
-                <tr>
-                    <td>` + policial.email + `</td>
-                </tr>
-            </tbody>
-            </table>`;
+                let table = `
+                    <table class="police_officer_table">
+                        <thead>
+                            <tr>
+                                <th class="cargo_title">POLICIAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="#"><img class="shadow perfil" src="` + policial.foto + `" alt=""></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>` + policial.nome + `</td>
+                            </tr>
+                            <tr>
+                                <td>` + policial.matricula + `</td>
+                            </tr>
+                            <tr>
+                                <td>` + policial.telefone + `</td>
+                            </tr>
+                            <tr>
+                                <td>` + policial.lotacao + `</td>
+                            </tr>
+                            <tr>
+                                <td>` + policial.email + `</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    `;
 
                 var inputElement = document.createElement("input");
                 inputElement.type = "hidden";
@@ -295,15 +313,16 @@ var interval = setInterval(() => {
                 changeTemplate("select_load");
             }
         });
-}, 1000);
+}
+
+interval_get_login = setInterval(fetch_police, 1000);
 
 function edit(i) {
     if (square_on){
-        popUp("Quadro já em uso!");
+        popUp("Quadro já em uso!", {timer: 2000, overlay: false});
     } else {
         var rows = table_itens.getElementsByTagName("tr"); // pega os tr da tabela
         serialNum = rows[i].getElementsByTagName("td")[1].innerHTML;
-        console.log(serialNum);
         equipmentData = list_equipment[serialNum];
         clearInterval(interval);
         addToSquare(list_equipment[serialNum]);
@@ -345,7 +364,6 @@ function clearSquare() {
 // Adiciona o equipamento ao quadro da sala de meios
 function addToSquare(data) {
     square_on = true;
-    console.log(data);
 
     var serialNumberInput = document.getElementById("serial_number");
     var description = document.getElementById("description");

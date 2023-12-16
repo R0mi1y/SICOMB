@@ -185,13 +185,6 @@ class EquipmentFilterForm(forms.Form):
         widget=forms.TextInput(
             attrs={'class': 'form-control input-data'}),
     )
-    uid = forms.CharField(
-        label=_("UID"), 
-        max_length=200, 
-        required=False,
-        widget=forms.TextInput(
-            attrs={'class': 'form-control input-data'}),
-    )
     status = forms.ChoiceField(
         label=_("Estado Atual"),
         choices=equipment_choices,
@@ -225,8 +218,6 @@ class EquipmentFilterForm(forms.Form):
 
         if data.get('serial_number'):
             queryset = queryset.filter(serial_number__icontains=data['serial_number'])
-        if data.get('uid'):
-            queryset = queryset.filter(uid__icontains=data['uid'])
         if data.get('status'):
             queryset = queryset.filter(status__icontains=data['status'])
         if data.get('model_type'):
@@ -252,7 +243,7 @@ class ModelFilterForm(forms.Form):
         label=_("Tipo do Modelo"), 
         choices=TYPES, 
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control chekboxes '}),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control checkboxes '}),
     )
     
     amount = forms.DecimalField(

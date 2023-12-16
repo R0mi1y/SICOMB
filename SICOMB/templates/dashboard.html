@@ -18,11 +18,11 @@
             </div>
             <div class="card-informations">
                 <h2>CARGAS REALIZADAS</h2>
-                <span>0</span>
+                <span>{{loads.completed}}</span>
                 <h2>CARGAS FINALIZADAS</h2>
-                <span>0</span>
+                <span>{{loads.executed}}</span>
                 <h2>FINALIZADAS COM FALTA</h2>
-                <span>0</span>
+                <span>{{loads.pending}}</span>
             </div>
 
         </div>
@@ -34,9 +34,9 @@
             </div>
             <div class="card-informations">
                 <h2>TOTAL DE EQUIPAMENTOS</h2>
-                <span>0</span>
+                <span>{{equipment.total}}</span>
                 <h2>DISPONÍVEIS</h2>
-                <span>0</span>
+                <span>{{equipment.available}}</span>
             </div>
         </div>
 
@@ -47,9 +47,9 @@
             </div>
             <div class="card-informations">
                 <h2>EQUIP. INDISPONÍVEIS</h2>
-                <span>0</span>
+                <span>{{equipment.unavailable}}</span>
                 <h2>EM CONSERTO</h2>
-                <span>0</span>
+                <span>{{equipment.repair}}</span>
             </div>
 
         </div>
@@ -61,8 +61,10 @@
                 {% comment %} <span><a href=""></a></span> {% endcomment %}
             </div>
             <div class=" card-informations">
-                <h2>EFETIVO POLICIAL CADASTRADO</h2>
-                <span>0</span>
+                <h2>POLICIAIS CADASTRADOS</h2>
+                <span>{{police.total}}</span>
+                <h2>AGUARDANDO APROVAÇÃO</h2>
+                <span>{{police.inactive}}</span>
             </div>
         </div>
 
@@ -73,7 +75,7 @@
             </div>
             <div class="card-informations">
                 <h2>EQUIPAMENTOS EM PERÍCIA</h2>
-                <span>0</span>
+                <span>{{equipment.judicial_request}}</span>
             </div>
         </div>
     </div>

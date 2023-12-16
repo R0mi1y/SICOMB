@@ -64,11 +64,31 @@
         </form>
     {% else %}
         <div class="define-registration-div">
-            <a href="{% url "register_model" model_name="armament" %}" class="a-register-btn">Cadastrar Armamento</a>
-            <a href="{% url "register_model" model_name="grenada" %}" class="a-register-btn">Cadastrar Granada</a>
-            <a href="{% url "register_model" model_name="wearable" %}" class="a-register-btn">Cadastrar Vestimento</a>
-            <a href="{% url "register_model" model_name="accessory" %}" class="a-register-btn">Cadastrar Acessório</a>
-            <a href="{% url "register_model" model_name="bullet" %}" class="a-register-btn">Cadastrar Munição</a>
+            <div class="option_type_model">
+                <a href="{% url "register_model" model_name="armament" %}" class="a-register-btn">
+                    <!-- <label>
+                        
+                    </label> -->
+                    <span>Cadastrar Armamento</span>
+                </a>
+            </div>
+            <div class="option_type_model">
+                <a href="{% url "register_model" model_name="grenada" %}" class="a-register-btn"> 
+                    <!-- <label> 
+                        <img  src="{% static 'img/granade_icon.png' %}"> 
+                    </label>                     -->
+                    <span>Cadastrar Granada</span>
+                </a>
+            </div>
+            <div class="option_type_model">
+                <a href="{% url "register_model" model_name="wearable" %}" class="a-register-btn">Cadastrar Vestimento</a>
+            </div>
+            <div class="option_type_model">
+                <a href="{% url "register_model" model_name="accessory" %}" class="a-register-btn">Cadastrar Acessório</a>
+            </div>
+            <div class="option_type_model">
+                <a href="{% url "register_model" model_name="bullet" %}" class="a-register-btn">Cadastrar Munição</a>
+            </div>
         </div>
     {% endif %}
   </div>

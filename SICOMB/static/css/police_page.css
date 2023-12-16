@@ -154,7 +154,7 @@ table img{
 
 .table_itens tbody{
     font-size: 11px;
-    border-bottom: 1px solid rgb(129, 108, 89);
+    /* border-bottom: 1px solid rgb(129, 108, 89); */
 }
 .table_itens tbody td a{
     /* background: red; */
@@ -172,6 +172,16 @@ table img{
     min-width: 100px;
 }
 
+.row-tbody-police-page{
+    height: 40px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 50px;
+}
+
+.table_itens tbody tr:nth-child(even){
+    background-color: rgb(235, 235, 235);
+}
 .finalize_load{
     justify-content: flex-end;
     display: flex;
@@ -230,6 +240,7 @@ table img{
 .row_color_police_login span{
     width: 80%
 }
+
 
 .form_police_login{
     display: flex;

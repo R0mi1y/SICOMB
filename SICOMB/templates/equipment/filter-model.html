@@ -70,7 +70,7 @@
             </thead>
             <tbody>
                 {% for model in model_list %}
-                <tr>
+                <tr class="row-tbody">
                     <td>{{ model|model_class }}</td>
                     <td>{{ model.amount|default:"-" }}</td>
                     <td>{{ model.caliber|default:"-" }}</td>

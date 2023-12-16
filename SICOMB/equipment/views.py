@@ -121,7 +121,7 @@ def filter_model(request):
         Model_grenada.objects.filter(activated=True),
         Bullet.objects.filter(activated=True)
     ))
-
+    
     filter_form = ModelFilterForm(request.GET)
     
     if filter_form.is_valid():

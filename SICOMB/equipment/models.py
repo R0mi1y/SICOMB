@@ -6,7 +6,6 @@ from SICOMB import settings
 from django.utils import timezone
 from police.models import Police
 
-
 class Model_armament(models.Model):
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
     activated = models.BooleanField("Ativado", default=False)
@@ -18,6 +17,9 @@ class Model_armament(models.Model):
     def __str__(self):
         # na hora dos campos do select ele retorna isso
         return f"Armamento {self.model}"
+    
+    def get_equipment_amount(self):
+        return Equipment.objects.filter(model=self).count()
 
 
 class Model_wearable(models.Model):
@@ -31,6 +33,9 @@ class Model_wearable(models.Model):
     def __str__(self):
         # na hora dos campos do select ele retorna isso
         return f"Vestível {self.model}"
+    
+    def get_equipment_amount(self):
+        return Equipment.objects.filter(model=self).count()
 
 
 class Model_accessory(models.Model):  # bastão, escudo
@@ -43,6 +48,9 @@ class Model_accessory(models.Model):  # bastão, escudo
     def __str__(self):
         # na hora dos campos do select ele retorna isso
         return f"Acessório {self.model}"
+    
+    def get_equipment_amount(self):
+        return Equipment.objects.filter(model=self).count()
 
 
 class Model_grenada(models.Model):
@@ -51,10 +59,13 @@ class Model_grenada(models.Model):
     model = models.TextField("Modelo do armamento")
     image_path = models.FileField(upload_to="Modelos/granadas/")
     description = models.TextField("Descrição")
-
+    
     def __str__(self):
         # na hora dos campos do select ele retorna isso
         return f"Granada {self.model}"
+
+    def get_equipment_amount(self):
+        return Equipment.objects.filter(model=self).count()
 
 
 class Equipment(models.Model):

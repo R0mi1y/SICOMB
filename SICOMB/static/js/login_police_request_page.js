@@ -9,7 +9,7 @@ function fetchList() {
     fetching = true; // Definir o indicador de que estamos buscando os dados
 
     $.ajax({
-        url: 'http://localhost:8000/police/get_fingerprint/',
+        url: '/police/get_fingerprint/',
         type: 'POST',
         dataType: 'json',
         data: {
@@ -34,4 +34,4 @@ function fetchList() {
     });
 }
 
-setInterval(fetchList, 3000);
+setInterval(fetchList, 500);

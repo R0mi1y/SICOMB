@@ -5,7 +5,7 @@ setInterval(fetchList, 1000);
 
 function fetchList() {
     $.ajax({
-        url: 'http://localhost:8000/carga/lista_equipamentos_atual/get',
+        url: '/carga/lista_equipamentos_atual/get',
         type: 'POST',
         dataType: 'json',
         data: {
@@ -50,7 +50,7 @@ function confirmCargo(self) {
     self.style.backgroundColor = "#9999";
     self.style.color = "black";
     $.ajax({
-        url: 'http://localhost:8000/equipamento/allow_cargo',
+        url: '/equipamento/allow_cargo',
         type: 'POST',
         data: {
             user: user,

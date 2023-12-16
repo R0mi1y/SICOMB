@@ -17,7 +17,7 @@ set_date();
 
 // busca se já tem uma lista no sistema 
 //(serve para caso a página de refresh, tá salvo no sistema desde q ele não rreinicie o sistema)
-fetch("http://localhost:8000/carga/lista_equipamentos/get", {
+fetch("/carga/lista_equipamentos/get", {
     method: 'POST', // Método HTTP POST para enviar dados
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -40,8 +40,8 @@ function fetchEquipmentData(serial_number, type='none') {
     // Caso a função receba o parâmetro serial_number, ela requisita o equipamento correspondente.
     // Caso contrário, ela requisita o equipamento passado no sensor.
     let url = (serial_number == null || serial_number == undefined ?
-        'http://localhost:8000/equipamento/get_disponivel' :
-        'http://localhost:8000/equipamento/get/' + serial_number);
+        '/equipamento/get_disponivel' :
+        '/equipamento/get/' + serial_number);
 
     // Faz a requisição para a URL especificada
     fetch(url, {
@@ -113,7 +113,7 @@ function check_cargo_square() {
         equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ?? equipmentData.model.caliber;
 
         // adiciona no array de equipamentos do django => {
-        fetch('http://localhost:8000/carga/lista_equipamentos/add/', {
+        fetch('/carga/lista_equipamentos/add/', {
             method: 'POST',
             headers: {
                 'Content-Type': "application/x-www-form-urlencoded"
@@ -168,7 +168,7 @@ function checkRemoveRow(rowNumber) {
         clearInterval(interval);
 
         interval = setInterval(() => { // começa a requisitar mas mudando as verificações
-            fetch('http://localhost:8000/equipamento/get_disponivel', {
+            fetch('/equipamento/get_disponivel', {
                     method: 'POST', // Método HTTP POST para enviar dados
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
@@ -191,7 +191,7 @@ function checkRemoveRow(rowNumber) {
                                     // remove da lista do django
                                     console.log(list_equipment);
 
-                                    fetch("http://localhost:8000/carga/lista_equipamentos/remover/", {
+                                    fetch("/carga/lista_equipamentos/remover/", {
                                         method: 'POST', // Método HTTP POST para enviar dados
                                         headers: {
                                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -227,7 +227,7 @@ function checkRemoveRow(rowNumber) {
     } else {
         caliber = col[4].innerHTML;
         removeRow(rowNumber);
-        fetch("http://localhost:8000/carga/lista_equipamentos/remover/", {
+        fetch("/carga/lista_equipamentos/remover/", {
             method: 'POST', // Método HTTP POST para enviar dados
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -285,7 +285,7 @@ function checkAwateList(type='none') {
 }
 
 function searchWatingList() {
-    fetch("http://localhost:8000/equipamento/lista_espera/get/", {
+    fetch("/equipamento/lista_espera/get/", {
             method: 'POST', // Método HTTP POST para enviar dados
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

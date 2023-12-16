@@ -38,6 +38,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'SICOMB.middlwares.handle_error',
 ]
 
 APPEND_SLASH = False  # resolve erro do fetch de rotas do django
@@ -171,6 +172,27 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 DEFAULT_FROM_EMAIL = 'edielromily01@gmail.com'
 EMAIL_SENDER_NAME = 'SISCOEM'
 
+
+ADMINS = [('Ediel Romily', 'edielromily7@gmail.com')]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
 # Variável auxiliar do sistema
 
 AUX = {
@@ -191,6 +213,7 @@ AUX = {
     "confirmCargo": False,
     "errors": [],
     "list_equipment": [],
+    "list_equipment_valid": False,
     # "porta_serial": serial.Serial('COM13', 115200),
     "porta_serial": None,
     "token_login_police": None,
