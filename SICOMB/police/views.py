@@ -285,8 +285,8 @@ def filter_police(request):
 def dashboard(request):
     data = {
         "loads": {
+            "total": Load.objects.all().exclude(status="descarga").count(),
             "completed": Load.objects.filter(status="DESCARREGADA").count(),
-            "executed": Load.objects.all().exclude(status="descarga").count(),
             "pending": Load.objects.all().exclude(status="descarga").exclude(status="DESCARREGADA").count(),
         },
         "equipment": {

@@ -28,7 +28,7 @@ class PoliceForm(forms.ModelForm):
             'username': forms.TextInput(attrs={'class':'input-data', "required": True}),
             'name': forms.TextInput(attrs={'class':'input-data', "required": True}),
             'matricula': forms.TextInput(attrs={'id':'matricula-input'}),
-            'posto': forms.TextInput(attrs={'class':'input-data'}),
+            'posto': forms.Select(attrs={'class':'input-data select'}),
             'email': forms.EmailInput(attrs={'class':'input-data'}),
             'telefone': forms.TextInput(attrs={'class':'input-data'}),
             'lotacao': forms.TextInput(attrs={'class':'input-data'}),
@@ -74,11 +74,10 @@ class PoliceFilterForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
     )
-    posto = forms.CharField(
+    posto = forms.ChoiceField(
         label="Posto",
-        max_length=10,
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
+        widget=forms.Select(attrs={'class': 'form-control input-data'}),
     )
     tipo = forms.ChoiceField(
         label="Tipo",

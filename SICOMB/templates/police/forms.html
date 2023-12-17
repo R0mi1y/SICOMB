@@ -39,8 +39,6 @@
                     <h4 for="{{ field.id_for_label }}" class="input-title {% if field.errors %}input-error{% endif %}">{{ field.label }}</h4>
                     <div class="input-search">
                         {{ field }}
-                        {% comment %} <button type="button" onclick="search()"><img src="{% static 'img/search.png'%}"
-                            alt="Procurar"></button> {% endcomment %}
                     </div>
                 </div>
             {% else %}

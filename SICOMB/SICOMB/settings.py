@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "police",
     "equipment",
     "load",
+    "report",
     "django.contrib.contenttypes",
 ]
     
@@ -210,6 +211,19 @@ AUX = {
         ("7.62mm", "7.62mm"),
         (".22 LR", ".22 LR"),
     ),
+    "postos": [
+        ("Soldado", "Soldado"),
+        ("Cabo", "Cabo"),
+        ("Primeiro Sargento", "Primeiro Sargento"),
+        ("Subtenente", "Subtenente"),
+        ("Aspirante", "Aspirante"),
+        ("Primeiro Tenente", "Primeiro Tenente"),
+        ("Capitão", "Capitão"),
+        ("Major", "Major"),
+        ("Tenente Coronel", "Tenente Coronel"),
+        ("Coronel", "Coronel"),
+        ("Comandante Geral", "Comandante Geral"),
+    ],
     "confirmCargo": False,
     "errors": [],
     "list_equipment": [],

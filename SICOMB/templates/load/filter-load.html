@@ -1,8 +1,8 @@
 {% extends 'base/footer.html' %}
 {% load static %}
 
-{% block title %}SICOMB - Registro de Equipamento{% endblock title %}
-{% block title_top %}REGISTRO DE EQUIPAMENTO{% endblock title_top %}
+{% block title %}SICOMB - Cargas{% endblock title %}
+{% block title_top %}TABELA DE CARGAS{% endblock title_top %}
 {% block css2 %}{% static 'css/carga.css' %}{% endblock%}
 {% block content_final %}
 <link rel="stylesheet" href="{% static 'css/equipamentos.css' %}">
@@ -18,11 +18,12 @@
     <div class="cargo_itens dashboard_loads shadow"> 
          <table class="table_itens">
             <thead>
-                <tr>
-                    <th colspan="100%" class="cargo_title"><h3 >CARGAS </h3></th>
-                </tr>
                 <form method="get">
+                <tr>
+                    <th colspan="100%" class="cargo_title"><h3>CARGAS </h3></th>
+                </tr>
                     <tr class="col-itens">
+                        <th colspan="2">NUMERO DE SÉRIE {{ filter_form.equipment_sn }}</th>
                         <th colspan="100%" class=""><input type="submit" class="button" value="Filtrar"></th>
                     </tr>
                     
@@ -34,7 +35,7 @@
                         <th>{{ filter_form.graduation }}</th>
                         <th>{{ filter_form.adjunct }}</th>
                         <th>{{ filter_form.amount_items }}</th>
-                        <th>Começo<br> {{ filter_form.date_load_start }} <br>Fim<br> {{ filter_form.date_load_end }}</th>
+                        <th><label>Começo<br> {{ filter_form.date_load_start }} <br>Fim<br> {{ filter_form.date_load_end }}</th>
                         <th>Começo<br> {{ filter_form.expected_load_return_date_start }} <br>Fim<br> {{ filter_form.expected_load_return_date_end }}</th>
                         <th>{{ filter_form.status }}</th>
                         <th>Começo<br> {{ filter_form.returned_load_date_start }} <br>Fim<br> {{ filter_form.returned_load_date_end }}</th>

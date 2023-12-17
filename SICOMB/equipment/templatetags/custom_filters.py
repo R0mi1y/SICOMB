@@ -1,6 +1,7 @@
 from django import template
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import redirect, render
+from equipment.models import Equipment
 from police.models import Police
 from django.contrib.auth.models import Group
 from django.contrib import messages
@@ -19,6 +20,13 @@ def model_class(model):
     }
     
     return model_name[model.__class__.__name__]
+
+@register.filter
+def get_amount(model):
+    if model.__class__.__name__ != 'Bullet':
+        return [i for i in Equipment.objects.all() if model.model == i.model.model].__len__()
+    else:
+        return model.amount
 
 
 def require_user_pass(funcao):

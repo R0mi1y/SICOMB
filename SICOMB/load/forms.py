@@ -85,6 +85,11 @@ class LoadFilterForm(forms.Form):
         required=False,
         widget=forms.DateTimeInput(attrs={'placeholder': 'YYYY-MM-DD HH:MM', 'type': 'datetime-local', 'class': 'form-control input-data'}),
     )
+    equipment_sn = forms.CharField(
+        label="Equipamento", 
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control input-data'})
+    )
     status = forms.ChoiceField(
         label="Status",
         choices=(
@@ -137,8 +142,7 @@ class LoadFilterForm(forms.Form):
                 
                 if amount_items != len(equipment_loads):
                     queryset = queryset.exclude(pk=i.pk)
-        
-
+                    
         # Filtrar por datas
         date_load_start = data.get('date_load_start')
         date_load_end = data.get('date_load_end')
@@ -164,5 +168,21 @@ class LoadFilterForm(forms.Form):
         status = data.get('status')
         if status and status != '':
             queryset = queryset.filter(status=status)
+            
+        equipment_sn = data.get('equipment_sn')
+        if equipment_sn:
+            list_loads = queryset
+            queryset = []
+            for load in list_loads:
+                is_in = False
+                for eq_load in Equipment_load.objects.filter(load=load):
+                    if eq_load.equipment and eq_load.equipment.serial_number.lower() in equipment_sn.lower():
+                        is_in = True
+                        break
+                    elif eq_load.bullet and eq_load.bullet.caliber.lower() in equipment_sn.lower():
+                        is_in = True
+                        break
+                if is_in:
+                    queryset.append(load)
 
         return queryset

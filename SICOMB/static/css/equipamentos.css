@@ -38,41 +38,58 @@ select.input-data {
 .checkboxes div {
     text-align: left;
     height: 25px;
-    margin-left: 10px;
+    /* margin-left: 10px; */
+    margin: 5px 5px 0px 5px;
 }
 .checkboxes {
     margin-bottom: 20px;
+    /* display: none; */
 }
 .checkboxes div label input[type="checkbox"]{
     /* display: none; */
+    
 }
 
+.checkboxes div label{
+    background-color: white;
+    color: #5B4939;
+    padding: 5px 5px 5px 10px;
+    border-radius: 10px;
+    box-shadow: 1px 3px 6px #a38972;
+    cursor: pointer;
+}
+
+
 .checkboxes div label input[type="checkbox"]:hover{ 
-    border: 1px solid #916d4c;
-    box-shadow: 3px 2px 2px #916d4c;
+    /* border: 1px solid #916d4c; */
+    /* box-shadow: 3px 2px 2px #916d4c; */
   }
 
 .checkboxes div label input[type="checkbox"]{
   /* content: ""; */
   /* display: block; */
-  width: 1.4em;
-  height: 1.4em;
-  border: 1px solid #916d4c;
-  border-radius: 0.2em;
+  /* width: 1.4em; */
+  /* height: 1.4em; */
+  /* border: 1px solid #916d4c; */
+  /* border-radius: 0.2em; */
   /* position: absolute; */
   /* left: 0; */
   /* top: 0; */
-  -webkit-transition: all 0.2s, background 0.2s ease-in-out;
-  transition: all 0.2s, background 0.2s ease-in-out;
-  background: rgba(255, 255, 255, 0.03);
-  box-shadow: -3px -2px 2px #916d4c;
-  background: #f3f3f3;
+  /* -webkit-transition: all 0.2s, background 0.2s ease-in-out; */
+  /* transition: all 0.2s, background 0.2s ease-in-out; */
+  /* background: rgba(255, 255, 255, 0.03); */
+  /* box-shadow: -3px -2px 2px #916d4c; */
+  /* background: #f3f3f3; */
+
+  
+  
 }
-.checkboxes div label input[type="checkbox"]:checked{
-  border: 2px solid #fff;
-  border-radius: 0.3em;
-  background: #916d4c;
-  box-shadow: 3px 2px 2px #916d4c;
+.checkboxes div label input[type="checkbox"]:checked {
+  border: 2px solid #ff0000;
+  /* border-radius: 0.3em; */
+  background-color: #916d4c;
+  /* box-shadow: 3px 2px 2px #916d4c; */
+  /* color: #fff; */
 }
 
 
@@ -265,8 +282,8 @@ table img{
  }
 
  .table_info_product thead{
-    position: sticky;
-    top: 0;
+    /* position: sticky; */
+    /* top: 0; */
  }
 
 .info_product_title{

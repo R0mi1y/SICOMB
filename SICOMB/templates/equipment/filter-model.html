@@ -12,7 +12,7 @@
         position: absolute;
     }
     .container {
-        max-width: 100%;
+        <!-- max-width: 100%; -->
     }
     .dashboard_loads{
         width: auto;
@@ -72,7 +72,7 @@
                 {% for model in model_list %}
                 <tr class="row-tbody">
                     <td>{{ model|model_class }}</td>
-                    <td>{{ model.amount|default:"-" }}</td>
+                    <td>{{ model|get_amount }}</td>
                     <td>{{ model.caliber|default:"-" }}</td>
                     <td>{{ model.model|default:"-" }}</td>
                     <td>{{ model.description|default:"-" }}</td>

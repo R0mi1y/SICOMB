@@ -133,7 +133,7 @@
                                     <img src="{% static 'img/disket.png' %}" alt="">
                                     <span>Modelos</span>
                                 </li>
-                                <li onclick="window.location='#'">
+                                <li onclick="window.location='{% url "relatorios" %}'">
                                     <img src="{% static 'img/reports.png' %}" alt="">
                                     <span>Relatórios</span>
                                 </li>
@@ -216,11 +216,6 @@
                             </div>
                         {% endif %}
                     </ul>
-                    {% comment %} <div class="balls">
-                        <div class="ball ball_blue"></div>
-                        <div class="ball ball_red"></div>
-                    </div> {% endcomment %}
-
                 </nav>
             </header>
             <div id="messages"></div>

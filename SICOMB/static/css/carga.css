@@ -200,9 +200,16 @@ table img{
  }
 
  .table_info_product thead{
-    position: sticky;
-    top: 0;
+    /* position: sticky; */
+    /* top: 0; */
  }
+ 
+ .table_itens .row-tbody{
+    height: 40px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 50px;
+}
 
 .info_product_title{
     background-color: burlywood;
@@ -330,8 +337,8 @@ table img{
     font-size: 17px;
 } */
 .table_itens thead{
-    position: sticky;
-    top: 0;
+    /* position: sticky; */
+    /* top: 0; */
 }
 .table_itens thead th{
     min-width: 100px;

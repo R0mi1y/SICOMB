@@ -199,7 +199,7 @@ class EquipmentFilterForm(forms.Form):
     )
     
     model = forms.CharField(
-        label=_("UID"), 
+        label=_("Modelo"), 
         max_length=200, 
         required=False,
         widget=forms.TextInput(
