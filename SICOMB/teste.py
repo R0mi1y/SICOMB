@@ -5,8 +5,8 @@ import time
 # Inicializa o dicionário para armazenar os códigos e seus tempos
 codigo_armazenado = {}
 
-def enviar_linha_para_url(linha):
-    url = "http://localhost:8000/equipamento/set"
+def enviar_linha_para_url(linha, url):
+    
     parametros = {"uid": linha}
     response = requests.get(url, params=parametros)
     
@@ -26,11 +26,17 @@ try:
         
         linha = linha.split("::")
         if linha[0] == "TAG_CODE":
+            url = "http://localhost:8000/equipamento/set"
+            
             code = linha[1]
             # Verifica se o código já foi armazenado
             if code not in codigo_armazenado:
                 codigo_armazenado[code] = time.time()  # Armazena o código com o tempo atual
-                enviar_linha_para_url(code)
+                enviar_linha_para_url(code, url)
+        elif linha[0] == "FINGERPRINT":
+            url = "http://localhost:8000/police/set_fingerprint"
+            
+            
                 
         # Remove códigos que estão na lista há mais de 5 segundos
         tempo_atual = time.time()
