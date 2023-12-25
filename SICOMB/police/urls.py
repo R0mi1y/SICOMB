@@ -10,5 +10,8 @@ urlpatterns = [
     path("reduce/", views.reduce_police, name="reduce_police"),
     path("promote/", views.promote_police, name="promote_police"),
     path("get_login/", apis.get_login_police),
+    path("register/fingerprint/<int:police_id>/", apis.fingerprint_register_police, name="register_police"),
     path("get_fingerprint/", apis.get_fingerprint),
+    path("request/fingerprint/", apis.request_fingerprint),
+    path("fingerprint/delete/<int:police_id>", apis.delete_fingerprint),
 ]

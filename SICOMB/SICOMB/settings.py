@@ -1,10 +1,6 @@
 from pathlib import Path
 import os
-import serial
 
-# Configure as configurações de CORS
-
-# Adicione o middleware de CORS ao MIDDLEWARE do Django
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-=@-^(fuzcew496ttksj^_=+irgt1xd5oc86f2wr0ck6yo%qhtw"
@@ -14,23 +10,23 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-    "corsheaders",  # Configuração necessaria para acerro da página equipment/get como uma api
+    "django.contrib.contenttypes",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Meus Apps 
     "police",
     "equipment",
     "load",
     "report",
-    "django.contrib.contenttypes",
+    # Apps de terceiros
+    "corsheaders",  # Configuração necessaria para acerro da página equipment/get como uma api
 ]
     
-CORS_ORIGIN_ALLOW_ALL = True  # CORS configuração
-
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -39,7 +35,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'SICOMB.middlwares.handle_error',
+    "SICOMB.middlwares.handle_error",
 ]
 
 APPEND_SLASH = False  # resolve erro do fetch de rotas do django
@@ -64,14 +60,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "SICOMB.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -87,13 +75,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
 LANGUAGE_CODE = "pt-BR"
 
-TIME_ZONE = "America/Bahia"
+TIME_ZONE = "America/Sao_Paulo"
 
 USE_I18N = True
 
@@ -129,9 +113,6 @@ MEDIA_URL = "/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUX = {"UID": ""}
@@ -159,7 +140,7 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_HEADERS = [
     "cache-control",
-    'Content-Type'
+    "Content-Type"
 ]
 
 # Configurações de emails
@@ -184,13 +165,15 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
         },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
         },
+    },
+    'root': {
+        'handlers': ['console'],
+        # 'handlers': ['console', 'mail_admins'],
+        'level': 'INFO', 
     },
 }
 
@@ -224,12 +207,25 @@ AUX = {
         ("Coronel", "Coronel"),
         ("Comandante Geral", "Comandante Geral"),
     ],
+    "registering_fingerprint": {
+        'police_id': None,
+        'status': False,
+        'fingetprint_id': False
+    },
     "confirmCargo": False,
     "errors": [],
     "list_equipment": [],
     "list_equipment_valid": False,
-    # "porta_serial": serial.Serial('COM13', 115200),
+    "fingerprint_id": None,
     "porta_serial": None,
-    "token_login_police": None,
+    "key_token_login_police": None,
+    "serial_port_rfid": None,
+    "serial_port_fingerprint": None,
+    "common_serial": None,
+    "message_fingerprint_sensor": None,
+    "SENSOR_FINGERPRINT": True,
+    "SENSOR_RFID": True,
+    "PORT_FINGERPRINT": "COM5",
+    "PORT_RFID": "COM13",
+    
 }
-

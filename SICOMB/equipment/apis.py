@@ -375,6 +375,7 @@ def get_uids(request):
     Returns:
         Array: JSON com todos os uids
     """
-
+    
     dicionario = dict(enumerate(settings.AUX["uids"]))
     return JsonResponse(dicionario, json_dumps_params={'ensure_ascii': False})
+

@@ -71,7 +71,7 @@
                             </th>
                         {% endfor %}
                         {% if user.is_superuser %}
-                        <th></th>
+                        <th colspan="2"></th>
                         {% endif %}
                     </tr>
                 </form>
@@ -83,7 +83,7 @@
                         </td>
                     {% endfor %}
                     {% if user.is_superuser %}
-                        <td>Ação</td>
+                        <td colspan="2">Ação</td>
                     {% endif %}
                 </tr>
             </thead>
@@ -151,3 +151,7 @@
 </script>
 {% endif %}
 {% endblock content_final %} 
+
+{% block js %}
+    <script src="{% static "js/register_fp_police.js" %}" ></script>
+{% endblock js %}

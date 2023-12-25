@@ -23,20 +23,6 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2);
 int num = 0;
 int parm = -1;
 
-void processCommand(const String& input) {
-  num = 0;
-  parm = -1;
-
-  int spaceIndex = input.indexOf(' ');
-
-  if (spaceIndex != -1) {
-    num = input.substring(0, spaceIndex).toInt();
-    parm = input.substring(spaceIndex + 1).toInt();
-  } else {
-    num = input.toInt();
-  }
-}
-
 void setup()
 {
   Serial.begin(115200);
@@ -72,38 +58,7 @@ void loop()
     processCommand(inputString);
   }
 
-  if (num == 0){
-    handleInput();
-
-    if(hasValidRead) {
-      for(int i = 0; i < 64; i++) {
-        if(lastValidReadData[i + 1] == 0XDD || lastValidReadData[i] == 0XDD) {  // Se os últimos dados lidos forem 0XDD
-          break;  // Interrompe o loop
-        }
-        if(counter % 300 == 0) {
-          Serial.print("TAG_CODE::");
-          for(int i = 0; i < 64; i++) {  // Loop até 64 vezes
-            if(lastValidReadData[i + 1] == 0XDD || lastValidReadData[i] == 0XDD) {  // Se os últimos dados lidos forem 0XDD
-              break;  // Interrompe o loop
-            }
-            if(i >=6 ) {
-              Serial.print(lastValidReadData[i], HEX);
-            }  // Imprime lastValidReadData no monitor serial como hexadecimal
-          }
-          Serial.println();
-          counter++;
-        }
-      }
-
-    }
-
-    if(counter % 3000 == 0) {  // Pausa não bloqueante dos comandos ReadSingle
-      // Serial1.write(ReadSingle, 7);  // Envia o comando ReadSingle para o módulo RFID R200
-      Serial1.write(ReadMulti, 10);  // Envia o comando ReadSingle para o módulo RFID R200
-    }
-    counter++;
-
-  } else if (num == 1) {
+  if (num == 1) {
     int findId = 1;
     Serial.println("FINGERPRINT::USERMESSAGE::Coloque o dedo");
 
@@ -119,55 +74,6 @@ void loop()
       while (!getFingerprintEnroll(parm));
     num = 0;
   }
-}
-
-void handleInput() {  // Inicia o loop de manipulação de entrada
-
-	while(Serial1.available()) {  // Verifica se há entrada serial disponível
-		unsigned char rc = Serial1.read();  // Lê os dados de entrada e os armazena em 'rc'
-
-		if(rc == 0XAA) { // Iniciar leitura // Verifica se os dados de entrada marcam o início de uma leitura pelo cabeçalho (AA)
-			isReading = true;  // Define o estado de leitura como verdadeiro
-			currentReadlength = 0;  // Comprimento atual do sinal RFID de entrada salvo
-
-			for(int i = 0; i < 64; i++) {  // Loop 64 vezes para 'readData'
-				readData[i] = 0X00;  // Preenche 'readData' com 0X00 para limpar todas as posições antes de salvar novos dados (apenas para fins visuais e de inspeção)
-			}
-		}
-
-		if(isReading) {  // Verifica se 'isReading' é verdadeiro
-			readData[currentReadlength] = rc;  // Coloca os dados de entrada de 'readData' na posição correta (determinada por 'currentReadLength') em 'rc'
-			
-			if(currentReadlength == 1 && rc == 0X02) { // Tipo de resposta válido // Verifica se o primeiro caractere após o cabeçalho (AA) é 0X02. Isso garante que os dados de entrada sejam uma resposta
-				validReadLength = 0;  // Altera a posição em que os primeiros dados de entrada devem ser colocados
-				isValidRead = true;  // Os dados de leitura de entrada são válidos
-				for(int i = 0; i < 64; i++) {  // Loop 64 vezes para 'lastValidReadData'
-					lastValidReadData[i] = 0X00;  // Limpa todos os caracteres
-				}
-				lastValidReadData[0] = 0XAA;  // Escreve o cabeçalho em 'lastValidReadData' como 0XAA
-			}
-
-			if(isValidRead) {  // Se os dados de entrada forem válidos
-				lastValidReadData[currentReadlength] = rc;  // Pega os dados de 'lastValidReadData' e os coloca em 'rc' na posição determinada por 'currentReadLength'
-				validReadLength++;  // Salva o comprimento da string salva
-
-				if(currentReadlength > 7 && currentReadlength < 20) {  // Extrair o código EPC da sequência completa de dados de entrada após a leitura
-					readepc[currentReadlength - 8] = rc;  // Remove os primeiros 8 caracteres dos dados de entrada e os salva em 'readepc'
-				}
-			}
-		}
-
-		if(rc == 0XDD) {  // Verifica se o valor de leitura é 0XDD (IMPORTANTE, se o valor de leitura tiver 0XDD em algum lugar antes do esperado como um rodapé, o código ainda acha que é um rodapé)
-			if(isValidRead) {  // Verdadeiro quando os dados de entrada começam com 0XAA, 0X02, indicando que é o cabeçalho e é uma resposta
-				hasValidRead = true;  // Salva o estado de uma leitura válida de entrada
-			}
-
-			isValidRead = false;  // Como os dados de leitura são 0XDD, eles agem como rodapé da string. Portanto, os dados de entrada possíveis não devem ser considerados como dados válidos
-			isReading = false;  // Como os dados de leitura são 0XDD, eles agem como rodapé da string. Portanto, os dados de entrada não devem ser considerados como dados que devem ser lidos
-		}
-
-		currentReadlength++;  // Altera a posição em que os dados de leitura devem ser colocados
-	}
 }
 
 // FUNCAO PARA LER A DIGITAL E RETORNAR O ID COM NIVEL CONFIANCA //
@@ -190,9 +96,7 @@ uint8_t getFingerprintID() {
       Serial.println("FINGERPRINT::ERROR::Erro desconhecido!");
       return p;
   }
-
   // OK success!
-
   p = finger.image2Tz();
   switch (p) {
     case FINGERPRINT_OK:
@@ -217,7 +121,6 @@ uint8_t getFingerprintID() {
       Serial.println("FINGERPRINT::ERROR::Erro desconhecido!");
       return p;
   }
-
   // OK converted!
   p = finger.fingerSearch();
   if (p == FINGERPRINT_OK) {
@@ -240,10 +143,10 @@ uint8_t getFingerprintID() {
   }
 }
 
+
 // FUNCAO PARA CADASTRAR UMA NOVA DIGITAL //
 uint8_t getFingerprintEnroll(int value)
 {
-
   int p = -1;
   Serial.println("FINGERPRINT::USERMESSAGE::Coloque o dedo");
   while (p != FINGERPRINT_OK)
@@ -267,9 +170,7 @@ uint8_t getFingerprintEnroll(int value)
       break;
     }
   }
-
   // OK success!
-
   p = finger.image2Tz(1);
   switch (p)
   {
@@ -292,7 +193,6 @@ uint8_t getFingerprintEnroll(int value)
     Serial.println("Unknown error");
     return p;
   }
-
   Serial.println("FINGERPRINT::USERMESSAGE::Remova o dedo!");
   delay(2000);
   p = 0;
@@ -328,7 +228,6 @@ uint8_t getFingerprintEnroll(int value)
   }
 
   // OK success!
-
   p = finger.image2Tz(2);
   switch (p)
   {
@@ -351,11 +250,9 @@ uint8_t getFingerprintEnroll(int value)
     Serial.println("Unknown error");
     return p;
   }
-
   // OK converted!
   // Serial.print("Creating model for #");
   // Serial.println(value);
-
   p = finger.createModel();
   if (p == FINGERPRINT_OK)
   {
@@ -406,6 +303,18 @@ uint8_t getFingerprintEnroll(int value)
     Serial.println("FINGERPRINT::ERROR::Erro desconhecido!");
     return p;
   }
-
   return true;
+}
+void processCommand(const String& input) {
+  num = 0;
+  parm = -1;
+
+  int spaceIndex = input.indexOf(' ');
+
+  if (spaceIndex != -1) {
+    num = input.substring(0, spaceIndex).toInt();
+    parm = input.substring(spaceIndex + 1).toInt();
+  } else {
+    num = input.toInt();
+  }
 }

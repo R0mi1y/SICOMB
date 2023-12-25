@@ -49,7 +49,8 @@ function register_bullet() {
             popUp("", { closeBtn: true, adicional: bullet_html });
         },
         error: function (error) {
-            console.error('Erro ao buscar dados da munição:', error);
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
         }
     });
 }
@@ -82,7 +83,8 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-                console.error('Erro ao buscar dados do equipamento:', error);
+                console.log("Erro de requisição: " + error);
+                popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
             }
         });
     }
@@ -130,7 +132,8 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-                console.error('Erro ao buscar dados do equipamento:', error);
+                console.log("Erro de requisição: " + error);
+                popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
             }
         });
 

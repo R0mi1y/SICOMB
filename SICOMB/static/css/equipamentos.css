@@ -35,6 +35,12 @@ select.input-data {
     box-shadow: -2px 4px 2px rgb(65, 35, 6);
 }
 
+.button.disabled {
+    border: 1px solid #beb7ae;
+    background-color: rgba(178, 169, 160, 0.9);
+    box-shadow: -2px 4px 2px rgba(190, 184, 179, 0.401);
+}
+
 .checkboxes div {
     text-align: left;
     height: 25px;

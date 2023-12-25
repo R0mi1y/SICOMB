@@ -18,6 +18,10 @@ function fetchList() {
             $.each(data, function (key, line) {
                 insertLine(line);
             });
+        },
+        error: function (error) {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
         }
     });
 }
@@ -55,7 +59,11 @@ function confirmCargo(self) {
         data: {
             user: user,
             pass: pass
+        },
+        error: function (error) {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
         }
     });
-    location.reload();
+    // location.reload();
 }

@@ -41,6 +41,7 @@
                         {{ field }}
                     </div>
                 </div>
+            {% elif field.name == "fingerprint" %}
             {% else %}
                 <div class="input-box">
                     <h4 for="{{ field.id_for_label }}" class="input-title {% if field.errors %}input-error{% endif %}">{{ field.label }}</h4>
@@ -48,8 +49,25 @@
                 </div>
             {% endif %}
         {% endfor %}
+
+        {% if edit|default:False %}
+            <div class="input-box">
+                <h4 class="input-title">&nbsp;</h4>
+                <input type="hidden" name="police_id" value="{{police.id}}">
+                <input type="hidden" name="police_name" value="{{police.name}}">
+                {% if police.fingerprint is not None %}
+                    <div class="file-div">
+                        <input type="button" id="delete-digital" class="button" value="Deletar digital">
+                    </div>
+                {% else %}
+                    <div class="file-div">
+                        <input type="button" id="register-fingerprint" class="button" value="Registrar impressão digital">
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
         <div class="finalize-registration">
-          <label><input type="submit" class="box-shadow-registration" value="Enviar"></label>
+            <label><input type="submit" class="box-shadow-registration" value="Enviar"></label>
         </div>
       </div> 
     </form>
@@ -57,17 +75,6 @@
 </section>
 
 <script>
-    function search() {
-        var matriculaInput = document.querySelector('#matricula-input');
-        var matricula = matriculaInput.value;
-        if (matricula != '') {
-            window.location.href = '/police/search/' + matricula + '/';
-        } else {
-            var messageText = "Insira uma matrícula";
-            // Crie um elemento de alerta para cada mensagem
-            popUp(messageText, {timer: 2000, overlay: false});
-        }
-    }
     $(document).ready(function () {
         let timer = 2000;
         {% for field in form %}
@@ -82,9 +89,6 @@
 </script>
 {% endblock content_final %}
 
-
-
-
-
-
-
+{% block js %}
+<script src="{% static "js/register_police.js" %}"></script>
+{% endblock js %}

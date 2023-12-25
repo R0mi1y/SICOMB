@@ -33,6 +33,10 @@ fetch("/carga/lista_equipamentos/get", {
             console.log(list_equipment[key]);
             insertLine(list_equipment[key]); // insere cada objeto novamente na tabela
         }
+    })
+    .catch(error => {
+        console.log("Erro de requisição: " + error);
+        popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
     });
 
     
@@ -87,7 +91,8 @@ function fetchEquipmentData(serial_number, type='none') {
             }
         })
         .catch(error => {
-            console.error('Erro ao buscar dados do equipamento:', error);
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
         });
 }
 
@@ -133,8 +138,8 @@ function check_cargo_square() {
             // popUp(data["message"]);
             })
             .catch(error => {
-            // Lidar com erros de solicitação, se houver
-            console.error(error);
+                console.log("Erro de requisição: " + error);
+                popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
             });
         // => }
 
@@ -221,7 +226,8 @@ function checkRemoveRow(rowNumber) {
                     }
                 })
                 .catch(error => {
-                    console.error('Erro ao buscar dados do equipamento:', error);
+                    console.log("Erro de requisição: " + error);
+                    popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
                 });
         }, 1000);
     } else {
@@ -238,6 +244,10 @@ function checkRemoveRow(rowNumber) {
                 'serial_number': caliber,
                 'obs': obs
             })
+        })
+        .catch(error => {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
         });
     }
 
@@ -303,6 +313,10 @@ function searchWatingList() {
                 wating_list += "<tr>" + data[i] + "</tr>";
             }
             document.getElementById("wating_list").innerHTML = wating_list;
+        })
+        .catch(error => {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
         });
 }
 searchWatingList();

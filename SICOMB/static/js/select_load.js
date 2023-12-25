@@ -104,13 +104,21 @@ function changeTemplate(template) {
 
                 // Adicione o elemento cargo_div onde desejar
                 document.getElementById("means_room_content").appendChild(unload_div);
+            })
+            .catch(error => {
+                console.log("Erro de requisição: " + error);
+                popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
             });
     } else {
         fetch("/static/html/" + template + ".html")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("means_room_content").innerHTML = data;
-        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("means_room_content").innerHTML = data;
+            })
+            .catch(error => {
+                console.log("Erro de requisição: " + error);
+                popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+            });
         if (template == "load") {
             setTimeout(() => {
                 var script = document.createElement('script');
@@ -144,6 +152,10 @@ function selectCargo(id) {
                 set_carga_id(id);
             }, 500);
         })
+        .catch(error => {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+        });
 }
 
 
@@ -219,8 +231,8 @@ function setObservation(serial_number, row, observation) {
             popUp("Observação adicionada com sucesso!", {timer: 2000, overlay: false});
         },
         error: function (error) {
-            popUp(error);
-            console.error(error);
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
         }
     });
 }
@@ -312,6 +324,10 @@ function fetch_police(){
 
                 changeTemplate("select_load");
             }
+        })
+        .catch(error => {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
         });
 }
 

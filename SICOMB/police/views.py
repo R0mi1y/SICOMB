@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib import messages
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from equipment.models import Equipment
 from equipment.templatetags.custom_filters import has_group
@@ -11,9 +11,7 @@ from load.models import Load, Equipment_load
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
-from load.apis import require_user_pass
-from django.views.decorators.csrf import csrf_exempt
-
+from cryptography.fernet import Fernet
 
 @login_required
 def login(request):
@@ -21,19 +19,19 @@ def login(request):
     data = {}
     if request.method == "POST":
         if not request.POST.get("cancelar"):
-            try:
-                police = Police.objects.get(
-                    matricula=request.POST.get("matricula")
-                )
-                
-            except Police.DoesNotExist:
-                messages.error(request, "Matrícula incorreta!")
-                
-                return render(
-                    request, "police/request_cargo.html"
-                )
-            
             if request.POST.get("type_login") == "password":
+                try:
+                    police = Police.objects.get(
+                        matricula=request.POST.get("matricula")
+                    )
+                    
+                except Police.DoesNotExist:
+                    messages.error(request, "Matrícula incorreta!")
+                    
+                    return render(
+                        request, "police/request_cargo.html"
+                    )
+            
                 if check_password(request.POST.get("senha"), police.password):
                     if not police.activated:
                         messages.error(request, "Policial aguardando aprovação de um administrador!")
@@ -53,30 +51,42 @@ def login(request):
                 else:
                     messages.error(request, "Senha incorreta!")
                     
-            if request.POST.get("type_login") == "fingerprint":
-                if request.POST.get("token") != settings.AUX["token_login_police"]:
-                    print(request.POST.get("token")) 
-                    print(settings.AUX["token_login_police"])
-                    messages.error(request, "Token de acesso incoerente!")
-                else:
-                    if not police.activated:
-                        messages.error(request, "Policial aguardando aprovação de um administrador!")
+            if request.POST.get("type_login") == "fingerprint": # Login via impressão digital
+                
+                if request.POST.get("token"):
+                    police = None
+                    
+                    try:
+                        fernet = Fernet(settings.AUX["key_token_login_police"])
+                        info = fernet.decrypt(request.POST.get("token").encode()).decode('utf-8').split("::")
+                        print(info)
+                        police = Police.objects.filter(matricula=info[1]).first()
+                    except:
+                        pass
+                    
+                    if police is not None:
+                        settings.AUX["key_token_login_police"] = None
                         
-                        return render(request, "police/request_cargo.html", data)
-                    
-                    settings.AUX["confirmCargo"] = False
-                    
-                    settings.AUX["matricula"] = request.POST.get("matricula")
+                        if not police.activated:
+                            messages.error(request, "Policial aguardando aprovação de um administrador!")
+                            
+                            return render(request, "police/request_cargo.html", data)
+                        
+                        settings.AUX["confirmCargo"] = False
+                        
+                        settings.AUX["matricula"] = police.matricula
 
-                    data["police"] = police
-                    loads = Load.objects.filter(police=police).order_by('-date_load')[:15]
-                    data["loads"] = []
-                    
-                    for i in loads:
-                        ec = Equipment_load.objects.filter(load=i)
-                        data["loads"].append([i, len(ec)])
-            settings.AUX["token_login_police"] = None
-
+                        data["police"] = police
+                        loads = Load.objects.filter(police=police).order_by('-date_load')[:15]
+                        data["loads"] = []
+                        
+                        for i in loads:
+                            ec = Equipment_load.objects.filter(load=i)
+                            data["loads"].append([i, len(ec)])
+                    # else:
+                    #     messages.error(request, "Token de acesso incoerente!")
+                else:
+                    messages.error(request, "Token de acesso inexistente!")
 
     return render(request, "police/request_cargo.html", data)
 
@@ -110,28 +120,30 @@ def register_police(request):
 @has_group('adjunct')
 def search_police(request, id):
     try:
-        policial = Police.objects.only("id").get(id=id)
+        police = Police.objects.only("id").get(id=id)
     except Police.DoesNotExist:
-        policial = None
+        police = None
         messages.error(request, "Policial não encontrado!")
         return HttpResponseRedirect("/police/register/")
 
     if request.method == "POST":
-        form = PoliceForm(request.POST, request.FILES, instance=policial)
+        form = PoliceForm(request.POST, request.FILES, instance=police)
         
         if form.is_valid():
             
             form.save()
             messages.success(request, "Atulização realizada com sucesso!")
-            return HttpResponseRedirect("/police/register/")
+            return HttpResponseRedirect("/police/filter/")
     else:
-        form = PoliceForm(instance=policial)
+        form = PoliceForm(instance=police)
 
     return render(
         request,
         "police/forms.html",
         context={
+            "police": police,
             "form": form,
+            "edit": True
         },
     )
 
@@ -273,14 +285,6 @@ def filter_police(request):
 
     return render(request, 'police/manage_police.html', context)
 
-# def filter_police(request):
-    # context = {
-        
-    #     "polices": Police.objects.filter(activated=True)
-    # }
-    
-
-
 
 def dashboard(request):
     data = {
@@ -299,6 +303,7 @@ def dashboard(request):
         "police": {
             "total": Police.objects.all().count(),
             "inactive": Police.objects.filter(activated=False).count(),
+            "fingerprints": Police.objects.all().exclude(fingerprint=None).count(),
         },
     }
     

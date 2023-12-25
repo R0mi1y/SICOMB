@@ -78,7 +78,7 @@ table img{
     background-color: #fff;
     border-radius: 10px;
     width: 60%;
-    height: 90%;
+    height: auto;
 }
 
 .shadow{

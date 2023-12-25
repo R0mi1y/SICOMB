@@ -120,9 +120,17 @@ function set_carga_id(id) {
                             });
                         });
                     },
+                    error: function (error) {
+                        console.log("Erro de requisição: " + error);
+                        popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+                    }
                 });
             });
         },
+        error: function (error) {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+        }
     });
 }
 
@@ -210,8 +218,9 @@ function fetchUnvalibleEquipmentData(serial_number, type = "none") {
             }
         },
         error: function (error) {
-            console.error("Erro ao buscar dados do equipamento:", error);
-        },
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+        }
     });
 }
 
@@ -260,8 +269,9 @@ function fetchEquipmentData(serial_number, type = "none") {
             }
         },
         error: function (error) {
-            console.error("Erro ao buscar dados do equipamento:", error);
-        },
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+        }
     });
 }
 
@@ -348,8 +358,9 @@ function check_cargo_square() {
                     square_equipment = null;
                 },
                 error: function (error) {
-                    console.error(error);
-                },
+                    console.log("Erro de requisição: " + error);
+                    popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+                }
             });
             return false;
         }

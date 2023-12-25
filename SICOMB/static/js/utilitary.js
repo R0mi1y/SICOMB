@@ -155,7 +155,7 @@ var popUp = function (message, options = {}) {
     return {"overlay": overlay, "close_function": () => {
         if (settings.overlay) overlay.remove();
         else $("#messages").find(popUpElement).remove();
-    }};
+    }, "message": message};
 }
 
 // Função para alternar a visibilidade do menu
