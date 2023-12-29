@@ -54,7 +54,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for field in report.getReportFields %}
+                {% for field in report.get_report_fields %}
                     <tr class="row-tbody">
                         <td>{{field.field}}</td>
                         <td>{{field.content}}</td>

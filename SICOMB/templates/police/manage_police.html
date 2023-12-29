@@ -92,7 +92,7 @@
                     {% csrf_token %}
                     {% for i in police_list %}
                         <tr>
-                            <td style="align-itens:center;"><img src="{% if i.image_path %}{{ i.image_path.url }}{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do policial" style="max-height:80px; width: auto; border-radius:500px; margin-top: 10px;"></td>
+                            <td style="align-itens:center;"><img src="{% if i.image_path %}{{ i.image_path.url }}{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do policial" style="max-height:80px; width: auto; border-radius:500px; border: 2px solid #6a5a4a; margin-top: 10px;"></td>
                             <td>{{ i.name }}</td>
                             <td>{{ i.email }}</td>
                             <td>{{ i.matricula }}</td>

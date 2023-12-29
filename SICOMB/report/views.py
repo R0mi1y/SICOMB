@@ -1,14 +1,16 @@
 from django.shortcuts import render
 from .models import *
+import pdfkit
 
-def filterReport(request):
+
+def filter_report(request):
     data = {
         'reports': Report.objects.all(),
     }
     
     return render(request, 'report/filter-report.html', data)
 
-def getReportPage(request, id):
+def get_report_page(request, id):
     data = {
         'report': Report.objects.filter(id=id).first(),
     }
@@ -16,6 +18,7 @@ def getReportPage(request, id):
     return render(request, 'report/report.html', data)
 
 
-def getPdfFile(request, id):
+def get_pdf_file(request, id):
     
-    return Report.objects.filter(id=id).first().generatePDF()
+    return Report.objects.generate_pdf(Report.objects.filter(id=id).first())
+

@@ -223,8 +223,8 @@ AUX = {
     "serial_port_fingerprint": None,
     "common_serial": None,
     "message_fingerprint_sensor": None,
-    "SENSOR_FINGERPRINT": True,
-    "SENSOR_RFID": True,
+    "SENSOR_FINGERPRINT": False,
+    "SENSOR_RFID": False,
     "PORT_FINGERPRINT": "COM5",
     "PORT_RFID": "COM13",
     

@@ -80,7 +80,7 @@
         {% for field in form %}
             {% if field.errors %}
                 {% for error in field.errors %}
-                    popUp("{{ error }}", {timer: timer, overlay: false});
+                    popUp("{{ field.label }}: {{ error }}", {timer: timer, overlay: false});
                     timer += 1000;
                 {% endfor %}
             {% endif %}

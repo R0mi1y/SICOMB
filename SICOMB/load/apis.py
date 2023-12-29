@@ -1,5 +1,7 @@
+import mimetypes
+import os
 from django.forms import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -61,7 +63,7 @@ def get_loads_police(request, plate):
 
 
 @csrf_exempt
-# @require_user_pass
+@require_user_pass
 def get_load(
     request, id
 ):  # Retorna uma resposta JSON com todas as cargas (caso necessário)
@@ -238,3 +240,29 @@ def add_obs(request):
                     return JsonResponse({"sucesso": "sucesso"})
     else:
         return JsonResponse({"message": "Método HTTP não suportado"}, json_dumps_params={'ensure_ascii': False})
+    
+
+@csrf_exempt
+@require_user_pass
+def send_load_relatory(request, id):
+    load = Load.objects.filter(id=id).first()
+    
+    if not load:
+        return JsonResponse({"status": False, "message": "Carga não encontrada!"})
+    
+    Load.objects.send_relatory(load)
+    
+    return JsonResponse({"status": True, "message": "Carga enviada com sucesso!"})
+
+
+@csrf_exempt
+@require_user_pass
+def get_relatory(request, id):
+    load = Load.objects.filter(id=id).first()
+    
+    if not load:
+        return JsonResponse({"status": False, "message": "Carga não encontrada!"})
+    
+    Load.objects.send_relatory(load, to=request.user.email)
+    
+    return JsonResponse({"status": True, "message": "Carga enviada com sucesso!"})

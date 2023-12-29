@@ -27,6 +27,30 @@
     justify-content: space-around;
 }
 
+
+.button {
+    margin: 10px 20px;
+    padding: 6% 5%;
+    font-family: interBold;
+    font-size: 14px;
+    padding: 20px 5%;
+    border-radius: 10px;
+    width: auto;
+    cursor: pointer;
+    transition: .3s;
+    box-shadow: 0px 5px 10px rgb(0,0,0,0.50);
+
+    color: #fff;
+    background-color: rgb(91,73,57, 0.8);
+    border: 1px solid rgb(91,73,57, 0.6);
+}
+.button:hover {
+    transition: .3s;
+
+    color: #fff;
+    background-color: rgba(117, 94, 74, 0.8);
+}
+
 .cargo .cargo_title{
     font-family: interBold;
     color: #fff;
@@ -293,6 +317,8 @@ table img{
     background-color: rgb(235, 235, 235);
  }
 .cargo_itens .cargo_title{
+    display: table-cell;
+    justify-content: space-between;
     font-family: interBold;
     color: #5B4939;
     height: 50px;
@@ -304,6 +330,8 @@ table img{
     padding: 0px;
     font-size: 16px;
     line-height: 60px;
+    flex-direction: row;
+    align-content: space-around;
 }
 .table_itens .col-itens{
     background-color: #5B4939;

@@ -4,40 +4,31 @@ from equipment.models import Equipment, Bullet
 from police.models import Police
 from django.utils import timezone
 from django.db.models import Q
-# Create your models here.
+from django.core.mail import EmailMessage
+import pdfkit
+from django.template.loader import render_to_string
+
+from report.models import *
+from django.db import transaction
 
 
-class Load(models.Model):
-    load_unload = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, default=None)
-    date_load = models.DateTimeField(default=timezone.now)
-    expected_load_return_date = models.DateTimeField(
-        "Data Prevista de Devolução", null=True
-    )
-    returned_load_date = models.DateTimeField("Data de Descarregamento", null=True)
-    turn_type = models.CharField(max_length=20)
-    status = models.CharField(
-        "horário_carga",
-        max_length=50,
-        default="DENTRO DO PRAZO",
-        choices=(
-            ("Devolvido", "Devolvido"), 
-            ("Pendente", "Pendente"), 
-            ("Parcialmente devolvido", "Parcialmente devolvido"),
-            ("Justificado", "Justificado"),
-        ),
-    )
-    police = models.ForeignKey(
-        Police, on_delete=models.DO_NOTHING, related_name="policial"
-    )
-    adjunct = models.ForeignKey(
-        Police, on_delete=models.DO_NOTHING, related_name="adjunto"
-    )
-
-    def __str__(self):
-        return str(self.pk)
+class LoadManager(models.Manager):
+    def get_load_pdf(self, load, pdf_path=False):
+        context = {
+            "load": load,
+            "equipment_loads": self.get_equipment_loads(load)
+        }
+        
+        options = {
+            'page-size': 'A4',
+            'encoding': 'UTF-8'
+        }
+        
+        html = render_to_string('load/pdf_template.html', context)
+        return pdfkit.from_string(html, pdf_path, options=options)
     
-    def check_load(self):
-        load = self
+    
+    def check_load(self, load):
         data_hora_atual = timezone.now()
         expected_return_date = load.expected_load_return_date
         
@@ -82,6 +73,101 @@ class Load(models.Model):
                     
         load.save()
         return True
+    
+    
+    def generate_load_report(self, load, subject):
+        with transaction.atomic():
+            report = Report.objects.create(title=subject)
+
+            load_info = [
+                ["Data de Carga:", load.date_load.strftime('%d/%m/%Y %H:%M')],
+                ["Data Prevista de Devolução:", load.expected_load_return_date.strftime('%d/%m/%Y %H:%M') if load.expected_load_return_date else 'N/A'],
+                ["Data de Descarregamento:", load.returned_load_date.strftime('%d/%m/%Y %H:%M') if load.returned_load_date else 'N/A'],
+                ["Tipo de Turno:", load.turn_type],
+                ["Status:", load.status],
+                ["Policial:", load.police.name],
+                ["Adjunto:", load.adjunct.name],
+            ]
+
+            for field, content in load_info:
+                Report_field.objects.create(report=report, field=field, content=content)
+
+            Report_field.objects.create(report=report, field="Informações dos equipamentos", content=None)
+
+            for equipment_load in load.equipment_loads.all():
+                Report_field.objects.create(
+                    report=report,
+                    field="Equipamento",
+                    content=equipment_load.equipment.model.model if equipment_load.equipment else equipment_load.bullet,
+                )
+                Report_field.objects.create(report=report, field="Quantidade", content=str(equipment_load.amount))
+                Report_field.objects.create(report=report, field="Observação", content=equipment_load.observation if equipment_load.observation else 'N/A')
+                Report_field.objects.create(report=report, field="Status", content=equipment_load.status)
+
+        return report
+
+    
+    def send_relatory(self, load, to=False):
+        pdf = self.get_load_pdf(load)
+        
+        subject = 'Relatório de carga'
+        message = f'Relatório da carga feita no dia {load.date_load}' if load.turn_type != "descarga" else f'Relatório da descarga feita no dia {load.date_load}'
+        from_email = load.adjunct.email
+        
+        self.generate_load_report(load, subject)
+        
+        if not to:
+            recipient_list = [load.police.email]
+        else:
+            recipient_list = [to]
+        
+        email = EmailMessage(
+            subject=subject,
+            body=message,
+            bcc=recipient_list,
+        )
+        
+        email.attach(f'Relatório da carga {load.id}.pdf', pdf, 'application/pdf')
+        
+        email.send()
+    
+    def get_equipment_loads(self, load):
+        return Equipment_load.objects.filter(load=load)
+    
+
+
+class Load(models.Model):
+    load_unload = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, default=None)
+    date_load = models.DateTimeField(default=timezone.now)
+    expected_load_return_date = models.DateTimeField(
+        "Data Prevista de Devolução", null=True
+    )
+    returned_load_date = models.DateTimeField("Data de Descarregamento", null=True)
+    turn_type = models.CharField(max_length=20)
+    status = models.CharField(
+        "horário_carga",
+        max_length=50,
+        default="DENTRO DO PRAZO",
+        choices=(
+            ("Devolvido", "Devolvido"), 
+            ("Pendente", "Pendente"), 
+            ("Parcialmente devolvido", "Parcialmente devolvido"),
+            ("Justificado", "Justificado"),
+        ),
+    )
+    police = models.ForeignKey(
+        Police, on_delete=models.DO_NOTHING, related_name="policial"
+    )
+    adjunct = models.ForeignKey(
+        Police, on_delete=models.DO_NOTHING, related_name="adjunto"
+    )
+    
+    objects = LoadManager()
+
+    def __str__(self):
+        return str(self.pk)
+
+
 
 
 # Tabela que faz o relacionamento entre a carga e os equipamentos
@@ -93,6 +179,7 @@ class Equipment_load(models.Model):
     bullet = models.ForeignKey(
         Bullet, on_delete=models.CASCADE, null=True, default=None
     )
+    # o amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
     amount = models.IntegerField("Quantidade", null=True, default="1")
     observation = models.TextField("Observação", default=None, null=True)
     status = models.CharField(
@@ -106,6 +193,5 @@ class Equipment_load(models.Model):
         ),
     )
 
-    # o amount diz, caso seja uma munição, a quantidade selecionada nessa carga em específico e dessa munição em específico
 
 

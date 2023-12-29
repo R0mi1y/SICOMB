@@ -9,7 +9,7 @@ from django.contrib.auth.hashers import make_password
 
 class PoliceForm(forms.ModelForm):
     image_path = forms.ImageField(widget=ClearableFileInput(attrs={'class':'file-input', 'accept':'image/*', 'onchange':'handleFileSelection(event)'}), label='Foto')
-    fingerprint = forms.CharField(widget=forms.HiddenInput(), label='Impressão Digital')
+    fingerprint = forms.CharField(widget=forms.HiddenInput(), label='Impressão Digital', required=False)
     class Meta:
         model = Police
         fields = [

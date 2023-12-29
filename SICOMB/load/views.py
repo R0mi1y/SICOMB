@@ -7,7 +7,6 @@ from police.models import *
 from datetime import datetime, timedelta
 from django.conf import settings
 from django.utils import timezone
-from police.pdf_emails_views import generate_pdf, send_relatory
 from .forms import *
 from django.contrib import messages
 
@@ -115,7 +114,7 @@ def confirm_load(request):
                             status="Pendente",
                         ).save()
                 
-                send_relatory(load)
+                Load.objects.send_relatory(load)
 
                 settings.AUX["matricula"] = ""
                 settings.AUX["list_equipment"].clear()
@@ -203,12 +202,12 @@ def confirm_load(request):
                         else:
                             messages.error(request, "Erro!")
                 
-                send_relatory(load)
+                Load.objects.send_relatory(load)
                 
                 settings.AUX["matricula"] = ""
                 
-                if load_unload: load_unload.check_load() 
-                load.check_load()
+                if load_unload: Load.objects.check_load(load_unload) 
+                Load.objects.check_load(load)
 
                 settings.AUX["list_equipment"].clear()
                 settings.AUX["list_equipment_removed"].clear()
@@ -226,7 +225,7 @@ def confirm_load(request):
         data["policial"] = police
     
     for i in Load.objects.all():
-        i.check_load()
+        Load.objects.check_load(i)
     
     return render(request, "load/load.html", data)
 
@@ -253,7 +252,7 @@ def filter_loads(request):
         ec = Equipment_load.objects.filter(load=i)
         loads.append([i, len(ec)])
         
-        i.check_load()
+        Load.objects.check_load(i)
     
     context = {
         "loads": loads,

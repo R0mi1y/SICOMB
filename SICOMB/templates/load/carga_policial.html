@@ -104,6 +104,7 @@
                     <tr>
                         <th colspan="100%" class="cargo_title">
                             <h3>ITENS</h3>
+                            <h3><input class="button" id="send_relatory" type="button" value="Enviar relatório"><input class="button" id="get_relatory" type="button" value="Receber relatório"></h3>
                         </th>
                     </tr>
                     <tr class="col-itens">
@@ -123,7 +124,7 @@
                     {% for equipment_load in equipment_loads %}
                     <tr>
                         <td>
-                            {{ forloop.counter}}
+                            {{ forloop.counter }}
                         </td>
                         <td>
                             {{equipment_load.equipment.serial_number}}
@@ -174,6 +175,55 @@
       // Exibe o texto completo em um alerta (você pode personalizar essa parte)
       alert(completeText);
     }
+
+    $(document).ready(function () {
+        $("#send_relatory").on("click", function () {
+            popUp("Enviando relatório...", {timer: 2000, overlay: false});
+            $.ajax({
+                url: "/carga/relatorio/enviar/{{load.id}}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    user: user,
+                    pass: pass,
+                },
+                success: function (data) {
+                    if (data.status) {
+                        popUp("Relatório enviado com sucesso!", {timer: 2000, overlay: false});
+                    } else {
+                        popUp(data.message, {timer: 2000, overlay: false});
+                    }
+                },
+                error: function (error) {
+                    console.log("Erro de requisição: " + error);
+                    popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+                }
+            });
+        });
+        $("#get_relatory").on("click", function () {
+            popUp("Enviando relatório...", {timer: 2000, overlay: false});
+            $.ajax({
+                url: "/carga/relatorio/receber/{{load.id}}",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    user: user,
+                    pass: pass,
+                },
+                success: function (data) {
+                    if (data.status) {
+                        popUp("O relatório foi enviado para seu email!", {timer: 2000, overlay: false});
+                    } else {
+                        popUp(data.message, {timer: 2000, overlay: false});
+                    }
+                },
+                error: function (error) {
+                    console.log("Erro de requisição: " + error);
+                    popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+                }
+            });
+        });
+    });
 
   </script>
 {% endblock content_final %} 
