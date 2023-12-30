@@ -17,7 +17,6 @@ def minha_view(request):
 
 
 urlpatterns = [
-    # path('', minha_view),
     path('', main_view),
     path('admin/', admin.site.urls),
     path('equipamento/', include('equipment.urls')),

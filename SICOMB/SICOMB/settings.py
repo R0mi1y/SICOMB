@@ -225,7 +225,7 @@ AUX = {
     "message_fingerprint_sensor": None,
     "SENSOR_FINGERPRINT": False,
     "SENSOR_RFID": False,
-    "PORT_FINGERPRINT": "COM5",
+    "PORT_FINGERPRINT": "COM13",
     "PORT_RFID": "COM13",
     
 }

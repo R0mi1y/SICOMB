@@ -100,7 +100,7 @@ def get_fingerprint(request):
 @require_user_pass
 def request_fingerprint(request):
     ser = settings.AUX["serial_port_fingerprint"]
-    
+    print(ser)
     ser.write("1".encode())
     return JsonResponse({"status": True})
 

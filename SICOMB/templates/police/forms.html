@@ -3,7 +3,7 @@
 
 {% block css %}{% static 'css/register_police_form.css' %}{% endblock %}
 {% block title %}SICOMB - Registro de Equipamento{% endblock title %}
-{% block title_top %}REGISTRO DE EQUIPAMENTO{% endblock title_top %}
+{% block title_top %}{% if edit|default:False %}EDIÇÃO DE POLICIAL{% else %}REGISTRO DE POLICIAL{% endif %}{% endblock title_top %}
 
 {% block content_final %}
 <section class="section_register shadow">
@@ -11,7 +11,7 @@
     <table>
         <thead>
             <tr>
-                <th colspan="100%" class="title"><h3>FORMULÁRIO DE CADASTRO</h3></th>
+                <th colspan="100%" class="title"><h3>{% if edit|default:False %}EDIÇÃO DE POLICIAL{% else %}FORMULÁRIO DE CADASTRO{% endif %}</h3></th>
             </tr>
         </thead>
         <tbody>

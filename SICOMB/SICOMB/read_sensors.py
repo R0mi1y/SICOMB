@@ -75,13 +75,13 @@ def get_fingerprint():
     while True:
         try:
             line = ser.readline().decode('utf-8')
+            print(line)
             if not line:
                 continue
             line = line.split("::")
         
             if len(line) > 1:
                 AUX["message_fingerprint_sensor"] = line
-                print(line)
         except Exception as e:
             print("\nConexão com sensor leitor de impressão digital perdida!\n")
             print(e)

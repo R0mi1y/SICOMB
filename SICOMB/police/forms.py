@@ -27,7 +27,7 @@ class PoliceForm(forms.ModelForm):
         widgets = {
             'username': forms.TextInput(attrs={'class':'input-data', "required": True}),
             'name': forms.TextInput(attrs={'class':'input-data', "required": True}),
-            'matricula': forms.TextInput(attrs={'id':'matricula-input'}),
+            'matricula': forms.NumberInput(attrs={'id':'matricula-input'}),
             'posto': forms.Select(attrs={'class':'input-data select'}),
             'email': forms.EmailInput(attrs={'class':'input-data'}),
             'telefone': forms.TextInput(attrs={'class':'input-data'}),
@@ -54,11 +54,10 @@ class PoliceFilterForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
     )
-    matricula = forms.CharField(
+    matricula = forms.DecimalField(
         label="Matrícula",
-        max_length=20,
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
+        widget=forms.NumberInput(attrs={'class': 'form-control input-data'}),
     )
     telefone = forms.CharField(
         label="Telefone",

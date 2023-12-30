@@ -5,13 +5,18 @@
     SICOMB - 
     {% if btn_promote == "EDITAR" %}
         Policiais
+    {% elif btn_promote == "APROVAR" %}
+        Policiais
     {% elif btn_promote == "PROMOVER" %}
         Promover a adjunto
     {% elif btn_promote == "REBAIXAR" %}
         Rebaixar a policial
-    {% endif %}{% endblock title %}
+    {% endif %}
+{% endblock title %}
 {% block title_top %}
     {% if btn_promote == "EDITAR" %}
+        POLICIAIS
+    {% elif btn_promote == "APROVAR" %}
         POLICIAIS
     {% elif btn_promote == "PROMOVER" %}
         PROMOVER A ADJUNTO
