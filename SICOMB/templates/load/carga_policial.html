@@ -73,7 +73,7 @@
                     <tr>
                         {% comment %} <td rowspan="100%"> {% endcomment %}
                         <td>
-                            <a><img class="shadow" src="{{load.adjunct.image_path.url}}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do adjunto" alt=""></a>
+                            <a><img class="shadow" src="{{load.adjunct.image_path.url|default:"static/img/user.png"}}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do adjunto" alt=""></a>
                         </td>
                     </tr>
                     <tr>

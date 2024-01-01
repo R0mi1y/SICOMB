@@ -17,7 +17,7 @@ class Model_armament(models.Model):
 
     def __str__(self):
         # na hora dos campos do select ele retorna isso
-        return f"Armamento {self.model}"
+        return f"{self.model}"
     
     def get_equipment_amount(self):
         return [i for i in Equipment.objects.all() if self.model == i.model.model].__len__()
@@ -33,7 +33,7 @@ class Model_wearable(models.Model):
 
     def __str__(self):
         # na hora dos campos do select ele retorna isso
-        return f"Vestível {self.model}"
+        return f"{self.model}"
     
     def get_equipment_amount(self):
         return [i for i in Equipment.objects.all() if self.model == i.model.model].__len__()
@@ -48,7 +48,7 @@ class Model_accessory(models.Model):  # bastão, escudo
 
     def __str__(self):
         # na hora dos campos do select ele retorna isso
-        return f"Acessório {self.model}"
+        return f"{self.model}"
     
     def get_equipment_amount(self):
         return [i for i in Equipment.objects.all() if self.model == i.model.model].__len__()
@@ -63,7 +63,7 @@ class Model_grenada(models.Model):
     
     def __str__(self):
         # na hora dos campos do select ele retorna isso
-        return f"Granada {self.model}"
+        return f"{self.model}"
 
     def get_equipment_amount(self):
         return [i for i in Equipment.objects.all() if self.model == i.model.model].__len__()
@@ -108,4 +108,4 @@ class Bullet(models.Model):
 
     def __str__(self):
         # na hora dos campos do select ele retorna isso
-        return f"Munição {self.caliber}"
+        return f"{self.caliber}"

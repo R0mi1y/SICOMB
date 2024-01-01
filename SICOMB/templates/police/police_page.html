@@ -3,7 +3,7 @@
 
 {% block css %}{% static 'css/police_page.css' %}{% endblock %}
 {% block title %}SICOMB - Login Policial{% endblock title %}
-{% block title_top %}REQUISITAR CARGA{% endblock title_top %}
+{% block title_top %}PERFIL DO POLICIAL{% endblock title_top %}
 {% block nav %}{% endblock nav %}
 {% block perfil %}{% endblock perfil %}
 
@@ -19,7 +19,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="#"><img class="shadow perfil" src="/media/{{user.image_path}}" alt=""></a>
+                            <a href="#"><img class="shadow perfil" src="/media/{{user.image_path}}" onerror="this.src='{% static "img/user.png"%}'" alt=""></a>
                         </td>
                     </tr>
                     <tr>
@@ -81,7 +81,7 @@
                             <td>{{ i.0.police.posto |default:'Tenente'}}</td>
                             <td>{{ i.1 }}</td>
                             <td>{{ i.0.date_cargo }}</td>
-                            <td>{{ i.0.expected_cargo_return_date |default:'-' }}</td>
+                            <td>{{ i.0.expected_load_return_date |default:'-' }}</td>
                         </tr>
                     </tr>
                     {% endfor %}

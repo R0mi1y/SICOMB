@@ -42,6 +42,11 @@ class PoliceForm(forms.ModelForm):
     
 
 class PoliceFilterForm(forms.Form):
+    foto = forms.CharField(
+        label="Foto",
+        required=False,
+        widget=forms.HiddenInput(),
+    )
     name = forms.CharField(
         label="Nome",
         max_length=200,
@@ -78,15 +83,14 @@ class PoliceFilterForm(forms.Form):
     )
     tipo = forms.ChoiceField(
         label="Tipo",
-        choices=[(None, "-------------"), ("Policial", "Policial"), ("Adjunto", "Adjunto"), ("Admin", "Admin")],
+        choices=[(None, "-------------"), ("Policial", "Policial"), ("Adjunto", "Adjunto"), ("Administrador", "Administrador")],
         required=False,
         widget=forms.Select(attrs={'class': 'form-control input-data'}),
     )
-    activator = forms.ModelChoiceField(
+    activator = forms.CharField(
         label="Policial Aprovador",
-        queryset=Police.objects.filter(tipo="Admin"),  # Certifique-se de importar o modelo Police
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control input-data'}),
+        widget=forms.HiddenInput(),
     )
 
     def filter_queryset(self, queryset):
@@ -106,7 +110,7 @@ class PoliceFilterForm(forms.Form):
             queryset = queryset.filter(posto__icontains=data['posto'])
         if data.get('tipo'):
             queryset = queryset.filter(tipo=data['tipo'])
-        if data.get('activator') is not None:
-            queryset = queryset.filter(activator=data['activator'])
+        # if data.get('activator') is not None:
+        #     queryset = queryset.filter(activator=data['activator'])
 
         return queryset

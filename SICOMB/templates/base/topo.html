@@ -47,8 +47,8 @@
     <h1>{% block title_top %}{% endblock title_top %}</h1>
     <div>
         {% block perfil %}
-        <a href="" class="info-login">
-            <span class="top-item">
+        <div class="info-login">
+            <span class="top-item" onclick="window.location='{% url "perfil_police" id=request.user.id %}'">
                 {% if user.image_path %}
                     <img style="border-radius:500px; margin-right:15px;" src="{{ user.image_path.url|default:'/static/img/user.png' }}" onerror="this.src='{% static "img/user.png"%}'" alt="Usuário">
                 {% else %}
@@ -66,12 +66,12 @@
                 <button>
                 <div class="dropdown-menu" id="menu">
                     <ul>
-                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                        <li><a class="dropdown-item" href="{% url "perfil_police" id=request.user.id %}">Perfil</a></li>
                         <li><a class="dropdown-item" href="{% url "logout" %}">Sair</a></li>
                     </ul>
                 </div>
             </span>
-        </a>
+        </div>
         {% endblock perfil %}
     </div>
 </section>

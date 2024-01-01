@@ -65,8 +65,6 @@
                         <th colspan="100%" class=""><input type="submit" class="button" value="Filtrar"></th>
                     </tr>
                     <tr class="col-itens">
-                        <th>
-                        </th>
                         {% for field in filter_form %}
                             <th>
                                 {{ field }}
@@ -81,7 +79,6 @@
                     </tr>
                 </form>
                 <tr class="col-itens">
-                    <th>Foto</th>
                     {% for field in filter_form %}
                         <td>
                             {{ field.label }}
@@ -97,7 +94,7 @@
                     {% csrf_token %}
                     {% for i in police_list %}
                         <tr>
-                            <td style="align-itens:center;"><img src="{% if i.image_path %}{{ i.image_path.url }}{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do policial" style="max-height:80px; width: auto; border-radius:500px; border: 2px solid #6a5a4a; margin-top: 10px;"></td>
+                            <td style="align-itens:center;"><a href="{% url "perfil_police" id=i.id %}"><img src="{% if i.image_path %}{{ i.image_path.url }}{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do policial" style="max-height:80px; width: auto; border-radius:500px; border: 2px solid #6a5a4a; margin-top: 10px;"></a></td>
                             <td>{{ i.name }}</td>
                             <td>{{ i.email }}</td>
                             <td>{{ i.matricula }}</td>
@@ -105,7 +102,7 @@
                             <td>{{ i.lotacao }}</td>
                             <td>{{ i.posto }}</td>
                             <td>{{ i.tipo }}</td>
-                            <td>{{ i.activator }}</td>
+                            <td>{{ i.activator|default:"-" }}</td>
                             <td class="click_redirect"><button class="button" type="submit" name="pk" value="{{ i.pk }}">{{ btn_promote }}<button></td>
                         </tr>
                     {% empty %}

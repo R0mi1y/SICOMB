@@ -162,6 +162,26 @@ def dashboard_police(request):
     return render(request, "police/police_page.html", context)
 
 
+@login_required
+def perfil_police(request, id):
+    police = Police.objects.filter(id=id).first()
+    
+    if police is None:
+        messages.error(request, "Policial não encontrado!")
+        return render(request, "error.html")
+    
+    context = {
+        'cargos' : '',
+        "loads": [],
+        'police': police
+    }
+    loads = Load.objects.filter(police=police)
+    for i in loads:
+        ec = Equipment_load.objects.filter(load=i)
+        context["loads"].append([i, len(ec)])
+    return render(request, "police/police_perfil.html", context)
+
+
 @has_group('admin')
 def promote_police(request):
     group, created = Group.objects.get_or_create(name='police')
@@ -177,11 +197,12 @@ def promote_police(request):
         'filter_form': filter_form,
     }
     
-    
     if request.method == 'POST':
         id = request.POST.get("pk")
         try:
             police = Police.objects.get(pk=id)
+            police.tipo = "Adjunto"
+            police.save()
             
             police.groups.remove(group)
             group_adjunct, created = Group.objects.get_or_create(name='adjunct')
@@ -215,10 +236,13 @@ def reduce_police(request):
         id = request.POST.get("pk")
         try:
             police = Police.objects.get(pk=id)
-            police.groups.add(group)
-
+            police.tipo = "Policial"
+            police.save()
+            
+            police.groups.remove(group)
             group_police, _ = Group.objects.get_or_create(name='police')
-            police.groups.remove(group_police)
+
+            police.groups.add(group_police)
             
         except Police.DoesNotExist:
             context["msm"] = "Falha, o policial não foi encontrado!"
@@ -300,6 +324,8 @@ def dashboard(request):
             "unavailable": Equipment.objects.all().exclude(status="disponível").count(),
             "repair": Equipment.objects.all().filter(status="CONSERTO").count(),
             "judicial_request": Equipment.objects.all().filter(status="REQUISIÇÃO JUDICIAL").count(),
+            "inactive": Equipment.objects.filter(activated=False).count(),
+            
         },
         "police": {
             "total": Police.objects.all().count(),

@@ -178,7 +178,7 @@ class EquipmentFilterForm(forms.Form):
         (ContentType.objects.get(app_label='equipment', model='Model_wearable').pk, 'Vestimentos'),
         (ContentType.objects.get(app_label='equipment', model='Model_grenada').pk, 'Granadas'),
     )
-    
+
     serial_number = forms.CharField(
         label=_("Número de Série"), 
         max_length=200, required=False, 
@@ -206,11 +206,10 @@ class EquipmentFilterForm(forms.Form):
             attrs={'class': 'form-control input-data'}),
     )
     
-    activator = forms.ModelChoiceField(
+    activator = forms.CharField(
         label="Policial Aprovador",
-        queryset=Police.objects.filter(tipo="Police"),  # Certifique-se de importar o modelo Police
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control input-data'}),
+        widget=forms.HiddenInput(),
     )
 
     def filter_queryset(self, queryset):
@@ -222,8 +221,8 @@ class EquipmentFilterForm(forms.Form):
             queryset = queryset.filter(status__icontains=data['status'])
         if data.get('model_type'):
             queryset = queryset.filter(model_type=data['model_type'])
-        if data.get('activator'):
-            queryset = queryset.filter(activator=data['activator'])
+        # if data.get('activator'):
+        #     queryset = queryset.filter(activator=data['activator'])
         if data.get('model'):
             queryset = [i for i in queryset.all() if data['model'].lower() in i.model.model.lower()]
 
@@ -277,11 +276,10 @@ class ModelFilterForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control input-data'}),
     )
     
-    activator = forms.ModelChoiceField(
+    activator = forms.CharField(
         label="Policial Aprovador",
-        queryset=Police.objects.filter(tipo="Police"),  # Certifique-se de importar o modelo Police
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control input-data'}),
+        widget=forms.HiddenInput(),
     )
     
     def filter_queryset(self, queryset):
@@ -323,7 +321,7 @@ class ModelFilterForm(forms.Form):
         if data.get("size"):
             queryset = [obj for obj in queryset if hasattr(obj, 'size') and data.get("size").lower() in obj.size.lower()]
             
-        if data.get("activator"):
-            queryset = [obj for obj in queryset if hasattr(obj, 'activator') and data.get("activator") == obj.activator]
+        # if data.get("activator"):
+        #     queryset = [obj for obj in queryset if hasattr(obj, 'activator') and data.get("activator") == obj.activator]
 
         return queryset
