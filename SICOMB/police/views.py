@@ -15,8 +15,9 @@ from cryptography.fernet import Fernet
 
 @login_required
 def login(request):
-    settings.AUX["matricula"] = ''
     data = {}
+    settings.AUX["matricula"] = ''
+    
     if request.method == "POST":
         if not request.POST.get("cancelar"):
             if request.POST.get("type_login") == "password":
@@ -38,7 +39,7 @@ def login(request):
                         
                         return render(request, "police/request_cargo.html", data)
                     
-                    settings.AUX["confirmCargo"] = False
+                    settings.AUX["confirm_cargo"] = False
                     
                     settings.AUX["matricula"] = request.POST.get("matricula")
 
@@ -72,7 +73,7 @@ def login(request):
                             
                             return render(request, "police/request_cargo.html", data)
                         
-                        settings.AUX["confirmCargo"] = False
+                        settings.AUX["confirm_cargo"] = False
                         
                         settings.AUX["matricula"] = police.matricula
 
@@ -87,7 +88,7 @@ def login(request):
                     #     messages.error(request, "Token de acesso incoerente!")
                 else:
                     messages.error(request, "Token de acesso inexistente!")
-
+    
     return render(request, "police/request_cargo.html", data)
 
 

@@ -20,8 +20,9 @@ def confirm_load(request):
     data = {}
     police = None
     
-    if request.method == "POST" and settings.AUX["confirmCargo"]:
-        settings.AUX["confirmCargo"] = False
+    if request.method == "POST" and settings.AUX["confirm_cargo"]:
+        settings.AUX["matricula"] = ''
+        settings.AUX["confirm_cargo"] = False
         
         if len(settings.AUX["list_equipment"]) > 0 or len(settings.AUX["list_equipment_removed"]) > 0:
             turn_type = request.POST.get("turn_type")
@@ -226,7 +227,8 @@ def confirm_load(request):
     
     for i in Load.objects.all():
         Load.objects.check_load(i)
-    
+        
+    settings.AUX["matricula"] = ''
     return render(request, "load/load.html", data)
 
 

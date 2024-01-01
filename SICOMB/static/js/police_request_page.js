@@ -1,7 +1,10 @@
 let table_itens = $("#actually_load");
 let list_equipment;
 
-setInterval(fetchList, 1000);
+setInterval(() => {
+    fetchList();
+    getInfoLoad();
+}, 1000);
 
 function fetchList() {
     $.ajax({
@@ -18,6 +21,28 @@ function fetchList() {
             $.each(data, function (key, line) {
                 insertLine(line);
             });
+        },
+        error: function (error) {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+        }
+    });
+}
+
+function getInfoLoad() {
+    $.ajax({
+        url: '/carga/info/get',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            user: user,
+            pass: pass
+        },
+        success: function (data) {
+            console.log(data);
+            if (data.matricula == null) {
+                window.location = "/police/login/";
+            }
         },
         error: function (error) {
             console.log("Erro de requisição: " + error);

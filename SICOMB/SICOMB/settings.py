@@ -210,19 +210,24 @@ AUX = {
     "registering_fingerprint": {
         'police_id': None,
         'status': False,
-        'fingetprint_id': False
+        'fingetprint_id': None,
     },
-    "confirmCargo": False,
-    "errors": [],
+    
+    "confirm_cargo": False,
     "list_equipment": [],
     "list_equipment_valid": False,
-    "fingerprint_id": None,
-    "porta_serial": None,
     "key_token_login_police": None,
+    
+    "messsage_serial_port": None,
+    "is_requesting_load": False,
+    
+    # ======================= SENSORES =========================
     "serial_port_rfid": None,
     "serial_port_fingerprint": None,
-    "common_serial": None,
+    
+    # LEITOR DE DIGITAL
     "message_fingerprint_sensor": None,
+    
     "SENSOR_FINGERPRINT": False,
     "SENSOR_RFID": False,
     "PORT_FINGERPRINT": "COM13",

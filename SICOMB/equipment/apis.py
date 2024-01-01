@@ -118,7 +118,7 @@ def get_equipment_avalible(request):
     
     data = {
         "uid": "",
-        "confirmCargo": settings.AUX["confirmCargo"],
+        "confirmCargo": settings.AUX["confirm_cargo"],
     }
 
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
@@ -198,7 +198,7 @@ def get_equipment_avalible(request):
 @csrf_exempt
 @require_user_pass
 def allow_cargo(request):
-    settings.AUX["confirmCargo"] = True
+    settings.AUX["confirm_cargo"] = True
     return JsonResponse({}, json_dumps_params={'ensure_ascii': False})
 
 
@@ -215,7 +215,7 @@ def get_equipment_unvalible(request, id):
     
     data = {
         "uid": "",
-        "confirmCargo": settings.AUX["confirmCargo"],
+        "confirmCargo": settings.AUX["confirm_cargo"],
     }
     
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
@@ -347,7 +347,7 @@ def set_uid(request):
 
 def set_uid_from_arduino():
     while True:
-        linha = settings.AUX["porta_serial"].readline().decode('utf-8').strip()
+        linha = settings.AUX["messsage_serial_port"].readline().decode('utf-8').strip()
 
         print("printando linha")
         print(linha)

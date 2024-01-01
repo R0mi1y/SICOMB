@@ -13,10 +13,11 @@ from cryptography.fernet import Fernet
 @require_user_pass
 def get_login_police(request):
     print(settings.AUX["matricula"])
+    
     if settings.AUX["matricula"]:
         try:
             police = Police.objects.get(matricula=settings.AUX["matricula"])
-            settings.AUX["matricula"] = ''
+            # settings.AUX["matricula"] = ''
             
             police = {
                 "foto": police.image_path.url,
@@ -26,6 +27,7 @@ def get_login_police(request):
                 "lotacao": police.lotacao,
                 "email": police.email,
             }
+            
         except Police.DoesNotExist:
             return JsonResponse({})
         return JsonResponse(police)
@@ -43,7 +45,7 @@ def calcular_hash(police):
 
 
 @csrf_exempt
-# @require_user_pass
+@require_user_pass
 def get_fingerprint(request):
     """
     Função que lê o leitor de impressão digital e retorna encriptografado 
