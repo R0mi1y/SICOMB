@@ -175,7 +175,7 @@ def perfil_police(request, id):
         "loads": [],
         'police': police
     }
-    loads = Load.objects.filter(police=police)
+    loads = Load.objects.filter(adjunct=police) | Load.objects.filter(police=police)
     for i in loads:
         ec = Equipment_load.objects.filter(load=i)
         context["loads"].append([i, len(ec)])

@@ -103,7 +103,7 @@ class Bullet(models.Model):
     activated = models.BooleanField("Ativado", default=False)
     amount = models.IntegerField("Quantidade", default=0)
     image_path = models.FileField(upload_to="Modelos/municoes/")
-    caliber = models.CharField("Calibre", choices=settings.AUX['calibres'], default="SELECIONE", max_length=30)
+    caliber = models.CharField("Calibre", choices=settings.AUX['calibres'], default="SELECIONE", max_length=30, unique=True)
     description = models.TextField("Descrição")
 
     def __str__(self):

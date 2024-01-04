@@ -171,8 +171,8 @@ LOGGING = {
         },
     },
     'root': {
-        'handlers': ['console'],
-        # 'handlers': ['console', 'mail_admins'],
+        # 'handlers': ['console'],
+        'handlers': ['console', 'mail_admins'],
         'level': 'INFO', 
     },
 }

@@ -17,7 +17,9 @@ settings.AUX["list_equipment_removed"] = {}  # lista de equipamentos removidos
 # cadastra a carga com a lista
 @has_group('adjunct')
 def confirm_load(request):
-    data = {}
+    data = {
+        "municoes": settings.AUX["calibres"]
+    }
     police = None
     
     if request.method == "POST" and settings.AUX["confirm_cargo"]:
@@ -54,7 +56,7 @@ def confirm_load(request):
 
             if turn_type in turn_types:
                 for key in settings.AUX["list_equipment"]:
-                    if key.isdigit() or key.startswith("ac"):
+                    if "bullet::" not in key:
                         equipment = Equipment.objects.get(serial_number=key)
                         equipment.status = turn_type
                         equipment.save()
@@ -65,8 +67,8 @@ def confirm_load(request):
                             observation=settings.AUX["list_equipment"][key]["observation"],
                             amount=settings.AUX["list_equipment"][key]["amount"],
                         ).save()
-                    elif not key.isdigit():
-                        bullet = Bullet.objects.get(caliber=key)
+                    elif "bullet::" in key:
+                        bullet = Bullet.objects.get(caliber=key.replace("bullet::", ''))
                         amount_to_subtract = int(settings.AUX["list_equipment"][key]["amount"])
 
                         if bullet.amount - amount_to_subtract < 0:
@@ -92,7 +94,7 @@ def confirm_load(request):
                             ).save()
                             
                 for key in settings.AUX["list_equipment_removed"]:
-                    if key.isdigit() or key.startswith("ac"):
+                    if "bullet::" not in key:
                         equipment = Equipment.objects.get(serial_number=key)
                         equipment.status = turn_type
                         equipment.save()
@@ -104,8 +106,8 @@ def confirm_load(request):
                             amount=settings.AUX["list_equipment_removed"][key]["amount"],
                             status="Pendente",
                         ).save()
-                    elif key.isalnum():
-                        bullet = Bullet.objects.get(caliber=key)
+                    elif "bullet::" in key:
+                        bullet = Bullet.objects.get(caliber=key.replace("bullet::", ""))
 
                         Equipment_load(
                             load=load,
@@ -137,7 +139,7 @@ def confirm_load(request):
                     observation = settings.AUX["list_equipment"][key]["observation"]
                     no_especial_char = ''.join(c if c.isalnum() or c.isspace() else 'x' for c in key)
                     
-                    if key.isdigit() or key.startswith("ac"):
+                    if "bullet::" not in key:
                         load_unload.status = "Descarga da carga " + str(load_unload.pk)
                         load_unload.save()
                         
@@ -157,14 +159,11 @@ def confirm_load(request):
                             status="Retorno",
                         ).save()
                         
-                        print("Entrou aqui1")
-                    elif no_especial_char.replace(" ", "").isalnum():
-                        print("Entrou aqui2")
-                        
+                    elif "bullet::" in key:
                         load_unload.status = "Descarga da carga " + str(load_unload.pk)
                         load_unload.save()
                         
-                        bullet = Bullet.objects.get(caliber=key)
+                        bullet = Bullet.objects.get(caliber=key.replace("bullet::", ''))
                         bullet.amount += amount
                         bullet.save()
                         
@@ -270,7 +269,3 @@ def get_carga_policial(request, pk):
     equipment_loads = load.equipment_loads.all()
     return render(request, "load/carga_policial.html", {'load': load, 'equipment_loads': equipment_loads})
 
-
-
-
-        

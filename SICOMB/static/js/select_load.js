@@ -126,15 +126,21 @@ function changeTemplate(template) {
                 script.id = 'fetch_load.js';
                 document.head.appendChild(script);
 
-                document.getElementById("search-btn").addEventListener("click", () => {
-                    let search = document.getElementById("search-camp");
-                    fetchEquipmentData(search.value, "search");
-                    search.value = '';
+                $(document).ready(function() {
+                    $("#search-btn").on("click", () => {
+                        let search = $("#search-camp");
+                        fetchEquipmentData(search.val(), "search");
+                        search.value = '';
+                    });
+                    $(".search-bullet").on("click", (e) => {
+                        fetchEquipmentData("bullet::" + e.target.value, "search");
+                    });
                 });
             }, 500)
         } 
     }
 }
+
 
 function selectCargo(id) {
     fetch("/static/html/load.html")
@@ -193,7 +199,7 @@ function updateRowNumbers(x) {
             cells[cells.length - 1].innerHTML = '<a onclick="checkRemoveRow(' + i + ')"><svg fill="red" height="24" viewBox="0 -960 960 960" width="24"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></a>'; // ultima coluna, o botão de remover
         } else if (cells[cells.length - 1].innerHTML != "<svg fill=\"green\" height=\"24\" viewBox=\"0 -960 960 960\" width=\"24\"><path d=\"M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z\"></path></svg>"){
             if (cells[1].innerHTML == '-') {
-                var key = cells[4].innerHTML;
+                var key = "bullet::" + cells[4].innerHTML;
             } else {
                 var key = cells[1].innerHTML;
             }
@@ -361,7 +367,7 @@ function clearSquare() {
 
     var serialNumberInput = document.getElementById("serial_number");
     var description = document.getElementById("description");
-    var observation = document.getElementById("note_equipment");
+    // var observation = document.getElementById("note_equipment");
     var type = document.getElementById("type");
     var amount = document.getElementById("amount");
     let amount_input = document.getElementById("amount_input");
@@ -369,7 +375,7 @@ function clearSquare() {
     document.getElementById("means_room_product").src = "/static/img/default.png";
     serialNumberInput.innerText = ' ';
     description.innerText = ' ';
-    observation.innerHTML = ' ';
+    // observation.innerHTML = ' ';
     type.innerText = ' ';
     amount.innerText = ' ';
     amount_input.value = '1';
@@ -383,7 +389,7 @@ function addToSquare(data) {
 
     var serialNumberInput = document.getElementById("serial_number");
     var description = document.getElementById("description");
-    var observation = document.getElementById("note_equipment");
+    // var observation = document.getElementById("note_equipment");
     var type = document.getElementById("type");
     var amount = document.getElementById("amount");
     let amount_input = document.getElementById("amount_input");
@@ -407,7 +413,7 @@ function addToSquare(data) {
     data.model.description = data.model.description ?? "-";
     serialNumberInput.innerText = data.equipment.serial_number ?? "-";
     description.innerText = data.model.description;
-    observation.innerText = data.equipment.observation == null || data.equipment.observation == undefined ? "" : data.equipment.observation;
+    // observation.innerText = data.equipment.observation == null || data.equipment.observation == undefined ? "" : data.equipment.observation;
     type.innerText = data.campo;
     amount.innerText = data.amount == null || data.amount == undefined || data.amount == '' ? "1" : data.amount;
     amount_input.value = amount.innerText;

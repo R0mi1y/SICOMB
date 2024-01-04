@@ -2,7 +2,7 @@ var serialNumberInput = document.getElementById("serial_number");
 var description = document.getElementById("description");
 var type = document.getElementById("type");
 var amount = document.getElementById("amount");
-var observation = document.getElementById("note_equipment");
+// var observation = document.getElementById("note_equipment");
 var insert_bttn = document.getElementById("insert_btn");
 let amount_input = document.getElementById("amount_input");
 var list_equipment = []; // array de equipamentos com os equipamentos a serem cadastrados em formato de dicionário
@@ -103,44 +103,50 @@ var interval = setInterval(fetchEquipmentData, 1000);
 function check_cargo_square() {
     if (equipmentData != null) { // se tiver um equipamento no quadro
         equipmentData['amount'] = amount_input.value;
+        
+        let eq = equipmentData
 
-        insertLine(equipmentData); // insere a linha
-
-        list_equipment[equipmentData.equipment.serial_number ?? 'ac' + equipmentData.equipment.id] = { // adiciona no array de equipamentos o numero de série e a observação
-            'serial_number': equipmentData.equipment.serial_number,
-            'observation': observation.innerText,
-            'amount': amount_input.value,
-            'model': {
-                'image_path': document.getElementById('means_room_product').src,
-            }
-        };
-
-        equipmentData.equipment.serial_number = equipmentData.equipment.serial_number ?? equipmentData.model.caliber;
-
+        let serial_number = eq.equipment.serial_number ?? "bullet::" + eq.model.caliber;
+        
         // adiciona no array de equipamentos do django => {
         fetch('/carga/lista_equipamentos/add/', {
             method: 'POST',
             headers: {
                 'Content-Type': "application/x-www-form-urlencoded"
-            },
-            body: new URLSearchParams({
-                'serialNumber': equipmentData.equipment.serial_number,
-                'observation': observation.value ?? "-",
-                'amount': equipmentData.amount,
-                'user': user,
-                'pass': pass
-            }).toString()
-            })
-            .then(response => response.json())
-            .then(data => {
-            // Manipular os dados recebidos, por exemplo, mostrar um pop-up
-            console.log(data);
-            // popUp(data["message"]);
-            })
-            .catch(error => {
-                console.log("Erro de requisição: " + error);
-                popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
-            });
+        },
+        body: new URLSearchParams({
+            'serialNumber': serial_number,
+            // 'observation': observation.value ?? "-",
+            'observation': "-",
+            'amount': eq.amount,
+            'user': user,
+            'pass': pass
+        }).toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            if(data.status == "error") {
+                popUp(data.message);
+                return;
+            }
+
+            list_equipment[eq.equipment.serial_number ?? 'ac' + eq.equipment.id] = { // adiciona no array de equipamentos o numero de série e a observação
+                'serial_number': eq.equipment.serial_number,
+                // 'observation': observation.innerText ?? "-",
+                'observation': "-",
+                'amount': amount_input.value,
+                'model': {
+                    'image_path': document.getElementById('means_room_product').src,
+                }
+            };
+
+            insertLine(eq); // insere a linha
+        })
+        .catch(error => {
+            console.log("Erro de requisição: " + error);
+            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+        });
         // => }
 
         equipmentData = null; // reseta os equipamentos atuais

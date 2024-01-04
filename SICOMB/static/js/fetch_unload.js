@@ -136,6 +136,10 @@ function set_carga_id(id) {
 
 $(document).ready(function () {
     $("#search-btn").on("click", search);
+
+    $(".search-bullet").on("click", (e) => {
+        fetchUnvalibleEquipmentData(e.target.value, "search");
+    });
 });
 
 function search() {
@@ -289,7 +293,7 @@ function checkAwateList(type = "none") {
 }
 
 function check_cargo_square() {
-    var observation = $("#note_equipment").val();
+    // var observation = $("#note_equipment").val();
     var table_itens = $("#body_table_itens");
     var amount_input = $("#amount_input").val();
     var serialNumberInput = $("#serial_number").text();
@@ -338,7 +342,7 @@ function check_cargo_square() {
 
             var serialNumber =
                 square_equipment.equipment["serial_number"] ??
-                square_equipment.equipment["caliber"] ??
+                "bullet::" + square_equipment.equipment["caliber"] ??
                 "";
 
             // Realizar solicitação Ajax
@@ -348,7 +352,8 @@ function check_cargo_square() {
                 dataType: "json",
                 data: {
                     serialNumber: serialNumber,
-                    observation: observation,
+                    // observation: observation ?? "-",
+                    observation: "-",
                     amount: amount_input,
                     user: user,
                     pass: pass,

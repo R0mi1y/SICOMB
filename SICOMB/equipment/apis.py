@@ -60,7 +60,8 @@ def valid_serial_number(request, sn):
 @csrf_exempt
 @require_user_pass
 def get_equipment_serNum(request, serial_number):
-    if serial_number.isdigit():
+    print(serial_number)
+    if "bullet::" not in serial_number:
         try:
             equipment = Equipment.objects.get(serial_number=serial_number)
             
@@ -79,7 +80,8 @@ def get_equipment_serNum(request, serial_number):
         data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
 
         return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
-    elif not serial_number.isdigit():
+    elif "bullet::" in serial_number:
+        serial_number = serial_number.replace("bullet::", "")
         try:
             bullet = Bullet.objects.get(caliber=serial_number)
             

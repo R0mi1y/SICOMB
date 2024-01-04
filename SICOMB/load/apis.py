@@ -115,10 +115,10 @@ def get_list_equipment_avalible(request):
     for i in settings.AUX["list_equipment"]:
         print(settings.AUX["list_equipment"][i])
         
-        if settings.AUX["list_equipment"][i]["registred"] and settings.AUX["list_equipment"][i]["registred"] != "bullet":
+        if "registred" in settings.AUX["list_equipment"][i] and settings.AUX["list_equipment"][i]["registred"] != "bullet":
             if Equipment.objects.get(serial_number=i).status.lower() != "disponivel":
-                
                 settings.AUX["list_equipment"] = {}
+                
     return JsonResponse(settings.AUX["list_equipment"], json_dumps_params={'ensure_ascii': False})
 
 
@@ -141,115 +141,117 @@ def get_info(request):
 
 
 @csrf_exempt
-@require_user_pass
+# @require_user_pass
 def add_list_equipment(request):
-    if request.method == "POST":
-        # password = request.POST.get('pass')
-        # user = request.POST.get('user')
-        obs = request.POST.get('observation')
-        serial_number = request.POST.get('serialNumber')
-        amount = request.POST.get('amount')
+    # obs = request.POST.get('observation')
+    serial_number = request.POST.get('serialNumber')
+    amount = request.POST.get('amount')
+    # serial_number = request.GET.get('serialNumber')
+    # amount = request.GET.get('amount')
+    
+    print(serial_number)
+    
+    # if Police.objects.filter(username=user, password=password).exists():
+    if "bullet::" not in serial_number:
+        equipment = Equipment.objects.filter(serial_number=serial_number).first()
         
-        # if Police.objects.filter(username=user, password=password).exists():
-        if serial_number.isdigit() or "ac" in serial_number:
-            equipment = get_object_or_404(Equipment, serial_number=serial_number)
+        if not equipment:
+            return JsonResponse({"message": "Equipamento não encontrada!", "status": "error"}, json_dumps_params={'ensure_ascii': False})
+        
+        data = {
+            "equipment": model_to_dict(equipment),
+            "model": model_to_dict(equipment.model),
+            "registred": equipment.model_type.model.replace("model_", ""),
+            # "observation": obs if obs != "-" else "",
+            "amount": amount,
+        }
+        
+        data["model"]["image_path"] = equipment.model.image_path.url if equipment.model.image_path else ''
+        
+        settings.AUX["list_equipment"][serial_number] = data
+        
+    elif "bullet::" in serial_number:  # se for uma munição
+        print("É uma munição!")
+        bullet = Bullet.objects.filter(caliber=serial_number.replace("bullet::" ,"")).first()
+        
+        if not bullet:
+            return JsonResponse({"message": "Munição não encontrada!", "status": "error"}, json_dumps_params={'ensure_ascii': False})
+        
+        if settings.AUX["list_equipment"].get(serial_number) is not None:
+            print(settings.AUX["list_equipment"].get('serial_number'))
+            settings.AUX["list_equipment"][serial_number]["amount"] += int(amount)
+            
+        else:
             data = {
-                "equipment": model_to_dict(equipment),
-                "model": model_to_dict(equipment.model),
-                "registred": equipment.model_type.model.replace("model_", ""),
-                "observation": obs if obs != "-" else "",
-                "amount": amount,
+                "model": model_to_dict(bullet),
+                "campo": "Munição",
+                # "observation": obs if obs != "-" else "",
+                "amount": int(amount),
             }
-            
-            data["model"]["image_path"] = equipment.model.image_path.url if equipment.model.image_path else ''
-            
+            data["model"]["image_path"] = bullet.image_path.url if bullet.image_path else ''
+            data["equipment"] = data["model"]
             settings.AUX["list_equipment"][serial_number] = data
-            
-        elif not serial_number.isdigit():  # se for uma munição
-            bullet = get_object_or_404(Bullet, caliber=serial_number)
-            
-            if settings.AUX["list_equipment"].get(serial_number) is not None:
-                print(settings.AUX["list_equipment"].get('serial_number'))
-                settings.AUX["list_equipment"][serial_number]["amount"] += int(amount)
-            else:
-                data = {
-                    "model": model_to_dict(bullet),
-                    "campo": "Munição",
-                    "observation": obs if obs != "-" else "",
-                    "amount": int(amount),
-                }
-                data["model"]["image_path"] = bullet.image_path.url if bullet.image_path else ''
-                data["equipment"] = data["model"]
-                settings.AUX["list_equipment"][serial_number] = data
-        
-        return JsonResponse({"uid": settings.AUX["list_equipment"]}, json_dumps_params={'ensure_ascii': False})
-        # else:
-        #     return JsonResponse({"message": "Credenciais inválidas"})
-    else:
-        return JsonResponse({"message": "Método HTTP não suportado"}, json_dumps_params={'ensure_ascii': False})
-
+    
+    print(settings.AUX["list_equipment"])
+    
+    return JsonResponse({"uid": settings.AUX["list_equipment"]}, json_dumps_params={'ensure_ascii': False})
 
 
 # Remove da lista de equipamentos
 @csrf_exempt
 @require_user_pass
 def remove_list_equipment(request):
-    if request.method == "POST":
-        serial_number = request.POST.get('serial_number')
-        obs = request.POST.get('obs')
-        settings.AUX["list_equipment_removed"][serial_number] = settings.AUX[
-            "list_equipment"
-        ][serial_number]
-        
-        settings.AUX["list_equipment_removed"][serial_number]["observation"] = obs if obs != "-" else ""
-        del settings.AUX["list_equipment"][serial_number]  # deleta efetivamente
+    serial_number = request.POST.get('serial_number')
+    obs = request.POST.get('obs')
+    settings.AUX["list_equipment_removed"][serial_number] = settings.AUX[
+        "list_equipment"
+    ][serial_number]
+    
+    settings.AUX["list_equipment_removed"][serial_number]["observation"] = obs if obs != "-" else ""
+    del settings.AUX["list_equipment"][serial_number]  # deleta efetivamente
 
-        return JsonResponse({"sucesso": "sucesso"}, json_dumps_params={'ensure_ascii': False})
-    else:
-        return JsonResponse({"falha": "falha"}, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse({"sucesso": "sucesso"}, json_dumps_params={'ensure_ascii': False})
 
 
 
 @csrf_exempt
 @require_user_pass
 def add_obs(request):
-    if request.method == "POST":
-        serial_number = request.POST.get('serialNumber')
-        obs = request.POST.get('observation')
-        id_cargo = request.POST.get('id_cargo')
-        
-        eq_loads = Load.objects.get(id=id_cargo).equipment_loads.all()
-        
-        no_especial_char = ''.join(c if c.isalnum() or c.isspace() else 'x' for c in serial_number)
-        
-        if serial_number.isdigit() or serial_number.startswith("ac"):
-            for eq in eq_loads:
-                if eq.equipment and eq.equipment.serial_number == serial_number:
-                    eq.observation = obs
-                    # eq.status = "Justificado" # pode criar uma var no settings.AUX pra colocar os numeros de serie e as obs pra validar e salvar só qnd finalizar a carga
-                    eq.save()
-                     
-                    settings.AUX["list_equipment_valid"] = True
-                    
-                    print("Sucesso salvando OBS")
-
-                    return JsonResponse({"sucesso": "sucesso"})
-
-        elif no_especial_char.replace(" ", "").isalnum():
-            for eq in eq_loads:
-                if eq.bullet and eq.bullet.caliber == serial_number:
-                    eq.observation = obs
-                    eq.status = "Justificado"
-                    
-                    eq.save()
-                    settings.AUX["list_equipment_valid"] = True
-                    
-                    print("Sucesso salvando OBS")
-                    
-                    return JsonResponse({"sucesso": "sucesso"})
-    else:
-        return JsonResponse({"message": "Método HTTP não suportado"}, json_dumps_params={'ensure_ascii': False})
+    serial_number = request.POST.get('serialNumber')
+    obs = request.POST.get('observation')
+    id_cargo = request.POST.get('id_cargo')
     
+    eq_loads = Load.objects.get(id=id_cargo).equipment_loads.all()
+    
+    no_especial_char = ''.join(c if c.isalnum() or c.isspace() else 'x' for c in serial_number)
+    
+    if "bullet::" not in serial_number:
+        for eq in eq_loads:
+            if eq.equipment and eq.equipment.serial_number == serial_number:
+                eq.observation = obs
+                # eq.status = "Justificado" # pode criar uma var no settings.AUX pra colocar os numeros de serie e as obs pra validar e salvar só qnd finalizar a carga
+                eq.save()
+                    
+                settings.AUX["list_equipment_valid"] = True
+                
+                print("Sucesso salvando OBS")
+
+                return JsonResponse({"sucesso": "sucesso"})
+
+    elif "bullet::" in serial_number:  # se for uma munição
+        serial_number = serial_number.replace("bullet::", "")
+        for eq in eq_loads:
+            if eq.bullet and eq.bullet.caliber == serial_number:
+                eq.observation = obs
+                eq.status = "Justificado"
+                
+                eq.save()
+                settings.AUX["list_equipment_valid"] = True
+                
+                print("Sucesso salvando OBS")
+                
+                return JsonResponse({"sucesso": "sucesso"})
+
 
 @csrf_exempt
 @require_user_pass
