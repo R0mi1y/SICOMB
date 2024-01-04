@@ -158,18 +158,6 @@ var popUp = function (message, options = {}) {
     }, "message": message};
 }
 
-// Função para alternar a visibilidade do menu
-function toggleMenu() {
-    var menu = document.getElementById("menu");
-    if (menu.style.opacity === "1") {
-        menu.style.opacity = "0";
-        menu.style.pointerEvents = "none"; // Impede interações com o menu oculto
-    } else {
-        menu.style.opacity = "1";
-        menu.style.pointerEvents = "auto"; // Restaura interações com o menu visível
-    }
-}
-
 function handleFileSelection(event) {
     const fileInput = event.target;
     const fileSelectedMessage = document.querySelector("#fileSelectedMessage");

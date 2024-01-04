@@ -61,15 +61,10 @@
                 <p>MATRÍCULA: {{ request.user.matricula }}</p>
             </span class="top-item">
             <span>
-                <button type="button" onclick="toggleMenu()">
-                    <img id="down_arrow" src="{% static 'img/down_arrow.png' %}" alt="">
-                <button>
-                <div class="dropdown-menu" id="menu">
-                    <ul>
-                        <li><a class="dropdown-item" href="{% url "perfil_police" id=request.user.id %}">Perfil</a></li>
-                        <li><a class="dropdown-item" href="{% url "logout" %}">Sair</a></li>
-                    </ul>
-                </div>
+                <a href="{% url "logout" %}">
+                    <img id="down_arrow" src="{% static 'img/out-icon.png' %}" alt="">
+                <a>
+                <a></a> <!-- Ver o pq se tirar esse link ele buga -->
             </span>
         </div>
         {% endblock perfil %}
