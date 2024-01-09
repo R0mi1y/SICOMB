@@ -28,28 +28,28 @@ class EquipmentForm(forms.ModelForm):
     )
     
     armament = forms.ModelChoiceField(
-        queryset=Model_armament.objects.filter(activated=True),
+        queryset=Model_armament.objects.filter(activated=True).exclude(activator=None),
         widget=forms.Select(attrs={"id": "type-choices-armament", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
         label="ARMAMENTOS",
         empty_label="SELECIONE",
         required=False,
     )
     accessory = forms.ModelChoiceField(
-        queryset=Model_accessory.objects.filter(activated=True),
+        queryset=Model_accessory.objects.filter(activated=True).exclude(activator=None),
         widget=forms.Select(attrs={"id": "type-choices-accessory", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
         label="ACESSÓRIOS",
         empty_label="SELECIONE",
         required=False,
     )
     wearable = forms.ModelChoiceField(
-        queryset=Model_wearable.objects.filter(activated=True),
+        queryset=Model_wearable.objects.filter(activated=True).exclude(activator=None),
         widget=forms.Select(attrs={"id": "type-choices-wearable", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
         label="VESTIMENTOS",
         empty_label="SELECIONE",
         required=False,
     )
     grenada = forms.ModelChoiceField(
-        queryset=Model_grenada.objects.filter(activated=True),
+        queryset=Model_grenada.objects.filter(activated=True).exclude(activator=None),
         widget=forms.Select(attrs={"id": "type-choices-grenada", "style": "display: none", "class": "type-choices-type select-field", "name": "model"}),
         label="GRANADAS",
         empty_label="SELECIONE",
@@ -94,7 +94,7 @@ class Model_grenadaForm(forms.ModelForm):
         widgets = {
             "description": forms.Textarea(attrs={"class": "input-data", "placeholder": "Descrição", "rows":3}),
             "model": forms.TextInput(attrs={"class": "input-data", "placeholder": "Modelo"}),
-            "image_path": forms.FileInput(attrs={"class": "input-file", "id":"file", "accept":"image/*"})
+            "image_path": forms.FileInput(attrs={"class": "input-file input-image", "id":"file", "accept":"image/*"})
         }
         
         
@@ -113,7 +113,7 @@ class Model_armamentForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"class": "input-data", "placeholder": "Descrição", "rows":3}),
             "caliber": forms.Select(attrs={"class": "select-field", "placeholder": "Calibre"}),
             "model": forms.TextInput(attrs={"class": "input-data", "placeholder": "Modelo"}),
-            "image_path": forms.FileInput(attrs={"class": "input-file", "id":"file", "accept":"image/*"})
+            "image_path": forms.FileInput(attrs={"class": "input-file input-image", "id":"file", "accept":"image/*"})
         }
         
 class Model_wearableForm(forms.ModelForm):
@@ -130,7 +130,7 @@ class Model_wearableForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"class": "input-data", "placeholder": "Descrição", "rows":3}),
             "size": forms.TextInput(attrs={"class": "input-data", "placeholder": "Tamanho"}),
             "model": forms.TextInput(attrs={"class": "input-data", "placeholder": "Modelo"}),
-            "image_path": forms.FileInput(attrs={"class": "input-file", "id":"file", "accept":"image/*"})
+            "image_path": forms.FileInput(attrs={"class": "input-file input-image", "id":"file", "accept":"image/*"})
         }
         
 class Model_accessoryForm(forms.ModelForm):
@@ -145,7 +145,7 @@ class Model_accessoryForm(forms.ModelForm):
         widgets = {
             "description": forms.Textarea(attrs={"class": "input-data", "placeholder": "Descrição", "rows":3}),
             "model": forms.TextInput(attrs={"class": "input-data", "placeholder": "Modelo"}),
-            "image_path": forms.FileInput(attrs={"class": "input-file", "id":"file", "accept":"image/*"})
+            "image_path": forms.FileInput(attrs={"class": "input-file input-image", "id":"file", "accept":"image/*"})
         }
         
 
@@ -163,7 +163,7 @@ class BulletForm(forms.ModelForm):
             "description": forms.Textarea(attrs={"class": "input-data", "placeholder": "Descrição", "rows":3}),
             "caliber": forms.Select(attrs={"class": "select-field", "placeholder": "Calibre"}),
             "amount": forms.NumberInput(attrs={"class": "input-data", "placeholder": "Modelo", "min":0}),
-            "image_path": forms.FileInput(attrs={"class": "input-file", "id":"file", "accept":"image/*"})
+            "image_path": forms.FileInput(attrs={"class": "input-file input-image", "id":"file", "accept":"image/*"})
         }
         
 
@@ -297,7 +297,7 @@ class ModelFilterForm(forms.Form):
             }
             for i in data.get("type"):
                 if not i == 'Bullet':
-                    models_aux = model_classes[i].objects.filter(activated=True)
+                    models_aux = model_classes[i].objects.filter(activated=True).exclude(activator=None)
                     queryset = list(chain(queryset, models_aux))
                 else:
                     models_aux = model_classes[i].objects.all()

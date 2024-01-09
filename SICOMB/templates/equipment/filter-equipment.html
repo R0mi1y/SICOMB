@@ -88,7 +88,7 @@
                         Armamento
                     {% endif %}</td>
                     <td>{{ equipment.model.model }}</td>
-                    <td>{{ equipment.activator|default:"-" }}</td>
+                    <td><a href="{% url 'perfil_police' id=equipment.activator.id %}">{{ equipment.activator|default:"-" }}</a></td>
                     {% if user.is_superuser %}
                         <td class="click_redirect"><button class="button" type="button" onclick="window.location='{% url "edit_equipment" id=equipment.pk %}'" name="pk" value="{{ equipment.pk }}">EDITAR<button></td>
                     {% endif %}

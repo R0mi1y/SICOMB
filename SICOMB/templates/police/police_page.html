@@ -19,7 +19,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="#"><img class="shadow perfil" src="/media/{{user.image_path}}" onerror="this.src='{% static "img/user.png"%}'" alt=""></a>
+                            <a href="#"><img class="shadow perfil" src="{% if user.image_path %}{{ user.image_path.url }}{% else %}static/img/user.png{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt=""></a>
                         </td>
                     </tr>
                     <tr>

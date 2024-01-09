@@ -49,10 +49,10 @@
         {% block perfil %}
         <div class="info-login">
             <span class="top-item" onclick="window.location='{% url "perfil_police" id=request.user.id %}'">
-                {% if user.image_path %}
-                    <img style="border-radius:500px; margin-right:15px;" src="{{ user.image_path.url|default:'/static/img/user.png' }}" onerror="this.src='{% static "img/user.png"%}'" alt="Usuário">
+                {% if request.user.image_path %}
+                    <img style="border-radius:500px; margin-right:15px;" src="{{ request.user.image_path.url|default:'/static/img/user.png' }}" onerror="this.src='{% static "img/user.png"%}'" alt="Usuário">
                 {% else %}
-                    <img style="border-radius:500px; margin-right:15px;" src="/static/img/user.png" onerror="this.src='{% static "img/user.png"%}'" alt="Usuário">
+                    <img style="border-radius:500px; margin-right:15px;" src="{% static "img/user.png"%}" alt="Usuário">
                 {% endif %}
             </span>
             

@@ -31,7 +31,7 @@
                     <h4 class="input-title {% if field.errors %}input-error{% endif %}">{{ field.label }}</h4>
                     <div class="file-div">
                         <label class="file-label" for="{{ field.id_for_label }}">UPLOAD DE ARQUIVO +</label>
-                        <input class="input-file" name="{{ field.name }}" type="file" id="{{ field.id_for_label }}" accept="image/*">
+                        <input class="input-file input-image" name="{{ field.name }}" type="file" id="{{ field.id_for_label }}" accept="image/*">
                     </div>
                 </div>
             {% elif field.name == "matricula" %}

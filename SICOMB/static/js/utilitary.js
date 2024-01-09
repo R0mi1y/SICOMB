@@ -169,3 +169,21 @@ function handleFileSelection(event) {
         fileSelectedMessage.textContent = "Nenhum arquivo selecionado";
     }
 }
+
+$(document).ready(function () {
+    console.log($(".input-image"));
+    $(".input-image").on("change" ,function() {
+        console.log("running");
+        // Verifique se um arquivo foi selecionado
+        if (this.files.length > 0) {
+            // Adicione a classe .file-selected para destacar a borda
+            $(".file-label").addClass("file-selected");
+            // Exiba o nome do arquivo na div .file-name
+            $(".file-label").text("ARQUIVO: " +this.files[0].name);
+        } else {
+            // Caso contrário, remova a classe .file-selected e limpe o nome do arquivo
+            $(".file-label").removeClass("file-selected");
+            $(".file-label").text("UPLOAD DE ARQUIVO +");
+        }
+    });
+});

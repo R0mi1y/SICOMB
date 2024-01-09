@@ -12,6 +12,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import Group
 from cryptography.fernet import Fernet
+from django.db.models import Q
 
 @login_required
 def login(request):
@@ -97,10 +98,7 @@ def register_police(request):
     if request.method == "POST":
         form = PoliceForm(request.POST, request.FILES)
         if form.is_valid():
-            police = form.save()
-            
-            group, created = Group.objects.get_or_create(name='police')
-            police.groups.add(group)
+            form.save()
             
             messages.success(request, "Cadastro realizado com sucesso!")
             return HttpResponseRedirect("/police/register/")
@@ -185,7 +183,7 @@ def perfil_police(request, id):
 @has_group('admin')
 def promote_police(request):
     group, created = Group.objects.get_or_create(name='police')
-    police_list = Police.objects.filter(groups=group, activated=True)
+    police_list = Police.objects.filter(groups=group, activated=True).exclude(activator=None)
     filter_form = PoliceFilterForm(request.GET)
     
     if filter_form.is_valid():
@@ -220,7 +218,7 @@ def promote_police(request):
 @has_group('admin')
 def reduce_police(request):
     group, created = Group.objects.get_or_create(name='adjunct')
-    police_list = Police.objects.filter(groups=group, activated=True)
+    police_list = Police.objects.filter(groups=group, activated=True).exclude(activator=None)
     filter_form = PoliceFilterForm(request.GET)
     
     if filter_form.is_valid():
@@ -253,7 +251,7 @@ def reduce_police(request):
 
 @has_group('admin')
 def approve_police(request):
-    police_list = Police.objects.filter(activated=False)
+    police_list = Police.objects.filter(Q(activated=False) | Q(activator=None))
     filter_form = PoliceFilterForm(request.GET)
     
     if filter_form.is_valid():
@@ -270,10 +268,18 @@ def approve_police(request):
         try:
             police = Police.objects.get(pk=id)
             
-            police.activated = True
             police.activator = request.user
+        
+            action = request.POST.get("action-type")
+            if action:
+                if action == 'approve':
+                    police.activated = 1
+                    police.save()
+                elif action == 'disapprove':
+                    police.delete()
             
-            police.save()
+            else:
+                messages.error(request, "Falha, ação indefinida!")
             
         except Police.DoesNotExist:
             messages.error(request, "Falha, o policial não foi encontrado!")
@@ -285,7 +291,7 @@ def approve_police(request):
 
 @has_group('adjunct')
 def filter_police(request):
-    police_list = Police.objects.all()
+    police_list = Police.objects.filter(activated=True).exclude(activator=None)
     filter_form = PoliceFilterForm(request.GET)
     
     if request.method == 'POST':
@@ -324,12 +330,12 @@ def dashboard(request):
             "unavailable": Equipment.objects.all().exclude(status="disponível").count(),
             "repair": Equipment.objects.all().filter(status="CONSERTO").count(),
             "judicial_request": Equipment.objects.all().filter(status="REQUISIÇÃO JUDICIAL").count(),
-            "inactive": Equipment.objects.filter(activated=False).count(),
+            "inactive": Equipment.objects.filter(Q(activated=False) | Q(activator=None)).count(),
             
         },
         "police": {
             "total": Police.objects.all().count(),
-            "inactive": Police.objects.filter(activated=False).count(),
+            "inactive": Police.objects.filter(Q(activated=False) | Q(activator=None)).count(),
             "fingerprints": Police.objects.all().exclude(fingerprint=None).count(),
         },
     }

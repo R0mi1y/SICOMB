@@ -4,24 +4,32 @@ from django.contrib.auth.decorators import login_required
 from .forms import *
 from itertools import chain
 from .templatetags.custom_filters import has_group
+from django.contrib import messages
+from django.db.models import Q
 
-
-# Registra o equipamento
 @has_group('admin')
 def delete_equipment(request, id):
     try:
-        Equipment.objects.get(pk=id, activated=True).delete()
+        Equipment.objects.get(pk=id).delete()
     except Equipment.DoesNotExist:
         pass
 
     return redirect("filter_equipment")
 
 
+# Registra o equipamento
 @has_group('adjunct')
 def register_edit_equipment(request, id=None):
     equipment = None
     if id:  # Se houver o id, signigica que é uma edição
-        equipment = Equipment.objects.get(pk=id, activated=True)
+        equipment = Equipment.objects.filter(pk=id, activated=True).exclude(activator=None).first()
+        
+        if not equipment:
+            return render(
+                request,
+                "equipment/register-equipment.html",
+                {"msm": "Equipamento não existe ou não está ativado!", "form": form},
+            )
 
     if request.method == "POST":
         if request.POST.get("bullet") and request.POST.get("amount"):
@@ -97,7 +105,7 @@ def delete_model(request, model_name=None, id=None):
 
 @has_group('adjunct')
 def filter_equipment(request):
-    equipment_list = Equipment.objects.filter(activated=True)
+    equipment_list = Equipment.objects.filter(activated=True).exclude(activator=None)
     filter_form = EquipmentFilterForm(request.GET)
     # filter_form = None
     if filter_form.is_valid():
@@ -115,11 +123,11 @@ def filter_equipment(request):
 def filter_model(request):
     # Consulta todos os objetos dos diferentes modelos e os concatena
     all_models = list(chain(
-        Model_armament.objects.filter(activated=True),
-        Model_accessory.objects.filter(activated=True),
-        Model_wearable.objects.filter(activated=True),
-        Model_grenada.objects.filter(activated=True),
-        Bullet.objects.filter(activated=True)
+        Model_armament.objects.filter(activated=True).exclude(activator=None),
+        Model_accessory.objects.filter(activated=True).exclude(activator=None),
+        Model_wearable.objects.filter(activated=True).exclude(activator=None),
+        Model_grenada.objects.filter(activated=True).exclude(activator=None),
+        Bullet.objects.filter(activated=True).exclude(activator=None)
     ))
     
     filter_form = ModelFilterForm(request.GET)
@@ -148,17 +156,25 @@ def approve_model(request):
         }
         
         model = models[request.POST.get("model_name")].objects.filter(pk=request.POST.get("model_id")).first()
-        model.activated = True
         model.activator = request.user
         
-        model.save()
+        action = request.POST.get("action-type")
+        if action:
+            if action == 'approve':
+                model.activated = 1
+                model.save()
+            elif action == 'disapprove':
+                model.delete()
+        
+        else:
+            messages.error(request, "Falha, ação indefinida!")
         
     all_models = list(chain(
-        Model_armament.objects.filter(activated=False),
-        Model_accessory.objects.filter(activated=False),
-        Model_wearable.objects.filter(activated=False),
-        Model_grenada.objects.filter(activated=False),
-        Bullet.objects.filter(activated=False)
+        Model_armament.objects.filter(Q(activated=False) | Q(activator=None)),
+        Model_accessory.objects.filter(Q(activated=False) | Q(activator=None)),
+        Model_wearable.objects.filter(Q(activated=False) | Q(activator=None)),
+        Model_grenada.objects.filter(Q(activated=False) | Q(activator=None)),
+        Bullet.objects.filter(Q(activated=False) | Q(activator=None))
     ))
     
     context = {
@@ -170,15 +186,21 @@ def approve_model(request):
 
 @has_group('admin')
 def approve_equipment(request):
-    equipment_list = Equipment.objects.filter(activated=False)
+    equipment_list = Equipment.objects.filter(Q(activated=False) | Q(activator=None))
 
     if request.method == 'POST':
         equipment = Equipment.objects.filter(pk=request.POST.get("equipment_id")).first()
-        equipment.activated = True
         equipment.activator = request.user
         
-        equipment.save()
-        
+        action = request.POST.get("action-type")
+        if action:
+            if action == 'approve':
+                equipment.activated = 1
+                equipment.save()
+            elif action == 'disapprove':
+                equipment.delete()
+        else:
+            messages.error(request, "Falha, ação indefinida!")
     context = {
         'equipment_list': equipment_list,
     }

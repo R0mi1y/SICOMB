@@ -21,7 +21,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="#"><img class="shadow perfil" src="/media/{{police.image_path}}" alt=""></a>
+                            <a href="#"><img class="shadow perfil" src="{% if police.image_path %}{{ police.image_path.url }}{% else %}static/img/user.png{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt=""></a>
                         </td>
                     </tr>
                     <tr>

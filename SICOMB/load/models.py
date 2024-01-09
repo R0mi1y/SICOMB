@@ -27,7 +27,6 @@ class LoadManager(models.Manager):
         html = render_to_string('load/pdf_template.html', context)
         return pdfkit.from_string(html, pdf_path, options=options)
     
-    
     def check_load(self, load):
         data_hora_atual = timezone.now()
         expected_return_date = load.expected_load_return_date
@@ -74,7 +73,6 @@ class LoadManager(models.Manager):
         load.save()
         return True
     
-    
     def generate_load_report(self, load, subject):
         with transaction.atomic():
             report = Report.objects.create(title=subject)
@@ -105,7 +103,6 @@ class LoadManager(models.Manager):
                 Report_field.objects.create(report=report, field="Status", content=equipment_load.status)
 
         return report
-
     
     def send_relatory(self, load, to=False):
         pdf = self.get_load_pdf(load)
@@ -133,7 +130,6 @@ class LoadManager(models.Manager):
     
     def get_equipment_loads(self, load):
         return Equipment_load.objects.filter(load=load)
-    
 
 
 class Load(models.Model):

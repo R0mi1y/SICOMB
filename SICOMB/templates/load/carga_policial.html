@@ -40,7 +40,7 @@
                     <tr>
                         {% comment %} <td rowspan="100%"> {% endcomment %}
                         <td>
-                            <a><img class="shadow" src="{{load.police.image_path.url}}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do policial" alt=""></a>
+                            <a><img class="shadow" src="{% if load.police.image_path %}{{ load.police.image_path.url }}{% else %}static/img/user.png{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do policial" alt=""></a>
                         </td>
                     </tr>
                     <tr>
@@ -73,7 +73,7 @@
                     <tr>
                         {% comment %} <td rowspan="100%"> {% endcomment %}
                         <td>
-                            <a><img class="shadow" src="{{load.adjunct.image_path.url|default:"static/img/user.png"}}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do adjunto" alt=""></a>
+                            <a><img class="shadow" src="{% if load.adjunct.image_path %}{{ load.adjunct.image_path.url }}{% else %}static/img/user.png{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt="Perfil do adjunto" alt=""></a>
                         </td>
                     </tr>
                     <tr>

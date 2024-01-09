@@ -8,7 +8,7 @@ from police.models import Police
 
 class Model_armament(models.Model):
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
-    activated = models.BooleanField("Ativado", default=False)
+    activated = models.IntegerField("Ativado", default=0)
     model = models.TextField("Modelo do armamento")
     caliber = models.CharField("Calibre", choices=settings.AUX['calibres'], default="SELECIONE", max_length=30)
     description = models.TextField("Descrição")
@@ -25,7 +25,7 @@ class Model_armament(models.Model):
 
 class Model_wearable(models.Model):
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
-    activated = models.BooleanField("Ativado", default=False)
+    activated = models.IntegerField("Ativado", default=0)
     model = models.TextField("Modelo do armamento")
     size = models.CharField("Tamanho", max_length=10)
     description = models.TextField("Descrição")
@@ -41,7 +41,7 @@ class Model_wearable(models.Model):
 
 class Model_accessory(models.Model):  # bastão, escudo
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
-    activated = models.BooleanField("Ativado", default=False)
+    activated = models.IntegerField("Ativado", default=0)
     model = models.TextField("Modelo do armamento")
     description = models.TextField("Descrição")
     image_path = models.FileField(upload_to="Modelos/acessorios/")
@@ -56,7 +56,7 @@ class Model_accessory(models.Model):  # bastão, escudo
 
 class Model_grenada(models.Model):
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
-    activated = models.BooleanField("Ativado", default=False)
+    activated = models.IntegerField("Ativado", default=0)
     model = models.TextField("Modelo do armamento")
     image_path = models.FileField(upload_to="Modelos/granadas/")
     description = models.TextField("Descrição")
@@ -82,7 +82,7 @@ class Equipment(models.Model):
     )
     date_register = models.DateTimeField("Data de registro", default=timezone.now)
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
-    activated = models.BooleanField("Ativado", default=False)
+    activated = models.IntegerField("Ativado", default=0)
     serial_number = models.CharField("Numero de série", max_length=200, null=True, unique=True)
     uid = models.CharField("uid", max_length=200, primary_key=True, default=None)
     status = models.CharField("Estado atual", choices=CHOICES, max_length=20, default="Disponível")
@@ -100,7 +100,7 @@ class Equipment(models.Model):
 
 class Bullet(models.Model):
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
-    activated = models.BooleanField("Ativado", default=False)
+    activated = models.IntegerField("Ativado", default=0)
     amount = models.IntegerField("Quantidade", default=0)
     image_path = models.FileField(upload_to="Modelos/municoes/")
     caliber = models.CharField("Calibre", choices=settings.AUX['calibres'], default="SELECIONE", max_length=30, unique=True)

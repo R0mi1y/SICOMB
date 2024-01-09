@@ -55,11 +55,12 @@
                     <td>Tipo</td>
                     <td>Modelo</td>
                     <th>APROVAR</th>
+                    <th>REPROVAR</th>
                 </tr>
             </thead>
             <tbody>
-                {% for equipment in equipment_list %}
-                <form action="." method="post">
+            {% for equipment in equipment_list %}
+                <form action="." id="form" method="post">
                     {% csrf_token %}
                     <tr>
                         <td>{{ equipment.serial_number }}</td>
@@ -75,8 +76,11 @@
                             Armamento
                         {% endif %}</td>
                         <td>{{ equipment.model.model }}</td>
-                        <td class="click_redirect"><button class="button" type="submit" name="equipment_id" value="{{ equipment.pk }}">APROVAR<button></td>
+                        <td class="click_redirect"><button class="button" onclick="$('#action-type').val('approve'); $('#form').submit()" type="button">APROVAR<button></td>
+                        <td class="click_redirect"><button class="button" onclick="$('#action-type').val('disapprove'); $('#form').submit()" type="button">REPROVAR<button></td>
                     </tr>
+                    <input type="hidden" name="action-type" id="action-type" value=""> 
+                    <input type="hidden" name="equipment_id" value="{{ equipment.pk }}"> 
                 </form>
             {% empty %}
                 <tr>

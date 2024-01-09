@@ -56,6 +56,13 @@ def confirm_load(request):
 
             if turn_type in turn_types:
                 for key in settings.AUX["list_equipment"]:
+                    
+                    try:
+                        observation = settings.AUX["list_equipment"][key]["observation"]
+                    except:
+                        observation = "-"
+                        
+                    
                     if "bullet::" not in key:
                         equipment = Equipment.objects.get(serial_number=key)
                         equipment.status = turn_type
@@ -64,7 +71,7 @@ def confirm_load(request):
                         Equipment_load(
                             load=load,
                             equipment=equipment,
-                            observation=settings.AUX["list_equipment"][key]["observation"],
+                            observation=observation,
                             amount=settings.AUX["list_equipment"][key]["amount"],
                         ).save()
                     elif "bullet::" in key:
@@ -89,11 +96,17 @@ def confirm_load(request):
                             Equipment_load(
                                 load=load,
                                 bullet=bullet,
-                                observation=settings.AUX["list_equipment"][key]["observation"],
+                                observation=observation,
                                 amount=amount_to_subtract,
                             ).save()
                             
                 for key in settings.AUX["list_equipment_removed"]:
+                    
+                    try:
+                        observation = settings.AUX["list_equipment_removed"][key]["observation"]
+                    except:
+                        observation = "-"
+                    
                     if "bullet::" not in key:
                         equipment = Equipment.objects.get(serial_number=key)
                         equipment.status = turn_type
@@ -102,7 +115,7 @@ def confirm_load(request):
                         Equipment_load(
                             load=load,
                             equipment=equipment,
-                            observation=settings.AUX["list_equipment_removed"][key]["observation"],
+                            observation=observation,
                             amount=settings.AUX["list_equipment_removed"][key]["amount"],
                             status="Pendente",
                         ).save()
@@ -112,7 +125,7 @@ def confirm_load(request):
                         Equipment_load(
                             load=load,
                             bullet=bullet,
-                            observation=settings.AUX["list_equipment_removed"][key]["observation"],
+                            observation=observation,
                             amount=settings.AUX["list_equipment_removed"][key]["amount"],
                             status="Pendente",
                         ).save()
@@ -136,8 +149,11 @@ def confirm_load(request):
                 
                 for key in settings.AUX["list_equipment"]:
                     amount = int(settings.AUX["list_equipment"][key]["amount"])
-                    observation = settings.AUX["list_equipment"][key]["observation"]
-                    no_especial_char = ''.join(c if c.isalnum() or c.isspace() else 'x' for c in key)
+                        
+                    try:
+                        observation = settings.AUX["list_equipment"][key]["observation"]
+                    except:
+                        observation = "-"
                     
                     if "bullet::" not in key:
                         load_unload.status = "Descarga da carga " + str(load_unload.pk)

@@ -46,14 +46,16 @@
                         <td>Descrição</td>	
                         <td>Tamanho</td>
                         <th>APROVAR</th>
+                        <th>REPROVAR</th>
                     </tr>
                 </tr>
             </thead>
             <tbody>
                 {% for model in model_list %}
-                <form action="." method="post">
+                <form action="." id="form" method="post">
                     {% csrf_token %}
                     <tr>
+                        <input type="hidden" name="action-type" id="action-type" value="aprove"> 
                         <input type="hidden" name="model_name" value="{{ model|model_class }}">
                         <input type="hidden" name="model_id" value="{{ model.pk }}">
                         <td>{{ model|model_class }}</td>
@@ -62,7 +64,9 @@
                         <td>{{ model.model|default:"-" }}</td>
                         <td>{{ model.description|default:"-" }}</td>
                         <td>{{ model.size|default:"-" }}</td>
-                        <td class="click_redirect"><button class="button" type="submit">APROVAR<button></td>
+                        <td class="click_redirect"><button class="button" onclick="$('#action-type').val('approve'); $('#form').submit()" type="button">APROVAR<button></td>
+                        <td class="click_redirect"><button class="button" onclick="$('#action-type').val('disapprove'); $('#form').submit()" type="button">REPROVAR<button></td>
+                        </tr>
                     </tr>
                 </form>
             {% empty %}
