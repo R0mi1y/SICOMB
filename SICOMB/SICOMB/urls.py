@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-import serial
 
 from .settings import AUX
 from .main_view import main_view

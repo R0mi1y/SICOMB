@@ -51,16 +51,21 @@ def get_uids():
             print(AUX["uids"])
             if line not in AUX["uids"]:
                 AUX["uids"].append(line)
+                
+        except UnicodeDecodeError:
+            print(f"Erro de decodificação no sensor RFID, impossível decodificar como UTF-8")
         except Exception as e:
             print("\nConexão com sensor RFID perdida!\n")
             print(e)
             
+            if AUX['serial_port_fingerprint']: AUX['serial_port_fingerprint'].close()
+            
             while ser is None:
+                time.sleep(1)
                 try:
                     if ser is not None: ser.close()
                     ser = serial.Serial(AUX["PORT_RFID"], 115200)
                 except Exception as e:
-                    time.sleep(0.5)
                     print(e)
             print("\nConexão reestabelecida!\n")
 
@@ -82,16 +87,21 @@ def get_fingerprint():
         
             if len(line) > 1:
                 AUX["message_fingerprint_sensor"] = line
+        except UnicodeDecodeError:
+            print(f"Erro de decodificação no sensor de impressão digital, impossível decodificar como UTF-8")
         except Exception as e:
             print("\nConexão com sensor leitor de impressão digital perdida!\n")
             print(e)
             AUX["message_fingerprint_sensor"] = ['FINGERPRINT', 'ERROR', 'Conexão com sensor leitor de impressão digital perdida!']
+            
+            if AUX['serial_port_fingerprint']: AUX['serial_port_fingerprint'].close()
+            
             while ser is None:
+                time.sleep(1)
                 try:
                     if ser is not None: ser.close()
                     ser = serial.Serial(AUX["PORT_FINGERPRINT"], 115200)
                 except Exception as e:
-                    time.sleep(0.5)
                     print(e)
             print("\nConexão reestabelecida!\n")
     

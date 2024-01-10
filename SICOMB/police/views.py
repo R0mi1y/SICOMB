@@ -1,3 +1,5 @@
+import json
+import os
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -196,6 +198,7 @@ def promote_police(request):
     }
     
     if request.method == 'POST':
+        print(request.POST)
         id = request.POST.get("pk")
         try:
             police = Police.objects.get(pk=id)
@@ -213,6 +216,54 @@ def promote_police(request):
             return render(request, 'police/manage_police.html', context)
         
     return render(request, 'police/manage_police.html', context)
+
+
+def ler_settings():
+    caminho_arquivo = os.path.join(settings.STATICFILES_DIRS[0], 'json', 'settings.json')
+    
+    sett = None
+    
+    try:
+        with open(caminho_arquivo, 'r') as arquivo:
+            sett = json.load(arquivo)
+
+    except FileNotFoundError:
+        print("Arquivo não encontrado")
+
+    except Exception as e:
+        print(f"Erro ao ler o arquivo: {str(e)}")
+    
+    return sett
+
+
+def escrever_settings(dados):
+    caminho_arquivo = os.path.join(settings.STATICFILES_DIRS[0], 'json', 'settings.json')
+    
+    try:
+        with open(caminho_arquivo, 'w') as arquivo:
+            json.dump(dados, arquivo, indent=4)
+
+    except Exception as e:
+        print(f"Erro ao escrever no arquivo: {str(e)}")
+
+
+@has_group('admin')
+def settings_view(request):
+    sett = ler_settings()
+    
+    if request.method == 'POST':
+        key = request.POST.get('key')
+        value = request.POST.get('value')
+        
+        sett[key] = value
+        
+        escrever_settings(sett)
+    
+    context = {
+        "settings": settings.AUX
+    }
+        
+    return render(request, 'police/admin/settings.html', context)
 
 
 @has_group('admin')

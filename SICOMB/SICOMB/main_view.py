@@ -2,6 +2,7 @@ import time
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 import serial
+from serial.tools import list_ports
 from SICOMB.settings import AUX
 from equipment.views import filter_equipment
 from police.views import dashboard_police
@@ -40,8 +41,39 @@ def main_view(request):
         return VIEW_ERROR(request)
 
 
+def verificar_portas():
+    while True:
+        for porta in list_ports.comports():
+            try:
+                ser = serial.Serial(porta.device, baudrate=115200, timeout=2)
+                print(f"Tentando porta {porta.device}...")
+                
+                for i in range(0, 100):
+                    time.sleep(1)
+                
+                    try:
+                        resposta = ser.readline().decode('UTF-8')
+                        print(resposta)
+                        
+                        if "FINGERPRINT::SUCCESS::Started" in resposta:
+                            print(f"Mensagem 'started' recebida em {porta.device}")
+                            ser.write("4".encode())
+                            
+                            return porta.device
+
+                    except UnicodeDecodeError:
+                        print(f"Erro de decodificação em {porta.device}: impossível decodificar como UTF-8")
+                            
+                ser.write("4".encode())
+                ser.close()
+
+            except serial.SerialException:
+                print(f"Erro ao abrir a porta {porta.device}")
+
+
 if AUX["SENSOR_RFID"]:
     ser_rfid = None
+    
     while ser_rfid is None:
         try:
             if ser_rfid is not None: ser_rfid.close()
@@ -53,11 +85,15 @@ if AUX["SENSOR_RFID"]:
     AUX['serial_port_rfid'] = ser_rfid
         
 if AUX["SENSOR_FINGERPRINT"]:
+    AUX['PORT_FINGERPRINT'] = verificar_portas()
+    
     ser_fingerprint = None
     while ser_fingerprint is None:
         try:
             if ser_fingerprint is not None: ser_fingerprint.close()
-            ser_fingerprint = serial.Serial(AUX["PORT_FINGERPRINT"], 115200)
+            ser_fingerprint = serial.Serial(AUX['PORT_FINGERPRINT'], 115200)
+            time.sleep(2)
+            ser_fingerprint.write("4".encode())
         except Exception as e:
             time.sleep(0.5)
             print(e)

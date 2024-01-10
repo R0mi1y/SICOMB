@@ -21,7 +21,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="#"><img class="shadow perfil" src="{% if police.image_path %}{{ police.image_path.url }}{% else %}static/img/user.png{% endif %}" onerror="this.src='{% static "img/user.png"%}'" alt=""></a>
+                            <a href="#"><img class="shadow perfil" src="{% if police.image_path %}{{ police.image_path.url }}{% else %}static/img/user.png{% endif %}" onerror="this.src='{% static "img/user.png"%}';" alt=""></a>
                         </td>
                     </tr>
                     <tr>
@@ -122,49 +122,49 @@
     {% else %}
         <style>
             .cargo {
-                height: 83%;
+                height: 85%;
             }
         </style>
         <div class="military_means_room military_means_room_form shadow">
-            <div class="means_room_content">
-                <div class="means_room_table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th colspan="100%" class="title">LOGIN</th>
-                            </tr>
-                        </thead>
-                        <tbody class="tbody_top_means_room">
-                            <tr>
-                                <td class="sub-title">PREENCHA O FORMULÁRIO OU USE SUA DIGITAL</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="row_color row_color_police_login"><span><hr></span></div>
-                    <form class="form_police_login" id="form_login" action="./" method="POST">
-                        {% csrf_token %}
-                        <input type='hidden' name='type_login' value='password'>
-                        <input type='hidden' name='token'>
-                        <div class="input-div-form-police">
-                            <div class="input-box">
-                                <h4 class="input-title input-title-form-police">MATRÍCULA</h4>
-                                <input type="text" name="matricula" class="input-data" placeholder="Digite a matrícula">
-                            </div>
-                            <div class="input-box">
-                                <!-- <h4 class="input-title">CONFIRME A CARGA COM SUA MATRÍCULA E SENHA.</h4> -->
-                                <h4 class="input-title input-title-form-police">SENHA</h4>
-                                <input type="password" name="senha" class="input-data" placeholder="Digite a senha">
-                            </div>
-                            <div class="finalize-registration">
-                                <div class="btn_final">
-                                    <input class="btn_finalize btn_confirm shadow btn_finalize_form_police" type="submit" value="Confirmar">
-                                    <input class="btn_finalize btn_confirm shadow btn_finalize_form_police" id="request_fingerprint" type="button" value="Usar digital">
-                                </div>
-                            </div>
+            <!-- <div class="means_room_content"> -->
+                <!-- <div class="means_room_table"> -->
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="100%" class="title">LOGIN</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody_top_means_room">
+                    <tr>
+                        <td class="sub-title">PREENCHA O FORMULÁRIO OU USE SUA DIGITAL</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row_color row_color_police_login"><span><hr></span></div>
+            <form class="form_police_login" id="form_login" action="./" method="POST">
+                {% csrf_token %}
+                <input type='hidden' name='type_login' value='password'>
+                <input type='hidden' name='token'>
+                <div class="input-div-form-police">
+                    <div class="input-box">
+                        <h4 class="input-title input-title-form-police">MATRÍCULA</h4>
+                        <input type="text" name="matricula" class="input-data" placeholder="Digite a matrícula">
+                    </div>
+                    <div class="input-box">
+                        <!-- <h4 class="input-title">CONFIRME A CARGA COM SUA MATRÍCULA E SENHA.</h4> -->
+                        <h4 class="input-title input-title-form-police">SENHA</h4>
+                        <input type="password" name="senha" class="input-data" placeholder="Digite a senha">
+                    </div>
+                    <div class="finalize-registration">
+                        <div class="btn_final">
+                            <input class="btn_finalize btn_confirm shadow btn_finalize_form_police" type="submit" value="Confirmar">
+                            <input class="btn_finalize btn_finger_digital shadow btn_finalize_form_police " id="request_fingerprint" type="button" value="Usar digital" >
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
+                <!-- </div> -->
+            <!-- </div> -->
         </div>
     </section>
     {% endif %}

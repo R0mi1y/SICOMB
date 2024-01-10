@@ -78,7 +78,7 @@ table img{
     background-color: #fff;
     border-radius: 10px;
     width: 60%;
-    height: auto;
+    height: 100%;
 }
 
 .shadow{
@@ -207,6 +207,7 @@ table img{
 }
 .btn_confirm{
     background-color: rgb(5, 168, 5);
+    transition: .5s;
 }
 
 .btn_cancel:hover{
@@ -214,6 +215,14 @@ table img{
 }
 .btn_confirm:hover{
     background-color: rgb(5, 168, 5, 0.8);
+}
+
+.btn_finger_digital{
+    background-color: coral;
+    transition: .5s;
+}
+.btn_finger_digital:hover{
+    background-color: rgb(248, 124, 79, 0.7);
 }
 /* ------------------------------------------------------------------------------- */
 

@@ -396,7 +396,7 @@ table img{
     height: 40px;
     font-size: 13px;
     text-align: center;
-    line-height: 50px;
+    /* line-height: 50px; */
 }
 
 .table_itens tbody{

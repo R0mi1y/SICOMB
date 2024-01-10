@@ -28,6 +28,9 @@ def get_amount(model):
     else:
         return model.amount
 
+@register.filter(name='replace_underscore')
+def replace_underscore(value):
+    return value.replace('_', ' ')
 
 def require_user_pass(funcao):
     def wrapper(request, *args, **kwargs):

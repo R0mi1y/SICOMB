@@ -20,7 +20,7 @@ RFIDLabel* label;
 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2);
 
-int num = 0;
+int num = 3;
 int parm = -1;
 
 void setup()
@@ -41,6 +41,7 @@ void setup()
   finger.getTemplateCount();
 
   label = new RFIDLabel();															//Data that should be sent to RFIDLabel
+	
 	Serial.println("Started");
 }
 
@@ -73,6 +74,20 @@ void loop()
     if (parm >= 0)
       while (!getFingerprintEnroll(parm));
     num = 0;
+  } else if (num == 3) {
+    while(1) {
+      if (Serial.available()) {
+        inputString = Serial.readStringUntil('\n'); // Lê até encontrar uma quebra de linha
+        processCommand(inputString);
+      }
+
+      if (num == 4) {
+        break;
+      }
+
+      Serial.println("FINGERPRINT::SUCCESS::Started");
+      num = 0;
+    }
   }
 }
 

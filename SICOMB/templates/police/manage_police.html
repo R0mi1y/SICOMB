@@ -116,8 +116,11 @@
                             <td colspan="100%">Nenhum policial encontrado.</td>
                         </tr>
                     {% endfor %}
-                    <input type="hidden" name="action-type" id="action-type" value=""> 
-                    <input type="hidden" id="police-id" name="pk" value="{{ equipment.pk }}"> 
+                    {% if btn_promote == "APROVAR" %}
+                        <input type="hidden" name="action-type" id="action-type" value=""> 
+                        <input type="hidden" id="police-id" name="pk" value="{{ equipment.pk }}"> 
+                    {% endif %}
+
                 </form>
             </tbody>
         </table>
