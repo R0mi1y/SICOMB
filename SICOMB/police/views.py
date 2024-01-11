@@ -260,7 +260,7 @@ def settings_view(request):
         escrever_settings(sett)
     
     context = {
-        "settings": settings.AUX
+        "settings": settings.AUX,
     }
         
     return render(request, 'police/admin/settings.html', context)

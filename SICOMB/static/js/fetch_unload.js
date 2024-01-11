@@ -138,7 +138,7 @@ $(document).ready(function () {
     $("#search-btn").on("click", search);
 
     $(".search-bullet").on("click", (e) => {
-        fetchUnvalibleEquipmentData(e.target.value, "search");
+        fetchUnvalibleEquipmentData("bullet::" + e.target.value, "search");
     });
 });
 
@@ -154,25 +154,11 @@ function fetchUnvalibleEquipmentData(serial_number, type = "none") {
     let url = "/equipamento/get_indisponivel/" + id_cargo + "/";
 
     if (!(serial_number == null || serial_number == undefined)) {
-        if (/^[0-9]+$/.test(serial_number)) {
-            url =
-                "/equipamento/get_indisponivel/" +
-                id_cargo +
-                "/?type=equipment&pk=" +
-                serial_number;
-        } else if (serial_number.includes("ac")) {
-            url =
-                "/equipamento/get_indisponivel/" +
-                id_cargo +
-                "/?type=equipment&pk=" +
-                serial_number;
-        } else {
-            url =
-                "/equipamento/get_indisponivel/" +
-                id_cargo +
-                "/?type=bullet&pk=" +
-                serial_number;
-        }
+        url =
+            "/equipamento/get_indisponivel/" +
+            id_cargo +
+            "/?type=equipment&pk=" +
+            serial_number;
     }
 
     $.ajax({

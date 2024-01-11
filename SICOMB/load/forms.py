@@ -25,7 +25,8 @@ class LoadFilterForm(forms.Form):
                 ('24h', '24h'), 
                 ('conserto', 'conserto'), 
                 ('requisição judicial', 'requisição judicial'), 
-                ('indeterminado', 'indeterminado')
+                ('indeterminado', 'indeterminado'),
+                ('descarga', 'descarga'),
             ]),
     )
     police = forms.ModelChoiceField(
@@ -112,6 +113,8 @@ class LoadFilterForm(forms.Form):
         # Filtrar por tipo de turno
         turn_type = data.get('turn_type')
         if turn_type and turn_type != '':
+            queryset = Load.objects.all()
+            
             queryset = queryset.filter(turn_type=turn_type)
 
         # Filtrar por policial

@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.hashers import make_password
 
+from SICOMB import settings
+
 
 class PoliceForm(forms.ModelForm):
     image_path = forms.ImageField(widget=forms.FileInput(attrs={'class':'file-input input-image', 'accept':'image/*', 'onchange':'handleFileSelection(event)'}), label='Foto')
@@ -113,3 +115,5 @@ class PoliceFilterForm(forms.Form):
         #     queryset = queryset.filter(activator=data['activator'])
 
         return queryset
+
+

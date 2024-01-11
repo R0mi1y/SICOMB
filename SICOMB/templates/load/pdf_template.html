@@ -42,9 +42,13 @@
     </style>
 </head>
 <body>
-    <h1>Comprovante de Carga</h1>
-    
+    <h1>Comprovante de {% if load.turn_type == "descarga" %}{{ load.turn_type }}{% else %}Carga{% endif %}</h1>
+
+    <p><strong>Tipo:</strong> {{ load.turn_type }}</p>
     <p><strong>ID da Carga:</strong> {{ load.pk }}</p>
+    <p><strong>Data:</strong> {{ load.date_load }}</p>
+    <p><strong>Data esperada de retorno:</strong> {{ load.expected_load_return_date }}</p>
+    <p><strong>Data descarga:</strong> {{ load.returned_load_date|default:"-" }}</p>
     
     <h2>Informações do Policial</h2>
     <table class="police">

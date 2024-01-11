@@ -222,12 +222,14 @@ def get_equipment_unvalible(request, id):
     
     # Para caso o que o usuário esteja solicitando não seja algo que tenha uma tag
     if request.GET.get("type") != None:
+        print(request.GET.get("pk"))
         data["registred"] = request.GET.get("type")
 
         # Caso seja uma munição
-        if request.GET.get("type") == "bullet":
+        if "bullet::" in request.GET.get("pk"):
+            caliber = request.GET.get("pk").replace("bullet::", "")
             try:
-                bullet = Bullet.objects.get(caliber=request.GET.get("pk"))
+                bullet = Bullet.objects.get(caliber=caliber)
                 
                 if not bullet.activated:
                     return JsonResponse({"uid": "", "msm": "Munição aguardando aprovação de um administrador!"}, json_dumps_params={'ensure_ascii': False})
@@ -248,7 +250,7 @@ def get_equipment_unvalible(request, id):
                     json_dumps_params={'ensure_ascii': False}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
 
-        elif request.GET.get("type") == "equipment":
+        else:
             try:
                 equipment = Equipment.objects.get(serial_number=request.GET.get("pk"))
                 

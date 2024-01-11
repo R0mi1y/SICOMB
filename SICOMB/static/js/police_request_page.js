@@ -55,7 +55,7 @@ function insertLine(line) {
     var newRow = $("<tr>").append(
         $("<td></td>"),
         $("<td>").text(line.equipment.serial_number || "-"),
-        $("<td>").text(line.model.description || "-"),
+        $("<td>").text(line.model.model || "-"),
         $("<td>").text(line.campo || "-"),
         $("<td>").text(line.model.caliber || "-"),
         $("<td>").text(line.amount || "1"),

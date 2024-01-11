@@ -174,7 +174,7 @@ function insertLine(line, x) {
         '<tr>' +
         '<td></td>' +
         '<td>' + (line.equipment.serial_number == null || line.equipment.serial_number == undefined ? "-" : line.equipment.serial_number) + '</td>' +
-        '<td>' + (line.model.description == null || line.model.description == undefined ? "-" : line.model.description) + '</td>' +
+        '<td>' + (line.model.model == null || line.model.model == undefined ? "-" : line.model.model) + '</td>' +
         '<td>' + (line.campo == null || line.campo == undefined ? "-" : line.campo) + '</td>' +
         '<td>' + (line.model.caliber == null || line.model.caliber == undefined ? "-" : line.model.caliber) + '</td>' +
         '<td>' + (line.amount == null || line.amount == undefined || line.amount == '' ? "1" : line.amount) + '</td>' +
