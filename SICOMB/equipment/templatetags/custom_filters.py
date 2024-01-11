@@ -24,7 +24,7 @@ def model_class(model):
 @register.filter
 def get_amount(model):
     if model is not None and model.__class__.__name__ != 'Bullet':
-        return [i for i in Equipment.objects.all() if model.model == i.model.model].__len__()
+        return [i for i in Equipment.objects.all() if i.model.model is not None and model.model == i.model.model].__len__()
     else:
         return model.amount
 
