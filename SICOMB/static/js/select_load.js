@@ -248,7 +248,13 @@ function addObs(i, id_cargo) {
     let row = rows[i].getElementsByTagName("td");
     window.obs_seted = true;
 
-    popUp("Adicione a observação: ", {textArea:true, function_textarea: setObservation, parm1:id_cargo, parm2: row, contentTextarea: list_equipment[i].observation});
+    popUp("Adicione a observação: ", {
+        textArea: true,
+        function_textarea: setObservation,
+        parm1: id_cargo,
+        parm2: row,
+        contentTextarea: (list_equipment[i] && list_equipment[i].observation) ?? ""
+    });
 }
 
 function setTurnType() {
