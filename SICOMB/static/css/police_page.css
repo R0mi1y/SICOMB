@@ -60,7 +60,7 @@ table img{
 
 }
 
-.cargo_itens h2{
+.load_itens .loads h2{
     color:  rgb(91,73,57);
     background-color: #fff;
 }
@@ -126,14 +126,21 @@ table img{
 }
 
 
-.cargo_itens{
+.load_itens{
     background-color: #fff;
     border-radius: 10px;
     height: 478px;
     margin: 20px 0px;
 }
+.loads{
+    background-color: #fff;
+    border-radius: 10px;
+    height: fit-content;
 
-.cargo_itens .cargo_title{
+    margin: 20px 0px;
+}
+
+.load_itens .cargo_title, .loads .cargo_title{
     font-family: interBold;
     color:  rgb(91,73,57);
     height: 50px;
@@ -173,8 +180,7 @@ table img{
 }
 
 
-
-.row-tbody-police-page{
+.row-tbody-police-page, .row-tbody-police-page tr{
     height: 40px;
     font-size: 13px;
     text-align: center;
@@ -256,6 +262,7 @@ table img{
 .form_police_login{
     display: flex;
     justify-content: center;
+    color: #5B4939;
 }
 
 .input-div{

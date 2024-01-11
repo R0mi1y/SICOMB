@@ -180,6 +180,7 @@ table img{
 .search-btn{
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .put_qnt{
     background-color: rgb(91,73,57, 0.1);
@@ -246,10 +247,10 @@ table img{
 .row_color{
     display: flex;
     justify-content: center;
-    padding: 10px 0px 0px 0px;
+    /* padding: 10px 0px 0px 0px; */
 }
 .row_color span{
-    height: 2px;
+    height: 1px;
     width: 600px;
     background-color: #5B4939;
 }
@@ -262,6 +263,23 @@ table img{
     display: flex;
     padding: 10px 20px;
     justify-content: space-between;
+}
+
+.search-bullet{
+    padding: 1% 3%;
+    margin: 0.5% 0%;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #5B4939;
+    box-shadow: 1px 2px 0px #d39b53;
+    background-color: rgb(236, 190, 129);
+    transition: .5s;
+    cursor: pointer;
+    font-family: 'interBold'
+}
+.search-bullet:hover{
+    background-color: rgb(190, 128, 46); 
+    color: white;
 }
 
 .btn{
@@ -283,7 +301,7 @@ table img{
 }
 
 .note{
-    border-bottom: 1px solid #5B4939;
+    /* border-bottom: 1px solid #5B4939; */
 }
 
 .note h5{
@@ -296,6 +314,12 @@ table img{
     font-family: interRegular;
     font-size:13px;
     color: #5B4939;
+}
+.row-tbody tr{
+    height: 40px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 50px;
 }
 
 .cargo_itens{
@@ -386,23 +410,28 @@ table img{
     height: 35px;
     border-radius: 10px;
     margin: 0px 0px 0px 20px;
+    cursor: pointer;
 }
 
 .btn_disabled {
     background-color: rgba(177, 177, 177, 0.875);
+    cursor: pointer;
 }
 
 .btn_confirm{
     background-color: rgba(2, 183, 2, 0.875);
+    cursor: pointer;
 }
 .btn_confirm:hover{
     background-color: rgba(60, 190, 60, 0.8);
 }
 .btn_cancel{
     background-color: #c7180c;
+    cursor: pointer;
 }
 .btn_cancel:hover{
     background-color: #b63131;
+    
 }
 
 footer{
@@ -414,6 +443,7 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .img-return{
     width: 40px;

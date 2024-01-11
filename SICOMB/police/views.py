@@ -133,7 +133,7 @@ def search_police(request, id):
         if form.is_valid():
             
             form.save()
-            messages.success(request, "Atulização realizada com sucesso!")
+            messages.success(request, "Atualização realizada com sucesso!")
             return HttpResponseRedirect("/police/filter/")
     else:
         form = PoliceForm(instance=police)

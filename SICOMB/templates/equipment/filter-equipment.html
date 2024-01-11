@@ -76,7 +76,7 @@
             <tbody>
                 {% for equipment in equipment_list %}
                 <tr class="row-tbody">
-                    <td>{{ equipment.serial_number }}</td>
+                    <td href="#">{{ equipment.serial_number }}</td>
                     <td>{{ equipment.status }}</td>
                     <td>{% if equipment.model_type.name == "model_accessory" %}
                         Acessório
