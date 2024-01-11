@@ -205,3 +205,11 @@ def approve_equipment(request):
         'equipment_list': equipment_list,
     }
     return render(request, "equipment/approve_equipment.html", context)
+
+@login_required
+def get_equipment_info(request, pk):
+    equipment = get_object_or_404(Equipment, pk=pk)
+    
+    equipment_info = equipment.serial_number #Teste, necessário modificações
+    
+    return render(request, "equipment/equipment_information.html", {'equipment': equipment, 'equipment_info': equipment_info})

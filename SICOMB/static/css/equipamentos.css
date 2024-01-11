@@ -108,14 +108,17 @@ select.input-data {
 .content{
     padding: 0 20px;  
 }
-.cargo{
+.equipment_informations{
+    padding: 0px 20px;
+}
+.equipment_and_police{
     font-family: interRegular;
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-.cargo .cargo_title{
+table .cargo_title{
     font-family: interBold;
     color: #fff;
     height: 50px;
@@ -135,9 +138,11 @@ table {
     font-size: 15px;
     color: #5B4939;
 }
+
 .police_officer_table td{
     text-align: center;
     padding: 7px 2px;
+    font-size: 13px;
 }  
 .police_officer_table img{
     border-radius: 80px;
@@ -156,6 +161,15 @@ table img{
     justify-content: center; 
 
 }
+
+.equipment_field{
+    width: 30%;
+    height: fit-content;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgb(0,0,0,0.50);
+}
+
 
 .cargo_itens h2{
     color: #5B4939;
