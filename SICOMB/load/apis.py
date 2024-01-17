@@ -141,7 +141,7 @@ def get_info(request):
 
 
 @csrf_exempt
-# @require_user_pass
+@require_user_pass
 def add_list_equipment(request):
     # obs = request.POST.get('observation')
     serial_number = request.POST.get('serialNumber')
@@ -223,34 +223,56 @@ def add_obs(request):
     
     eq_loads = Load.objects.get(id=id_cargo).equipment_loads.all()
     
-    no_especial_char = ''.join(c if c.isalnum() or c.isspace() else 'x' for c in serial_number)
-    
     if "bullet::" not in serial_number:
         for eq in eq_loads:
             if eq.equipment and eq.equipment.serial_number == serial_number:
-                eq.observation = obs
+                # eq.observation = obs
                 # eq.status = "Justificado" # pode criar uma var no settings.AUX pra colocar os numeros de serie e as obs pra validar e salvar só qnd finalizar a carga
-                eq.save()
+                # eq.save()
+                data = {
+                    "equipment": model_to_dict(eq.equipment),
+                    "model": model_to_dict(eq.equipment.model),
+                    "registred": eq.equipment.model_type.model.replace("model_", ""),
+                    "observation": obs if obs != "-" else "",
+                }
+                
+                data["model"]["image_path"] = eq.equipment.model.image_path.url if eq.equipment.model.image_path else ''
+        
+                settings.AUX["list_equipment"][serial_number] = {**data, **settings.AUX["list_equipment"][serial_number]}
                     
                 settings.AUX["list_equipment_valid"] = True
                 
                 print("Sucesso salvando OBS")
+                print(settings.AUX["list_equipment"])
 
                 return JsonResponse({"sucesso": "sucesso"})
 
     elif "bullet::" in serial_number:  # se for uma munição
-        serial_number = serial_number.replace("bullet::", "")
         for eq in eq_loads:
-            if eq.bullet and eq.bullet.caliber == serial_number:
-                eq.observation = obs
-                eq.status = "Justificado"
+            if eq.bullet and eq.bullet.caliber == serial_number.replace("bullet::", ""):
+                # eq.observation = obs
+                # eq.status = "Justificado"
                 
-                eq.save()
+                # eq.save()
+                data = {
+                    "model": model_to_dict(eq.bullet),
+                    "campo": "Munição",
+                    "observation": obs if obs != "-" else "",
+                }
+                data["model"]["image_path"] = eq.bullet.image_path.url if eq.bullet.image_path else ''
+                data["equipment"] = data["model"]
+                settings.AUX["list_equipment"][serial_number] = {**data, **settings.AUX["list_equipment"][serial_number]}
+                
                 settings.AUX["list_equipment_valid"] = True
                 
                 print("Sucesso salvando OBS")
+                print(settings.AUX["list_equipment"])
                 
                 return JsonResponse({"sucesso": "sucesso"})
+        else:
+            return JsonResponse({"Falha": "Falha"})
+    else:
+        return JsonResponse({"Falha": "Falha"})
 
 
 @csrf_exempt

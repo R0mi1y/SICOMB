@@ -149,22 +149,25 @@ def confirm_load(request):
                 
                 for key in settings.AUX["list_equipment"]:
                     amount = int(settings.AUX["list_equipment"][key]["amount"])
-                        
+                    
                     try:
                         observation = settings.AUX["list_equipment"][key]["observation"]
                     except:
                         observation = "-"
+                    print(f"Observação do {key}: {observation}")
                     
                     if "bullet::" not in key:
-                        load_unload.status = "Descarga da carga " + str(load_unload.pk)
-                        load_unload.save()
-                        
                         equipment = Equipment.objects.get(serial_number=key)
                         equipment.status = "Disponível"
                         equipment.save()
                         
                         eq_load = equipment_load_list.filter(equipment=equipment).first()
-                        eq_load.status = "Devolvido"
+                        
+                        if observation != "-":
+                            eq_load.status = "Justificado"
+                        else:
+                            eq_load.status = "Devolvido"
+                            
                         eq_load.save()
                         
                         Equipment_load(
@@ -176,9 +179,6 @@ def confirm_load(request):
                         ).save()
                         
                     elif "bullet::" in key:
-                        load_unload.status = "Descarga da carga " + str(load_unload.pk)
-                        load_unload.save()
-                        
                         bullet = Bullet.objects.get(caliber=key.replace("bullet::", ''))
                         bullet.amount += amount
                         bullet.save()
@@ -192,14 +192,18 @@ def confirm_load(request):
                                 Equipment_load(
                                     load=load_unload,
                                     bullet=bullet,
-                                    observation=observation,
                                     amount=amount,
-                                    status="Devolvido",
+                                    status="Retorno",
                                 ).save()
+                                
+                                if observation != "-":
+                                    equipment_load.status = "Justificado"
+                                    equipment_load.observation = observation
                                 
                                 equipment_load.save()
                                 
                             elif equipment_load.amount - amount < 0:
+                                amount = equipment_load.amount
                                 messages.error(request, "Quantidade incorreta! Munições totalmente devolvidas!")
                                 equipment_load.status = "Devolvido"
                                 equipment_load.save()
