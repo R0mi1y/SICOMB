@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import os
+import socket
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +28,7 @@ INSTALLED_APPS = [
 ]
     
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
+    # "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -99,8 +100,8 @@ DATABASES = {
         "OPTIONS": {
             "sql_mode": "traditional",
         },
-        #"PASSWORD": "",
-        "PASSWORD": "12345679",
+        "PASSWORD": "root",
+        # "PASSWORD": "12345679",
         "HOST": "localhost",
         "PORT": "3306",
     }
@@ -233,9 +234,27 @@ AUX = {
     # "SENSOR_RFID": False,
     # "PORT_FINGERPRINT": "COM13",
     "PORT_RFID": "COM13",
-    
 }
 
+
+def get_local_ip():
+    try:
+        # Cria um socket UDP
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        
+        # Conecta-se a um servidor externo (não há tráfego real)
+        s.connect(('8.8.8.8', 80))
+        
+        # Obtém o endereço IP local
+        local_ip = s.getsockname()[0]
+        
+        return local_ip
+    except socket.error:
+        return None
+    finally:
+        # Fecha o socket
+        s.close()
+    
 
 def ler_settings():
     caminho_arquivo = os.path.join(STATICFILES_DIRS[0], 'json', 'settings.json')
@@ -246,11 +265,13 @@ def ler_settings():
         with open(caminho_arquivo, 'r') as arquivo:
             sett = json.load(arquivo)
 
+        sett['ip'] = get_local_ip()
     except FileNotFoundError:
         print("Arquivo não encontrado")
 
     except Exception as e:
         print(f"Erro ao ler o arquivo: {str(e)}")
+        
     
     return sett
 

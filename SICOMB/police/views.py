@@ -389,6 +389,7 @@ def dashboard(request):
             "inactive": Police.objects.filter(Q(activated=False) | Q(activator=None)).count(),
             "fingerprints": Police.objects.all().exclude(fingerprint=None).count(),
         },
+        "link": f"http://{settings.AUX['ip']}:8000/"
     }
     
     return render(request, 'dashboard.html', data)

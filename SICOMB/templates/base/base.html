@@ -223,6 +223,12 @@
                                 </li> {% endcomment %}
                             </div>
                         {% endif %}
+                        <br>
+                        <div class="card-qrcode">
+                            <h2 style="margin-bottom: 5px;">Link</h2>
+                            <span><a href="{{link}}">{{link}}</a></span>
+                            <div id="qrcode"></div>
+                        </div>
                     </ul>
                 </nav>
             </header>
@@ -249,6 +255,16 @@
                 popUp("{{ message }}");
             {% endfor %}
         {% endif %}
+    </script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script>
+        const url = `{{link}}`;
+        const container = document.getElementById('qrcode');
+        const qr = new QRCode(container, {
+            text: url,
+            width: 185,
+            height: 185
+        });
     </script>
 </body>
 

@@ -21,12 +21,16 @@ def model_class(model):
     
     return model_name[model.__class__.__name__]
 
+
 @register.filter
 def get_amount(model):
-    if model is not None and model.__class__.__name__ != 'Bullet':
-        return [i for i in Equipment.objects.all() if i.model.model is not None and model.model == i.model.model].__len__()
-    else:
+    if model is not None and hasattr(model, 'model') and model.model is not None and model.__class__.__name__ != 'Bullet':
+        return Equipment.objects.filter(model__model=model.model).count()
+    elif hasattr(model, 'amount'):
         return model.amount
+    else:
+        return 0
+    
 
 @register.filter(name='replace_underscore')
 def replace_underscore(value):

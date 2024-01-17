@@ -1,4 +1,5 @@
 from datetime import datetime
+import threading
 from django.db import models
 from equipment.models import Equipment, Bullet
 from police.models import Police
@@ -105,28 +106,34 @@ class LoadManager(models.Manager):
         return report
     
     def send_relatory(self, load, to=False):
-        pdf = self.get_load_pdf(load)
-        
-        subject = 'Relatório de carga'
-        message = f'Relatório da carga feita no dia {load.date_load}' if load.turn_type != "descarga" else f'Relatório da descarga feita no dia {load.date_load}'
-        from_email = load.adjunct.email
-        
-        self.generate_load_report(load, subject)
-        
-        if not to:
-            recipient_list = [load.police.email]
-        else:
-            recipient_list = [to]
-        
-        email = EmailMessage(
-            subject=subject,
-            body=message,
-            bcc=recipient_list,
-        )
-        
-        email.attach(f'Relatório da carga {load.id}.pdf', pdf, 'application/pdf')
-        
-        email.send()
+        def send():
+            pdf = self.get_load_pdf(load)
+            
+            subject = 'Relatório de carga'
+            message = f'Relatório da carga feita no dia {load.date_load}' if load.turn_type != "descarga" else f'Relatório da descarga feita no dia {load.date_load}'
+            from_email = load.adjunct.email
+            
+            self.generate_load_report(load, subject)
+            
+            if not to:
+                recipient_list = [load.police.email]
+            else:
+                recipient_list = [to]
+            
+            email = EmailMessage(
+                subject=subject,
+                body=message,
+                bcc=recipient_list,
+            )
+            
+            email.attach(f'Relatório da carga {load.id}.pdf', pdf, 'application/pdf')
+            email.send()
+            
+        thread = threading.Thread(target=send)
+        thread.start()
+
+        # Retorna a referência à thread (opcional, dependendo dos requisitos)
+        return thread
     
     def get_equipment_loads(self, load):
         return Equipment_load.objects.filter(load=load)
