@@ -127,15 +127,14 @@
                             {{ forloop.counter }}
                         </td>
                         <td>
-                            {{equipment_load.equipment.serial_number}}
-                            {{equipment_load.bullet.caliber}}
+                            {{equipment_load.equipment.serial_number|default:'-' }}
                         </td>
                         <td>
                             {{ equipment_load.equipment.model.description }}
                             {{ equipment_load.bullet.description}}
                         </td>
                         <td>
-                            {{equipment_load.equipment.model.model|default:equipment_load.bullet}}
+                            {{equipment_load.equipment.model.model|default:"Munição"}}
                         </td>
                         <td>
                             {% if equipment_load.equipment.model.caliber %}

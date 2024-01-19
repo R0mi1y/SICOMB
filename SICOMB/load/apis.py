@@ -13,6 +13,11 @@ from django.utils import timezone
 from equipment.templatetags.custom_filters import require_user_pass
 
 
+def check_load(request, id):
+    Load.objects.check_load(Load.objects.filter(id=id).first())
+    return JsonResponse({})
+
+
 def convert_date(data_hora_utc):
     # Converter para um objeto de data e hora do Django
     data_hora = timezone.datetime.strptime(data_hora_utc, "%Y-%m-%d %H:%M:%S.%f%z")
@@ -25,7 +30,6 @@ def convert_date(data_hora_utc):
     data_hora_formatada = data_hora_brasileira.strftime(formato_br)
 
     return data_hora_formatada
-
 
 
 @csrf_exempt

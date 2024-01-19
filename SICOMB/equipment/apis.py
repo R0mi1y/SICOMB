@@ -96,11 +96,13 @@ def get_equipment_serNum(request, serial_number):
                 }, 
                 json_dumps_params={'ensure_ascii': False}
             )
+            
         data = {
             "uid": "Search",
             "model": model_to_dict(bullet),
             "registred": "bullet"
         }
+        
         data['model']['image_path'] = bullet.image_path.url if bullet.image_path else ''
         data["equipment"] = data["model"]
 
@@ -227,6 +229,7 @@ def get_equipment_unvalible(request, id):
 
         # Caso seja uma munição
         if "bullet::" in request.GET.get("pk"):
+            data["registred"] = "bullet"
             caliber = request.GET.get("pk").replace("bullet::", "")
             try:
                 bullet = Bullet.objects.get(caliber=caliber)
@@ -254,6 +257,8 @@ def get_equipment_unvalible(request, id):
             try:
                 equipment = Equipment.objects.get(serial_number=request.GET.get("pk"))
                 
+                data["registred"] = equipment.model_type.model.replace("model_", ""),
+
                 if not equipment.activated:
                     return JsonResponse({"msm": "UID aguardando aprovação de um administrador!", "uid": ""}, json_dumps_params={'ensure_ascii': False})
             except Equipment.DoesNotExist:
@@ -277,6 +282,7 @@ def get_equipment_unvalible(request, id):
                     {"uid": "", "msm": "Equipamento não presente na carga atual."}, 
                     json_dumps_params={'ensure_ascii': False}
                 )  # Caso o equipamento não esteja cadastrado ele simplismente ignora
+                
                 
     # Para os equipamentos com a tag
     elif settings.AUX["uids"].__len__() > 0:

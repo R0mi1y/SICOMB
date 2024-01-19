@@ -545,6 +545,7 @@ footer{
 
 .status-data-indefinida{
     /* color: #fff; */
+    color: #5B4939;
     border-left: solid #5B4939;
     border-right: solid #5B4939;
     background-color: lightgray;

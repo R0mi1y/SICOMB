@@ -40,4 +40,5 @@ urlpatterns = [
     path("<str:pk>/carga_policial/", views.get_carga_policial, name='carga_polical'),
     path("relatorio/enviar/<int:id>", apis.send_load_relatory),
     path("relatorio/receber/<int:id>", apis.get_relatory),
+    path("check_load/<int:id>", apis.check_load),
 ]
