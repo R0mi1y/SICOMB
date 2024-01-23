@@ -101,8 +101,8 @@ DATABASES = {
         "OPTIONS": {
             "sql_mode": "traditional",
         },
-        "PASSWORD": "root",
-        # "PASSWORD": "12345679",
+        #"PASSWORD": "root",
+        "PASSWORD": "12345679",
         "HOST": "localhost",
         "PORT": "3306",
     }

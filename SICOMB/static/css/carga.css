@@ -116,7 +116,7 @@ table img{
 
 .means_room_table table tbody, td{
     text-align: center;
-    padding: 3px 0px 3px 0px;
+    padding: 3px 20px 3px 20px;
 }
 
 .img-search{
@@ -329,6 +329,7 @@ table img{
     /* max-height: 75vh; */
     /* overflow-y: scroll; */
     /* overflow-x: scroll; */
+    min-width: max-content;
 }
 .dashboard_loads{
     width: 100%;
@@ -395,7 +396,7 @@ table img{
 .table_itens thead th{
     min-width: 100px;
 }
-.unload_itens{}
+
 .finalize_load{
     justify-content: flex-end;
     display: flex;
@@ -548,7 +549,7 @@ footer{
         max-height: 400px;
         overflow-y: scroll;
         overflow-x: scroll;
-
+        min-width: max-content;
 }
 
 .unload_itens .table_itens .cargo_title{

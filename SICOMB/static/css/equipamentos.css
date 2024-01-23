@@ -164,7 +164,7 @@ table img{
 
 .equipment_field{
     width: 30%;
-    height: fit-content;
+    height: 400px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 5px 10px rgb(0,0,0,0.50);
