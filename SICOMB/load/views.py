@@ -14,6 +14,7 @@ from django.contrib import messages
 settings.AUX["list_equipment"] = {}  # lista de equipamentos
 settings.AUX["list_equipment_removed"] = {}  # lista de equipamentos removidos
 
+
 # cadastra a carga com a lista
 @has_group('adjunct')
 def confirm_load(request):
@@ -139,7 +140,6 @@ def confirm_load(request):
             elif turn_type == "descarga":
                 load.returned_load_date = datetime.now()
                 load.status = "descarga"
-                load.returned_load_date = datetime.now()
                 
                 load_unload = Load.objects.filter(id=request.POST.get("load_id")).first()
                 load.load_unload = load_unload
@@ -175,7 +175,7 @@ def confirm_load(request):
                             equipment=equipment,
                             observation=observation,
                             amount=amount,
-                            status="Retorno",
+                            status="Devolvido",
                         ).save()
                         
                     elif "bullet::" in key:
@@ -193,7 +193,7 @@ def confirm_load(request):
                                     load=load_unload,
                                     bullet=bullet,
                                     amount=amount,
-                                    status="Retorno",
+                                    status="Devolvido",
                                 ).save()
                                 
                                 if observation != "-":
@@ -217,10 +217,12 @@ def confirm_load(request):
                                 bullet=bullet,
                                 observation=observation,
                                 amount=amount,
-                                status="Retorno",
+                                status="Devolvido",
                             ).save()
                         else:
                             messages.error(request, "Erro!")
+                            
+                load.save()
                 
                 Load.objects.send_relatory(load)
                 
@@ -244,8 +246,7 @@ def confirm_load(request):
 
         data["policial"] = police
     
-    for i in Load.objects.all():
-        Load.objects.check_load(i)
+    Load.objects.check_all_loads()
         
     settings.AUX["matricula"] = ''
     return render(request, "load/load.html", data)

@@ -319,6 +319,9 @@ function fetch_police(){
                                 <td>` + policial.lotacao + `</td>
                             </tr>
                             <tr>
+                                <td>` + policial.posto + `</td>
+                            </tr>
+                            <tr>
                                 <td>` + policial.email + `</td>
                             </tr>
                         </tbody>
@@ -406,7 +409,10 @@ function addToSquare(data) {
         'armament' : 'Armamento',
         'grenada' : 'Granada',
         'bullet' : 'Munição',
+        'equipment' : '-',
     }
+
+
 
     data['campo'] = tipo_model[data.registred];
     document.getElementById("means_room_product").src = data.model.image_path; // Muda a imagem
@@ -420,7 +426,9 @@ function addToSquare(data) {
     serialNumberInput.innerText = data.equipment.serial_number ?? "-";
     description.innerText = data.model.description;
     // observation.innerText = data.equipment.observation == null || data.equipment.observation == undefined ? "" : data.equipment.observation;
-    type.innerText = data.campo;
+    console.log(data.registred);
+    console.log(data);
+    type.innerText = data["campo"];
     amount.innerText = data.amount == null || data.amount == undefined || data.amount == '' ? "1" : data.amount;
     amount_input.value = amount.innerText;
 }

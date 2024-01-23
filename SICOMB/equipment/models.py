@@ -19,14 +19,14 @@ class Model_armament(models.Model):
         # na hora dos campos do select ele retorna isso
         return f"{self.model}"
     
-    def get_equipment_amount(self):
-        return [i for i in Equipment.objects.all() if self.model == i.model.model].__len__()
+    def get_amount(self):
+        return Equipment.objects.filter(model_type=ContentType.objects.get_for_model(self), model_id=self.id).count()
 
 
 class Model_wearable(models.Model):
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
     activated = models.IntegerField("Ativado", default=0)
-    model = models.TextField("Modelo do armamento")
+    model = models.TextField("Modelo do vestimento")
     size = models.CharField("Tamanho", max_length=10)
     description = models.TextField("Descrição")
     image_path = models.FileField(upload_to="Modelos/vestiveis/")
@@ -35,14 +35,14 @@ class Model_wearable(models.Model):
         # na hora dos campos do select ele retorna isso
         return f"{self.model}"
     
-    def get_equipment_amount(self):
-        return [i for i in Equipment.objects.all() if self.model == i.model.model].__len__()
-
+    def get_amount(self):
+        return Equipment.objects.filter(model_type=ContentType.objects.get_for_model(self), model_id=self.id).count()
+    
 
 class Model_accessory(models.Model):  # bastão, escudo
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
     activated = models.IntegerField("Ativado", default=0)
-    model = models.TextField("Modelo do armamento")
+    model = models.TextField("Modelo do acessório")
     description = models.TextField("Descrição")
     image_path = models.FileField(upload_to="Modelos/acessorios/")
 
@@ -50,14 +50,14 @@ class Model_accessory(models.Model):  # bastão, escudo
         # na hora dos campos do select ele retorna isso
         return f"{self.model}"
     
-    def get_equipment_amount(self):
-        return [i for i in Equipment.objects.all() if self.model == i.model.model].__len__()
+    def get_amount(self):
+        return Equipment.objects.filter(model_type=ContentType.objects.get_for_model(self), model_id=self.id).count()
 
 
 class Model_grenada(models.Model):
     activator = models.ForeignKey(Police, on_delete=models.DO_NOTHING, default=None, null=True)
     activated = models.IntegerField("Ativado", default=0)
-    model = models.TextField("Modelo do armamento")
+    model = models.TextField("Modelo da granada")
     image_path = models.FileField(upload_to="Modelos/granadas/")
     description = models.TextField("Descrição")
     
@@ -65,8 +65,8 @@ class Model_grenada(models.Model):
         # na hora dos campos do select ele retorna isso
         return f"{self.model}"
 
-    def get_equipment_amount(self):
-        return [i for i in Equipment.objects.all() if self.model == i.model.model].__len__()
+    def get_amount(self):
+        return Equipment.objects.filter(model_type=ContentType.objects.get_for_model(self), model_id=self.id).count()
 
 
 class Equipment(models.Model):
@@ -109,3 +109,6 @@ class Bullet(models.Model):
     def __str__(self):
         # na hora dos campos do select ele retorna isso
         return f"{self.caliber}"
+    
+    def get_amount(self):
+        return self.amount

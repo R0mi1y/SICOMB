@@ -28,14 +28,25 @@ class LoadManager(models.Manager):
         html = render_to_string('load/pdf_template.html', context)
         return pdfkit.from_string(html, pdf_path, options=options)
     
+    def check_all_loads(self):
+        
+        def chek():
+            for i in Load.objects.exclude(status="DESCARREGADA"):
+                Load.objects.check_load(i)
+                
+        thread = threading.Thread(target=chek)
+        thread.start()
+        
+        
     def check_load(self, load):
         data_hora_atual = timezone.now()
+            
         expected_return_date = load.expected_load_return_date
         
         # se tem alguma que já foi devolvida
         has_devolved = load.equipment_loads.filter(Q(status='Devolvido') | Q(status="Justificado")).exists()
         # se tem alguma que ainda não foi devolvida
-        has_not_devolved = load.equipment_loads.exclude(Q(status='Devolvido') | Q(status="Justificado")).exists()
+        has_not_devolved = load.equipment_loads.exclude(Q(status='Devolvido') | Q(status='Justificado')).exists()
         
         status_descarregado = ['DESCARREGADA', 'DESCARREGADA COM ATRASO']
         
@@ -66,13 +77,20 @@ class LoadManager(models.Manager):
                             load.status = 'PARCIALMENTE DESCARREGADA'
                         else:
                             load.status = 'DESCARREGADA'
+                            if load.returned_load_date is None:
+                                load.returned_load_date = data_hora_atual
+                                load.save()
                     else:
                         load.status = 'DATA DE RETORNO NÃO DEFINIDA'
+            elif load.returned_load_date is None: # Forma provisória de resolver erro de cargas como CONSERTO e REQUISIÇÃO sem data
+                load.returned_load_date = data_hora_atual
+                load.save()
         else:
             load.status = 'descarga'
                     
         load.save()
         return True
+    
     
     def generate_load_report(self, load, subject):
         with transaction.atomic():

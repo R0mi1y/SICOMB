@@ -35,9 +35,10 @@ def login(request):
                     return render(
                         request, "police/request_cargo.html"
                     )
+                
             
                 if check_password(request.POST.get("senha"), police.password):
-                    if not police.activated:
+                    if not police.activated or police.activator is None:
                         messages.error(request, "Policial aguardando aprovação de um administrador!")
                         
                         return render(request, "police/request_cargo.html", data)
@@ -47,7 +48,7 @@ def login(request):
                     settings.AUX["matricula"] = request.POST.get("matricula")
 
                     data["police"] = police
-                    loads = Load.objects.filter(police=police).order_by('-date_load')[:15]
+                    loads = Load.objects.filter(police=police).order_by('-date_load')[:35]
                     data["loads"] = []
                     for i in loads:
                         ec = Equipment_load.objects.filter(load=i)
@@ -81,7 +82,7 @@ def login(request):
                         settings.AUX["matricula"] = police.matricula
 
                         data["police"] = police
-                        loads = Load.objects.filter(police=police).order_by('-date_load')[:15]
+                        loads = Load.objects.filter(police=police).order_by('-date_load')[:35]
                         data["loads"] = []
                         
                         for i in loads:

@@ -26,6 +26,7 @@ def get_login_police(request):
                 "telefone": police.telefone,
                 "lotacao": police.lotacao,
                 "email": police.email,
+                "posto": police.posto,
             }
             
         except Police.DoesNotExist:

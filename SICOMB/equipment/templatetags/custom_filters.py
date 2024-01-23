@@ -24,12 +24,13 @@ def model_class(model):
 
 @register.filter
 def get_amount(model):
-    if model is not None and hasattr(model, 'model') and model.model is not None and model.__class__.__name__ != 'Bullet':
-        return Equipment.objects.filter(model__model=model.model).count()
-    elif hasattr(model, 'amount'):
-        return model.amount
-    else:
-        return 0
+    try:
+        if model is not None:
+            return model.get_amount()
+    except Exception as e:
+        print(f"Erro ao acessar 'model': {e}")
+
+    return '-'
     
 
 @register.filter(name='replace_underscore')
