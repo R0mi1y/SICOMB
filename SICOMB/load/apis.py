@@ -1,10 +1,12 @@
 import mimetypes
 import os
+import time
 from django.forms import model_to_dict
 from django.http import JsonResponse, FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+import serial
 from load.models import *
 from equipment.models import *
 from police.models import *
@@ -303,3 +305,13 @@ def get_relatory(request, id):
     Load.objects.send_relatory(load, to=request.user.email)
     
     return JsonResponse({"status": True, "message": "Carga enviada com sucesso!"})
+
+
+@csrf_exempt
+@require_user_pass
+def reset_rfid(request):
+    print("Resetando rfid")
+    settings.AUX['restart_rfid_thread']()
+    
+    return JsonResponse({"status": True, "message": "Conexão resetada com sucesso!"})
+    

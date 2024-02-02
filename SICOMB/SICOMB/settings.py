@@ -101,8 +101,8 @@ DATABASES = {
         "OPTIONS": {
             "sql_mode": "traditional",
         },
-        #"PASSWORD": "root",
-        "PASSWORD": "12345679",
+        "PASSWORD": "root",
+        # "PASSWORD": "12345679",
         "HOST": "localhost",
         "PORT": "3306",
     }
@@ -185,31 +185,6 @@ LOGGING = {
 AUX = {
     "matricula": "",
     "uids": [],
-    # "calibres": (
-    #     ("", "SELECIONE"),
-    #     ("9mm", "9mm"),
-    #     (".45 ACP", ".45 ACP"),
-    #     (".380 ACP", ".380 ACP"),
-    #     (".40 S&W", ".40 S&W"),
-    #     (".357 Magnum", ".357 Magnum"),
-    #     (".44 Magnum", ".44 Magnum"),
-    #     ("5.56mm", "5.56mm"),
-    #     ("7.62mm", "7.62mm"),
-    #     (".22 LR", ".22 LR"),
-    # ),
-    # "postos": [
-    #     ("Soldado", "Soldado"),
-    #     ("Cabo", "Cabo"),
-    #     ("Primeiro Sargento", "Primeiro Sargento"),
-    #     ("Subtenente", "Subtenente"),
-    #     ("Aspirante", "Aspirante"),
-    #     ("Primeiro Tenente", "Primeiro Tenente"),
-    #     ("Capitão", "Capitão"),
-    #     ("Major", "Major"),
-    #     ("Tenente Coronel", "Tenente Coronel"),
-    #     ("Coronel", "Coronel"),
-    #     ("Comandante Geral", "Comandante Geral"),
-    # ],
     "registering_fingerprint": {
         'police_id': None,
         'status': False,
@@ -230,10 +205,6 @@ AUX = {
     
     # LEITOR DE DIGITAL
     "message_fingerprint_sensor": None,
-    
-    # "SENSOR_FINGERPRINT": False,
-    # "SENSOR_RFID": False,
-    # "PORT_FINGERPRINT": "COM13",
     "PORT_RFID": "COM13",
 }
 

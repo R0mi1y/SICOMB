@@ -1,5 +1,30 @@
+var messages = [];
+
+var reset_rfid = function() {
+    console.log("Resetando sensor RFID");
+    $.ajax({
+        url: "/carga/api/reset_rfid/",
+        type: "POST",
+        dataType: "json",
+        data: {
+            user: user,
+            pass: pass,
+        },
+        success: function () {
+            popUp("Conexão resetada!", {timer: 2000, overlay: false});
+        }
+    });
+};
+
 var popUp = function (message, options = {}) {
-    console.log(message, options);
+    if (messages.includes(message)) {
+        console.log(message + ' já exibida.');
+        return;
+    } else {
+        messages.push(message);
+        console.log('Exibindo mensagem: ' + message);
+    }
+
     const defaultOptions = {
         closeBtn: true,
         yn: false,
@@ -27,13 +52,15 @@ var popUp = function (message, options = {}) {
         const closeButton = $("<button>x</button>");
         closeButton.addClass("close-button");
         closeButton.on("click", () => {
-            if (settings.overlay) overlay.remove();
+            if (settings.overlay) {
+                overlay.remove();
+                messages = messages.filter(item => item !== message);
+            }
             else {
-                // Inicia a animação de saída diminuindo a opacidade
                 popUpElement.css("opacity", "0");
     
-                // Adiciona um atraso antes de remover o elemento do DOM
                 setTimeout(() => {
+                    messages = messages.filter(item => item !== message);
                     popUpElement.remove();
                 }, 300); // Ajuste conforme necessário
             }
@@ -53,15 +80,17 @@ var popUp = function (message, options = {}) {
         const yesButton = $("<button>SIM</button>");
         yesButton.addClass("popup-button green");
         yesButton.on("click", () => {
-            if (settings.overlay) overlay.remove();
+            if (settings.overlay) {
+                overlay.remove();
+                messages = messages.filter(item => item !== message);
+            }
             else {
-                // Inicia a animação de saída diminuindo a opacidade
                 popUpElement.css("opacity", "0");
     
-                // Adiciona um atraso antes de remover o elemento do DOM
                 setTimeout(() => {
                     popUpElement.remove();
-                }, 300); // Ajuste conforme necessário
+                    messages = messages.filter(item => item !== message);
+                }, 300);
             }
             settings.yesFunction();
         });
@@ -69,14 +98,16 @@ var popUp = function (message, options = {}) {
         const noButton = $("<button>NÃO</button>");
         noButton.addClass("popup-button red");
         noButton.on("click", () => {
-            if (settings.overlay) overlay.remove();
+            if (settings.overlay) {
+                overlay.remove();
+                messages = messages.filter(item => item !== message);
+            }
             else {
-                // Inicia a animação de saída diminuindo a opacidade
                 popUpElement.css("opacity", "0");
     
-                // Adiciona um atraso antes de remover o elemento do DOM
                 setTimeout(() => {
                     popUpElement.remove();
+                    messages = messages.filter(item => item !== message);
                 }, 300); // Ajuste conforme necessário
             }
             settings.noFunction();
@@ -115,15 +146,17 @@ var popUp = function (message, options = {}) {
         button.css("background-color", "#685949");
         button.css("color", "#fff");
         button.on("click", () => {
-            if (settings.overlay) overlay.remove();
+            if (settings.overlay) {
+                overlay.remove();
+                messages = messages.filter(item => item !== message);
+            }
             else {
-                // Inicia a animação de saída diminuindo a opacidade
                 popUpElement.css("opacity", "0");
     
-                // Adiciona um atraso antes de remover o elemento do DOM
                 setTimeout(() => {
                     popUpElement.remove();
-                }, 300); // Ajuste conforme necessário
+                    messages = messages.filter(item => item !== message);
+                }, 300); 
             }
             settings.function_textarea(settings.parm1, settings.parm2, textArea.val());
         });
@@ -135,15 +168,17 @@ var popUp = function (message, options = {}) {
 
     if (settings.timer) {
         setTimeout(() => {
-            if (settings.overlay) overlay.remove();
+            if (settings.overlay) {
+                overlay.remove();
+                messages = messages.filter(item => item !== message);
+            }
             else {
-                // Inicia a animação de saída diminuindo a opacidade
                 popUpElement.css("opacity", "0");
     
-                // Adiciona um atraso antes de remover o elemento do DOM
                 setTimeout(() => {
                     popUpElement.remove();
-                }, 300); // Ajuste conforme necessário
+                    messages = messages.filter(item => item !== message);
+                }, 300); 
             }
         }, settings.timer);
     }
@@ -153,8 +188,11 @@ var popUp = function (message, options = {}) {
     }, 10);
 
     return {"overlay": overlay, "close_function": () => {
-        if (settings.overlay) overlay.remove();
+        if (settings.overlay) {
+            overlay.remove();
+        }
         else $("#messages").find(popUpElement).remove();
+        messages = messages.filter(item => item !== message);
     }, "message": message};
 }
 

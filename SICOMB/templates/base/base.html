@@ -90,6 +90,10 @@
                                     alt="17º Batalhão de Polícia Militar do Estado da Bahia">
                                 <h3>SISCOEM</h3>
                             </div>
+                            <li onclick="reset_rfid()">
+                                <img src="{% static 'img/dashboard.png' %}" alt="">
+                                <span>Ativar Leitor</span>
+                            </li>
                             <li onclick="window.location='{% url 'request_cargo_login' %}'">
                                 <img src="{% static 'img/dashboard.png' %}" alt="">
                                 <span>Login policial</span>

@@ -88,6 +88,6 @@
         ]
     ],
     "SENSOR_FINGERPRINT": false,
-    "SENSOR_RFID": false,
-    "PORT_RFID": "COM13"
+    "SENSOR_RFID": true,
+    "stop_event": false
 }
