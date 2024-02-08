@@ -132,8 +132,13 @@ def search_police(request, id):
         form = PoliceForm(request.POST, request.FILES, instance=police)
         
         if form.is_valid():
+            police = form.save()
             
-            form.save()
+            group_police, _ = Group.objects.get_or_create(name='police')
+
+            if len(police.groups) == 0:
+                police.groups.add(group_police)
+            
             messages.success(request, "Atualização realizada com sucesso!")
             return HttpResponseRedirect("/police/filter/")
     else:

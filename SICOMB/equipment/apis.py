@@ -7,7 +7,7 @@ from SICOMB import settings
 from load.models import *
 from .templatetags.custom_filters import require_user_pass
 from django.views.decorators.csrf import csrf_exempt
-import threading
+import simpleaudio as sa
 
 @csrf_exempt
 @require_user_pass
@@ -335,7 +335,6 @@ def set_uid(request):
         "equipments": Equipment.objects.all()
     }
     
-    # Armazena o UID recebido num array
     if request.method == "GET":
         if (
             request.GET.get("uid") != ""
@@ -344,16 +343,14 @@ def set_uid(request):
         ):
             settings.AUX["uids"].append(request.GET.get("uid"))
             data["uid"] = settings.AUX["uids"][settings.AUX["uids"].__len__() - 1]
+            
+            som = sa.WaveObject.from_wave_file(settings.STATICFILES_DIRS[0] + "/sounds/passSound.wav")
+            play_obj = som.play()
+            play_obj.wait_done()
         
         print(settings.AUX["uids"])
     return render(request, "equipment/set_answer.html", data)
     
-    # else:
-    #     thread = threading.Thread(target=set_uid_from_arduino)
-    #     thread.start()
-        
-    #     return JsonResponse({})
-
 
 def set_uid_from_arduino():
     while True:

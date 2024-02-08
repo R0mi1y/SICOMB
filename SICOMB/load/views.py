@@ -17,6 +17,10 @@ settings.AUX["list_equipment_removed"] = {}  # lista de equipamentos removidos
 
 # cadastra a carga com a lista
 @has_group('adjunct')
+def read_qrcode(request):
+    return render(request, 'load/read_qrcode.html')
+    
+@has_group('adjunct')
 def confirm_load(request):
     data = {
         "municoes": settings.AUX["calibres"]

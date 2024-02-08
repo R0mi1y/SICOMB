@@ -27,4 +27,5 @@ urlpatterns = [
     path("bullets/get/", apis.get_bullets), # seta o uid (em formato API)
     # path("get_models", get_models_equipment), # retorna todos os models
     path("<str:pk>/info_equipamento/", views.get_equipment_info, name='get_equipment_info'),
+    path("<str:pk>/generate_qr_tag/", views.generate_qr_tag, name='get_equipment_info'),
 ]

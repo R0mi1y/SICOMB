@@ -18,11 +18,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
     # Meus Apps 
     "police",
     "equipment",
     "load",
     "report",
+    
     # Apps de terceiros
     "corsheaders",  # Configuração necessaria para acerro da página equipment/get como uma api
 ]
@@ -40,7 +42,7 @@ MIDDLEWARE = [
     "SICOMB.middlwares.handle_error",
 ]
 
-APPEND_SLASH = False  # resolve erro do fetch de rotas do django
+APPEND_SLASH = True  # resolve erro do fetch de rotas do django
 
 ROOT_URLCONF = "SICOMB.urls"
 
@@ -131,14 +133,12 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
-]
 
 CORS_ALLOW_METHODS = [
     "GET",
     "POST",
+    "PUT",
+    "DELETE",
 ]
 
 CORS_ALLOW_HEADERS = [

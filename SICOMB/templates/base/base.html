@@ -85,7 +85,7 @@
                 <nav id="navbar">
                     <ul class="alter">
                         {% if user|has_group:"adjunct" or user.is_superuser %}
-                            <div class="logo">
+                            <div class="logo" onclick="window.location='/'">
                                 <img id="pm_nav_img" class="img-bpm" src="{% static 'img/policiamilitar_logo.png' %}"
                                     alt="17º Batalhão de Polícia Militar do Estado da Bahia">
                                 <h3>SISCOEM</h3>
@@ -128,6 +128,10 @@
                                 <li onclick="window.location='{% url 'filter_cargas' %}'">
                                     <img src="{% static 'img/network.png' %}" alt="">
                                     <span>Cargas</span>
+                                </li>
+                                <li onclick="generateQrTag()">
+                                    <img src="{% static 'img/network.png' %}" alt="">
+                                    <span>Gerar tag qr</span>
                                 </li>
                                 <li onclick="window.location='{% url "filter_equipment" %}'">
                                     <img src="{% static 'img/disket.png' %}" alt="">
@@ -260,7 +264,7 @@
             {% endfor %}
         {% endif %}
     </script>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="{% static 'js/qrcode.min.js' %}"></script>
     <script>
         const url = `{{link}}`;
         const container = document.getElementById('qrcode');
@@ -269,6 +273,49 @@
             width: 185,
             height: 185
         });
+
+        function generateRandomString(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        function generateQrTag() {
+            const randomString = generateRandomString(20);
+            const qrData = "qrSICOMBtag=" + randomString;
+
+            let qrCodeElement = document.createElement("div");
+
+            const qrCode = new QRCode(qrCodeElement, {
+            text: qrData,
+            width: 128,
+            height: 128
+            });
+
+            qrCodeElement.style = ` 
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: solid 20px white;
+            `;
+        
+            const qrElement = qrCode._el.firstChild;
+            qrElement.style.border = "4px solid white";
+        
+            const qrDataURL = qrElement.toDataURL("image/png");
+        
+            const downloadLink = document.createElement("a");
+            downloadLink.href = qrDataURL;
+            downloadLink.download = "qrCode.png";
+        
+            downloadLink.click();
+            console.log(qrCode);
+
+            popUp("QR code garado!", {adicional: qrCodeElement});
+        }
     </script>
 </body>
 

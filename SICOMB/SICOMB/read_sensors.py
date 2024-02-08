@@ -2,7 +2,8 @@ from serial.tools import list_ports
 import threading
 import serial
 import time
-import psutil
+import simpleaudio as sa
+
 
 command_hex = "AA 00 27 00 03 22 FF FF 4A DD"
 # command_hex_2 = "AA 00 B6 00 02 03 E8 A3 DD"
@@ -121,7 +122,7 @@ def read_line(ser, start_time=time.time(), timer=time_while, read_tag=True):
 
 
 def get_uids():
-    from SICOMB.settings import AUX
+    from SICOMB.settings import AUX, STATICFILES_DIRS
     
     while not AUX['serial_port_rfid'].isOpen():
         time.sleep(1)
@@ -138,11 +139,19 @@ def get_uids():
     while time.time() - start_time < time_while:
         try:
             line = read_line(ser, start_time)
+            
+            som = sa.WaveObject.from_wave_file(STATICFILES_DIRS[0] + "/sounds/passSound.wav")
+            play_obj = som.play()
+            play_obj.wait_done()
+            
             line = "".join(line[6:len(line) - 2])
 
             print(AUX["uids"])
             if line not in AUX["uids"] and line.strip() != "" :
                 AUX["uids"].append(line)
+                # som = sa.WaveObject.from_wave_file(STATICFILES_DIRS[0] + "/sounds/passSound.wav")
+                # play_obj = som.play()
+                # play_obj.wait_done()
                 
         except UnicodeDecodeError:
             print(f"Erro de decodificação no sensor RFID, impossível decodificar como UTF-8")

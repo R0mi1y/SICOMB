@@ -33,8 +33,16 @@ def main_view(request):
             return VIEW_ADJUNCT(request)
         else:
             print("O usuário não está presente em nenhum grupo de usuário!")
-            messages.error(request, "O usuário não está presente em nenhum grupo de usuário!")
-            return VIEW_ERROR(request)
+            messages.error(request, "O usuário não está presente em nenhum grupo de usuário! definindo como policial.")
+            
+            if len(request.user.groups.all()) == 0:
+                request.user.groups.add(police_group)
+            
+            if police_group in request.user.groups.all():
+                return VIEW_POLICE(request)
+            else:
+                return VIEW_ERROR(request)
+            
     except Group.DoesNotExist:
         print("O usuário está presente em um grupo de usuário não existente!")
         messages.error(request, "O usuário está presente em um grupo de usuário não existente!")

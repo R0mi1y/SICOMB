@@ -19,6 +19,10 @@ def delete_equipment(request, id):
 
 # Registra o equipamento
 @has_group('adjunct')
+def generate_qr_tag(request, pk):
+    return render(request, "equipment/generate_qr_tag.html",)
+
+@has_group('adjunct')
 def register_edit_equipment(request, id=None):
     equipment = None
     if id:  # Se houver o id, signigica que é uma edição
