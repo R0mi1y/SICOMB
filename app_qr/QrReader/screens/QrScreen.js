@@ -186,11 +186,10 @@ const styles = StyleSheet.create({
   },
   nav: {
     flexDirection: 'row',
-    paddingTop: screenHeight * 0.02,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Color.colorBg,
-    height: screenHeight * 0.13,
+    height: screenHeight * 0.1,
     width: screenWidth,
     position: 'absolute',
     top: 0,
