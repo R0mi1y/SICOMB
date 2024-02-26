@@ -15,6 +15,8 @@ urlpatterns = [
     path("modelo/cadastro/<str:model_name>/", views.register_edit_model, name="register_model"), # registra o equipamento
     path("modelo/edit/<str:model_name>/<int:id>/", views.register_edit_model, name="edit_model"), # registra o equipamento
     path("modelo/delete/<str:model_name>/<int:id>/", views.delete_model, name="delete_model"), # registra o equipamento
+    path("tag/test/", views.test_tag, name="test_tag"), # registra o equipamento
+    path("tag/api/test/", apis.get_tag, name="test_tag_api"), # registra o equipamento
     
     path("allow_cargo", apis.allow_cargo), # retorna em json o equipamento do uid inserido (em formato JSON)
     path("get_disponivel", apis.get_equipment_avalible), # retorna em json o equipamento do uid inserido (em formato JSON)
@@ -27,5 +29,4 @@ urlpatterns = [
     path("bullets/get/", apis.get_bullets), # seta o uid (em formato API)
     # path("get_models", get_models_equipment), # retorna todos os models
     path("<str:pk>/info_equipamento/", views.get_equipment_info, name='get_equipment_info'),
-    path("<str:pk>/generate_qr_tag/", views.generate_qr_tag, name='get_equipment_info'),
 ]

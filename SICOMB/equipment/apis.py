@@ -109,6 +109,32 @@ def get_equipment_serNum(request, serial_number):
         return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
 
 
+# @require_user_pass
+@csrf_exempt
+def get_tag(request):
+    data = {
+        "uid": ""
+    }
+    
+    if len(settings.AUX["uids"]) > 0:
+        uid = settings.AUX["uids"].pop()
+        data["uid"] = uid
+        
+        try:
+            equipment = Equipment.objects.get(uid=uid)  # Recupera o objeto Equipamento
+        except Equipment.DoesNotExist:
+            return JsonResponse(
+                {"uid": uid}
+            )
+        
+        data["equipment"] = model_to_dict(equipment)
+        data["type"] = equipment.model_type.model.replace("model_", "")
+        data["model"] = model_to_dict(equipment.model)
+        data['model']['image_path'] = equipment.model.image_path.url if equipment.model.image_path else ''
+        
+    return JsonResponse(data, json_dumps_params={'ensure_ascii': False})
+    
+    
 @csrf_exempt
 @require_user_pass
 def get_equipment_avalible(request):

@@ -17,10 +17,10 @@ def delete_equipment(request, id):
     return redirect("filter_equipment")
 
 
-# Registra o equipamento
 @has_group('adjunct')
-def generate_qr_tag(request, pk):
-    return render(request, "equipment/generate_qr_tag.html",)
+def test_tag(request):
+    return render(request, "equipment/test_tag.html",)
+
 
 @has_group('adjunct')
 def register_edit_equipment(request, id=None):

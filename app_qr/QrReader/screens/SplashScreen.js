@@ -5,7 +5,10 @@ import { Color } from "../GlobalStyles";
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate("QrScreen");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "QrScreen" }],
+      });
     }, 2000);
 
     return () => clearTimeout(timer);

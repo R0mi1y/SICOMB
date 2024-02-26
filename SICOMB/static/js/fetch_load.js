@@ -166,97 +166,55 @@ function checkRemoveRow(rowNumber) {
     var col = rows[rowNumber].getElementsByTagName("td"); // pega os td da tr
 
     obs = col[7].innerHTML;
-    caliber = col[4].innerHTML;
     amount = col[5].innerHTML;
 
     if (col[3].innerHTML != 'Munição') {
         serialNum = col[1].innerHTML; // 1 É A POSIÇÃO DO NUMERO DE SÉRIE, ou seja ele pega o numero de série
-        let popup = popUp("Passe de volta o equipamento", {
-            closeBtn: false
-        }); // o false tira o botão de excluir a notificação
 
-        clearInterval(interval); // Para de ficar requisitando
-        clearInterval(interval);
-
-        interval = setInterval(() => { // começa a requisitar mas mudando as verificações
-            fetch('/equipamento/get_disponivel', {
-                    method: 'POST', // Método HTTP POST para enviar dados
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        'user': user,
-                        'pass': pass,
-                    })
-                }) // requisita o equipamento
-                .then(response => response.json())
-                .then(data => {
-                    if (data.uid !== '') {
-                        // percorre procurando o equipamento correspondente na tabela
-                        for (let key in list_equipment) {
-                            if (key === data.equipment.serial_number) { // verifica se tá na lista
-                                if (key == serialNum) { // verifica se é o certo pois ele pode passar um q tá na lista mas é outro
-                                    removeRow(rowNumber); // remove a linha da tabela do html
-                                    popup['close_function'](); // remove o popUpa
-                                    clearInterval(interval); // Para de ficar requisitando
-                                    // remove da lista do django
-                                    console.log(list_equipment);
-
-                                    fetch("/carga/lista_equipamentos/remover/", {
-                                        method: 'POST', // Método HTTP POST para enviar dados
-                                        headers: {
-                                            'Content-Type': 'application/x-www-form-urlencoded'
-                                        },
-                                        body: new URLSearchParams({
-                                            'user': user,
-                                            'pass': pass,
-                                            'serial_number': serialNum,
-                                            'obs': obs
-                                        })
-                                    });
-
-                                    interval = setInterval(fetchEquipmentData, 1000); // volta a ficar requisitando pra cadastrar outros
-                                    return;
-                                } else {
-                                    popUp("Equipamento incorreto!");
-                                    return;
-                                }
-                            }
-                        } // a partir daqui é se o equipamento não é o certo
-                        // exibe a msm q veio do django
-                        if (data.msm != null) {
-                            popUp(data.msm);
-                        } else {
-                            popUp("O equipamento não está na lista!");
-                        }
-                    }
+        popUp("Tem certeza que deseja remover esse equipamento?", {yn: true, closeBtn: false, yesFunction: () => {
+            fetch("/carga/lista_equipamentos/remover/", {
+                method: 'POST', // Método HTTP POST para enviar dados
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'user': user,
+                    'pass': pass,
+                    'serial_number': serialNum,
+                    'obs': obs
                 })
-                .catch(error => {
-                    console.log("Erro de requisição: " + error);
-                    popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
-                });
-        }, 1000);
+            })
+            .then(response => {
+                removeRow(rowNumber); // remove a linha da tabela do html
+            }).catch(error => {
+                console.log("Erro de requisição: " + error);
+                popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+            });
+        }});
     } else {
         caliber = col[4].innerHTML;
-        removeRow(rowNumber);
-        fetch("/carga/lista_equipamentos/remover/", {
-            method: 'POST', // Método HTTP POST para enviar dados
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                'user': user,
-                'pass': pass,
-                'serial_number': caliber,
-                'obs': obs
+        popUp("Tem certeza que deseja remover esse equipamento?", {yn: true, closeBtn: false, yesFunction: () => {
+            fetch("/carga/lista_equipamentos/remover/", {
+                method: 'POST', // Método HTTP POST para enviar dados
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'user': user,
+                    'pass': pass,
+                    'serial_number': caliber,
+                    'obs': obs
+                })
             })
-        })
-        .catch(error => {
-            console.log("Erro de requisição: " + error);
-            popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
-        });
+            .then(response => {
+                removeRow(rowNumber); // remove a linha da tabela do html
+            })
+            .catch(error => {
+                console.log("Erro de requisição: " + error);
+                popUp("Conexão com o sistema perdida!", {timer: 2000, overlay: false});
+            });
+        }});
     }
-
 }
 
 

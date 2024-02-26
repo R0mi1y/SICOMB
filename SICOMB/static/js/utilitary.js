@@ -30,8 +30,8 @@ var popUp = function (message, options = {}) {
         yn: false,
         adicional: "",
         timer: null,
-        yesFunction: false,
-        noFunction: false,
+        yesFunction: () => {},
+        noFunction: () => {},
         overlay: true,
         textArea: false,
         contentTextarea: "",
@@ -217,7 +217,7 @@ $(document).ready(function () {
             // Adicione a classe .file-selected para destacar a borda
             $(".file-label").addClass("file-selected");
             // Exiba o nome do arquivo na div .file-name
-            $(".file-label").text("ARQUIVO: " +this.files[0].name);
+            $(".file-label").text("ARQUIVO: " + this.files[0].name);
         } else {
             // Caso contrário, remova a classe .file-selected e limpe o nome do arquivo
             $(".file-label").removeClass("file-selected");

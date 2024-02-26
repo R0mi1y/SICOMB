@@ -31,6 +31,14 @@ def send_hex_command(ser, commands=[command_hex_2, command_hex_3, command_hex]):
             print('Error sending command:', str(e))
 
 
+def is_iterable(variable):
+    try:
+        iter(variable)
+        return True
+    except TypeError:
+        return False
+    
+
 def verificar_portas(sensor):
     if sensor == "DIGITAL_READER":
         for porta in list_ports.comports():
@@ -71,7 +79,7 @@ def verificar_portas(sensor):
                         send_hex_command(ser, "AA 00 08 00 08 DD")
                         try:
                             resposta = read_line(ser, read_tag=False, timer=2)
-                            if "AA" in resposta and "DD" in resposta:
+                            if is_iterable(resposta) and "AA" in resposta and "DD" in resposta:
                                 print(f"Modulo RFID recebido {porta.device}")
                                 return porta.device
                             else:
@@ -79,7 +87,7 @@ def verificar_portas(sensor):
                                 resposta = read_line(ser, timer=3)
                                 print(resposta)
                                 
-                                if "aa" in resposta and "dd" in resposta:
+                                if is_iterable(resposta) and "aa" in resposta and "dd" in resposta:
                                     print(f"Modulo RFID recebido {porta.device}")
                                     return porta.device
                                 
@@ -140,18 +148,14 @@ def get_uids():
         try:
             line = read_line(ser, start_time)
             
-            som = sa.WaveObject.from_wave_file(STATICFILES_DIRS[0] + "/sounds/passSound.wav")
-            play_obj = som.play()
-            play_obj.wait_done()
-            
             line = "".join(line[6:len(line) - 2])
 
             print(AUX["uids"])
             if line not in AUX["uids"] and line.strip() != "" :
                 AUX["uids"].append(line)
-                # som = sa.WaveObject.from_wave_file(STATICFILES_DIRS[0] + "/sounds/passSound.wav")
-                # play_obj = som.play()
-                # play_obj.wait_done()
+                som = sa.WaveObject.from_wave_file(STATICFILES_DIRS[0] + "/sounds/passSound.wav")
+                play_obj = som.play()
+                play_obj.wait_done()
                 
         except UnicodeDecodeError:
             print(f"Erro de decodificação no sensor RFID, impossível decodificar como UTF-8")
